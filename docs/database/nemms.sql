@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2015-01-05 17:40:36
+Date: 2015-05-03 09:52:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,11 +29,7 @@ CREATE TABLE `event` (
   `url` varchar(255) NOT NULL COMMENT 'url',
   `create_time` datetime NOT NULL COMMENT '日志发生的时间',
   PRIMARY KEY (`event_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='用户操作日志表';
-
--- ----------------------------
--- Records of event
--- ----------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8 COMMENT='用户操作日志表';
 
 -- ----------------------------
 -- Table structure for module
@@ -65,19 +61,17 @@ CREATE TABLE `module` (
 -- Records of module
 -- ----------------------------
 INSERT INTO `module` VALUES ('2', '0', '仪表盘', 'dashboard', 'fa fa-lg fa-fw fa-compass', 'dashboard/index', '2', '\0', '0', '', '', '1', '1', '仪表盘', '2014-10-30 14:41:01', '2014-10-30 14:40:03');
+INSERT INTO `module` VALUES ('3', '0', '设备参数', 'deviceParam', 'fa fa-lg fa-fw fa-eye', 'device/index', '3', '', '0', '', '', '2', '1', '千里眼', '2014-10-30 14:41:24', '2014-10-30 14:40:26');
+INSERT INTO `module` VALUES ('4', '0', '采集参数', 'collectParam', 'fa fa-lg fa-fw fa-tags', 'comunication/index', '4', '', '0', '', '', '3', '1', '标签工厂', '2014-10-30 14:41:42', '2014-10-30 14:40:45');
 INSERT INTO `module` VALUES ('6', '0', '报表管理', 'reporting', 'fa fa-lg fa-fw fa-bar-chart-o', 'report/designer', '6', '', '0', '', '', '5', '1', '报表管理', '2014-10-30 14:44:09', '2014-10-30 14:43:11');
 INSERT INTO `module` VALUES ('7', '0', '用户权限', 'memberships', 'fa fa-lg fa-fw fa-user', 'membership/user', '7', '', '0', '', '', '6', '1', '用户权限', '2014-10-30 14:45:47', '2014-10-30 14:44:50');
-INSERT INTO `module` VALUES ('21', '6', '报表设计器', 'reporting.designer', '', 'report/designer', '6,21', '\0', '0', '', '', '1', '1', '报表设计器', '2014-10-30 15:37:12', '2014-10-30 15:36:15');
-INSERT INTO `module` VALUES ('22', '6', '报表配置', 'reporting.config', '', 'report/config', '6,22', '\0', '0', '', '', '3', '1', '报表配置', '2014-10-30 15:37:57', '2014-10-30 15:37:00');
 INSERT INTO `module` VALUES ('23', '7', '用户管理', 'membership.user', '', 'membership/user', '7,23', '\0', '0', '', '', '1', '1', '用户管理', '2014-10-30 15:38:22', '2014-10-30 15:37:24');
 INSERT INTO `module` VALUES ('24', '7', '角色管理', 'memberships.role', '', 'membership/role', '7,24', '\0', '0', '', '', '2', '1', '角色管理', '2014-10-30 15:38:44', '2014-10-30 15:37:46');
 INSERT INTO `module` VALUES ('25', '7', '操作管理', 'memberships.opt', '', 'membership/operation', '7,25', '\0', '0', '', '', '3', '1', '操作管理', '2014-10-30 15:39:03', '2014-10-30 15:38:05');
 INSERT INTO `module` VALUES ('26', '7', '用户日志', 'memberships.event', '', 'membership/event', '7,26', '\0', '0', '', '', '5', '1', '用户日志', '2014-10-30 15:41:06', '2014-10-30 15:40:08');
-INSERT INTO `module` VALUES ('28', '6', '数据源管理', 'reporting.ds', '', 'report/ds', '6,28', '\0', '0', '', '', '2', '1', '数据源管理', '2014-10-30 15:45:19', '2014-10-30 15:44:22');
 INSERT INTO `module` VALUES ('31', '7', '模块管理', 'memberships.module', '', 'membership/module', '7,31', '\0', '0', '', '', '4', '1', '模块管理', '2014-10-31 10:21:46', '2014-10-31 10:20:49');
 INSERT INTO `module` VALUES ('32', '0', '系统管理', 'system', 'fa fa-lg fa-fw fa-cog', 'system/config', '32', '', '0', '', '', '7', '1', '系统管理', '2014-11-12 12:20:57', '2014-11-12 12:20:57');
 INSERT INTO `module` VALUES ('38', '32', '配置管理', 'system.config', 'fa fa-lg fa-fw fa-cog', 'system/config', '32,38', '\0', '0', '', '', '1', '1', '配置管理', '2014-11-27 15:27:51', '2014-11-27 15:27:51');
-INSERT INTO `module` VALUES ('41', '32', '国家字典', 'system.country', 'fa fa-lg fa-fw fa-cog', 'system/country', '32,41', '\0', '0', '', '', '4', '1', '国家字典', '2014-11-28 17:20:06', '2014-11-28 17:20:06');
 
 -- ----------------------------
 -- Table structure for operation
@@ -113,51 +107,9 @@ INSERT INTO `operation` VALUES ('16', '31', '删除模块', 'memberships.module.
 INSERT INTO `operation` VALUES ('18', '26', '查看日志', 'memberships.event:view', '1', '查看', '2014-10-31 10:31:08', '2014-10-31 10:30:11');
 INSERT INTO `operation` VALUES ('20', '23', '添加用户', 'memberships.user:create', '1', '添加', '2014-10-31 18:29:22', '2014-10-31 18:28:26');
 INSERT INTO `operation` VALUES ('21', '2', '查看', 'dashboard:view', '1', '查看仪表盘图表', '2014-11-12 11:01:11', '2014-11-12 11:01:11');
-INSERT INTO `operation` VALUES ('22', '8', '查询', 'userAnalyz.tag:query', '1', '查询人群标签验证', '2014-11-12 11:05:25', '2014-11-12 11:05:25');
-INSERT INTO `operation` VALUES ('23', '9', '查询', 'userAnalyz.click:query', '1', '查询用户点击行为分析', '2014-11-12 11:06:11', '2014-11-12 11:06:11');
-INSERT INTO `operation` VALUES ('24', '10', '查询', 'userAnalyz.query:query', '1', '查询批量查询用户', '2014-11-12 11:07:11', '2014-11-12 11:07:11');
-INSERT INTO `operation` VALUES ('25', '10', '导出', 'userAnalyz.query:export', '1', '导出批量查询结果', '2014-11-12 11:08:11', '2014-11-12 11:08:11');
-INSERT INTO `operation` VALUES ('26', '11', '查看', 'userAnalyz.gpTag:view', '1', '查看GP标签平均值报表', '2014-11-12 11:09:04', '2014-11-12 11:09:04');
-INSERT INTO `operation` VALUES ('27', '11', '查询', 'userAnalyz.gpTag:query', '2', '查询GP标签平均值报表', '2014-11-12 11:11:52', '2014-11-12 11:11:52');
-INSERT INTO `operation` VALUES ('28', '16', '查询', 'predictMaster.predict:query', '1', '查询预估大师', '2014-11-12 11:14:16', '2014-11-12 11:14:16');
-INSERT INTO `operation` VALUES ('29', '17', '查询', 'predictMaster.expert:query', '1', '查询预估大师专业版报表', '2014-11-12 11:14:53', '2014-11-12 11:14:53');
-INSERT INTO `operation` VALUES ('30', '17', '查看', 'predictMaster.expert:view', '2', '查看预估大师专业版报表', '2014-11-12 11:15:08', '2014-11-12 11:15:08');
-INSERT INTO `operation` VALUES ('31', '18', '管理', 'predictMaster.app:*', '1', '管理预估App', '2014-11-12 11:16:34', '2014-11-12 11:16:34');
-INSERT INTO `operation` VALUES ('32', '20', '查看', 'predictMaster.expData:view', '1', '查看实验数据报表', '2014-11-12 11:17:08', '2014-11-12 11:17:08');
-INSERT INTO `operation` VALUES ('33', '20', '查询', 'predictMaster.expData:query', '2', '查询实验数据报表', '2014-11-12 11:17:23', '2014-11-12 11:17:23');
-INSERT INTO `operation` VALUES ('34', '21', '管理', 'reporting.designer:*', '2', '报表设计器管理', '2014-11-12 11:19:36', '2014-11-12 11:19:36');
-INSERT INTO `operation` VALUES ('35', '28', '管理', 'reporting.ds:*', '1', '数据源管理', '2014-11-12 11:24:26', '2014-11-12 11:24:26');
-INSERT INTO `operation` VALUES ('36', '22', '管理', 'reporting.config:*', '1', '报表配置', '2014-11-12 11:24:42', '2014-11-12 11:24:42');
 INSERT INTO `operation` VALUES ('37', '23', '管理', 'membership.user:*', '1', '用户管理', '2014-11-12 11:26:41', '2014-11-12 11:26:41');
 INSERT INTO `operation` VALUES ('38', '24', '管理', 'memberships.role:*', '1', '角色管理', '2014-11-12 11:27:49', '2014-11-12 11:27:49');
-INSERT INTO `operation` VALUES ('41', '12', '管理', 'tagFactory.userFilter:*', '1', '所有权限', '2014-11-15 13:00:01', '2014-11-15 12:59:59');
-INSERT INTO `operation` VALUES ('42', '13', '管理', 'tagFactory.history:*', '1', '所有权限', '2014-11-15 13:00:10', '2014-11-15 13:00:08');
-INSERT INTO `operation` VALUES ('43', '14', '管理', 'tagFactory.fixedTag:*', '1', '所有权限', '2014-11-15 13:00:14', '2014-11-15 13:00:13');
-INSERT INTO `operation` VALUES ('44', '15', '管理', 'tagFactory.tagMgr:*', '1', '所有权限', '2014-11-15 13:00:18', '2014-11-15 13:00:16');
-INSERT INTO `operation` VALUES ('48', '37', '管理', 'tagFactory.expTagMgr:*', '1', '实验标签管理', '2014-11-26 10:26:56', '2014-11-26 10:26:54');
-INSERT INTO `operation` VALUES ('49', '37', '增加', 'tagFactory.expTagMgr:create', '2', '增加实验标签', '2014-11-26 10:27:28', '2014-11-26 10:27:26');
-INSERT INTO `operation` VALUES ('50', '37', '删除', 'tagFactory.expTagMgr:delete', '3', '删除实验标签', '2014-11-26 10:27:53', '2014-11-26 10:27:51');
-INSERT INTO `operation` VALUES ('51', '37', '修改', 'tagFactory.expTagMgr:update', '4', '修改实验标签', '2014-11-26 10:28:23', '2014-11-26 10:28:21');
-INSERT INTO `operation` VALUES ('52', '37', '查看', 'tagFactory.expTagMgr:view', '5', '查看实验标签', '2014-11-26 10:29:08', '2014-11-26 10:29:06');
-INSERT INTO `operation` VALUES ('53', '38', '管理', 'system.config:*', '1', '管理所有', '2014-11-27 15:44:33', '2014-11-27 15:44:33');
-INSERT INTO `operation` VALUES ('54', '38', '增加', 'system.config:create', '2', '增加', '2014-11-27 15:44:51', '2014-11-27 15:44:51');
-INSERT INTO `operation` VALUES ('55', '38', '删除', 'system.config:delete', '3', '删除', '2014-11-27 15:45:02', '2014-11-27 15:45:02');
-INSERT INTO `operation` VALUES ('56', '38', '修改', 'system.config:update', '4', '修改', '2014-11-27 15:46:01', '2014-11-27 15:46:01');
-INSERT INTO `operation` VALUES ('57', '38', '查看', 'system.config:view', '5', '查看', '2014-11-27 15:46:09', '2014-11-27 15:46:09');
 INSERT INTO `operation` VALUES ('58', '26', '日志管理', 'memberships.event:*', '2', '日志管理', '2014-11-27 15:51:02', '2014-11-27 15:51:04');
-INSERT INTO `operation` VALUES ('59', '39', '管理', 'system.AppPosid:*', '1', 'AppPosid字典管理', '2014-11-29 10:23:36', '2014-11-29 10:23:42');
-INSERT INTO `operation` VALUES ('60', '40', '管理', 'system.appMd:*', '1', 'App埋点字典管理', '2014-11-29 10:23:48', '2014-11-29 10:23:53');
-INSERT INTO `operation` VALUES ('61', '41', '管理', 'system.country:*', '1', '国家字典管理', '2014-11-29 10:23:54', '2014-11-29 10:24:00');
-INSERT INTO `operation` VALUES ('62', '42', '管理', 'system.dictActiveMd:*', '1', '标签埋点字典管理', '2014-11-29 10:24:01', '2014-11-29 10:24:07');
-INSERT INTO `operation` VALUES ('63', '43', '管理', 'system.dictAndroidOs:*', '1', 'Android操作系统字典管理', '2014-11-29 10:24:08', '2014-11-29 10:24:13');
-INSERT INTO `operation` VALUES ('64', '44', '管理', 'system.dictDateRange:*', '1', '标签时间范围字典管理', '2014-11-29 10:24:14', '2014-11-29 10:24:19');
-INSERT INTO `operation` VALUES ('65', '45', '管理', 'system.dictDiffDegree:*', '1', '标签区分度字典管理', '2014-11-29 10:24:20', '2014-11-29 10:24:26');
-INSERT INTO `operation` VALUES ('66', '46', '管理', 'system.dictGender:*', '1', '标签性别字典管理', '2014-11-29 10:24:26', '2014-11-29 10:24:32');
-INSERT INTO `operation` VALUES ('67', '47', '管理', 'system.dictInsNum:*', '1', '标签安装数字典管理', '2014-11-29 10:24:41', '2014-11-29 10:24:47');
-INSERT INTO `operation` VALUES ('68', '48', '管理', 'system.dictMcc:*', '1', '运营商MCC字典管理', '2014-11-29 10:24:48', '2014-11-29 10:24:53');
-INSERT INTO `operation` VALUES ('69', '49', '管理', 'system.dictPhoneModel:*', '1', '手机机型字典管理', '2014-11-29 10:24:53', '2014-11-29 10:24:58');
-INSERT INTO `operation` VALUES ('70', '50', '管理', 'system.dictPosid:*', '1', '标签Posid字典管理', '2014-11-29 10:24:59', '2014-11-29 10:25:04');
-INSERT INTO `operation` VALUES ('71', '51', '管理', 'system.DictProductPosid:*', '1', '所有权限', '2014-12-11 15:36:59', '2014-12-11 15:36:59');
 
 -- ----------------------------
 -- Table structure for role
@@ -179,7 +131,7 @@ CREATE TABLE `role` (
   PRIMARY KEY (`role_id`),
   UNIQUE KEY `uk_role_name` (`name`),
   UNIQUE KEY `uk_role_code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COMMENT='系统角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='系统角色表';
 
 -- ----------------------------
 -- Records of role
@@ -208,7 +160,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `uk_user_account` (`account`),
   UNIQUE KEY `uk_user_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='系统用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统用户表';
 
 -- ----------------------------
 -- Records of user
