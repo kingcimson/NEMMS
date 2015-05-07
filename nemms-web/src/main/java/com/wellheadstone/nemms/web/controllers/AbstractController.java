@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import com.wellheadstone.nemms.common.viewmodel.JsonResult;
-import com.wellheadstone.nemms.service.EventService;
+import com.wellheadstone.nemms.membership.service.EventService;
 
 @Controller
 public abstract class AbstractController {

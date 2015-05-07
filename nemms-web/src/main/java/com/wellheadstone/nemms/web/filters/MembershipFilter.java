@@ -7,8 +7,8 @@ import javax.servlet.ServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 
-import com.wellheadstone.nemms.MembershipFacade;
-import com.wellheadstone.nemms.web.Constants;
+import com.wellheadstone.nemms.membership.MembershipFacade;
+import com.wellheadstone.nemms.web.membership.Constants;
 
 public class MembershipFilter extends PathMatchingFilter {
 	@Resource

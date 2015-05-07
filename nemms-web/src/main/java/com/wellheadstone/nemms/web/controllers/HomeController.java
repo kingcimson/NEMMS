@@ -11,10 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.wellheadstone.nemms.MembershipFacade;
-import com.wellheadstone.nemms.po.ModulePo;
-import com.wellheadstone.nemms.po.UserPo;
-import com.wellheadstone.nemms.web.CurrentUser;
+import com.wellheadstone.nemms.membership.MembershipFacade;
+import com.wellheadstone.nemms.membership.po.ModulePo;
+import com.wellheadstone.nemms.membership.po.UserPo;
+import com.wellheadstone.nemms.web.membership.CurrentUser;
 
 @Controller
 @RequestMapping(value = "/home")
