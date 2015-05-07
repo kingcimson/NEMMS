@@ -99,7 +99,7 @@
 	<bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
 
 	<!-- 凭证匹配器 -->
-	<bean id="credentialsMatcher" class="com.wellheadstone.nemms.security.RetryLimitHashedCredentialsMatcher">
+	<bean id="credentialsMatcher" class="com.wellheadstone.nemms.membership.security.RetryLimitHashedCredentialsMatcher">
 		<constructor-arg ref="cacheManager" />
 		<property name="hashAlgorithmName" value="md5" />
 		<property name="hashIterations" value="2" />
@@ -107,7 +107,7 @@
 	</bean>
 
 	<!-- Realm实现 -->
-	<bean id="shiroRealm" class="com.wellheadstone.nemms.security.MyRealm">
+	<bean id="shiroRealm" class="com.wellheadstone.nemms.membership.security.MyRealm">
 		<property name="credentialsMatcher" ref="credentialsMatcher" />
 		<property name="cachingEnabled" value="false" />
 		<!--<property name="authenticationCachingEnabled" value="true"/> -->
