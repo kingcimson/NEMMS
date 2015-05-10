@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.wellheadstone.nemms.data.SortType;
 import com.wellheadstone.nemms.data.criterion.Restrictions;
 import com.wellheadstone.nemms.data.jdbc.BaseDao;
 import com.wellheadstone.nemms.po.ConfigDictPo;
@@ -19,6 +20,14 @@ public class ConfigDictDao extends BaseDao<ConfigDictPo> {
 		super(ConfigDictPo.EntityName, ConfigDictPo.Id);
 	}
 
+	public List<ConfigDictPo> queryAllItem() {
+		String[] columnNames = new String[] {
+				ConfigDictPo.Id, ConfigDictPo.Name, ConfigDictPo.Key,
+				ConfigDictPo.Pid, ConfigDictPo.Value, ConfigDictPo.Sequence
+		};
+		return this.query("pid,sequence", SortType.ASC, columnNames);
+	}
+
 	public ConfigDictPo queryBy(int pid, String key) {
 		String condition = Restrictions.equal(ConfigDictPo.Pid, "?")
 				.append(Restrictions.And)
@@ -31,5 +40,11 @@ public class ConfigDictDao extends BaseDao<ConfigDictPo> {
 		String sqlTemplate = "SELECT t.*,(SELECT if(count(*)>0,1,0) FROM %1$s t1 WHERE t1.pid = t.id) as has_child FROM %1$s t WHERE pid=?";
 		return this.queryForList(String.format(sqlTemplate, ConfigDictPo.EntityName),
 				new Object[] { pid }, new int[] { Types.INTEGER }, ConfigDictPo.class);
+	}
+
+	public List<ConfigDictPo> queryBy(String key) {
+		String sqlTemplate = "select * from %1$s t1 INNER JOIN %1$s t2 on t1.pid = t2.id where t2.key=? order by t1.sequence asc";
+		return this.queryForList(String.format(sqlTemplate, ConfigDictPo.EntityName),
+				new Object[] { key }, new int[] { Types.VARCHAR }, ConfigDictPo.class);
 	}
 }

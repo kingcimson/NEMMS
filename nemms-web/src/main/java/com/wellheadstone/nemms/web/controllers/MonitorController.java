@@ -10,12 +10,12 @@ import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.web.membership.CurrentUser;
 
 @Controller
-@RequestMapping(value = "/comunication")
-public class ComunicationController extends AbstractController {
+@RequestMapping(value = "/monitor")
+public class MonitorController extends AbstractController {
 
 	@RequestMapping(value = { "", "/", "/index" })
 	public String index(@CurrentUser UserPo loginUser, Model model, HttpServletRequest req) {
-		return "comunication/index";
+		return "monitor/index";
 	}
 
 }
