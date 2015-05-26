@@ -15,8 +15,7 @@
 <section id="widget-grid" class="">
 	<div class="row">
 		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false"
-				data-widget-deletebutton="false">
+			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false" data-widget-deletebutton="false">
 				<header>
 					<span class="widget-icon"> <i class="fa fa-table"></i>
 					</span>
@@ -29,8 +28,8 @@
 							<form class="form-inline" role="form">
 								<div class="row">
 									<div class="col-sm-12 col-md-10">
-										<div class="form-group">类别：
-											<select id="categoryId" name=categoryId class="form-control input-sm"></select>
+										<div class="form-group">
+											类别： <select id="filter_categoryId" name=categoryId class="form-control input-sm"></select>
 										</div>
 										<div class="form-group">
 											<select id="fieldName" name="fieldName" class="form-control input-sm">
@@ -41,8 +40,8 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label>关键字</label> <input type="text" id="keyword" name="keyword" class="form-control input-sm"
-												placeholder="名称">
+											<label>关键字</label>
+											<input type="text" id="keyword" name="keyword" class="form-control input-sm" placeholder="名称">
 										</div>
 										<div class="form-group">
 											<a href="javascript:void(0);" id="search" class="btn btn-primary"> <i class="fa fa-search"></i>搜索
@@ -117,15 +116,6 @@
 					<fieldset>
 						<section>
 							<div class="row">
-								<label class="label col col-2">Posid:</label>
-								<div class="col col-10">
-									<label class="input"> <input type="text" name="posid" id="posid" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
 								<label class="label col col-2">名称:</label>
 								<div class="col col-10">
 									<label class="input"> <input type="text" name="name" id="name" required>
@@ -135,17 +125,106 @@
 						</section>
 						<section>
 							<div class="row">
-								<label class="label col col-2">排序:</label>
-								<div class="col col-10">
-									<label class="input"> <input type="text" name="seq" id="seq" required>
+								<label class="label col col-2">类别:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="categoryId" name="categoryId">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">模式:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="mode" name="mode">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">系数:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="ratio" id="ratio" required>
+									</label>
+								</div>
+								<label class="label col col-2">单位:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="unit" id="unit" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">值类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="valueType" name="valueType">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">值长度:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="valueLen" id="valueLen" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">值最小长度:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="valueMinLen" id="valueMinLen" required>
+									</label>
+								</div>
+								<label class="label col col-2">值最大长度:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="valueMaxLen" id="valueMaxLen" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">最小值:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="minValue" id="minValue" required>
+									</label>
+								</div>
+								<label class="label col col-2">最大值:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="maxValue" id="maxValue" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">告警级别:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="warnLevel" name="warnLevel">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">权限归属:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="authorityRoles" name="authorityRoles">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
 									</label>
 								</div>
 							</div>
 						</section>
 					</fieldset>
 					<footer>
-						<a type="button" id="add_submit" class="btn btn-primary">确定</a> <a type="button" class="btn btn-default"
-							data-dismiss="modal">取消</a>
+						<a type="button" id="add_submit" class="btn btn-primary">确定</a> <a type="button" class="btn btn-default" data-dismiss="modal">取消</a>
 					</footer>
 				</form>
 			</div>
@@ -168,17 +247,106 @@
 							<div class="row">
 								<label class="label col col-2">名称:</label>
 								<div class="col col-10">
-									<label class="input"> <input type="text" name="name" id="edit_name" required> <input
-										name="posid" type="hidden">
+									<label class="input"> <input type="text" name="name" id="edit_name" required>
 									</label>
 								</div>
 							</div>
 						</section>
 						<section>
 							<div class="row">
-								<label class="label col col-2">排序:</label>
-								<div class="col col-10">
-									<label class="input"> <input type="text" name="seq" id="edit_seq" required>
+								<label class="label col col-2">类别:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="edit_categoryId" name="categoryId">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">模式:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="edit_mode" name="mode">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">系数:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="ratio" id="edit_ratio" required>
+									</label>
+								</div>
+								<label class="label col col-2">单位:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="unit" id="edit_unit" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">值类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="edit_valueType" name="valueType">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">值长度:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="valueLen" id="edit_valueLen" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">值最小长度:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="valueMinLen" id="edit_valueMinLen" required>
+									</label>
+								</div>
+								<label class="label col col-2">值最大长度:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="valueMaxLen" id="edit_valueMaxLen" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">最小值:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="minValue" id="edit_minValue" required>
+									</label>
+								</div>
+								<label class="label col col-2">最大值:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="maxValue" id="edit_maxValue" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">告警级别:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="edit_warnLevel" name="warnLevel">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">权限归属:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="edit_uthorityRoles" name="authorityRoles">
+											<option value="1" selected="selected">启用</option>
+											<option value="0">禁用</option>
+									</select> <i></i>
 									</label>
 								</div>
 							</div>
@@ -194,7 +362,8 @@
 	</div>
 </div>
 <div id="delete_dialog" title="">
-	<span id="delete_message"></span> <input id="delete_id" type="hidden" />
+	<span id="delete_message"></span>
+	<input id="delete_id" type="hidden" />
 </div>
 <script src="<%=request.getContextPath()%>/assets/modules/device/js/params.js"></script>
 <script type="text/javascript">

@@ -37,16 +37,31 @@ var DeviceParam = {
 			parentKey : "deviceParam"
 		}, function(data) {
 			DeviceParam.configItems = data;
-			DeviceParam.fillCategorySelect();
+			DeviceParam.fillSelect();
 		});
 	},
-	fillCategorySelect:function(){
-		var categories = DeviceParam.configItems.deviceParamCategory;
-		$('#categoryId').empty();
-		$('#categoryId').append("<option value='all' selected>全部</option>");
-		$.each(categories, function(i, item){
-			$('#categoryId').append("<option value='"+ item.value +"'>"+ item.name +"</option>");
+	fillSelect:function(){
+		var map = {
+			"categoryId" : DeviceParam.configItems.deviceParamCategory,
+			"mode" : DeviceParam.configItems.deviceParamMode,
+			"valueType" : DeviceParam.configItems.deviceParamValueType,
+			"warnLevel" : DeviceParam.configItems.deviceParamWarnLevel
+		};
+		
+		$('#filter_categoryId').empty();
+		$('#filter_categoryId').append("<option value='all' selected>全部</option>");
+		$.each(map["categoryId"], function(i, item) {
+			$('#filter_categoryId').append("<option value='" + item.value + "'>" + item.name + "</option>");
 		});
+		
+		for(var key in map){
+			$('#'+key).empty();
+			$('#edit_'+key).empty();
+			$.each(map[key], function(i, item) {
+				$('#'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+				$('#edit_'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+			});
+		}
 	},
 	loadDataTables : function() {
 		var url = DeviceParam.pageUrl + 'list';
@@ -150,6 +165,10 @@ var DeviceParam = {
 					} ]
 				});
 		var dt = DeviceParam.dt = $('#datatable1').DataTable(options);
+		$('#datatable1 tbody').on('dblclick', 'tr', function() {
+			var rowIndex = DeviceParam.dt.row(this).index();
+			DeviceParam.showEditModal(rowIndex);
+		});
 	},
 	showAddModal : function() {
 		$("#modal_action").val("add");
@@ -172,7 +191,7 @@ var DeviceParam = {
 		$('#delete_dialog').dialog('open');
 	},
 	find : function() {
-		var categoryId = $("#categoryId").val();
+		var categoryId = $("#filter_categoryId").val();
 		var fieldName = $("#fieldName").val();
 		var keyword = $("#keyword").val();
 		var url = DeviceParam.pageUrl + 'find?categoryId=' + categoryId
