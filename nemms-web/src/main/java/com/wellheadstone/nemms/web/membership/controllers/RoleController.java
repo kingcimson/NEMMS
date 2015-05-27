@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wellheadstone.nemms.common.util.DhtmlXTreeUtils;
 import com.wellheadstone.nemms.common.viewmodel.DhtmlXTreeNode;
+import com.wellheadstone.nemms.common.viewmodel.IdNamePair;
 import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
 import com.wellheadstone.nemms.data.SortType;
 import com.wellheadstone.nemms.membership.po.ModulePo;
@@ -58,6 +59,15 @@ public class RoleController extends AbstractController {
 			return node;
 		}).collect(Collectors.toList());
 		return DhtmlXTreeUtils.getRootNode("0", nodes);
+	}
+
+	@RequestMapping(value = "/getRoleList")
+	@ResponseBody
+	public List<IdNamePair> getRoleList() {
+		return this.roleService.getAll(RolePo.RoleId, RolePo.Name)
+				.stream()
+				.map(x -> new IdNamePair(String.valueOf(x.getRoleId()), x.getName()))
+				.collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/add")

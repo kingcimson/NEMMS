@@ -146,10 +146,10 @@ public class DeviceParamPo implements Serializable {
 	private String warnLevel;
 
 	@Column(name = "create_time")
-	private Date createTime;
+	private Date createTime = Calendar.getInstance().getTime();
 
 	@Column(name = "update_time")
-	private Date updateTime;
+	private Date updateTime = Calendar.getInstance().getTime();
 
 	/**
 	 * 获取参数id
@@ -229,7 +229,7 @@ public class DeviceParamPo implements Serializable {
 	 * @return 参数单位
 	 */
 	public String getUnit() {
-		return this.unit;
+		return this.unit == null ? "" : this.unit;
 	}
 
 	/**
@@ -337,7 +337,7 @@ public class DeviceParamPo implements Serializable {
 	 * @return 参数最小值
 	 */
 	public String getMinValue() {
-		return this.minValue;
+		return this.minValue == null ? "" : this.minValue;
 	}
 
 	/**
@@ -355,7 +355,7 @@ public class DeviceParamPo implements Serializable {
 	 * @return 参数最大值
 	 */
 	public String getMaxValue() {
-		return this.maxValue;
+		return this.maxValue == null ? "" : this.maxValue;
 	}
 
 	/**
@@ -373,7 +373,7 @@ public class DeviceParamPo implements Serializable {
 	 * @return 参数权限归属(即系统哪些角色的用户可以使用),对应角色id
 	 */
 	public String getAuthorityRoles() {
-		return this.authorityRoles;
+		return this.authorityRoles == null ? "" : this.authorityRoles;
 	}
 
 	/**

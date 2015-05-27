@@ -39,6 +39,13 @@ var DeviceParam = {
 			DeviceParam.configItems = data;
 			DeviceParam.fillSelect();
 		});
+		
+		$.getJSON( XFrame.getContextPath() + '/membership/role/getRoleList',null,function(data){
+			$.each(data, function(i, item) {
+				$('#authorityRoles').append("<option value='" + item.id + "'>" + item.name + "</option>");
+				$('#edit_authorityRoles').append("<option value='" + item.id + "'>" + item.name + "</option>");
+			});
+		});
 	},
 	fillSelect:function(){
 		var map = {
@@ -205,6 +212,7 @@ var DeviceParam = {
 		if ($(formId).validate().form()) {
 			var url = DeviceParam.pageUrl + action;
 			var data = $(formId).serialize();
+			console.log(data);
 			DeviceParam.ajaxPost(data, url, function() {
 				$(modalId).modal('hide');
 			});

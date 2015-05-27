@@ -146,10 +146,10 @@ public class SitePo implements Serializable {
 	private String comment;
 
 	@Column(name = "create_time")
-	private Date createTime;
+	private Date createTime = Calendar.getInstance().getTime();
 
 	@Column(name = "update_time")
-	private Date updateTime;
+	private Date updateTime = Calendar.getInstance().getTime();
 
 	/**
 	 * 获取

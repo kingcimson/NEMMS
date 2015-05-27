@@ -39,8 +39,7 @@ public class DeviceController extends AbstractController {
 
 	@RequestMapping(value = "/params/list")
 	@ResponseBody
-	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataTablePageInfo dtPageInfo,
-			HttpServletRequest request) {
+	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataTablePageInfo dtPageInfo, HttpServletRequest request) {
 		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), UserPo.CreateTime);
 		List<DeviceParamPo> list = this.deviceParamService.getParams(page, loginUser);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);

@@ -128,16 +128,12 @@
 								<label class="label col col-2">类别:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="categoryId" name="categoryId">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
 									</select> <i></i>
 									</label>
 								</div>
 								<label class="label col col-2">模式:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="mode" name="mode">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
 									</select> <i></i>
 									</label>
 								</div>
@@ -162,8 +158,6 @@
 								<label class="label col col-2">值类型:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="valueType" name="valueType">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
 									</select> <i></i>
 									</label>
 								</div>
@@ -207,16 +201,12 @@
 								<label class="label col col-2">告警级别:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="warnLevel" name="warnLevel">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
 									</select> <i></i>
 									</label>
 								</div>
 								<label class="label col col-2">权限归属:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="authorityRoles" name="authorityRoles">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
 									</select> <i></i>
 									</label>
 								</div>
@@ -238,7 +228,7 @@
 				<button type="button" class="close" data-dismiss="modal">
 					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 				</button>
-				<h4 id="edit_modal_title" class="modal-title">编辑</h4>
+				<h4 id="edit_modal_title" class="modal-title">编辑</h4>	
 			</div>
 			<div class="modal-body no-padding">
 				<form id="edit_form" name="edit_form" method="post" class="smart-form">
@@ -248,6 +238,7 @@
 								<label class="label col col-2">名称:</label>
 								<div class="col col-10">
 									<label class="input"> <input type="text" name="name" id="edit_name" required>
+									<input name="id" type="hidden">
 									</label>
 								</div>
 							</div>
@@ -257,16 +248,12 @@
 								<label class="label col col-2">类别:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="edit_categoryId" name="categoryId">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
 									</select> <i></i>
 									</label>
 								</div>
 								<label class="label col col-2">模式:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="edit_mode" name="mode">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
 									</select> <i></i>
 									</label>
 								</div>
@@ -336,16 +323,12 @@
 								<label class="label col col-2">告警级别:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="edit_warnLevel" name="warnLevel">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
 									</select> <i></i>
 									</label>
 								</div>
 								<label class="label col col-2">权限归属:</label>
 								<div class="col col-4">
-									<label class="select"> <select id="edit_uthorityRoles" name="authorityRoles">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
+									<label class="select"> <select id="edit_authorityRoles" name="authorityRoles">
 									</select> <i></i>
 									</label>
 								</div>
