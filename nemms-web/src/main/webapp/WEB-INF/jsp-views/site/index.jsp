@@ -3,16 +3,8 @@
 <%@ include file="/WEB-INF/jsp-views/frame/form_scripts.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/frame/datatables_scripts.jsp"%>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/plugin/dhtmlxtree/skins/terrace/dhtmlxtree.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/plugin/codemirror/codemirror.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/plugin/codemirror/theme/rubyblue.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/plugin/codemirror/addon/hint/show-hint.css" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/plugin/select2/select2.css">
 <script src="<%=request.getContextPath()%>/assets/js/plugin/dhtmlxtree/dhtmlxtree.js"></script>
-<script src="<%=request.getContextPath()%>/assets/js/plugin/codemirror/codemirror.js"></script>
-<script src="<%=request.getContextPath()%>/assets/js/plugin/codemirror/mode/sql/sql.js"></script>
-<script src="<%=request.getContextPath()%>/assets/js/plugin/codemirror/addon/display/fullscreen.js"></script>
-<script src="<%=request.getContextPath()%>/assets/js/plugin/codemirror/addon/hint/show-hint.js"></script>
-<script src="<%=request.getContextPath()%>/assets/js/plugin/codemirror/addon/hint/sql-hint.js"></script>
 <script src="<%=request.getContextPath()%>/assets/js/plugin/select2/select2.js"></script>
 <style>
 .text-align-r {
@@ -40,13 +32,13 @@
 	padding-bottom: 10px;
 }
 
-.report-tree {
+.device-tree {
 	height: 750px;
 	border: 1px solid silver;
 	overflow: auto;
 }
 
-.report-tree-btn {
+.device-tree-btn {
 	width: 100%;
 	margin-bottom: 2px;
 }
@@ -67,39 +59,25 @@
 	display: block;
 }
 
-.CodeMirror {
-	height: 221px;
-}
-
 tr.selected:before {
 	content: '';
 	display: none;
 }
-
-.CodeMirror-fullscreen {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	height: auto;
-	z-index: 2000;
-}
 </style>
 <div class="row">
 	<div class="col-lg-2" style="padding-right: 5px;">
-		<div class="report-tree-btn">
-			<a href="javascript:void(0);" class="btn btn-primary" id="btnTreeSearch"><i class="fa fa-search"></i>查找</a> <a href="javascript:void(0);"
-				class="btn btn-primary" id="btnTreeAdd"><i class="fa fa-plus-circle"></i>添加</a> <a href="javascript:void(0);" class="btn btn-primary"
-				id="btnTreeRefresh"><i class="fa fa-refresh"></i>刷新</a>
+		<div class="device-tree-btn">
+		    <a href="javascript:void(0);" class="btn btn-primary" id="btnTreeAdd"><i class="fa fa-plus-circle"></i>添加</a>
+			<a href="javascript:void(0);" class="btn btn-primary" id="btnTreeSearch"><i class="fa fa-search"></i>查找</a> 
+		    <a href="javascript:void(0);" class="btn btn-primary" id="btnTreeRefresh"><i class="fa fa-refresh"></i>刷新</a>
 		</div>
-		<div id="report-tree" class="report-tree"> </div>
+		<div id="device-tree" class="device-tree"> </div>
 		<input type="hidden" id="copyNodeId" name="copyNodeId" value="0" />
 	</div>
 	<article class="col-lg-10" style="padding-left: 5px;">
 		<div id="tabs">
 			<ul class="nav nav-tabs" role="tablist">
-				<li role="presentation" class="active"><a href="#configTab" role="tab" target="b" data-toggle="tab">报表配置</a></li>
+				<li role="presentation" class="active"><a href="#configTab" role="tab" target="b" data-toggle="tab">站点配置</a></li>
 				<li role="presentation"><a href="#queryParamTab" role="tab" target="b" data-toggle="tab">查询参数</a></li>
 			</ul>
 			<div class="tab-content">
@@ -116,7 +94,7 @@ tr.selected:before {
 											<table style="width: 100%; height: 100%;" class="report-config-table">
 												<tbody>
 													<tr class="smart-form">
-														<td class="text-align-w"><span>报表名称:</span></td>
+														<td class="text-align-w"><span>站点名称:</span></td>
 														<td><label class="input"> <input type="text" id="reportName" name="name" required></label></td>
 														<td class="text-align-r"><span> 数据源:</span></td>
 														<td><select id="reportDsId" name="dsId" style="width: 100%"></select></td>
@@ -151,7 +129,7 @@ tr.selected:before {
 														<td><label class="input"> <input type="text" id="reportSequence" name="sequence" value="100" required></label></td>
 													</tr>
 													<tr>
-														<td class="text-align-r" style="vertical-align: top;"><span>报表SQL:</span></td>
+														<td class="text-align-r" style="vertical-align: top;"><span>站点SQL:</span></td>
 														<td colspan="7">
 															<div class="code-pretty">
 																<textarea id="reportSqlText" name="sqlText"></textarea>
@@ -167,7 +145,7 @@ tr.selected:before {
 											</a> <a class="btn btn-default" href="javascript:void(0);" id="btnViewHistorySqlText"> <i class="fa fa-archive"></i>查看SQL历史记录
 											</a> <a class="btn btn-default" id="btnNewReport"><i class="fa fa-plus-circle"></i> 新增</a> <a class="btn btn-default"
 												href="javascript:void(0);" id="btnEditReport"><i class="fa fa-pencil"></i> 修改</a> <a class="btn btn-default" href="javascript:void(0);"
-												id="btnViewReport"><i class="fa fa-table"></i>查看报表</a> <a class="btn btn-default" href="javascript:void(0);" id="btnFullScreenEditSql"><i
+												id="btnViewReport"><i class="fa fa-table"></i>查看站点</a> <a class="btn btn-default" href="javascript:void(0);" id="btnFullScreenEditSql"><i
 												class="fa fa-fullscreen"></i>全屏编辑</a>
 										</div>
 									</div>
@@ -324,7 +302,7 @@ tr.selected:before {
 		</div>
 	</article>
 </div>
-<!-- 新增报表树节点弹框  -->
+<!-- 新增站点树节点弹框  -->
 <div class="modal" id="addTreeNodeDlg" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -384,7 +362,7 @@ tr.selected:before {
 		</div>
 	</div>
 </div>
-<!-- 编辑报表树节点弹框  -->
+<!-- 编辑站点树节点弹框  -->
 <div class="modal" id="editTreeNodeDlg" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -403,7 +381,7 @@ tr.selected:before {
 								<div class="col col-10">
 									<label class="input"> <select name="flag" id="editTreeNodeFlag" class="form-control" style="box-sizing: border-box;">
 											<option value="0">树节点</option>
-											<option value="1">报表节点</option>
+											<option value="1">站点节点</option>
 									</select>
 									</label>
 								</div>
@@ -472,255 +450,6 @@ tr.selected:before {
 		</div>
 	</div>
 </div>
-<!-- 查看报表属性弹框  -->
-<div class="modal" id="propertiesDlg" tabindex="-1" role="dialog">
-	<div class="modal-dialog" style="width: 60%; height: 60%;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">报表属性</h4>
-			</div>
-			<div class="modal-body">
-				<table class="report-config-table">
-					<tbody>
-						<tr class="smart-form">
-							<td class="text-align-r" width="100">名称:</td>
-							<td><label id="reportProp_name"></label></td>
-							<td class="text-align-r" width="80">ID:</td>
-							<td><label id="reportProp_id"></label></td>
-							<td class="text-align-r" width="100">父ID:</td>
-							<td><label id="reportProp_pid"></label></td>
-						</tr>
-						<tr class="smart-form">
-							<td class="text-align-r">代号:</td>
-							<td><label id="reportProp_uid"></label></td>
-							<td class="text-align-r">布局形式:</td>
-							<td><label id="reportProp_layout"></label></td>
-							<td class="text-align-r">显示几天数据:</td>
-							<td><label id="reportProp_dataRange"></label></td>
-						</tr>
-						<tr class="smart-form">
-							<td class="text-align-r">树路径:</td>
-							<td><label id="reportProp_path"></label></td>
-							<td class="text-align-r">节点类型:</td>
-							<td><label id="reportProp_flag"></label></td>
-							<td class="text-align-r">是否有子节点:</td>
-							<td><label id="reportProp_hasChild"></label></td>
-						</tr>
-						<tr class="smart-form">
-							<td class="text-align-r">创建用户:</td>
-							<td><label id="reportProp_createUser"></label></td>
-							<td class="text-align-r">创建时间:</td>
-							<td><label id="reportProp_createTime"></label></td>
-							<td class="text-align-r">更新时间:</td>
-							<td><label id="reportProp_updateTime"></label></td>
-						</tr>
-						<tr class="smart-form">
-							<td class="text-align-r">状态:</td>
-							<td><label id="reportProp_status"></label></td>
-							<td class="text-align-r">显示顺序:</td>
-							<td><label id="reportProp_sequence"></label></td>
-							<td class="text-align-r"></td>
-							<td></td>
-						</tr>
-						<tr class="smart-form">
-							<td class="text-align-r">报表SQL:</td>
-							<td colspan="5" class="code"><label id="reportProp_sqlText"></label></td>
-						</tr>
-						<tr class="smart-form">
-							<td class="text-align-r">报表SQL列配置:</td>
-							<td colspan="5" class="code"><label id="reportProp_metaColumns"></label></td>
-						</tr>
-						<tr class="smart-form">
-							<td class="text-align-r">报表查询参数:</td>
-							<td colspan="5" class="code"><label id="reportProp_queryParams" style=""></label></td>
-						</tr>
-						<tr class="smart-form">
-							<td class="text-align-r">说明:</td>
-							<td colspan="5"><label id="reportProp_comment"></label></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- 查看报表SQL弹框  -->
-<div class="modal" id="viewSqlTextDlg" tabindex="-1" role="dialog">
-	<div class="modal-dialog" style="width: 60%; height: 80%;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">查看SQL</h4>
-			</div>
-			<div class="modal-body">
-				<div>
-					<textarea id="viewSqlText" name="sqlText" style="width: 99%; height: 500px;"></textarea>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- 查看报表SQL历史记录弹框  -->
-<div class="modal" id="viewHistorySqlTextDlg" tabindex="-1" role="dialog">
-	<div class="modal-dialog" style="width: 60%; height: 80%;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">查看SQL历史记录</h4>
-			</div>
-			<div class="modal-body clearfix">
-				<div class="col-md-4">
-					<div class="widget-body no-padding">
-						<table id="viewHistorySqlDt" class="display" cellspacing="0" width="95%">
-							<thead>
-								<tr>
-									<th>时间</th>
-									<th>创建者</th>
-								</tr>
-							</thead>
-						</table>
-					</div>
-				</div>
-				<div class="col-md-8">
-					<textarea id="viewHistorySqlText" name="sqlText" style="width: 95%; height: 500px;"></textarea>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" type="button" id="btnViewHistorySqlTextDlgCl">关闭</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- 设置计算列表达式弹框  -->
-<div class="modal" id="expressionDlg" tabindex="-1" role="dialog">
-	<div class="modal-dialog" style="width: 50%; height: 50%;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">设置表达式列</h4>
-			</div>
-			<div class="modal-body">
-				<div>
-					<textarea id="columnExpression" name="expression" style="width: 99%; height: 100px;"></textarea>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
-				<button class="btn btn-primary" id="btnSaveExpr" type="button">确定</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- 设置列备注弹框  -->
-<div class="modal" id="memoDlg" tabindex="-1" role="dialog">
-	<div class="modal-dialog" style="width: 50%; height: 50%;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">设置列备注说明</h4>
-			</div>
-			<div class="modal-body">
-				<div>
-					<textarea id="columnMemo" name="memo" style="width: 99%; height: 100px;"></textarea>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
-				<button class="btn btn-primary" id="btnSaveMemo" type="button">确定</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- 设置列格式弹框  -->
-<div class="modal" id="formatDlg" tabindex="-1" role="dialog">
-	<div class="modal-dialog" style="width: 50%; height: 50%;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">设置列格式</h4>
-			</div>
-			<div class="modal-body">
-				<div>
-					<textarea id="columnFormat" name="format" style="width: 99%; height: 100px;"></textarea>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
-				<button class="btn btn-primary" id="btnSaveFormat" type="button">确定</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- 查找报表弹框  -->
-<div class="modal" id="searchTreeNodeDlg" tabindex="-1" role="dialog">
-	<div class="modal-dialog" style="width: 50%; height: 80%;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">查找报表</h4>
-			</div>
-			<div class="modal-body">
-				<div class="widget-body-toolbar">
-					<div class="row">
-						<div class="col-sm-12 col-md-12">
-							<div class="form-group">
-								<div class="col-md-3">
-									<select id="fieldName" name="fieldName" class="form-control input-sm">
-										<option value="name">名称</option>
-										<option value="uid">代码</option>
-										<option value="create_user">创建者</option>
-									</select>
-								</div>
-								<div class="col-md-3">
-									<input type="text" id="Keyword" name="keyword" class="form-control input-sm" placeholder="关键字">
-								</div>
-								<div class="col-md-2">
-									<a href="javascript:void(0);" id="search" class="btn btn-primary"> <i class="fa fa-search"></i>搜索
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<table id="searchTreeNodeDt" cellpadding="0" class="display" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>名称</th>
-							<th>编号</th>
-							<th>创建者</th>
-							<th>创建时间</th>
-						</tr>
-					</thead>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
-			</div>
-		</div>
-	</div>
-</div>
 <div class="modal" id="confirmModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -741,17 +470,15 @@ tr.selected:before {
 	</div>
 </div>
 <div id="treeContextMenu" style="display: none;">
-	<div text="新建报表" img="add.png" id="addReport"></div>
-	<div text="设置备注" img="settings.gif" id="setComment"></div>
-	<div text="报表属性" img="presentation.gif" id="reportPro"></div>
-	<div id="ms1" type="separator"></div>
-<!-- 	<div text="复制" img="copy.gif" id="copy"></div> -->
-<!-- 	<div text="粘贴" img="paste.gif" id="paste"></div> -->
-	<div text="查找" img="open.gif" id="search"></div>
+	<div text="新建站点" img="add.png" id="addSite"></div>
 	<div id="ms2" type="separator"></div>
-	<div text="新增节点" img="page.gif" id="addNode"></div>
-	<div text="修改节点" img="page.gif" id="editNode"></div>
-	<div text="删除节点" img="page.gif" id="remove"></div>
+	<div text="新增设备" img="page.gif" id="addDevice"></div>
+	<div text="修改设备" img="page.gif" id="editDevice"></div>
+	<div text="删除设备" img="page.gif" id="remove"></div>
+	<div id="ms1" type="separator"></div>
+<!--<div text="复制" img="copy.gif" id="copy"></div> -->
+<!--<div text="粘贴" img="paste.gif" id="paste"></div> -->
+	<div text="查找" img="open.gif" id="search"></div>
 	<div id="ms3" type="separator"></div>
 	<div text="刷新" img="page.gif" id="refresh"></div>
 </div>
