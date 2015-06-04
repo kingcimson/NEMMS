@@ -1,5 +1,5 @@
-var ReportDesigner = {
-	reportTree : null,
+var SiteMgr = {
+	deviceTree : null,
 	sqlColumnDt : null,
 	queryParamDt : null,
 	searchTreeNodeDt : null,
@@ -55,7 +55,7 @@ var ReportDesigner = {
 		});
 	},
 	post : function(data, url, callback) {
-		ReportDesigner.ajaxPost(data, url, function(data) {
+		SiteMgr.ajaxPost(data, url, function(data) {
 			$.smallBox({
 				title : data.msg,
 				color : "#739E72",
@@ -74,7 +74,7 @@ var ReportDesigner = {
 		menu.renderAsContextMenu();
 		menu.attachEvent("onClick", function(menuItemId, type) {
 			var meta = tree.getUserData(tree.contextID, 'meta');
-			ReportDesigner.tree.onCtxMenuEvent(menuItemId, meta);
+			SiteMgr.tree.onCtxMenuEvent(menuItemId, meta);
 		});
 		menu.loadFromHTML("treeContextMenu", true, function() {
 		});
@@ -83,22 +83,22 @@ var ReportDesigner = {
 		tree.enableDragAndDrop(true);
 		tree.enableContextMenu(menu);
 		tree.setImagePath(XFrame.getContextPath() + "/assets/js/plugin/dhtmlxtree/imgs/dhxtree_skyblue/");
-		//tree.setXMLAutoLoading(ReportDesigner.pageUrl + "listnodes");
+		//tree.setXMLAutoLoading(SiteMgr.pageUrl + "listnodes");
 		tree.setDataMode("json");
 		tree.setDragBehavior("child");
-		tree.loadJSON(ReportDesigner.pageUrl + "listnodes");
+		tree.loadJSON(SiteMgr.pageUrl + "listnodes");
 		tree.setOnClickHandler(function onClick(id) {
 			var meta = tree.getUserData(id, 'meta');
-			ReportDesigner.tree.onClickHandler(meta);
+			SiteMgr.tree.onClickHandler(meta);
 		});
 		tree.attachEvent("onDrag", function(sId, tId, id, sObject) {
-			ReportDesigner.tree.dragTreeNode(sId,tId,sObject);
+			SiteMgr.tree.dragTreeNode(sId,tId,sObject);
 		});
-		ReportDesigner.reportTree = tree;
+		SiteMgr.deviceTree = tree;
 
 	},
 	initEditor : function() {
-		ReportDesigner.sqlEditor = CodeMirror.fromTextArea(document.getElementById("reportSqlText"), {
+		SiteMgr.sqlEditor = CodeMirror.fromTextArea(document.getElementById("reportSqlText"), {
 			mode : 'text/x-mysql',
 			theme : 'rubyblue',
 			indentWithTabs : true,
@@ -112,22 +112,21 @@ var ReportDesigner = {
 					cm.setOption("fullScreen", !cm.getOption("fullScreen"));
 				},
 				"Esc" : function(cm) {
-					if (cm.getOption("fullScreen"))
-						cm.setOption("fullScreen", false);
+					if (cm.getOption("fullScreen")){cm.setOption("fullScreen", false);}
 				},
 				"Tab" : "autocomplete"
 			}
 		});
-		ReportDesigner.sqlEditor.on("change", function(cm, obj) {
+		SiteMgr.sqlEditor.on("change", function(cm, obj) {
 			if (obj.origin == "setValue") {
 				$('#reportIsChange').val(0);
 			} else {
 				$('#reportIsChange').val(1);
 			}
 		});
-		ReportDesigner.datatables.setSqlEditorStatus();
+		SiteMgr.datatables.setSqlEditorStatus();
 
-		ReportDesigner.viewSqlEditor = CodeMirror.fromTextArea(document.getElementById("viewSqlText"), {
+		SiteMgr.viewSqlEditor = CodeMirror.fromTextArea(document.getElementById("viewSqlText"), {
 			mode : 'text/x-mysql',
 			theme : 'rubyblue',
 			indentWithTabs : true,
@@ -137,7 +136,7 @@ var ReportDesigner = {
 			autofocus : true
 		});
 
-		ReportDesigner.viewHistorySqlEditor = CodeMirror.fromTextArea(document.getElementById("viewHistorySqlText"), {
+		SiteMgr.viewHistorySqlEditor = CodeMirror.fromTextArea(document.getElementById("viewHistorySqlText"), {
 			mode : 'text/x-mysql',
 			theme : 'rubyblue',
 			indentWithTabs : true,
@@ -150,38 +149,37 @@ var ReportDesigner = {
 					cm.setOption("fullScreen", !cm.getOption("fullScreen"));
 				},
 				"Esc" : function(cm) {
-					if (cm.getOption("fullScreen"))
-						cm.setOption("fullScreen", false);
+					if (cm.getOption("fullScreen")){cm.setOption("fullScreen", false);}
 				}
 			}
 		});
 	},
 	initEventBind : function() {
-		$('#reportStatus').change(ReportDesigner.datatables.setSqlEditorStatus);
-		$('#btnTreeSearch').click(ReportDesigner.dialog.searchTreeNodeDlg.show);
-		$('#search').click(ReportDesigner.dialog.searchTreeNodeDlg.find);
-		$('#btnTreeAdd').click(ReportDesigner.dialog.addTreeNodeDlg.show);
-		$("#btnTreeRefresh").click(ReportDesigner.tree.refreshTree);
-		$('#btnExecSql').click(ReportDesigner.editor.executeSql);
-		$('#btnNewReport').click(ReportDesigner.config.save);
-		$('#btnEditReport').click(ReportDesigner.config.edit);
-		$('#btnSaveExpr').click(ReportDesigner.datatables.sqlColumnDt.saveExpression);
-		$('#btnSaveMemo').click(ReportDesigner.datatables.sqlColumnDt.saveMemo);
-		$('#btnSaveFormat').click(ReportDesigner.datatables.sqlColumnDt.saveFormat);
-		$('#btnViewSqlText').click(ReportDesigner.dialog.viewSqlTextDlg.show);
-		$('#btnViewHistorySqlText').click(ReportDesigner.dialog.viewHistorySqlTextDlg.show);
-		$('#btnFullScreenEditSql').click(ReportDesigner.editor.fullScreenSqlEditor);
-		$('#btnSqlColumnDtUp').click(ReportDesigner.datatables.sqlColumnDt.upRow);
-		$('#btnSqlColumnDtDown').click(ReportDesigner.datatables.sqlColumnDt.downRow);
-		$('#btnQueryParamDtUp').click(ReportDesigner.datatables.queryParamDt.upRow);
-		$('#btnQueryParamDtDown').click(ReportDesigner.datatables.queryParamDt.downRow);
-		$('#btnAddQueryPara').click(ReportDesigner.config.setQueryParam);
-		$('#btnEditQueryPara').click(ReportDesigner.config.editQueryParam);
-		$('#btnSaveQueryParam').click(ReportDesigner.config.saveQueryParam);
-		$('#btnSqlColumnDtAddRow').click(ReportDesigner.datatables.sqlColumnDt.addRow);
-		$('#btnSqlColumnDtRemoveRow').click(ReportDesigner.datatables.sqlColumnDt.delRow);
-		$('#btnViewHistorySqlTextDlgCl').click(ReportDesigner.dialog.viewHistorySqlTextDlg.close);
-		$('#btnViewReport').click(ReportDesigner.config.previewReport);
+		$('#reportStatus').change(SiteMgr.datatables.setSqlEditorStatus);
+		$('#btnTreeSearch').click(SiteMgr.dialog.searchTreeNodeDlg.show);
+		$('#search').click(SiteMgr.dialog.searchTreeNodeDlg.find);
+		$('#btnTreeAdd').click(SiteMgr.dialog.addTreeNodeDlg.show);
+		$("#btnTreeRefresh").click(SiteMgr.tree.refreshTree);
+		$('#btnExecSql').click(SiteMgr.editor.executeSql);
+		$('#btnNewReport').click(SiteMgr.config.save);
+		$('#btnEditReport').click(SiteMgr.config.edit);
+		$('#btnSaveExpr').click(SiteMgr.datatables.sqlColumnDt.saveExpression);
+		$('#btnSaveMemo').click(SiteMgr.datatables.sqlColumnDt.saveMemo);
+		$('#btnSaveFormat').click(SiteMgr.datatables.sqlColumnDt.saveFormat);
+		$('#btnViewSqlText').click(SiteMgr.dialog.viewSqlTextDlg.show);
+		$('#btnViewHistorySqlText').click(SiteMgr.dialog.viewHistorySqlTextDlg.show);
+		$('#btnFullScreenEditSql').click(SiteMgr.editor.fullScreenSqlEditor);
+		$('#btnSqlColumnDtUp').click(SiteMgr.datatables.sqlColumnDt.upRow);
+		$('#btnSqlColumnDtDown').click(SiteMgr.datatables.sqlColumnDt.downRow);
+		$('#btnQueryParamDtUp').click(SiteMgr.datatables.queryParamDt.upRow);
+		$('#btnQueryParamDtDown').click(SiteMgr.datatables.queryParamDt.downRow);
+		$('#btnAddQueryPara').click(SiteMgr.config.setQueryParam);
+		$('#btnEditQueryPara').click(SiteMgr.config.editQueryParam);
+		$('#btnSaveQueryParam').click(SiteMgr.config.saveQueryParam);
+		$('#btnSqlColumnDtAddRow').click(SiteMgr.datatables.sqlColumnDt.addRow);
+		$('#btnSqlColumnDtRemoveRow').click(SiteMgr.datatables.sqlColumnDt.delRow);
+		$('#btnViewHistorySqlTextDlgCl').click(SiteMgr.dialog.viewHistorySqlTextDlg.close);
+		$('#btnViewReport').click(SiteMgr.config.previewReport);
 	},
 	initSqlColumnDt : function() {
 		var options = DataTablePaging.getNotAjaxOptions({
@@ -205,35 +203,35 @@ var ReportDesigner = {
 			columsdefs : [ {
 				"targets" : [ 0 ],
 				"data" : "index",
-				"render" : ReportDesigner.datatables.renderIndexColumn
+				"render" : SiteMgr.datatables.renderIndexColumn
 			}, {
 				"targets" : [ 1 ],
 				"data" : "name",
-				"render" : ReportDesigner.datatables.sqlColumnDt.renderNameColumn
+				"render" : SiteMgr.datatables.sqlColumnDt.renderNameColumn
 			}, {
 				"targets" : [ 2 ],
 				"data" : "text",
-				"render" : ReportDesigner.datatables.sqlColumnDt.renderTextColumn
+				"render" : SiteMgr.datatables.sqlColumnDt.renderTextColumn
 			}, {
 				"targets" : [ 3 ],
 				"data" : "type",
-				"render" : ReportDesigner.datatables.sqlColumnDt.renderTypeColumn
+				"render" : SiteMgr.datatables.sqlColumnDt.renderTypeColumn
 			}, {
 				"targets" : [ 6 ],
 				"data" : "decimals",
-				"render" : ReportDesigner.datatables.sqlColumnDt.renderDecimalsColumn
+				"render" : SiteMgr.datatables.sqlColumnDt.renderDecimalsColumn
 			}, {
 				"targets" : [ 7 ],
 				"data" : "sortType",
-				"render" : ReportDesigner.datatables.sqlColumnDt.renderSortTypeColumn
+				"render" : SiteMgr.datatables.sqlColumnDt.renderSortTypeColumn
 			}, {
 				"targets" : [ 8 ],
-				"render" : ReportDesigner.datatables.sqlColumnDt.renderOptionsColumn
+				"render" : SiteMgr.datatables.sqlColumnDt.renderOptionsColumn
 			} ]
 		});
-		ReportDesigner.sqlColumnDt = $('#sqlColumnDt').DataTable(options);
+		SiteMgr.sqlColumnDt = $('#sqlColumnDt').DataTable(options);
 		$('#sqlColumnDt tbody').on('click', 'tr', function() {
-			ReportDesigner.sqlColumnDt.$('tr.selected').removeClass('selected');
+			SiteMgr.sqlColumnDt.$('tr.selected').removeClass('selected');
 			$(this).addClass('selected');
 		});
 	},
@@ -265,49 +263,49 @@ var ReportDesigner = {
 			columsdefs : [ {
 				"targets" : [ 0 ],
 				"data" : "index",
-				"render" : ReportDesigner.datatables.renderIndexColumn
+				"render" : SiteMgr.datatables.renderIndexColumn
 			}, {
 				"targets" : [ 3 ],
 				"data" : "defaultValue",
-				"render" : ReportDesigner.datatables.queryParamDt.renderDefaultValueColumn
+				"render" : SiteMgr.datatables.queryParamDt.renderDefaultValueColumn
 			}, {
 				"targets" : [ 4 ],
 				"data" : "defaultText",
-				"render" : ReportDesigner.datatables.queryParamDt.renderDefaultTextColumn
+				"render" : SiteMgr.datatables.queryParamDt.renderDefaultTextColumn
 			}, {
 				"targets" : [ 6 ],
 				"data" : "dataSource",
-				"render" : ReportDesigner.datatables.queryParamDt.renderDataSourceColumn
+				"render" : SiteMgr.datatables.queryParamDt.renderDataSourceColumn
 			}, {
 				"targets" : [ 7 ],
 				"data" : "dataType",
-				"render" : ReportDesigner.datatables.queryParamDt.renderDataTypeColumn
+				"render" : SiteMgr.datatables.queryParamDt.renderDataTypeColumn
 			}, {
 				"targets" : [ 8 ],
 				"data" : "width",
-				"render" : ReportDesigner.datatables.queryParamDt.renderWidthColumn
+				"render" : SiteMgr.datatables.queryParamDt.renderWidthColumn
 			}, {
 				"targets" : [ 9 ],
 				"data" : "required",
-				"render" : ReportDesigner.datatables.queryParamDt.renderRequiredColumn
+				"render" : SiteMgr.datatables.queryParamDt.renderRequiredColumn
 			}, {
 				"targets" : [ 10 ],
 				"data" : "autoComplete",
-				"render" : ReportDesigner.datatables.queryParamDt.renderAutoCompleteColumn
+				"render" : SiteMgr.datatables.queryParamDt.renderAutoCompleteColumn
 			},{
 				"targets" : [ 11 ],
-				"render" : ReportDesigner.datatables.queryParamDt.renderOptionsColumn
+				"render" : SiteMgr.datatables.queryParamDt.renderOptionsColumn
 			} ]
 		});
-		ReportDesigner.queryParamDt = $('#queryParamDt').DataTable(options);
+		SiteMgr.queryParamDt = $('#queryParamDt').DataTable(options);
 		$('#queryParamDt tbody').on('dblclick', 'tr', function() {
-			var data = ReportDesigner.queryParamDt.row(this).data();
-			var index = ReportDesigner.queryParamDt.row(this).index();
+			var data = SiteMgr.queryParamDt.row(this).data();
+			var index = SiteMgr.queryParamDt.row(this).index();
 			$('#queryParamGridIndex').val(index);
 			$('#reportQueryParamForm').autofill(data);
 		});
 		$('#queryParamDt tbody').on('click', 'tr', function() {
-			ReportDesigner.queryParamDt.$('tr.selected').removeClass('selected');
+			SiteMgr.queryParamDt.$('tr.selected').removeClass('selected');
 			$(this).addClass('selected');
 		});
 	},
@@ -326,10 +324,10 @@ var ReportDesigner = {
 				data : "createTime"
 			} ],
 		});
-		ReportDesigner.searchTreeNodeDt = $('#searchTreeNodeDt').DataTable(options);
+		SiteMgr.searchTreeNodeDt = $('#searchTreeNodeDt').DataTable(options);
 		$('#searchTreeNodeDt tbody').on('dblclick', 'tr', function() {
-			var data = ReportDesigner.searchTreeNodeDt.row(this).data();
-			ReportDesigner.reportTree.selectItem(data.id,true,true);
+			var data = SiteMgr.searchTreeNodeDt.row(this).data();
+			SiteMgr.deviceTree.selectItem(data.id,true,true);
 		});
 	},
 	initViewHistorySqlDt : function(){
@@ -342,31 +340,31 @@ var ReportDesigner = {
 				data : "author"
 			}],
 		});
-		ReportDesigner.viewHistorySqlDt = $('#viewHistorySqlDt').DataTable(options);
+		SiteMgr.viewHistorySqlDt = $('#viewHistorySqlDt').DataTable(options);
 		$('#viewHistorySqlDt tbody').on('dblclick', 'tr', function() {
-			var data = ReportDesigner.viewHistorySqlDt.row(this).data();
-			var index = ReportDesigner.viewHistorySqlDt.row(this).index();
-			ReportDesigner.viewHistorySqlEditor.setValue(data.sqlText);
+			var data = SiteMgr.viewHistorySqlDt.row(this).data();
+			var index = SiteMgr.viewHistorySqlDt.row(this).index();
+			SiteMgr.viewHistorySqlEditor.setValue(data.sqlText);
 		});
 	},
 	initTabs : function(){
 		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			if($(e.target).text()=="查询参数"){
-				ReportDesigner.queryParamDt.columns.adjust().draw();
+				SiteMgr.queryParamDt.columns.adjust().draw();
 			}
 		});
 	},
 	init : function() {
-		ReportDesigner.initTree();
-		ReportDesigner.initEditor();
-		ReportDesigner.initEventBind();
-		ReportDesigner.initSqlColumnDt();
-		ReportDesigner.initQueryParamDt();
-		ReportDesigner.initTabs();
-		ReportDesigner.loadDataSource();
+		SiteMgr.initTree();
+		SiteMgr.initEditor();
+		SiteMgr.initEventBind();
+		SiteMgr.initSqlColumnDt();
+		SiteMgr.initQueryParamDt();
+		SiteMgr.initTabs();
+		SiteMgr.loadDataSource();
 	},
 	loadDataSource : function() {
-		$.getJSON(ReportDesigner.dsListUrl, null, function(data) {
+		$.getJSON(SiteMgr.dsListUrl, null, function(data) {
 			$("#reportDsId").empty();
 			var html = "";
 			for (var i = 0; i < data.length; i++) {
@@ -379,7 +377,7 @@ var ReportDesigner = {
 		});
 	},
 	getTreeUserData : function(id) {
-		return ReportDesigner.reportTree.getUserData(id, 'meta');
+		return SiteMgr.deviceTree.getUserData(id, 'meta');
 	},
 	showConfirmDlg : function(message) {
 		$("#confirmMessage").text(message);
@@ -399,23 +397,23 @@ var ReportDesigner = {
 		},
 		edit : function() {
 			$('#reportAction').val("edit");
-			ReportDesigner.config.save();
+			SiteMgr.config.save();
 		},
 		save : function() {
 			if ($("#reportConfigForm").valid()) {
-				var metaRows = ReportDesigner.datatables.sqlColumnDt.getMetaRows();
+				var metaRows = SiteMgr.datatables.sqlColumnDt.getMetaRows();
 				if (metaRows == null || metaRows.length == 0) {
-					return ReportDesigner.showMsg("没有任何报表SQL配置列选项");
+					return SiteMgr.showMsg("没有任何报表SQL配置列选项");
 				}
 
-				var currRows = ReportDesigner.datatables.sqlColumnDt.getRows(metaRows);
-				var columnTypeMap = ReportDesigner.datatables.sqlColumnDt.getColumnTypeMap(currRows);
+				var currRows = SiteMgr.datatables.sqlColumnDt.getRows(metaRows);
+				var columnTypeMap = SiteMgr.datatables.sqlColumnDt.getColumnTypeMap(currRows);
 				if (columnTypeMap.layout == 0 || columnTypeMap.stat == 0) {
-					return ReportDesigner.showMsg("您没有设置布局列或者统计列");
+					return SiteMgr.showMsg("您没有设置布局列或者统计列");
 				}
-				var emptyExprColumns = ReportDesigner.datatables.sqlColumnDt.getEmptyExprColumns(currRows);
+				var emptyExprColumns = SiteMgr.datatables.sqlColumnDt.getEmptyExprColumns(currRows);
 				if (emptyExprColumns && emptyExprColumns.length > 0) {
-					return ReportDesigner.showMsg("计算列：[" + emptyExprColumns.join() + "]没有设置表达式！");
+					return SiteMgr.showMsg("计算列：[" + emptyExprColumns.join() + "]没有设置表达式！");
 				}
 
 				var reportId = $("#reportId").val();
@@ -428,16 +426,16 @@ var ReportDesigner = {
 					name : $("#reportName").val(),
 					uid : $("#reportUid").val(),
 					layout : $("#reportLayout").val(),
-					sqlText : ReportDesigner.sqlEditor.getValue(),
+					sqlText : SiteMgr.sqlEditor.getValue(),
 					metaColumns : JSON.stringify(currRows),
 					status : $("#reportStatus").val(),
 					sequence : $("#reportSequence").val(),
 					isChange : $('#reportIsChange').val() == 0 ? false : true
 				};
-				ReportDesigner.ajaxPost(data, ReportDesigner.pageUrl + '' + act, function(result) {
+				SiteMgr.ajaxPost(data, SiteMgr.pageUrl + '' + act, function(result) {
 					if (result.success) {
-						ReportDesigner.showMsg(result.msg);
-						ReportDesigner.tree.refreshTree();
+						SiteMgr.showMsg(result.msg);
+						SiteMgr.tree.refreshTree();
 						$('#reportIsChange').val(0);
 						$('#reportAction').val("add");
 					}
@@ -452,7 +450,7 @@ var ReportDesigner = {
 		},
 		saveQueryParam : function() {
 			var id = $("#queryParamReportId").val();
-			var queryParamRows = ReportDesigner.datatables.queryParamDt.getMetaRows();
+			var queryParamRows = SiteMgr.datatables.queryParamDt.getMetaRows();
 			if (queryParamRows == null || queryParamRows.length == 0) {
 				$('#jsonQueryParams').val("");
 			} else {
@@ -462,10 +460,10 @@ var ReportDesigner = {
 				id : id,
 				jsonQueryParams : $('#jsonQueryParams').val()
 			};
-			ReportDesigner.ajaxPost(data, ReportDesigner.pageUrl + 'setqueryparam', function(result) {
+			SiteMgr.ajaxPost(data, SiteMgr.pageUrl + 'setqueryparam', function(result) {
 				if (result.success) {
-					ReportDesigner.showMsg(result.msg);
-					ReportDesigner.tree.refreshTree();
+					SiteMgr.showMsg(result.msg);
+					SiteMgr.tree.refreshTree();
 				}
 			});
 		},
@@ -474,8 +472,8 @@ var ReportDesigner = {
 			var row = $('#reportQueryParamForm').serializeObject();
 			row.required = $('#queryParamIsRequired').prop("checked");
 			row.autoComplete = $('#queryParamIsAutoComplete').prop("checked");
-			ReportDesigner.queryParamDt.row(index).data(row);
-			ReportDesigner.queryParamDt.draw();
+			SiteMgr.queryParamDt.row(index).data(row);
+			SiteMgr.queryParamDt.draw();
 		},
 		setQueryParam : function() {
 			if (!$("#reportQueryParamForm").valid()) {
@@ -484,7 +482,7 @@ var ReportDesigner = {
 			var row = $('#reportQueryParamForm').serializeObject();
 			row.required = $('#queryParamIsRequired').prop("checked");
 			row.autoComplete = $('#queryParamIsAutoComplete').prop("checked");
-			ReportDesigner.queryParamDt.row.add(row).draw();
+			SiteMgr.queryParamDt.row.add(row).draw();
 		},
 		toggleButton : function(action) {
 			if (action == 'add') {
@@ -507,61 +505,61 @@ var ReportDesigner = {
 		executeSql : function() {
 			if ($("#reportConfigForm").valid()) {
 				var loading = $.loading('正在加载中').show();
-				var sqlText = ReportDesigner.sqlEditor.getValue();
+				var sqlText = SiteMgr.sqlEditor.getValue();
 				if (sqlText == "") {
-					return ReportDesigner.showMsg("未发现操作的SQL语句");
+					return SiteMgr.showMsg("未发现操作的SQL语句");
 				}
 				
-				var queryParamRows = ReportDesigner.datatables.queryParamDt.getMetaRows();
+				var queryParamRows = SiteMgr.datatables.queryParamDt.getMetaRows();
 				var jsonQueryParams = queryParamRows.length > 0 ? JSON.stringify(queryParamRows) : "";
 				var data = {
 					sqlText : sqlText,
 					dsId : $('#reportDsId').select2("val"),
 					jsonQueryParams : jsonQueryParams
 				};
-				ReportDesigner.ajaxPost(data, ReportDesigner.pageUrl + 'loadsqlcolumns', function(result) {
+				SiteMgr.ajaxPost(data, SiteMgr.pageUrl + 'loadsqlcolumns', function(result) {
 					loading.destroy();
 					if (result.success) {
-						ReportDesigner.datatables.sqlColumnDt.loadRows(result.data);
+						SiteMgr.datatables.sqlColumnDt.loadRows(result.data);
 					}else{
-						ReportDesigner.showMsg(result.msg);
+						SiteMgr.showMsg(result.msg);
 					}
 				});
 			}
 		},
 		fullScreenSqlEditor : function() {
-			ReportDesigner.editor.fullScreen(ReportDesigner.sqlEditor);
+			SiteMgr.editor.fullScreen(SiteMgr.sqlEditor);
 		},
 		fullScreen : function(cm) {
 			cm.setOption("fullScreen", !cm.getOption("fullScreen"));
 		},
 		clearAll : function() {
-			ReportDesigner.sqlEditor.setValue("");
-			ReportDesigner.viewSqlEditor.setValue("");
-			ReportDesigner.viewHistorySqlEditor.setValue("");
+			SiteMgr.sqlEditor.setValue("");
+			SiteMgr.viewSqlEditor.setValue("");
+			SiteMgr.viewHistorySqlEditor.setValue("");
 		},
 	},
 	tabs : {
 		clear : function() {
 			$('#reportConfigForm').resetForm();
 			$('#reportQueryParamForm').resetForm();
-			ReportDesigner.sqlEditor.setValue("");
-			ReportDesigner.datatables.sqlColumnDt.clear();
-			ReportDesigner.datatables.queryParamDt.clear();
+			SiteMgr.sqlEditor.setValue("");
+			SiteMgr.datatables.sqlColumnDt.clear();
+			SiteMgr.datatables.queryParamDt.clear();
 		},
 		loadData : function(meta) {
-			ReportDesigner.tabs.clear();
+			SiteMgr.tabs.clear();
 			$('#reportConfigForm').autofill(meta);
 			$('#reportSqlText').text(meta.sqlText);
 			$('#reportDsId').select2("val", meta.dsId);
 			$("#reportId").val(meta.id)
 			$("#queryParamReportId").val(meta.id)
-			ReportDesigner.sqlEditor.setValue(meta.sqlText);
+			SiteMgr.sqlEditor.setValue(meta.sqlText);
 
 			var metaColumnRows = $.parseJSON((meta.metaColumns == null || meta.metaColumns == "") ? "[]" : meta.metaColumns);
 			var queryParamRows = $.parseJSON((meta.queryParams == null || meta.queryParams == "") ? "[]" : meta.queryParams);
-			ReportDesigner.datatables.sqlColumnDt.loadData(metaColumnRows);
-			ReportDesigner.datatables.queryParamDt.loadData(queryParamRows);
+			SiteMgr.datatables.sqlColumnDt.loadData(metaColumnRows);
+			SiteMgr.datatables.queryParamDt.loadData(queryParamRows);
 		},
 	},
 	//
@@ -573,7 +571,7 @@ var ReportDesigner = {
 				"id" : 0,
 				"name" : "根节点"
 			};
-			ReportDesigner.tree.addTreeNode(data);
+			SiteMgr.tree.addTreeNode(data);
 		},
 		addChildTreeNode : function(meta) {
 			var id = meta.id;
@@ -582,7 +580,7 @@ var ReportDesigner = {
 					"id" : id,
 					"name" : meta.name,
 				};
-				ReportDesigner.tree.addTreeNode(data);
+				SiteMgr.tree.addTreeNode(data);
 			}
 		},
 		dragTreeNode : function(sId,tId,sObject){
@@ -591,8 +589,8 @@ var ReportDesigner = {
 				sourceId : sId,
 				targetId : tId
 			};
-			ReportDesigner.ajaxPost(data, ReportDesigner.pageUrl + 'dragtreenode', function(){
-				ReportDesigner.tree.refreshTree();
+			SiteMgr.ajaxPost(data, SiteMgr.pageUrl + 'dragtreenode', function(){
+				SiteMgr.tree.refreshTree();
 			});
 		},
 		addTreeNode : function(data) {
@@ -611,11 +609,11 @@ var ReportDesigner = {
 			}
 		},
 		saveTreeNode : function(act) {
-			var actUrl = act == "add" ? ReportDesigner.pageUrl + "/addtreenode" : ReportDesigner.pageUrl + "/edittreenode";
+			var actUrl = act == "add" ? SiteMgr.pageUrl + "/addtreenode" : SiteMgr.pageUrl + "/edittreenode";
 			var formId = act == "add" ? '#addTreeNodeForm' : '#editTreeNodeForm';
 			var modalId = act == "add" ? '#addTreeNodeDlg' : '#editTreeNodeDlg';
-			ReportDesigner.post($(formId).serialize(), actUrl, function() {
-				ReportDesigner.tree.refreshTree();
+			SiteMgr.post($(formId).serialize(), actUrl, function() {
+				SiteMgr.tree.refreshTree();
 				$(modalId).modal("hide");
 			});
 		},
@@ -623,7 +621,7 @@ var ReportDesigner = {
 			if (meta) {
 				$('#copyNodeId').val(meta.id);
 			} else {
-				ReportDesigner.showMsg("您没有选择任何节点");
+				SiteMgr.showMsg("您没有选择任何节点");
 			}
 		},
 		pasteTreeNode : function(meta) {
@@ -632,16 +630,16 @@ var ReportDesigner = {
 					sourceId : $('#copyNodeId').val(),
 					targetId : meta.id	
 				};
-				ReportDesigner.ajaxPost(data,ReportDesigner.pageUrl + 'pastetreenode',function(result){
+				SiteMgr.ajaxPost(data,SiteMgr.pageUrl + 'pastetreenode',function(result){
 					console.log(result);
 					if (result.success) {
 						$('#copyNodeId').val(0);
-						return ReportDesigner.tree.updateTreeNode('add', result.data);
+						return SiteMgr.tree.updateTreeNode('add', result.data);
 					}
-					return ReportDesigner.showMsg(result.msg);
+					return SiteMgr.showMsg(result.msg);
 				});
 			} else {
-				ReportDesigner.showMsg("您没有选择任何节点");
+				SiteMgr.showMsg("您没有选择任何节点");
 			}
 		},
 		updateTreeNode : function(act, nodeData) {
@@ -686,48 +684,58 @@ var ReportDesigner = {
 				id : meta.id,
 				pid : meta.pid
 			};
-			ReportDesigner.post(data, ReportDesigner.pageUrl + 'remove');
-			ReportDesigner.tree.refreshTree();
+			SiteMgr.post(data, SiteMgr.pageUrl + 'remove');
+			SiteMgr.tree.refreshTree();
 		},
 		refreshTree : function() {
-			ReportDesigner.reportTree.deleteChildItems(0);
-			ReportDesigner.reportTree.loadJSON(ReportDesigner.pageUrl + "listnodes");
-			//ReportDesigner.reportTree.refreshItem("0");
+			SiteMgr.deviceTree.deleteChildItems(0);
+			SiteMgr.deviceTree.loadJSON(SiteMgr.pageUrl + "listnodes");
+			//SiteMgr.deviceTree.refreshItem("0");
 		},
 		onClickHandler : function(meta) {
-			ReportDesigner.tabs.clear();
-			ReportDesigner.config.saveChanged(meta, function(data) {
+			SiteMgr.tabs.clear();
+			SiteMgr.config.saveChanged(meta, function(data) {
 				if (data.flag != 1) {
 					$('#reportAction').val('add');
 					$('#reportPid').val(data.id);
-					ReportDesigner.config.toggleButton('add');
+					SiteMgr.config.toggleButton('add');
 				} else {
-					ReportDesigner.config.toggleButton('');
-					ReportDesigner.tabs.loadData(data);
+					SiteMgr.config.toggleButton('');
+					SiteMgr.tabs.loadData(data);
 				}
 			});
 		},
 		onCtxMenuEvent : function(menuItemId, meta) {
-			if (menuItemId == "addReport")
-				return ReportDesigner.dialog.addTreeNodeDlg.show();
-			if (menuItemId == "addNode")
-				return ReportDesigner.dialog.addTreeNodeDlg.showAddChild(meta);
-			if (menuItemId == "editNode")
-				return ReportDesigner.dialog.editTreeNodeDlg.show(meta);
-			if (menuItemId == "setComment")
-				return ReportDesigner.dialog.editTreeNodeDlg.show(meta);
-			if (menuItemId == "remove")
-				return ReportDesigner.tree.removeTreeNode(meta);
-			if (menuItemId == "search")
-				return ReportDesigner.dialog.searchTreeNodeDlg.show();
-			if (menuItemId == "refresh")
-				return ReportDesigner.tree.refreshTree();
-			if (menuItemId == "copy")
-				return ReportDesigner.tree.copyTreeNode(meta);
-			if (menuItemId == "paste")
-				return ReportDesigner.tree.pasteTreeNode(meta);
-			if (menuItemId == "reportPro")
-				return ReportDesigner.dialog.propertiesDlg.show(meta);
+			if (menuItemId == "addReport") {
+				return SiteMgr.dialog.addTreeNodeDlg.show();
+			}
+			if (menuItemId == "addNode") {
+				return SiteMgr.dialog.addTreeNodeDlg.showAddChild(meta);
+			}
+			if (menuItemId == "editNode") {
+				return SiteMgr.dialog.editTreeNodeDlg.show(meta);
+			}
+			if (menuItemId == "setComment") {
+				return SiteMgr.dialog.editTreeNodeDlg.show(meta);
+			}
+			if (menuItemId == "remove") {
+				return SiteMgr.tree.removeTreeNode(meta);
+			}
+			if (menuItemId == "search") {
+				return SiteMgr.dialog.searchTreeNodeDlg.show();
+			}
+			if (menuItemId == "refresh") {
+				return SiteMgr.tree.refreshTree();
+			}
+			if (menuItemId == "copy") {
+				return SiteMgr.tree.copyTreeNode(meta);
+			}
+			if (menuItemId == "paste") {
+				return SiteMgr.tree.pasteTreeNode(meta);
+			}
+			if (menuItemId == "reportPro") {
+				return SiteMgr.dialog.propertiesDlg.show(meta);
+			}
 			return;
 		}
 	},
@@ -737,23 +745,23 @@ var ReportDesigner = {
 		sqlColumnDt : {
 			getMetaRows : function() {
 				var rows = [];
-				ReportDesigner.sqlColumnDt.rows().indexes().each(function(idx) {
-					rows.push(ReportDesigner.sqlColumnDt.row(idx).data())
+				SiteMgr.sqlColumnDt.rows().indexes().each(function(idx) {
+					rows.push(SiteMgr.sqlColumnDt.row(idx).data())
 				});
 				return rows;
 			},
 			loadData : function(rows) {
 				for ( var row in rows) {
-					ReportDesigner.sqlColumnDt.row.add(rows[row]).draw();
+					SiteMgr.sqlColumnDt.row.add(rows[row]).draw();
 				}
 			},
 			loadRows : function(newRows) {
-				var metaRows = ReportDesigner.datatables.sqlColumnDt.getMetaRows();
+				var metaRows = SiteMgr.datatables.sqlColumnDt.getMetaRows();
 				if (metaRows == null || metaRows.length == 0) {
-					return ReportDesigner.datatables.sqlColumnDt.loadData(newRows);
+					return SiteMgr.datatables.sqlColumnDt.loadData(newRows);
 				}
 
-				var currRows = ReportDesigner.datatables.sqlColumnDt.getRows(metaRows);
+				var currRows = SiteMgr.datatables.sqlColumnDt.getRows(metaRows);
 				var oldRowMap = {};
 				for (var i = 0; i < currRows.length; i++) {
 					var name = currRows[i].name;
@@ -768,16 +776,16 @@ var ReportDesigner = {
 					}
 				}
 				$.each(currRows, function(i,row){
-					  if(row.type == 4) newRows.push(row);
+					  if(row.type == 4){newRows.push(row);}
 				});
 	
-				ReportDesigner.datatables.sqlColumnDt.clear();
-				return ReportDesigner.datatables.sqlColumnDt.loadData(newRows);
+				SiteMgr.datatables.sqlColumnDt.clear();
+				return SiteMgr.datatables.sqlColumnDt.loadData(newRows);
 			},
 			getRows : function(metaRows) {
 				for (var rowIndex = 0; rowIndex < metaRows.length; rowIndex++) {
 					var row = metaRows[rowIndex];
-					var subOptions = ReportDesigner.datatables.sqlColumnDt.getCheckboxOptions(row.type);
+					var subOptions = SiteMgr.datatables.sqlColumnDt.getCheckboxOptions(row.type);
 					for (var optIndex = 0; optIndex < subOptions.length; optIndex++) {
 						var option = subOptions[optIndex];
 						var optionId = "#" + option.name + rowIndex;
@@ -799,14 +807,7 @@ var ReportDesigner = {
 					"computed" : 0
 				};
 				for (var i = 0; i < rows.length; i++) {
-					if (rows[i].type == 1)
-						typeMap.layout += 1;
-					else if (rows[i].type == 2)
-						typeMap.dim += 1;
-					else if (rows[i].type == 3)
-						typeMap.stat += 1;
-					else if (rows[i].type == 4)
-						typeMap.computed += 1;
+					if (rows[i].type == 1){typeMap.layout += 1;}else if (rows[i].type == 2){typeMap.dim += 1;}else if (rows[i].type == 3){typeMap.stat += 1;}else if (rows[i].type == 4){typeMap.computed += 1;}
 				}
 				return typeMap;
 			},
@@ -823,25 +824,25 @@ var ReportDesigner = {
 			getCheckboxOptions : function(type) {
 				var checkboxOptions = [];
 				if (type == 4) {
-					checkboxOptions = $.grep(ReportDesigner.sqlColumnOptions, function(option, i) {
+					checkboxOptions = $.grep(SiteMgr.sqlColumnOptions, function(option, i) {
 						return option.type == 1;
 					});
 				} else if (type == 3) {
-					checkboxOptions = $.grep(ReportDesigner.sqlColumnOptions, function(option, i) {
+					checkboxOptions = $.grep(SiteMgr.sqlColumnOptions, function(option, i) {
 						return option.type == 1 || option.type == 2;
 					});
 				} else {
-					checkboxOptions = $.grep(ReportDesigner.sqlColumnOptions, function(option, i) {
+					checkboxOptions = $.grep(SiteMgr.sqlColumnOptions, function(option, i) {
 						return option.type == 3;
 					});
 				}
 				return checkboxOptions;
 			},
 			clear : function() {
-				ReportDesigner.sqlColumnDt.clear().draw();
+				SiteMgr.sqlColumnDt.clear().draw();
 			},
 			addRow : function() {
-				ReportDesigner.sqlColumnDt.row.add({
+				SiteMgr.sqlColumnDt.row.add({
 					"name" : "",
 					"text" : "",
 					"type" : "4",
@@ -853,17 +854,17 @@ var ReportDesigner = {
 				}).draw();
 			},
 			delRow : function() {
-				ReportDesigner.sqlColumnDt.rows('.selected').remove().draw();
-				//rows = ReportDesigner.datatables.sqlColumnDt.getMetaRows();
-				//ReportDesigner.datatables.sqlColumnDt.loadRows(rows);
+				SiteMgr.sqlColumnDt.rows('.selected').remove().draw();
+				//rows = SiteMgr.datatables.sqlColumnDt.getMetaRows();
+				//SiteMgr.datatables.sqlColumnDt.loadRows(rows);
 			},
 			upRow : function() {
-				var index = ReportDesigner.sqlColumnDt.row('.selected').index();
-				ReportDesigner.datatables.resortRows(index, 'up', ReportDesigner.sqlColumnDt);
+				var index = SiteMgr.sqlColumnDt.row('.selected').index();
+				SiteMgr.datatables.resortRows(index, 'up', SiteMgr.sqlColumnDt);
 			},
 			downRow : function() {
-				var index = ReportDesigner.sqlColumnDt.row('.selected').index();
-				ReportDesigner.datatables.resortRows(index, 'down', ReportDesigner.sqlColumnDt);
+				var index = SiteMgr.sqlColumnDt.row('.selected').index();
+				SiteMgr.datatables.resortRows(index, 'down', SiteMgr.sqlColumnDt);
 			},
 			renderNameColumn : function(data, type, row, meta) {
 				var index = meta.row;
@@ -944,15 +945,15 @@ var ReportDesigner = {
 				
 				//4:计算列,3:统计列,2:维度列,1:布局列
 				if (row.type == 4) {
-					subOptions = $.grep(ReportDesigner.sqlColumnOptions, function(option, i) {
+					subOptions = $.grep(SiteMgr.sqlColumnOptions, function(option, i) {
 						return option.type == 1 || option.type == 2 || option.type == 4;
 					});
 				} else if (row.type == 3) {
-					subOptions = $.grep(ReportDesigner.sqlColumnOptions, function(option, i) {
+					subOptions = $.grep(SiteMgr.sqlColumnOptions, function(option, i) {
 						return option.type == 1 || option.type == 2;
 					});
 				} else {
-					subOptions = $.grep(ReportDesigner.sqlColumnOptions, function(option, i) {
+					subOptions = $.grep(SiteMgr.sqlColumnOptions, function(option, i) {
 						return option.type == 2 || option.type == 3;
 					});
 				}
@@ -966,7 +967,7 @@ var ReportDesigner = {
 					var html = "";
 					if (name == "expression" || name == "memo" || name == "format") {
 						var imgSrc = XFrame.getContextPath() + "/assets/modules/report/icons/"+ name +".png";
-						var onClick = " onclick =\"javascript:ReportDesigner.dialog."+ name +"Dlg.show("+ index +")\"";
+						var onClick = " onclick =\"javascript:SiteMgr.dialog."+ name +"Dlg.show("+ index +")\"";
 						html = "<img style=\"cursor: pointer;\" id=\"" + id + "\" title=\"" + text + "\" src=\"" + imgSrc + "\"" + onClick + "/>";
 					} else {
 						html = "<input type=\"checkbox\" id=\"" + id + "\" name=\"" + name + "\"" + checked + ">" + text + "</input>";
@@ -976,17 +977,17 @@ var ReportDesigner = {
 				return htmlOptions.join(" ");
 			},
 			saveExpression : function() {
-				var row = ReportDesigner.sqlColumnDt.row('.selected').data();
+				var row = SiteMgr.sqlColumnDt.row('.selected').data();
 				row.expression = $("#columnExpression").val();
 				$('#expressionDlg').modal("hide");
 			},
 			saveMemo : function() {
-				var row = ReportDesigner.sqlColumnDt.row('.selected').data();
+				var row = SiteMgr.sqlColumnDt.row('.selected').data();
 				row.comment = $("#columnMemo").val();
 				$('#memoDlg').modal("hide");
 			},
 			saveFormat : function() {
-				var row = ReportDesigner.sqlColumnDt.row('.selected').data();
+				var row = SiteMgr.sqlColumnDt.row('.selected').data();
 				row.format = $("#columnFormat").val();
 				$('#formatDlg').modal("hide");
 			}
@@ -994,29 +995,29 @@ var ReportDesigner = {
 		queryParamDt : {
 			getMetaRows : function() {
 				var rows = [];
-				ReportDesigner.queryParamDt.rows().indexes().each(function(idx) {
-					rows.push(ReportDesigner.queryParamDt.row(idx).data())
+				SiteMgr.queryParamDt.rows().indexes().each(function(idx) {
+					rows.push(SiteMgr.queryParamDt.row(idx).data())
 				});
 				return rows;
 			},
 			loadData : function(rows) {
 				for ( var row in rows) {
-					ReportDesigner.queryParamDt.row.add(rows[row]).draw();
+					SiteMgr.queryParamDt.row.add(rows[row]).draw();
 				}
 			},
 			clear : function() {
-				ReportDesigner.queryParamDt.clear().draw();
+				SiteMgr.queryParamDt.clear().draw();
 			},
 			delRow : function() {
-				var rows = ReportDesigner.queryParamDt.rows('.selected').remove().draw();
+				var rows = SiteMgr.queryParamDt.rows('.selected').remove().draw();
 			},
 			upRow : function() {
-				var index = ReportDesigner.queryParamDt.row('.selected').index();
-				ReportDesigner.datatables.resortRows(index, 'up', ReportDesigner.queryParamDt);
+				var index = SiteMgr.queryParamDt.row('.selected').index();
+				SiteMgr.datatables.resortRows(index, 'up', SiteMgr.queryParamDt);
 			},
 			downRow : function() {
-				var index = ReportDesigner.queryParamDt.row('.selected').index();
-				ReportDesigner.datatables.resortRows(index, 'down', ReportDesigner.queryParamDt);
+				var index = SiteMgr.queryParamDt.row('.selected').index();
+				SiteMgr.datatables.resortRows(index, 'down', SiteMgr.queryParamDt);
 			},
 			renderDefaultValueColumn : function(data, type, row, meta) {
 				return data || "";
@@ -1044,15 +1045,15 @@ var ReportDesigner = {
 			},
 			renderOptionsColumn : function(data, type, row, meta) {
 				var index = meta.row;
-				return "<a href=\"javascript:ReportDesigner.datatables.queryParamDt.delRow()\"><span class=\"glyphicon glyphicon-remove\"></span></a>";
+				return "<a href=\"javascript:SiteMgr.datatables.queryParamDt.delRow()\"><span class=\"glyphicon glyphicon-remove\"></span></a>";
 			}
 		},
 		setSqlEditorStatus : function() {
 			var status = $("#reportStatus").val();
 			if (status > 0) {
-				return ReportDesigner.sqlEditor.setOption("readOnly", "nocursor");
+				return SiteMgr.sqlEditor.setOption("readOnly", "nocursor");
 			}
-			return ReportDesigner.sqlEditor.setOption("readOnly", false);
+			return SiteMgr.sqlEditor.setOption("readOnly", false);
 		},
 		renderIndexColumn : function(data, type, row, meta) {
 			if (typeof (meta.row) == "number") {
@@ -1069,7 +1070,7 @@ var ReportDesigner = {
 				table.row(index).data(moveRow);
 				table.row(moveIndex).data(currRow);
 				table.draw();
-				ReportDesigner.datatables.selectedRow(table, moveIndex);
+				SiteMgr.datatables.selectedRow(table, moveIndex);
 			}
 		},
 		selectedRow : function(table, index) {
@@ -1082,54 +1083,54 @@ var ReportDesigner = {
 		addTreeNodeDlg : {
 			show : function() {
 				$('#addTreeNodeDlg').modal("show");
-				ReportDesigner.tree.addRootTreeNode();
+				SiteMgr.tree.addRootTreeNode();
 			},
 			showAddChild : function(meta) {
 				$('#addTreeNodeDlg').modal("show");
-				ReportDesigner.tree.addChildTreeNode(meta);
+				SiteMgr.tree.addChildTreeNode(meta);
 			},
 		},
 		editTreeNodeDlg : {
 			show : function(meta) {
 				$('#editTreeNodeDlg').modal("show");
-				ReportDesigner.tree.editTreeNode(meta);
+				SiteMgr.tree.editTreeNode(meta);
 			}
 		},
 		searchTreeNodeDlg : {
 			show : function() {
 				$('#searchTreeNodeDlg').modal("show");
-				ReportDesigner.initSearchTreeNodeDt();
+				SiteMgr.initSearchTreeNodeDt();
 			},
 			find : function() {
-				ReportDesigner.searchTreeNodeDt.clear().draw();
+				SiteMgr.searchTreeNodeDt.clear().draw();
 				var fieldName = $('#fieldName').val();
 				var keyword = $('#Keyword').val();
-				var url = ReportDesigner.pageUrl + 'search?fieldName=' + fieldName + '&keyword=' + keyword;
-				ReportDesigner.searchTreeNodeDt.ajax.url(url).load();
+				var url = SiteMgr.pageUrl + 'search?fieldName=' + fieldName + '&keyword=' + keyword;
+				SiteMgr.searchTreeNodeDt.ajax.url(url).load();
 			}
 		},
 		propertiesDlg : {
 			show : function(meta) {
 				$('#propertiesDlg').modal("show");
-				ReportDesigner.dialog.propertiesDlg.loadData(meta);
+				SiteMgr.dialog.propertiesDlg.loadData(meta);
 			},
 			loadData : function(meta) {
 				for ( var propName in meta) {
 					var id = "#reportProp_" + propName;
-					var value = ReportDesigner.utils.getPropertyValue(propName, meta);
+					var value = SiteMgr.utils.getPropertyValue(propName, meta);
 					$(id).text(value);
 				}
 			}
 		},
 		viewSqlTextDlg : {
 			show : function() {
-				var sqlText = ReportDesigner.sqlEditor.getValue();
+				var sqlText = SiteMgr.sqlEditor.getValue();
 				var dataRange = $('#reportDataRange').val();
 				if (sqlText == "") {
-					return ReportDesigner.showMsg("未发现操作的SQL语句");
+					return SiteMgr.showMsg("未发现操作的SQL语句");
 				}
 
-				var queryParamRows = ReportDesigner.datatables.queryParamDt.getMetaRows();
+				var queryParamRows = SiteMgr.datatables.queryParamDt.getMetaRows();
 				var jsonQueryParams = queryParamRows.length > 0 ? JSON.stringify(queryParamRows) : "";
 				var data = {
 					sqlText : sqlText,
@@ -1138,9 +1139,9 @@ var ReportDesigner = {
 					jsonQueryParams : jsonQueryParams
 				};
 				$('#viewSqlTextDlg').modal("show");
-				ReportDesigner.viewSqlEditor.setValue('');
-				ReportDesigner.ajaxPost(data, ReportDesigner.pageUrl + 'viewsqltext', function(result) {
-					ReportDesigner.viewSqlEditor.setValue(result.data);
+				SiteMgr.viewSqlEditor.setValue('');
+				SiteMgr.ajaxPost(data, SiteMgr.pageUrl + 'viewsqltext', function(result) {
+					SiteMgr.viewSqlEditor.setValue(result.data);
 				});
 			},
 		},
@@ -1148,15 +1149,15 @@ var ReportDesigner = {
 			show : function() {
 				var reportId = $("#reportId").val();
 				$('#viewHistorySqlTextDlg').modal("show");
-				if(ReportDesigner.viewHistorySqlDt==null){
-					ReportDesigner.initViewHistorySqlDt();
+				if(SiteMgr.viewHistorySqlDt==null){
+					SiteMgr.initViewHistorySqlDt();
 				}
-				ReportDesigner.viewHistorySqlDt.columns.adjust().draw();
-				url = ReportDesigner.pageUrl  + 'getallhistorysql?reportId=' + reportId,
-				ReportDesigner.viewHistorySqlDt.ajax.url(url).load();
+				SiteMgr.viewHistorySqlDt.columns.adjust().draw();
+				url = SiteMgr.pageUrl  + 'getallhistorysql?reportId=' + reportId,
+				SiteMgr.viewHistorySqlDt.ajax.url(url).load();
 			},
 			close : function() {
-				ReportDesigner.viewHistorySqlEditor.setValue("");
+				SiteMgr.viewHistorySqlEditor.setValue("");
 				$('#viewHistorySqlTextDlg').modal("hide");
 			}
 		},
@@ -1164,7 +1165,7 @@ var ReportDesigner = {
 			show : function(index) {
 				$('#expressionDlg').modal("show");
 				$("#columnExpression").val("");
-				var row = ReportDesigner.sqlColumnDt.row(index).data();
+				var row = SiteMgr.sqlColumnDt.row(index).data();
 				$("#columnExpression").val(row.expression);
 			}
 		},
@@ -1172,7 +1173,7 @@ var ReportDesigner = {
 			show : function(index) {		
 				$('#memoDlg').modal("show");
 				$("#columnMemo").val("");
-				var row = ReportDesigner.sqlColumnDt.row(index).data();
+				var row = SiteMgr.sqlColumnDt.row(index).data();
 				$("#columnMemo").val(row.comment);
 			}
 		},
@@ -1180,7 +1181,7 @@ var ReportDesigner = {
 			show : function(index) {
 				$('#formatDlg').modal("show");
 				$("#columnFormat").val("");
-				var row = ReportDesigner.sqlColumnDt.row(index).data();
+				var row = SiteMgr.sqlColumnDt.row(index).data();
 				$("#columnFormat").val(row.format);
 			}
 		}
@@ -1192,10 +1193,10 @@ var ReportDesigner = {
 		getPropertyValue : function(name, object) {
 			var value = object[name];
 			if (name == "flag") {
-				return ReportDesigner.utils.getFlagName(value);
+				return SiteMgr.utils.getFlagName(value);
 			}
 			if (name == "layout") {
-				return ReportDesigner.utils.getLayoutName(value);
+				return SiteMgr.utils.getLayoutName(value);
 			}
 			if (name == "hasChild") {
 				return value ? "有" : "无";
