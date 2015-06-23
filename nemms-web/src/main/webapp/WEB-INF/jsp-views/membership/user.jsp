@@ -41,7 +41,8 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label>关键字</label> <input type="text" id="Keyword" name="keyword" class="form-control input-sm" placeholder="用户名">
+											<label>关键字</label>
+											<input type="text" id="Keyword" name="keyword" class="form-control input-sm" placeholder="用户名">
 										</div>
 										<div class="form-group">
 											<a id="search_user" class="btn btn-primary"> <i class="fa fa-search"></i>搜索
@@ -103,7 +104,8 @@
 							<div class="row">
 								<label class="label col col-2">用户账号:</label>
 								<div class="col col-10">
-									<a id="edit_account" style="line-height: 30px;"></a><input id="edit_uid" type="hidden" name="userId" />
+									<a id="edit_account" style="line-height: 30px;"></a>
+									<input id="edit_uid" type="hidden" name="userId" />
 								</div>
 							</div>
 						</section>
@@ -321,7 +323,8 @@
 						</section>
 						<section>
 							<div class="row">
-								<input id="user_template_action" type="hidden" name="action" /><input id="user_template_id" type="hidden" name="action" />
+								<input id="user_template_action" type="hidden" name="action" />
+								<input id="user_template_id" type="hidden" name="action" />
 							</div>
 						</section>
 					</fieldset>
@@ -338,15 +341,14 @@
 	<span id="alert_message"></span>
 </div>
 <div id="delete_dialog" title="">
-	<span id="delete_message"></span> <input id="delete_id" type="hidden" />
+	<span id="delete_message"></span>
+	<input id="delete_id" type="hidden" />
 </div>
 <script src="<%=request.getContextPath()%>/assets/modules/membership/js/user.js"></script>
 <script type="text/javascript">
 	pageSetUp();
 	var tree1 ;
-	loadScript([
-		'<%=request.getContextPath()%>/assets/js/plugin/dhtmlxtree/dhtmlxtree.js'
-	], function() {
+	loadScript(['<%=request.getContextPath()%>/assets/js/plugin/dhtmlxtree/dhtmlxtree.js'], function() {
 		var tree = new dhtmlXTreeObject("module-tree1", "100%", "100%", 0);
 		tree1 = tree;
 		tree.setSkin('dhx_skyblue');

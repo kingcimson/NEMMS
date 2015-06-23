@@ -127,6 +127,17 @@
 												</div>
 											</div>
 											<div class="form-group">
+												<label class="col-md-1 control-label">可查看的设备参数属性</label>
+												<div class="col-md-11">
+													<div class="inline-group checkboxs">
+														<label class="checkbox">安装用户数<input class="checkbox-item" type="checkbox" name="paramProps" value="uv" checked="checked"><i></i></label><label
+															class="checkbox">总UV<input class="checkbox-item" type="checkbox" name="paramProps" value="total_uv" checked="checked"><i></i></label><label
+															class="checkbox">占比<input class="checkbox-item" type="checkbox" name="paramProps" value="rating" checked="checked"><i></i></label><label
+															class="checkbox">全选 <input type="checkbox" name="checkAllParamProps" id="checkAllParamProps"><i></i></label>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
 												<label class="col-md-1 control-label">描述&nbsp;</label>
 												<div class="col-md-11">
 													<input class="form-control" type="text" id="role_comment" name="role_comment" required>
@@ -198,9 +209,7 @@
 <script src="<%=request.getContextPath()%>/assets/modules/membership/js/role.js"></script>
 <script type="text/javascript">
 	pageSetUp();
-	loadScript([
-		'<%=request.getContextPath()%>/assets/js/plugin/dhtmlxtree/dhtmlxtree.js'
-	], function() {
+	loadScript(['<%=request.getContextPath()%>/assets/js/plugin/dhtmlxtree/dhtmlxtree.js'], function() {
 		MembershipRole.validator();
 		
 		dhtmlXTreeObject.prototype.getAllCheckedChildless = function () {

@@ -39,6 +39,11 @@ public class RolePo implements Serializable {
 	public final static String Operations = "operations";
 
 	/**
+	 * 可以查看的设备参数属性(如category_id,name,mode等)
+	 */
+	public final static String DeviceParamProps = "device_param_props";
+
+	/**
 	 * 列名name,系统角色名称
 	 */
 	public final static String Name = "name";
@@ -91,6 +96,9 @@ public class RolePo implements Serializable {
 
 	@Column(name = "operations")
 	private String operations;
+
+	@Column(name = "device_param_props")
+	private String deviceParamProps;
 
 	@Column(name = "name")
 	private String name;
@@ -171,6 +179,24 @@ public class RolePo implements Serializable {
 	 */
 	public void setOperations(String operations) {
 		this.operations = operations;
+	}
+
+	/**
+	 * 获取可以查看的设备参数属性(如category_id,name,mode等)
+	 * 
+	 * @return 设备参数属性(如category_id,name,mode等)
+	 */
+	public String getDeviceParamProps() {
+		return this.deviceParamProps == null ? "id" : this.deviceParamProps;
+	}
+
+	/**
+	 * 设置可以查看的设备参数属性(如category_id,name,mode等)
+	 * 
+	 * @param deviceParamProps 设备参数属性(如category_id,name,mode等)
+	 */
+	public void setDeviceParamProps(String deviceParamProps) {
+		this.deviceParamProps = deviceParamProps;
 	}
 
 	/**
