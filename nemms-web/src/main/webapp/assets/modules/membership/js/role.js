@@ -66,7 +66,8 @@ var MembershipRole = {
 			sequence : $("#role_sequence").val(),
 			comment : $("#role_comment").val(),
 			modules : moduleTree.getAllCheckedChildless(),
-			operations : moduleTree.getAllCheckedChildless()
+			operations : moduleTree.getAllCheckedChildless(),
+			deviceParamProps : $("input[name='deviceParamProps']:checked").map(function(){ return $(this).val();}).get().join(",")
 		};
 		if ($('#edit_role_form').validate().form()) {
 			var url = MembershipRole.pageUrl + 'add';
@@ -84,7 +85,8 @@ var MembershipRole = {
 			"status" : $("#status").val(),
 			"sequence" : $("#role_sequence").val(),
 			"comment" : $("#role_comment").val(),
-			"operations" : moduleTree.getAllCheckedChildless()
+			"operations" : moduleTree.getAllCheckedChildless(),
+			"deviceParamProps" : $("input[name='deviceParamProps']:checked").map(function(){ return $(this).val();}).get().join(",")
 		};
 		var id = roleTree.getSelectedItemId();
 		if (id == '') {
@@ -148,6 +150,9 @@ $(function() {
 			} else {
 				moduleTree.setSubChecked(0, false);
 			}
+		});
+		$("#checkAllDeviceParamProps").click(function() {
+			$("input[name='deviceParamProps']").prop("checked",$('#checkAllDeviceParamProps').is(':checked'));
 		});
 	});
 });

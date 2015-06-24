@@ -111,7 +111,7 @@ public class RoleController extends AbstractController {
 		ParamJsonResult<RolePo> result = new ParamJsonResult<RolePo>(false, "更新角色失败!");
 		String[] names = new String[] {
 				RolePo.Name, RolePo.Code, RolePo.IsSystem, RolePo.Status,
-				RolePo.Sequence, RolePo.Comment, RolePo.Modules, RolePo.Operations
+				RolePo.Sequence, RolePo.Comment, RolePo.Modules, RolePo.Operations, RolePo.DeviceParamProps
 		};
 
 		try {
