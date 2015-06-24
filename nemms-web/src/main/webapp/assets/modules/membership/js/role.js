@@ -11,6 +11,8 @@ var MembershipRole = {
 			moduleTree.deleteChildItems("0");
 			moduleTree.loadJSON(MembershipRole.pageUrl + 'getoperations?id=' + id);
 			$("#role_comment").val(result.comment);
+			$("input[name='deviceParamProps']").prop("checked",false);
+			alert(result.deviceParamProps);
 		});
 	},
 	validator : function() {
