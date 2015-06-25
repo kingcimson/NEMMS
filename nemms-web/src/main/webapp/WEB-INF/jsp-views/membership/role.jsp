@@ -130,19 +130,19 @@
 												<label class="col-md-1 control-label">可查看的设备参数属性</label>
 												<div class="col-md-11">
 													<div class="inline-group checkboxs">
-														<label class="checkbox">编号<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="id" checked="checked"><i></i></label>
-														<label class="checkbox">名称<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="name" checked="checked"><i></i></label>
-														<label class="checkbox">类别<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="category_id" checked="checked"><i></i></label>
-														<label class="checkbox">读写属性<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="mode"><i></i></label>
-														<label class="checkbox">单位<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="unit"><i></i></label>
-														<label class="checkbox">传输比或系数<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="ratio"><i></i></label>
-														<label class="checkbox">值数据类型<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="value_type"><i></i></label>
-														<label class="checkbox">值数据长度<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="value_len"><i></i></label>
-														<label class="checkbox">值数据最小长度<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="value_min_len"><i></i></label>
-														<label class="checkbox">值数据最大长度<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="value_max_len"><i></i></label>
-														<label class="checkbox">参数最小值<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="min_value"><i></i></label>
-														<label class="checkbox">参数最大值<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="max_value"><i></i></label>
-														<label class="checkbox">告警级别<input class="checkbox-item" type="checkbox" name="deviceParamProps" value="warn_level"><i></i></label>
+														<label class="checkbox">编号<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_id" value="id" checked="checked"><i></i></label>
+														<label class="checkbox">名称<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_name" value="name" checked="checked"><i></i></label>
+														<label class="checkbox">类别<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_category_id" value="category_id" checked="checked"><i></i></label>
+														<label class="checkbox">读写属性<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_mode" value="mode"><i></i></label>
+														<label class="checkbox">单位<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_unit" value="unit"><i></i></label>
+														<label class="checkbox">传输比或系数<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_ratio" value="ratio"><i></i></label>
+														<label class="checkbox">值数据类型<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_value_type" value="value_type"><i></i></label>
+														<label class="checkbox">值数据长度<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_value_len" value="value_len"><i></i></label>
+														<label class="checkbox">值数据最小长度<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_value_min_len" value="value_min_len"><i></i></label>
+														<label class="checkbox">值数据最大长度<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_value_max_len" value="value_max_len"><i></i></label>
+														<label class="checkbox">参数最小值<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_min_value" value="min_value"><i></i></label>
+														<label class="checkbox">参数最大值<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_max_value" value="max_value"><i></i></label>
+														<label class="checkbox">告警级别<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_warn_level" value="warn_level"><i></i></label>
 														<label class="checkbox">全选 <input type="checkbox" name="checkAllDeviceParamProps" id="checkAllDeviceParamProps"><i></i></label>
 													</div>
 												</div>

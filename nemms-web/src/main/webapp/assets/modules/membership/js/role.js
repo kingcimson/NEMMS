@@ -12,6 +12,9 @@ var MembershipRole = {
 			moduleTree.loadJSON(MembershipRole.pageUrl + 'getoperations?id=' + id);
 			$("#role_comment").val(result.comment);
 			$("input[name='deviceParamProps']").prop("checked",false);
+			$.each( result.deviceParamProps.split(','), function(i, n){
+				  $("#prop_"+ n).prop("checked",true);
+			});
 		});
 	},
 	validator : function() {
