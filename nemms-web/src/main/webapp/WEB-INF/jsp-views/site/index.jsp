@@ -67,9 +67,9 @@ tr.selected:before {
 <div class="row">
 	<div class="col-lg-2" style="padding-right: 5px;">
 		<div class="device-tree-btn">
-			<a href="javascript:void(0);" class="btn btn-primary" id="btnTreeAdd"><i class="fa fa-plus-circle"></i>添加</a> <a href="javascript:void(0);"
-				class="btn btn-primary" id="btnTreeSearch"><i class="fa fa-search"></i>查找</a> <a href="javascript:void(0);" class="btn btn-primary"
-				id="btnTreeRefresh"><i class="fa fa-refresh"></i>刷新</a>
+			<a href="javascript:void(0);" class="btn btn-primary" id="btnTreeAdd"><i class="fa fa-plus-circle"></i>添加</a> 
+<!-- 			<a href="javascript:void(0);" class="btn btn-primary" id="btnTreeSearch"><i class="fa fa-search"></i>查找</a>  -->
+			<a href="javascript:void(0);" class="btn btn-primary" id="btnTreeRefresh"><i class="fa fa-refresh"></i>刷新</a>
 		</div>
 		<div id="device-tree" class="device-tree"></div>
 	</div>
@@ -188,8 +188,7 @@ tr.selected:before {
 							<div class="row">
 								<label class="label col col-2">名称:</label>
 								<div class="col col-10">
-									<label class="input"> <input type="text" name="name" id="name" required>
-									</label>
+									<label class="input"> <input type="text" name="name" id="name" required></label>
 								</div>
 							</div>
 						</section>
@@ -203,9 +202,7 @@ tr.selected:before {
 								</div>
 								<label class="label col col-2">模式:</label>
 								<div class="col col-4">
-									<label class="select"> <select id="mode" name="mode">
-									</select> <i></i>
-									</label>
+									<label class="select"> <select id="mode" name="mode"></select> <i></i></label>
 								</div>
 							</div>
 						</section>

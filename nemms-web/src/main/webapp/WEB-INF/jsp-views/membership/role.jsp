@@ -130,6 +130,7 @@
 												<label class="col-md-1 control-label">可查看的设备参数属性</label>
 												<div class="col-md-11">
 													<div class="inline-group checkboxs">
+													    <label class="checkbox">全选 <input type="checkbox" name="checkAllDeviceParamProps" id="checkAllDeviceParamProps"><i></i></label>
 														<label class="checkbox">编号<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_id" value="id" checked="checked"><i></i></label>
 														<label class="checkbox">名称<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_name" value="name" checked="checked"><i></i></label>
 														<label class="checkbox">类别<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_category_id" value="category_id" checked="checked"><i></i></label>
@@ -143,7 +144,6 @@
 														<label class="checkbox">参数最小值<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_min_value" value="min_value"><i></i></label>
 														<label class="checkbox">参数最大值<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_max_value" value="max_value"><i></i></label>
 														<label class="checkbox">告警级别<input class="checkbox-item" type="checkbox" name="deviceParamProps" id="prop_warn_level" value="warn_level"><i></i></label>
-														<label class="checkbox">全选 <input type="checkbox" name="checkAllDeviceParamProps" id="checkAllDeviceParamProps"><i></i></label>
 													</div>
 												</div>
 											</div>
