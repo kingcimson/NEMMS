@@ -37,6 +37,12 @@ public class ConfigController extends AbstractController {
 		return this.configDictService.getConfigItems(parentKey);
 	}
 
+	@RequestMapping(value = "/getDeviceTypes")
+	@ResponseBody
+	public List<ConfigDictPo> getDeviceTypes(HttpServletRequest request) {
+		return this.configDictService.getDeviceTypes();
+	}
+
 	@RequestMapping(value = "/list")
 	@ResponseBody
 	public Map<String, Object> list(Integer id, DataTablePageInfo dtPageInfo, HttpServletRequest request) {

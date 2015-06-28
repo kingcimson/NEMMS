@@ -34,14 +34,64 @@ public class SitePo implements Serializable {
 	public final static String Pid = "pid";
 
 	/**
+	 * 列名uid,站点/设备编号
+	 */
+	public final static String Uid = "uid";
+
+	/**
 	 * 列名name,
 	 */
 	public final static String Name = "name";
 
 	/**
-	 * 列名uid,站点编号
+	 * 列名device_type,设备类型
 	 */
-	public final static String Uid = "uid";
+	public final static String DeviceType = "device_type";
+
+	/**
+	 * 列名ap_protocol,AP协议类型
+	 */
+	public final static String ApProtocol = "ap_protocol";
+
+	/**
+	 * 列名mcp_protocol,mcp协议类型
+	 */
+	public final static String McpProtocol = "mcp_protocol";
+
+	/**
+	 * 列名protocol,协议类型
+	 */
+	public final static String Protocol = "protocol";
+
+	/**
+	 * 列名ip_addr,设备ip地址
+	 */
+	public final static String IpAddr = "ip_addr";
+
+	/**
+	 * 列名port,远端端口
+	 */
+	public final static String Port = "port";
+
+	/**
+	 * 列名manufactor,设备厂商
+	 */
+	public final static String Manufactor = "manufactor";
+
+	/**
+	 * 列名comment,说明备注
+	 */
+	public final static String Comment = "comment";
+
+	/**
+	 * 列名create_user,站点或设备创建用户
+	 */
+	public final static String CreateUser = "create_user";
+
+	/**
+	 * 列名flag,记录标志,0为站点，1为设备
+	 */
+	public final static String Flag = "flag";
 
 	/**
 	 * 列名has_child,
@@ -59,39 +109,9 @@ public class SitePo implements Serializable {
 	public final static String Sequence = "sequence";
 
 	/**
-	 * 列名device_no,设备编号
+	 * 列名path,站点树型结构路径
 	 */
-	public final static String DeviceNo = "device_no";
-
-	/**
-	 * 列名port,远端端口
-	 */
-	public final static String Port = "port";
-
-	/**
-	 * 列名device_type,设备类型
-	 */
-	public final static String DeviceType = "device_type";
-
-	/**
-	 * 列名manufactor,设备厂商
-	 */
-	public final static String Manufactor = "manufactor";
-
-	/**
-	 * 列名type,站点类型
-	 */
-	public final static String Type = "type";
-
-	/**
-	 * 列名protocol,协议类型
-	 */
-	public final static String Protocol = "protocol";
-
-	/**
-	 * 列名comment,说明备注
-	 */
-	public final static String Comment = "comment";
+	public final static String Path = "path";
 
 	/**
 	 * 列名create_time,
@@ -107,43 +127,55 @@ public class SitePo implements Serializable {
 	private Integer id;
 
 	@Column(name = "pid")
-	private Integer pid;
-
-	@Column(name = "name")
-	private String name;
+	private Integer pid = 0;
 
 	@Column(name = "uid")
 	private String uid;
 
-	@Column(name = "has_child")
-	private Byte hasChild;
-
-	@Column(name = "status")
-	private Integer status;
-
-	@Column(name = "sequence")
-	private Integer sequence;
-
-	@Column(name = "device_no")
-	private String deviceNo;
-
-	@Column(name = "port")
-	private String port;
+	@Column(name = "name")
+	private String name;
 
 	@Column(name = "device_type")
-	private String deviceType;
+	private String deviceType = "";
 
-	@Column(name = "manufactor")
-	private String manufactor;
+	@Column(name = "ap_protocol")
+	private String apProtocol = "";
 
-	@Column(name = "type")
-	private String type;
+	@Column(name = "mcp_protocol")
+	private String mcpProtocol = "";
 
 	@Column(name = "protocol")
-	private String protocol;
+	private String protocol = "";
+
+	@Column(name = "ip_addr")
+	private String ipAddr = "";
+
+	@Column(name = "port")
+	private Integer port = 0;
+
+	@Column(name = "manufactor")
+	private String manufactor = "";
 
 	@Column(name = "comment")
-	private String comment;
+	private String comment = "";
+
+	@Column(name = "create_user")
+	private String createUser = "";
+
+	@Column(name = "flag")
+	private Integer flag = 0;
+
+	@Column(name = "has_child")
+	private Boolean hasChild = false;
+
+	@Column(name = "status")
+	private Integer status = 0;
+
+	@Column(name = "sequence")
+	private Integer sequence = 10;
+
+	@Column(name = "path")
+	private String path = "";
 
 	@Column(name = "create_time")
 	private Date createTime = Calendar.getInstance().getTime();
@@ -152,7 +184,7 @@ public class SitePo implements Serializable {
 	private Date updateTime = Calendar.getInstance().getTime();
 
 	/**
-	 * 获取
+	 * 获取记录标识
 	 * 
 	 * @return
 	 */
@@ -161,7 +193,7 @@ public class SitePo implements Serializable {
 	}
 
 	/**
-	 * 设置
+	 * 设置记录标识
 	 * 
 	 * @param id
 	 */
@@ -175,7 +207,7 @@ public class SitePo implements Serializable {
 	 * @return 站点父id
 	 */
 	public Integer getPid() {
-		return this.pid;
+		return this.pid == null ? 0 : this.pid;
 	}
 
 	/**
@@ -185,6 +217,25 @@ public class SitePo implements Serializable {
 	 */
 	public void setPid(Integer pid) {
 		this.pid = pid;
+	}
+
+	/**
+	 * 获取站点/设备编号
+	 * 
+	 * @return 站点/设备编号
+	 */
+	public String getUid() {
+		return this.uid == null ? "" : this.uid;
+	}
+
+	/**
+	 * 设置站点/设备编号
+	 * 
+	 * @param uid
+	 *            站点/设备编号
+	 */
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	/**
@@ -206,38 +257,200 @@ public class SitePo implements Serializable {
 	}
 
 	/**
-	 * 获取站点编号
+	 * 获取设备类型
 	 * 
-	 * @return 站点编号
+	 * @return 设备类型
 	 */
-	public String getUid() {
-		return this.uid;
+	public String getDeviceType() {
+		return this.deviceType == null ? "" : this.deviceType;
 	}
 
 	/**
-	 * 设置站点编号
+	 * 设置设备类型
 	 * 
-	 * @param uid
+	 * @param deviceType
 	 */
-	public void setUid(String uid) {
-		this.uid = uid;
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 
 	/**
-	 * 获取
+	 * 获取AP协议类型
+	 * 
+	 * @return AP协议类型
+	 */
+	public String getApProtocol() {
+		return this.apProtocol == null ? "" : this.apProtocol;
+	}
+
+	/**
+	 * 设置AP协议类型
+	 * 
+	 * @param apProtocol
+	 */
+	public void setApProtocol(String apProtocol) {
+		this.apProtocol = apProtocol;
+	}
+
+	/**
+	 * 获取mcp协议类型
+	 * 
+	 * @return mcp协议类型
+	 */
+	public String getMcpProtocol() {
+		return this.mcpProtocol == null ? "" : this.mcpProtocol;
+	}
+
+	/**
+	 * 设置mcp协议类型
+	 * 
+	 * @param mcpProtocol
+	 */
+	public void setMcpProtocol(String mcpProtocol) {
+		this.mcpProtocol = mcpProtocol;
+	}
+
+	/**
+	 * 获取协议类型
+	 * 
+	 * @return 协议类型
+	 */
+	public String getProtocol() {
+		return this.protocol == null ? "" : this.protocol;
+	}
+
+	/**
+	 * 设置协议类型
+	 * 
+	 * @param protocol
+	 */
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
+
+	/**
+	 * 获取设备ip地址
+	 * 
+	 * @return 设备ip地址
+	 */
+	public String getIpAddr() {
+		return this.ipAddr == null ? "" : this.ipAddr;
+	}
+
+	/**
+	 * 设置设备ip地址
+	 * 
+	 * @param ipAddr
+	 */
+	public void setIpAddr(String ipAddr) {
+		this.ipAddr = ipAddr;
+	}
+
+	/**
+	 * 获取远端端口
+	 * 
+	 * @return 远端端口
+	 */
+	public Integer getPort() {
+		return this.port == null ? 0 : this.port;
+	}
+
+	/**
+	 * 设置远端端口
+	 * 
+	 * @param port
+	 */
+	public void setPort(Integer port) {
+		this.port = port;
+	}
+
+	/**
+	 * 获取设备厂商
+	 * 
+	 * @return 设备厂商
+	 */
+	public String getManufactor() {
+		return this.manufactor == null ? "" : this.manufactor;
+	}
+
+	/**
+	 * 设置设备厂商
+	 * 
+	 * @param manufactor
+	 */
+	public void setManufactor(String manufactor) {
+		this.manufactor = manufactor;
+	}
+
+	/**
+	 * 获取说明备注
+	 * 
+	 * @return 说明备注
+	 */
+	public String getComment() {
+		return this.comment == null ? "" : this.comment;
+	}
+
+	/**
+	 * 设置说明备注
+	 * 
+	 * @param comment
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	/**
+	 * 获取站点或设备创建用户
+	 * 
+	 * @return 站点或设备创建用户
+	 */
+	public String getCreateUser() {
+		return this.createUser == null ? "unknow" : this.createUser;
+	}
+
+	/**
+	 * 设置站点或设备创建用户
+	 * 
+	 * @param createUser
+	 */
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
+
+	/**
+	 * 获取记录标志,0为站点，1为设备
+	 * 
+	 * @return 记录标志,0为站点，1为设备
+	 */
+	public Integer getFlag() {
+		return this.flag == null ? 0 : this.flag;
+	}
+
+	/**
+	 * 设置记录标志,0为站点，1为设备
+	 * 
+	 * @param flag
+	 */
+	public void setFlag(Integer flag) {
+		this.flag = flag;
+	}
+
+	/**
+	 * 获取是否有子节点
 	 * 
 	 * @return
 	 */
-	public Byte getHasChild() {
-		return this.hasChild;
+	public Boolean getHasChild() {
+		return this.hasChild == null ? false : this.hasChild;
 	}
 
 	/**
-	 * 设置
+	 * 设置是否有子节点
 	 * 
 	 * @param hasChild
 	 */
-	public void setHasChild(Byte hasChild) {
+	public void setHasChild(Boolean hasChild) {
 		this.hasChild = hasChild;
 	}
 
@@ -247,7 +460,7 @@ public class SitePo implements Serializable {
 	 * @return 站点状态（1表示锁定，0表示编辑)
 	 */
 	public Integer getStatus() {
-		return this.status;
+		return this.status == null ? 0 : this.status;
 	}
 
 	/**
@@ -265,7 +478,7 @@ public class SitePo implements Serializable {
 	 * @return 节点在其父节点中的顺序
 	 */
 	public Integer getSequence() {
-		return this.sequence;
+		return this.sequence == null ? 10 : this.sequence;
 	}
 
 	/**
@@ -278,133 +491,25 @@ public class SitePo implements Serializable {
 	}
 
 	/**
-	 * 获取设备编号
-	 * 
-	 * @return 设备编号
+	 * 获取站点树型结构路径
+	 *
+	 * @return 站点树型结构路径
 	 */
-	public String getDeviceNo() {
-		return this.deviceNo;
+	public String getPath() {
+		return this.path == null ? "" : this.path;
 	}
 
 	/**
-	 * 设置设备编号
-	 * 
-	 * @param deviceNo
+	 * 设置站点树型结构路径
+	 *
+	 * @param path
 	 */
-	public void setDeviceNo(String deviceNo) {
-		this.deviceNo = deviceNo;
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	/**
-	 * 获取远端端口
-	 * 
-	 * @return 远端端口
-	 */
-	public String getPort() {
-		return this.port;
-	}
-
-	/**
-	 * 设置远端端口
-	 * 
-	 * @param port
-	 */
-	public void setPort(String port) {
-		this.port = port;
-	}
-
-	/**
-	 * 获取设备类型
-	 * 
-	 * @return 设备类型
-	 */
-	public String getDeviceType() {
-		return this.deviceType;
-	}
-
-	/**
-	 * 设置设备类型
-	 * 
-	 * @param deviceType
-	 */
-	public void setDeviceType(String deviceType) {
-		this.deviceType = deviceType;
-	}
-
-	/**
-	 * 获取设备厂商
-	 * 
-	 * @return 设备厂商
-	 */
-	public String getManufactor() {
-		return this.manufactor;
-	}
-
-	/**
-	 * 设置设备厂商
-	 * 
-	 * @param manufactor
-	 */
-	public void setManufactor(String manufactor) {
-		this.manufactor = manufactor;
-	}
-
-	/**
-	 * 获取站点类型
-	 * 
-	 * @return 站点类型
-	 */
-	public String getType() {
-		return this.type;
-	}
-
-	/**
-	 * 设置站点类型
-	 * 
-	 * @param type
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	/**
-	 * 获取协议类型
-	 * 
-	 * @return 协议类型
-	 */
-	public String getProtocol() {
-		return this.protocol;
-	}
-
-	/**
-	 * 设置协议类型
-	 * 
-	 * @param protocol
-	 */
-	public void setProtocol(String protocol) {
-		this.protocol = protocol;
-	}
-
-	/**
-	 * 获取说明备注
-	 * 
-	 * @return 说明备注
-	 */
-	public String getComment() {
-		return this.comment;
-	}
-
-	/**
-	 * 设置说明备注
-	 * 
-	 * @param comment
-	 */
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
-	/**
-	 * 获取
+	 * 获取记录创建时间
 	 * 
 	 * @return
 	 */
@@ -414,7 +519,7 @@ public class SitePo implements Serializable {
 	}
 
 	/**
-	 * 设置
+	 * 设置记录创建时间
 	 * 
 	 * @param createTime
 	 */
@@ -423,7 +528,7 @@ public class SitePo implements Serializable {
 	}
 
 	/**
-	 * 获取
+	 * 获取记录更新时间
 	 * 
 	 * @return
 	 */
@@ -433,7 +538,7 @@ public class SitePo implements Serializable {
 	}
 
 	/**
-	 * 设置
+	 * 设置记录更新时间
 	 * 
 	 * @param updateTime
 	 */

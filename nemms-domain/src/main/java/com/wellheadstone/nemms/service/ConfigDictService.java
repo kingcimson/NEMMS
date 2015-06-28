@@ -54,7 +54,7 @@ public class ConfigDictService extends BaseService<ConfigDictDao, ConfigDictPo> 
 		return itemMap;
 	}
 
-	public List<ConfigDictPo> getDeviceParamCategories() {
-		return this.getDao().queryBy("deviceParamCategory");
+	public List<ConfigDictPo> getDeviceTypes() {
+		return this.getDao().queryBy("deviceType");
 	}
 }

@@ -1,6 +1,6 @@
 // Smart Notification (bootstraphunter.com)
 
-$.sound_path = "/facemb-web/assets/sound/";
+$.sound_path = "/nemms-web/assets/sound/";
 
 $(document).ready(function () {
 

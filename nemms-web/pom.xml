@@ -23,6 +23,10 @@
 			<artifactId>nemms-domain</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.wellheadstone</groupId>
+			<artifactId>nemms-membership</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>

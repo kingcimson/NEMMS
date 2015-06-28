@@ -43,7 +43,7 @@ public class ConfigDictDao extends BaseDao<ConfigDictPo> {
 	}
 
 	public List<ConfigDictPo> queryBy(String key) {
-		String sqlTemplate = "select * from %1$s t1 INNER JOIN %1$s t2 on t1.pid = t2.id where t2.key=? order by t1.sequence asc";
+		String sqlTemplate = "select t1.* from %1$s t1 INNER JOIN %1$s t2 on t1.pid = t2.id where t2.key=? order by t1.sequence asc";
 		return this.queryForList(String.format(sqlTemplate, ConfigDictPo.EntityName),
 				new Object[] { key }, new int[] { Types.VARCHAR }, ConfigDictPo.class);
 	}
