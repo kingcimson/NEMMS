@@ -20,7 +20,6 @@
 	width: 60px;
 }
 
-
 .report-config-table {
 	width: 98%;
 	height: 100%;
@@ -69,11 +68,11 @@ tr.selected:before {
 	<div class="col-lg-2" style="padding-right: 5px;">
 		<div class="device-tree-btn">
 			<a href="javascript:void(0);" class="btn btn-primary" id="btnTreeAdd"><i class="fa fa-plus-circle"></i>添加</a>
-			 <!-- <a href="javascript:void(0);" class="btn btn-primary" id="btnTreeSearch"><i class="fa fa-search"></i>查找</a> -->
+			<!-- <a href="javascript:void(0);" class="btn btn-primary" id="btnTreeSearch"><i class="fa fa-search"></i>查找</a> -->
 			<a href="javascript:void(0);" class="btn btn-primary" id="btnTreeRefresh"><i class="fa fa-refresh"></i>刷新</a>
 		</div>
 		<div id="device-tree" class="device-tree"></div>
-		<input type="hidden" name="treeAction" id="treeAction"/>
+		<input type="hidden" name="treeAction" id="treeAction" />
 	</div>
 	<article class="col-lg-10" style="padding-left: 5px;">
 		<div class="widget-body-toolbar">
@@ -229,20 +228,51 @@ tr.selected:before {
 						<section>
 							<div class="row">
 								<label class="label col col-2">站点名称:</label>
-								<div class="col col-10">
+								<div class="col col-4">
 									<label class="input"> <input type="text" name="name" id="site_name" required></label>
+								</div>
+								<label class="label col col-2">站点编号:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="uid" id="site_uid" required></label>
 								</div>
 							</div>
 						</section>
 						<section>
 							<div class="row">
-								<label class="label col col-2">站点编号:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="uid" id="site_uid" required></label>
-								</div>
 								<label class="label col col-2">设备类型:</label>
 								<div class="col col-4">
-									<label class="select"> <select id="site_deviceType" name="deviceType"></select> <i></i></label>
+									<label class="select"> <select name="deviceType" id="site_deviceType"></select> <i></i></label>
+								</div>
+								<label class="label col col-2">AP协议类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select name="apProtocol" id="site_apProtocol">
+									</select> <i></i>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">mcp协议类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select name="mcpProtocol" id="site_mcpProtocol">
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">通讯协议类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select name="protocol" id="site_protocol">
+									</select> <i></i>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">设备厂商:</label>
+								<div class="col col-10">
+									<label class="input"> <input type="text" name="manufactor" id="site_manufactor" required>
+									</label>
 								</div>
 							</div>
 						</section>
@@ -254,9 +284,9 @@ tr.selected:before {
 								</div>
 								<label class="label col col-2">站点备注:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="comment" id="site_comment"></label>
-									<input type="hidden"  name="pid" id="site_pid" value="0"/>
-									<input type="hidden"  name="flag" id="site_flag" value="0"/>
+									<label class="input"> <input type="text" name="comment" id="site_comment"></label> 
+									<input type="hidden" name="pid" id="site_pid" value="0" /> 
+									<input type="hidden" name="flag" id="site_flag" value="0" />
 								</div>
 							</div>
 						</section>
@@ -285,20 +315,51 @@ tr.selected:before {
 						<section>
 							<div class="row">
 								<label class="label col col-2">站点名称:</label>
-								<div class="col col-10">
-								<label class="input"> <input type="text" name="name" id="edit_site_name" required></label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="name" id="edit_site_name" required></label>
+								</div>
+								<label class="label col col-2">站点编号:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="uid" id="edit_site_uid" required></label>
 								</div>
 							</div>
 						</section>
 						<section>
 							<div class="row">
-								<label class="label col col-2">站点编号:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="uid" id="edit_site_uid" required></label>
-								</div>
 								<label class="label col col-2">设备类型:</label>
 								<div class="col col-4">
 									<label class="select"> <select name="deviceType" id="edit_site_deviceType"></select> <i></i></label>
+								</div>
+								<label class="label col col-2">AP协议类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select name="apProtocol" id="edit_site_apProtocol">
+									</select> <i></i>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">mcp协议类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select name="mcpProtocol" id="edit_site_mcpProtocol">
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">通讯协议类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select name="protocol" id="edit_site_protocol">
+									</select> <i></i>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">设备厂商:</label>
+								<div class="col col-10">
+									<label class="input"> <input type="text" name="manufactor" id="edit_site_manufactor" required>
+									</label>
 								</div>
 							</div>
 						</section>
@@ -312,7 +373,7 @@ tr.selected:before {
 								<div class="col col-4">
 									<label class="input"> <input type="text" name="comment" id="edit_site_comment"></label>
 								</div>
-								<input type="hidden" name="id" id="edit_site_id"/>
+								<input type="hidden" name="id" id="edit_site_id" />
 							</div>
 						</section>
 					</fieldset>
@@ -340,45 +401,19 @@ tr.selected:before {
 						<section>
 							<div class="row">
 								<label class="label col col-2">设备名称:</label>
-								<div class="col col-10">
-									<label class="input"><input type="text" name="name" id="device_name" required> 
-									</label>
+								<div class="col col-4">
+									<label class="input"><input type="text" name="name" id="device_name" required> </label>
 								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
 								<label class="label col col-2">设备编号:</label>
 								<div class="col col-4">
 									<label class="input"> <input type="text" name="uid" id="device_uid" required></label>
 								</div>
-								<label class="label col col-2">AP协议类型:</label>
-								<div class="col col-4">
-									<label class="select"> <select name="apProtocol" id="device_apProtocol">
-									</select> <i></i>
-									</label>
-								</div>
+								
 							</div>
 						</section>
 						<section>
 							<div class="row">
-								<label class="label col col-2">mcp协议类型:</label>
-								<div class="col col-4">
-									<label class="select"> <select name="mcpProtocol" id="device_mcpProtocol">
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">通讯协议类型:</label>
-								<div class="col col-4">
-									<label class="select"> <select name="protocol" id="device_protocol">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">设备IP地址:</label>
+								<label class="label col col-2">设备IP地址(UDP):</label>
 								<div class="col col-4">
 									<label class="input"> <input type="text" name="ipAddr" id="device_ipAddr" value="127.0.0.1" required>
 									</label>
@@ -399,17 +434,8 @@ tr.selected:before {
 								<label class="label col col-2">设备备注:</label>
 								<div class="col col-4">
 									<label class="input"> <input type="text" name="comment" id="device_comment"></label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">设备厂商:</label>
-								<div class="col col-10">
-									<label class="input"> <input type="text" name="manufactor" id="device_manufactor" required>
-									</label>
-									<input type="hidden"  name="pid" id="device_pid"/>
-									<input type="hidden"  name="flag" id="device_flag" value="1"/>
+									 <input type="hidden" name="pid" id="device_pid" /> 
+									 <input type="hidden" name="flag" id="device_flag" value="1" />
 								</div>
 							</div>
 						</section>
@@ -438,52 +464,26 @@ tr.selected:before {
 						<section>
 							<div class="row">
 								<label class="label col col-2">设备名称:</label>
-								<div class="col col-10">
-									<label class="input">  <input type="text" name="name" id="edit_device_name" required>
-									</label>
+								<div class="col col-4">
+									<label class="input"><input type="text" name="name" id="edit_device_name" required> </label>
 								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
 								<label class="label col col-2">设备编号:</label>
 								<div class="col col-4">
-									<label class="input"><input type="text" name="uid" id="edit_device_uid" required></label>
+									<label class="input"> <input type="text" name="uid" id="edit_device_uid" required></label>
 								</div>
-								<label class="label col col-2">AP协议类型:</label>
-								<div class="col col-4">
-									<label class="select"> <select name="apProtocol" id="edit_device_apProtocol">
-									</select> <i></i>
-									</label>
-								</div>
+								
 							</div>
 						</section>
 						<section>
 							<div class="row">
-								<label class="label col col-2">mcp协议类型:</label>
+								<label class="label col col-2">设备IP地址(UDP):</label>
 								<div class="col col-4">
-									<label class="select"> <select name="mcpProtocol" id="edit_device_mcpProtocol">
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">通讯协议类型:</label>
-								<div class="col col-4">
-									<label class="select"> <select name="protocol" id="edit_device_protocol">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">设备IP地址:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="ipAddr" id="edit_device_ipAddr" required>
+									<label class="input"> <input type="text" name="ipAddr" id="edit_device_ipAddr" value="127.0.0.1" required>
 									</label>
 								</div>
 								<label class="label col col-2">设备端口:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="port" id="edit_device_port" required>
+									<label class="input"> <input type="text" name="port" id="edit_device_port" value="8000" required>
 									</label>
 								</div>
 							</div>
@@ -497,16 +497,7 @@ tr.selected:before {
 								<label class="label col col-2">设备备注:</label>
 								<div class="col col-4">
 									<label class="input"> <input type="text" name="comment" id="edit_device_comment"></label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">设备厂商:</label>
-								<div class="col col-10">
-									<label class="input"> <input type="text" name="manufactor" id="edit_device_manufactor" required>
-									</label>
-									<input type="hidden"  name="id" id="edit_device_id"/>
+									<input type="hidden" name="id" id="edit_device_id" />
 								</div>
 							</div>
 						</section>

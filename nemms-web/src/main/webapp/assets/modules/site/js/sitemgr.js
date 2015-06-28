@@ -162,11 +162,11 @@ var SiteMgr = {
 				};
 				
 			for(var key in map){
-				$('#device_'+key).empty();
-				$('#edit_device_'+key).empty();
+				$('#site_'+key).empty();
+				$('#edit_site_'+key).empty();
 				$.each(map[key], function(i, item) {
-					$('#device_'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
-					$('#edit_device_'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+					$('#site_'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+					$('#edit_site_'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
 				});
 			}
 		});
@@ -482,11 +482,19 @@ var SiteMgr = {
 	// 设备参数查询
 	//
 	device:{
-		findAllParam:function(){
-			
+		findAllParam:function(){		
+			var id = getSelectedItemId();
+			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
+			if(meta.flag == 0){
+				SiteMgr.showMsg("请选择一个设备");
+			}
 		},
 		getParamList:function(){
-			
+			var id = getSelectedItemId();
+			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
+			if(meta.flag == 0){
+				SiteMgr.showMsg("请选择一个设备");
+			}
 		}
 	},
 	//

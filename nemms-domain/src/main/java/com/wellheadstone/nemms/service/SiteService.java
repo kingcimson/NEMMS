@@ -28,6 +28,8 @@ public class SiteService extends BaseService<SiteDao, SitePo> {
 	public boolean editSite(SitePo entity) {
 		String[] columnNames = new String[] {
 				SitePo.Name, SitePo.Uid, SitePo.DeviceType,
+				SitePo.ApProtocol, SitePo.McpProtocol,
+				SitePo.Protocol, SitePo.Manufactor,
 				SitePo.Sequence, SitePo.Comment
 		};
 		return this.edit(entity, entity.getId(), columnNames);
@@ -35,9 +37,8 @@ public class SiteService extends BaseService<SiteDao, SitePo> {
 
 	public boolean editDevice(SitePo entity) {
 		String[] columnNames = new String[] {
-				SitePo.Name, SitePo.Uid, SitePo.ApProtocol, SitePo.McpProtocol,
-				SitePo.Protocol, SitePo.IpAddr, SitePo.Port,
-				SitePo.Sequence, SitePo.Comment, SitePo.Manufactor
+				SitePo.Name, SitePo.Uid, SitePo.IpAddr, SitePo.Port,
+				SitePo.Sequence, SitePo.Comment,
 		};
 		return this.edit(entity, entity.getId(), columnNames);
 	}
