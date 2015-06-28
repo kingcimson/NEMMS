@@ -269,6 +269,20 @@ tr.selected:before {
 						</section>
 						<section>
 							<div class="row">
+								<label class="label col col-2">IP地址(UDP):</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="ipAddr" id="site_ipAddr" value="127.0.0.1" required>
+									</label>
+								</div>
+								<label class="label col col-2">端口:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="port" id="site_port" value="8000" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
 								<label class="label col col-2">设备厂商:</label>
 								<div class="col col-10">
 									<label class="input"> <input type="text" name="manufactor" id="site_manufactor" required>
@@ -356,6 +370,20 @@ tr.selected:before {
 						</section>
 						<section>
 							<div class="row">
+								<label class="label col col-2">IP地址(UDP):</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="ipAddr" id="edit_site_ipAddr" value="127.0.0.1" required>
+									</label>
+								</div>
+								<label class="label col col-2">端口:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="port" id="edit_site_port" value="8000" required>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
 								<label class="label col col-2">设备厂商:</label>
 								<div class="col col-10">
 									<label class="input"> <input type="text" name="manufactor" id="edit_site_manufactor" required>
@@ -408,21 +436,6 @@ tr.selected:before {
 								<div class="col col-4">
 									<label class="input"> <input type="text" name="uid" id="device_uid" required></label>
 								</div>
-								
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">设备IP地址(UDP):</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="ipAddr" id="device_ipAddr" value="127.0.0.1" required>
-									</label>
-								</div>
-								<label class="label col col-2">设备端口:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="port" id="device_port" value="8000" required>
-									</label>
-								</div>
 							</div>
 						</section>
 						<section>
@@ -470,21 +483,6 @@ tr.selected:before {
 								<label class="label col col-2">设备编号:</label>
 								<div class="col col-4">
 									<label class="input"> <input type="text" name="uid" id="edit_device_uid" required></label>
-								</div>
-								
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">设备IP地址(UDP):</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="ipAddr" id="edit_device_ipAddr" value="127.0.0.1" required>
-									</label>
-								</div>
-								<label class="label col col-2">设备端口:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="port" id="edit_device_port" value="8000" required>
-									</label>
 								</div>
 							</div>
 						</section>

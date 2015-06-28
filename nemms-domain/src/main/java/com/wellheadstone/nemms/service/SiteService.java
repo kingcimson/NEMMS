@@ -28,16 +28,15 @@ public class SiteService extends BaseService<SiteDao, SitePo> {
 	public boolean editSite(SitePo entity) {
 		String[] columnNames = new String[] {
 				SitePo.Name, SitePo.Uid, SitePo.DeviceType,
-				SitePo.ApProtocol, SitePo.McpProtocol,
-				SitePo.Protocol, SitePo.Manufactor,
-				SitePo.Sequence, SitePo.Comment
+				SitePo.ApProtocol, SitePo.McpProtocol, SitePo.IpAddr, SitePo.Port,
+				SitePo.Protocol, SitePo.Manufactor, SitePo.Sequence, SitePo.Comment
 		};
 		return this.edit(entity, entity.getId(), columnNames);
 	}
 
 	public boolean editDevice(SitePo entity) {
 		String[] columnNames = new String[] {
-				SitePo.Name, SitePo.Uid, SitePo.IpAddr, SitePo.Port,
+				SitePo.Name, SitePo.Uid,
 				SitePo.Sequence, SitePo.Comment,
 		};
 		return this.edit(entity, entity.getId(), columnNames);
