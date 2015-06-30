@@ -446,8 +446,9 @@ var SiteMgr = {
 		},
 		editTreeNodeDlg:{
 			show : function(meta) {
-				if(meta.flag == 0)
+				if(meta.flag == 0) {
 					return SiteMgr.dialog.editSiteNodeDlg.show(meta);
+				}
 				return SiteMgr.dialog.editDeviceNodeDlg.show(meta);
 			}
 		},
@@ -483,7 +484,7 @@ var SiteMgr = {
 	//
 	device:{
 		findAllParam:function(){		
-			var id = getSelectedItemId();
+			var id =  SiteMgr.deviceTree.getSelectedItemId();
 			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
 			if(meta.flag == 0){
 				SiteMgr.showMsg("请选择一个设备");
