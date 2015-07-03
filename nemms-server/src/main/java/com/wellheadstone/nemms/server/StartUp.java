@@ -11,34 +11,23 @@ import com.wellheadstone.nemms.data.util.SpringContextUtils;
 
 public class StartUp {
 	protected final static Logger logger = LoggerFactory.getLogger(StartUp.class);
-	protected final static SpringContextUtils springContextUtil = new SpringContextUtils();
 
 	public static void main(String[] args) {
-		int port = 9000;
-
-		if (args.length > 0) {
-			try {
-				port = Integer.parseInt(args[0]);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-		}
-
 		try {
-			init();
-			// new WebSocketServer().run(port);
+			initilizeConfigurations();
+			new WebSocketServer().run(Integer.parseInt(PropertiesUtils.getValue("nemms.server.websocket.port")));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug(e.toString());
 		}
 	}
 
-	private static void init() {
+	private static void initilizeConfigurations() {
 		PropertyConfigurator.configure("target/conf/log4j.properties");
 
+		SpringContextUtils springContextUtil = new SpringContextUtils();
 		ApplicationContext appContext = new FileSystemXmlApplicationContext("target/conf/app-config.xml");
 		springContextUtil.setApplicationContext(appContext);
 
 		PropertiesUtils.configure("target/conf/resource.properties");
-		System.out.println(PropertiesUtils.getValue("nemms.server.websocket.port"));
 	}
 }
