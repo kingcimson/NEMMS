@@ -17,20 +17,20 @@ public class UDPServer implements IServer {
 		int port = this.getPort();
 
 		try {
-			this.bind(port);
+			this.bind("192.168.1.10", port);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
 
-	private void bind(int port) throws Exception {
+	private void bind(String ip, int port) throws Exception {
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
 			Bootstrap b = new Bootstrap();
 			b.group(group).channel(NioDatagramChannel.class)
 					.option(ChannelOption.SO_BROADCAST, true)
 					.handler(new UDPServerHandler());
-			b.bind(port).sync().channel().closeFuture().await();
+			b.bind(ip, port).sync().channel().closeFuture().await();
 		} finally {
 			group.shutdownGracefully();
 		}

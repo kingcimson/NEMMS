@@ -557,8 +557,6 @@ var SiteMgr = {
 			
 			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
 			var data ={siteId:meta.id};
-			console.log(meta);
-			console.log(data);
 			SiteMgr.socketIO.sendMsg("getParams", data)
 		}
 	},

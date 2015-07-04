@@ -22,13 +22,13 @@ public class TcpIPServer implements IServer {
 		int port = this.getPort();
 
 		try {
-			this.bind(port);
+			this.bind("192.168.1.10", port);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
 
-	private void bind(int port) throws Exception {
+	private void bind(String ip, int port) throws Exception {
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -38,7 +38,7 @@ public class TcpIPServer implements IServer {
 					.channel(NioServerSocketChannel.class)
 					.option(ChannelOption.SO_BACKLOG, 1024)
 					.childHandler(new ChildChannelHandler());
-			ChannelFuture f = b.bind(port).sync();
+			ChannelFuture f = b.bind(ip, port).sync();
 			f.channel().closeFuture().sync();
 		} finally {
 			bossGroup.shutdownGracefully();
