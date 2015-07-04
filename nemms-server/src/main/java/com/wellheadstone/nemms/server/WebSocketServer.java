@@ -1,5 +1,7 @@
 package com.wellheadstone.nemms.server;
 
+import com.wellheadstone.nemms.common.util.PropertiesUtils;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -13,7 +15,8 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class WebSocketServer {
-	public void run(int port) throws Exception {
+	
+	public void start() throws Exception {
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -32,6 +35,7 @@ public class WebSocketServer {
 						}
 					});
 
+			int port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.websocket.port"));
 			Channel ch = b.bind(port).sync().channel();
 			System.out.println("Web socket server started at port " + port + '.');
 			System.out.println("Open your browser and navigate to http://localhost:" + port + '/');

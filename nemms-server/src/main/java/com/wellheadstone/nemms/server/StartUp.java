@@ -14,18 +14,18 @@ public class StartUp {
 
 	public static void main(String[] args) {
 		try {
-			initilizeConfigurations();
-			new WebSocketServer().run(Integer.parseInt(PropertiesUtils.getValue("nemms.server.websocket.port")));
+			initializeConfiguration();
+			new WebSocketServer().start();
 		} catch (Exception e) {
 			logger.debug(e.toString());
 		}
 	}
 
-	private static void initilizeConfigurations() {
+	private static void initializeConfiguration() {
 		PropertyConfigurator.configure("target/conf/log4j.properties");
 
 		SpringContextUtils springContextUtil = new SpringContextUtils();
-		ApplicationContext appContext = new FileSystemXmlApplicationContext("target/conf/app-config.xml");
+		ApplicationContext appContext = new FileSystemXmlApplicationContext("target/conf/spring.xml");
 		springContextUtil.setApplicationContext(appContext);
 
 		PropertiesUtils.configure("target/conf/resource.properties");

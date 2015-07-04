@@ -489,6 +489,14 @@ var SiteMgr = {
 			if(meta.flag == 0){
 				SiteMgr.showMsg("请选择一个设备");
 			}
+			
+			var socket = io.connect('http://localhost:9100/');
+			socket.on('news', function(data) {
+				console.log(data);
+				socket.emit('my other event', {
+					my : 'data'
+				});
+			});
 		},
 		getParamList:function(){
 			var id = getSelectedItemId();

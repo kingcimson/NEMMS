@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/plugin/select2/select2.css">
 <script src="<%=request.getContextPath()%>/assets/js/plugin/dhtmlxtree/dhtmlxtree.js"></script>
 <script src="<%=request.getContextPath()%>/assets/js/plugin/select2/select2.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/libs/socket.io-1.3.5.js"></script>
 <style>
 .text-align-r {
 	text-align: right;

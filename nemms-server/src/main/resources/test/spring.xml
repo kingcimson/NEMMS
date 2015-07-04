@@ -7,17 +7,15 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd 
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<context:property-placeholder location="target/conf/resource.properties" />
-
 	<!-- Scans the classpath of this application for @Components to deploy as beans -->
 	<context:component-scan base-package="com.wellheadstone.nemms" />
 	<context:annotation-config />
 
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="${nemms.jdbc.url}" />
-		<property name="user" value="${nemms.jdbc.user}" />
-		<property name="password" value="${nemms.jdbc.password}" />
+		<property name="jdbcUrl" value="jdbc:mysql://211.149.168.70:3306/nemms?characterEncoding=UTF-8" />
+		<property name="user" value="nemms" />
+		<property name="password" value="ddd" />
 		<property name="minPoolSize" value="1" />
 		<property name="maxPoolSize" value="300" />
 		<property name="maxIdleTime" value="1800" />

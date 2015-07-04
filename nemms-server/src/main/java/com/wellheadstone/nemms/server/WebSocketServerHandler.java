@@ -26,11 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> {
-	private static final Logger logger = LoggerFactory.getLogger(WebSocketServerHandler.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(WebSocketServerHandler.class);
 
 	private WebSocketServerHandshaker handshaker;
 
-	public void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
+	public void messageReceived(ChannelHandlerContext ctx, Object msg)
+			throws Exception {
 		// 传统的HTTP接入
 		if (msg instanceof FullHttpRequest) {
 			handleHttpRequest(ctx, (FullHttpRequest) msg);
@@ -59,12 +61,11 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 		}
 
 		// 构造握手响应返回，本机测试
-		WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
-				"ws://localhost:8080/websocket", null, false);
+		WebSocketServerHandshakerFactory wsFactory =
+				new WebSocketServerHandshakerFactory("ws://localhost:9100/websocket", null, false);
 		handshaker = wsFactory.newHandshaker(req);
 		if (handshaker == null) {
-			WebSocketServerHandshakerFactory
-					.sendUnsupportedWebSocketVersionResponse(ctx.channel());
+			WebSocketServerHandshakerFactory.sendUnsupportedWebSocketVersionResponse(ctx.channel());
 		} else {
 			handshaker.handshake(ctx.channel(), req);
 		}
@@ -96,8 +97,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 		String request = ((TextWebSocketFrame) frame).text();
 		logger.trace(String.format("%s received %s", ctx.channel(), request));
 
-		ctx.channel().write(
-				new TextWebSocketFrame(request
+		ctx.channel().write(new TextWebSocketFrame(request
 						+ " , 欢迎使用Netty WebSocket服务，现在时刻："
 						+ new java.util.Date().toString()));
 	}
@@ -128,7 +128,8 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext arg0, Object arg1) throws Exception {
+	protected void channelRead0(ChannelHandlerContext arg0, Object arg1)
+			throws Exception {
 		// TODO Auto-generated method stub
 
 	}
