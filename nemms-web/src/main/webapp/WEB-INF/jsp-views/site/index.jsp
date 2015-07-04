@@ -299,9 +299,8 @@ tr.selected:before {
 								</div>
 								<label class="label col col-2">站点备注:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="comment" id="site_comment"></label> 
-									<input type="hidden" name="pid" id="site_pid" value="0" /> 
-									<input type="hidden" name="flag" id="site_flag" value="0" />
+									<label class="input"> <input type="text" name="comment" id="site_comment"></label> <input type="hidden"
+										name="pid" id="site_pid" value="0" /> <input type="hidden" name="flag" id="site_flag" value="0" />
 								</div>
 							</div>
 						</section>
@@ -447,9 +446,8 @@ tr.selected:before {
 								</div>
 								<label class="label col col-2">设备备注:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="comment" id="device_comment"></label>
-									 <input type="hidden" name="pid" id="device_pid" /> 
-									 <input type="hidden" name="flag" id="device_flag" value="1" />
+									<label class="input"> <input type="text" name="comment" id="device_comment"></label> <input
+										type="hidden" name="pid" id="device_pid" /> <input type="hidden" name="flag" id="device_flag" value="1" />
 								</div>
 							</div>
 						</section>
@@ -495,8 +493,8 @@ tr.selected:before {
 								</div>
 								<label class="label col col-2">设备备注:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="comment" id="edit_device_comment"></label>
-									<input type="hidden" name="id" id="edit_device_id" />
+									<label class="input"> <input type="text" name="comment" id="edit_device_comment"></label> <input
+										type="hidden" name="id" id="edit_device_id" />
 								</div>
 							</div>
 						</section>
@@ -545,5 +543,6 @@ tr.selected:before {
 	loadScript(['<%=request.getContextPath()%>/assets/modules/site/js/sitemgr.js' ],
 			function() {
 				SiteMgr.init();
+				SiteMgr.socketIO.init('192.168.10.128','9100');
 			});
 </script>

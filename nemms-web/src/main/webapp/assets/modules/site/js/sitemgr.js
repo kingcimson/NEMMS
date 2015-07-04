@@ -2,6 +2,7 @@ var SiteMgr = {
 	deviceTree : null,
 	searchTreeNodeDt : null,
 	comunicateDt : null,
+	socket:null,
 	pageUrl : XFrame.getContextPath() + '/site/',
 	ajaxPost : function(data, url, success) {
 		$.ajax({
@@ -27,6 +28,45 @@ var SiteMgr = {
 				callback();
 			}
 		});
+	},
+	socketIO : {
+		init : function(ip, port) {
+			SiteMgr.socket = io.connect('http://' + ip + ':' + port);
+			SiteMgr.socket.on('connect', function() {
+				var rows = [];
+				var row = SiteMgr.datatables.comunicateDt.createRow();
+				row.recvContent = "Client has connected to the server!";
+				rows.push(row);
+				SiteMgr.datatables.comunicateDt.loadData(rows)
+			});
+			SiteMgr.socket.on('disconnect', function() {
+				var rows = [];
+				var row = SiteMgr.datatables.comunicateDt.createRow();
+				row.recvContent = "The client has disconnected!";
+				rows.push(row);
+				SiteMgr.datatables.comunicateDt.loadData(rows)
+			});
+			SiteMgr.socket.on('findAll', function(data) {
+				var rows = [];
+				var row = SiteMgr.datatables.comunicateDt.createRow();
+				row.recvContent = data.responseText;
+				rows.push(row);
+				SiteMgr.datatables.comunicateDt.loadData(rows)
+			});
+			SiteMgr.socket.on('getParams', function(data) {
+				var rows = [];
+				var row = SiteMgr.datatables.comunicateDt.createRow();
+				row.recvContent = data.responseText;
+				rows.push(row);
+				SiteMgr.datatables.comunicateDt.loadData(rows)
+			});
+		},
+		disconnect : function() {
+			SiteMgr.socket.disconnect();
+		},
+		sendMsg : function(event, data) {
+			SiteMgr.socket.emit(event, data);
+		}
 	},
 	initTree : function() {
 		var tree = new dhtmlXTreeObject("device-tree", "100%", "100%", 0);
@@ -74,7 +114,7 @@ var SiteMgr = {
 		$('#edit_device_submit').click(SiteMgr.tree.saveNode);
 		
 		//设备参数相关
-		$("#btnGetParamList").click(SiteMgr.device.getParamList());
+		$("#btnGetParamList").click(SiteMgr.device.getParamList);
 		$("#btnFindAllParam").click(SiteMgr.device.findAllParam);
 	},
 	initComunicateDt : function() {
@@ -352,6 +392,22 @@ var SiteMgr = {
 					SiteMgr.comunicateDt.row.add(rows[row]).draw();
 				}
 			},
+			createRow:function(){
+				return {
+					"index" : "1",
+					"msgId" : "",
+					"actType" : "",
+					"destIP" : "",
+					"msgType" : "",
+					"sendTime" : "",
+					"sendContent" : "",
+					"sendStatus" : "",
+					"recvTime" : "",
+					"recvContent" : "",
+					"recvStatus" : "",
+					"recvMsgCount" : ""
+				} 
+			},
 			clear : function() {
 				SiteMgr.comunicateDt.clear().draw();
 			},
@@ -485,25 +541,25 @@ var SiteMgr = {
 	device:{
 		findAllParam:function(){		
 			var id =  SiteMgr.deviceTree.getSelectedItemId();
-			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
-			if(meta.flag == 0){
-				SiteMgr.showMsg("请选择一个设备");
+			if(!id){
+				return SiteMgr.showMsg("请选择一个站点或设备");
 			}
 			
-			var socket = io.connect('http://localhost:9100/');
-			socket.on('news', function(data) {
-				console.log(data);
-				socket.emit('my other event', {
-					my : 'data'
-				});
-			});
+			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');	
+			var data ={siteId:meta.id};
+			SiteMgr.socketIO.sendMsg("findAll", data)
 		},
 		getParamList:function(){
-			var id = getSelectedItemId();
-			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
-			if(meta.flag == 0){
-				SiteMgr.showMsg("请选择一个设备");
+			var id =  SiteMgr.deviceTree.getSelectedItemId();
+			if(!id){
+				return SiteMgr.showMsg("请选择一个站点或设备");
 			}
+			
+			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
+			var data ={siteId:meta.id};
+			console.log(meta);
+			console.log(data);
+			SiteMgr.socketIO.sendMsg("getParams", data)
 		}
 	},
 	//

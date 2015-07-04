@@ -1,44 +1,49 @@
 package com.wellheadstone.nemms.server;
 
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 
-public class UDPServer {
-	public void run(int port) throws Exception {
-		EventLoopGroup bossGroup = new NioEventLoopGroup();
-		EventLoopGroup workerGroup = new NioEventLoopGroup();
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class UDPServer implements IServer {
+	private final static Logger logger = LoggerFactory.getLogger(UDPServer.class);
+
+	@Override
+	public void start() {
+		int port = this.getPort();
 
 		try {
-			ServerBootstrap b = new ServerBootstrap();
-			b.group(bossGroup, workerGroup)
-					.channel(NioServerSocketChannel.class)
-					.childHandler(new ChannelInitializer<SocketChannel>() {
-						@Override
-						protected void initChannel(SocketChannel ch) throws Exception {
-							ChannelPipeline pipeline = ch.pipeline();
-							pipeline.addLast("http-codec", new HttpServerCodec());
-							pipeline.addLast("aggregator", new HttpObjectAggregator(65536));
-							ch.pipeline().addLast("http-chunked", new ChunkedWriteHandler());
-							pipeline.addLast("handler", new WebSocketServerHandler());
-						}
-					});
-
-			Channel ch = b.bind(port).sync().channel();
-			System.out.println("Web socket server started at port " + port + '.');
-			System.out.println("Open your browser and navigate to http://localhost:" + port + '/');
-			ch.closeFuture().sync();
-		} finally {
-			bossGroup.shutdownGracefully();
-			workerGroup.shutdownGracefully();
+			this.bind(port);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
+	}
+
+	private void bind(int port) throws Exception {
+		EventLoopGroup group = new NioEventLoopGroup();
+		try {
+			Bootstrap b = new Bootstrap();
+			b.group(group).channel(NioDatagramChannel.class)
+					.option(ChannelOption.SO_BROADCAST, true)
+					.handler(new UDPServerHandler());
+			b.bind(port).sync().channel().closeFuture().await();
+		} finally {
+			group.shutdownGracefully();
+		}
+	}
+
+	private int getPort() {
+		int port = 8200;
+		try {
+			// port =
+			// Integer.parseInt(PropertiesUtils.getValue("nemms.server.udp.port"));
+		} catch (Exception e) {
+			logger.warn("UDP Server Port Parse Error,Set the default port:" + port, e);
+		}
+		return port;
 	}
 }

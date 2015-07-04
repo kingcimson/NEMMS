@@ -15,7 +15,7 @@ public class StartUp {
 	public static void main(String[] args) {
 		try {
 			initializeConfiguration();
-			new WebSocketServer().start();
+			startServers();
 		} catch (Exception e) {
 			logger.debug(e.toString());
 		}
@@ -29,5 +29,31 @@ public class StartUp {
 		springContextUtil.setApplicationContext(appContext);
 
 		PropertiesUtils.configure("target/conf/resource.properties");
+	}
+
+	private static void startServers() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				logger.info("Starting MySocketIOServer");
+				new MySocketIOServer().start();
+			}
+		}, "MySocketIOServer").start();
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				logger.info("Starting TcpIPServer");
+				new TcpIPServer().start();
+			}
+		}, "TcpIPServer").start();
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				logger.info("Starting UDPServer");
+				new UDPServer().start();
+			}
+		}, "UDPServer").start();
 	}
 }
