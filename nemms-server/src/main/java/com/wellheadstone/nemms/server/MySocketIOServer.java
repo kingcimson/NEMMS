@@ -9,7 +9,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
-import com.wellheadstone.nemms.server.message.Message;
+import com.wellheadstone.nemms.server.message.SocketIOMessage;
 
 public class MySocketIOServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(MySocketIOServer.class);
@@ -21,17 +21,17 @@ public class MySocketIOServer implements IServer {
 		config.setPort(this.getPort());
 
 		final SocketIOServer server = new SocketIOServer(config);
-		server.addEventListener("findAll", Message.class, new DataListener<Message>() {
+		server.addEventListener("findAll", SocketIOMessage.class, new DataListener<SocketIOMessage>() {
 			@Override
-			public void onData(SocketIOClient client, Message data, AckRequest ackRequest) {
+			public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackRequest) {
 				data.setResponseText("findAll Response");
 				server.getBroadcastOperations().sendEvent("findAll", data);
 			}
 		});
 
-		server.addEventListener("getParams", Message.class, new DataListener<Message>() {
+		server.addEventListener("getParams", SocketIOMessage.class, new DataListener<SocketIOMessage>() {
 			@Override
-			public void onData(SocketIOClient client, Message data, AckRequest ackRequest) {
+			public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackRequest) {
 				data.setResponseText("getParams Response");
 				server.getBroadcastOperations().sendEvent("getParams", data);
 			}

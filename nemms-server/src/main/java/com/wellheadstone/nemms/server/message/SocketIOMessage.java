@@ -2,7 +2,7 @@ package com.wellheadstone.nemms.server.message;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class Message {
+public class SocketIOMessage {
 	private int siteId;
 	private String sessionId;
 	private String serverIP;
@@ -13,7 +13,7 @@ public class Message {
 	private long timeStamp;
 	private boolean isCallback = true;
 
-	public Message() {
+	public SocketIOMessage() {
 	}
 
 	public int getSiteId() {
