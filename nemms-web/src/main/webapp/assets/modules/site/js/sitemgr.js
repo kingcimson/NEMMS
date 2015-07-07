@@ -2,7 +2,7 @@ var SiteMgr = {
 	deviceTree : null,
 	searchTreeNodeDt : null,
 	comunicateDt : null,
-	socket:null,
+	socket : null,
 	pageUrl : XFrame.getContextPath() + '/site/',
 	ajaxPost : function(data, url, success) {
 		$.ajax({
@@ -46,14 +46,14 @@ var SiteMgr = {
 				rows.push(row);
 				SiteMgr.datatables.comunicateDt.loadData(rows)
 			});
-			SiteMgr.socket.on('findAll', function(data) {
+			SiteMgr.socket.on('getParamList', function(data) {
 				var rows = [];
 				var row = SiteMgr.datatables.comunicateDt.createRow();
 				row.recvContent = data.responseText;
 				rows.push(row);
 				SiteMgr.datatables.comunicateDt.loadData(rows)
 			});
-			SiteMgr.socket.on('getParams', function(data) {
+			SiteMgr.socket.on('queryAll', function(data) {
 				var rows = [];
 				var row = SiteMgr.datatables.comunicateDt.createRow();
 				row.recvContent = data.responseText;
@@ -93,9 +93,9 @@ var SiteMgr = {
 			SiteMgr.tree.onClickHandler(meta);
 		});
 		tree.attachEvent("onDrag", function(sId, tId, id, sObject) {
-			SiteMgr.tree.dragTreeNode(sId,tId,sObject);
+			SiteMgr.tree.dragTreeNode(sId, tId, sObject);
 		});
-		tree.attachEvent("onDblClick", function(id){
+		tree.attachEvent("onDblClick", function(id) {
 			var meta = tree.getUserData(id, 'meta');
 			SiteMgr.dialog.editTreeNodeDlg.show(meta);
 		});
@@ -103,17 +103,17 @@ var SiteMgr = {
 
 	},
 	initEventBind : function() {
-		//站点树相关
+		// 站点树相关
 		$('#btnTreeAdd').click(SiteMgr.dialog.addSiteNodeDlg.show);
 		$("#btnTreeRefresh").click(SiteMgr.tree.refreshTree);
-		//$('#btnTreeSearch').click(SiteMgr.dialog.searchTreeNodeDlg.show);
-		//$('#search').click(SiteMgr.dialog.searchTreeNodeDlg.find);
+		// $('#btnTreeSearch').click(SiteMgr.dialog.searchTreeNodeDlg.show);
+		// $('#search').click(SiteMgr.dialog.searchTreeNodeDlg.find);
 		$('#add_site_submit').click(SiteMgr.tree.saveNode);
 		$('#edit_site_submit').click(SiteMgr.tree.saveNode);
 		$('#add_device_submit').click(SiteMgr.tree.saveNode);
 		$('#edit_device_submit').click(SiteMgr.tree.saveNode);
-		
-		//设备参数相关
+
+		// 设备参数相关
 		$("#btnGetParamList").click(SiteMgr.device.getParamList);
 		$("#btnFindAllParam").click(SiteMgr.device.findAllParam);
 	},
@@ -145,21 +145,22 @@ var SiteMgr = {
 				data : "recvMsgCount"
 			} ]
 		});
+		options.scrollY = "200px";
+		options.scrollCollapse = true;
+
 		SiteMgr.comunicateDt = $('#comunicateDt').DataTable(options);
 		$('#comunicateDt tbody').on('dblclick', 'tr', function() {
 			var data = SiteMgr.comunicateDt.row(this).data();
 			var index = SiteMgr.comunicateDt.row(this).index();
-			//$('#queryParamGridIndex').val(index);
-			//$('#reportQueryParamForm').autofill(data);
 		});
 		$('#comunicateDt tbody').on('click', 'tr', function() {
 			SiteMgr.comunicateDt.$('tr.selected').removeClass('selected');
 			$(this).addClass('selected');
 		});
 	},
-	initSearchTreeNodeDt : function(){
+	initSearchTreeNodeDt : function() {
 		var options = DataTablePaging.getNotAjaxPagingOptions({
-			pageLength:5,
+			pageLength : 5,
 			colums : [ {
 				data : "id"
 			}, {
@@ -175,10 +176,10 @@ var SiteMgr = {
 		SiteMgr.searchTreeNodeDt = $('#searchTreeNodeDt').DataTable(options);
 		$('#searchTreeNodeDt tbody').on('dblclick', 'tr', function() {
 			var data = SiteMgr.searchTreeNodeDt.row(this).data();
-			SiteMgr.deviceTree.selectItem(data.id,true,true);
+			SiteMgr.deviceTree.selectItem(data.id, true, true);
 		});
 	},
-	initTabs :function(){
+	initTabs : function() {
 	},
 	loadConfigItems : function() {
 		var url = XFrame.getContextPath() + '/system/config/getDeviceTypes'
@@ -190,23 +191,23 @@ var SiteMgr = {
 				$('#edit_site_deviceType').append("<option value='" + item.value + "'>" + item.name + "</option>");
 			});
 		});
-		
+
 		var url = XFrame.getContextPath() + '/system/config/getConfigItems'
 		$.getJSON(url, {
 			parentKey : "monitorParam"
 		}, function(data) {
 			var map = {
-					"apProtocol" : data.apProtocol,
-					"mcpProtocol" : data.mcpProtocol,
-					"protocol" : data.protocol,
-				};
-				
-			for(var key in map){
-				$('#site_'+key).empty();
-				$('#edit_site_'+key).empty();
+				"apProtocol" : data.apProtocol,
+				"mcpProtocol" : data.mcpProtocol,
+				"protocol" : data.protocol,
+			};
+
+			for ( var key in map) {
+				$('#site_' + key).empty();
+				$('#edit_site_' + key).empty();
 				$.each(map[key], function(i, item) {
-					$('#site_'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
-					$('#edit_site_'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+					$('#site_' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+					$('#edit_site_' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
 				});
 			}
 		});
@@ -235,8 +236,8 @@ var SiteMgr = {
 	},
 	tabs : {
 		clear : function() {
-			//$('#reportConfigForm').resetForm();
-			//$('#reportQueryParamForm').resetForm();
+			// $('#reportConfigForm').resetForm();
+			// $('#reportQueryParamForm').resetForm();
 		},
 		loadData : function(meta) {
 			SiteMgr.tabs.clear();
@@ -294,13 +295,13 @@ var SiteMgr = {
 				SiteMgr.tree.refreshTree();
 			});
 		},
-		dragTreeNode : function(sId,tId,sObject){
+		dragTreeNode : function(sId, tId, sObject) {
 			var data = {
 				sourcePid : sObject.getUserData(sId, 'meta').pid,
 				sourceId : sId,
 				targetId : tId
 			};
-			SiteMgr.ajaxPost(data, SiteMgr.pageUrl + 'dragtreenode', function(){
+			SiteMgr.ajaxPost(data, SiteMgr.pageUrl + 'dragtreenode', function() {
 				SiteMgr.tree.refreshTree();
 			});
 		},
@@ -313,11 +314,11 @@ var SiteMgr = {
 		},
 		pasteTreeNode : function(meta) {
 			if (meta) {
-				var data ={
+				var data = {
 					sourceId : $('#copyNodeId').val(),
-					targetId : meta.id	
+					targetId : meta.id
 				};
-				SiteMgr.ajaxPost(data,SiteMgr.pageUrl + 'pastetreenode',function(result){
+				SiteMgr.ajaxPost(data, SiteMgr.pageUrl + 'pastetreenode', function(result) {
 					console.log(result);
 					if (result.success) {
 						$('#copyNodeId').val(0);
@@ -330,7 +331,7 @@ var SiteMgr = {
 			}
 		},
 		updateTreeNode : function(act, nodeData) {
-			//console.log(act,nodeData);
+			// console.log(act,nodeData);
 		},
 		removeTreeNode : function(meta) {
 			var data = {
@@ -343,7 +344,7 @@ var SiteMgr = {
 		refreshTree : function() {
 			SiteMgr.deviceTree.deleteChildItems(0);
 			SiteMgr.deviceTree.loadJSON(SiteMgr.pageUrl + "listSites");
-			//SiteMgr.deviceTree.refreshItem("0");
+			// SiteMgr.deviceTree.refreshItem("0");
 		},
 		onClickHandler : function(meta) {
 			SiteMgr.tabs.clear();
@@ -392,7 +393,7 @@ var SiteMgr = {
 					SiteMgr.comunicateDt.row.add(rows[row]).draw();
 				}
 			},
-			createRow:function(){
+			createRow : function() {
 				return {
 					"index" : "1",
 					"msgId" : "",
@@ -406,7 +407,7 @@ var SiteMgr = {
 					"recvContent" : "",
 					"recvStatus" : "",
 					"recvMsgCount" : ""
-				} 
+				}
 			},
 			clear : function() {
 				SiteMgr.comunicateDt.clear().draw();
@@ -500,9 +501,9 @@ var SiteMgr = {
 				SiteMgr.tree.editDeviceNode(meta);
 			}
 		},
-		editTreeNodeDlg:{
+		editTreeNodeDlg : {
 			show : function(meta) {
-				if(meta.flag == 0) {
+				if (meta.flag == 0) {
 					return SiteMgr.dialog.editSiteNodeDlg.show(meta);
 				}
 				return SiteMgr.dialog.editDeviceNodeDlg.show(meta);
@@ -538,25 +539,29 @@ var SiteMgr = {
 	//
 	// 设备参数查询
 	//
-	device:{
-		findAllParam:function(){		
-			var id =  SiteMgr.deviceTree.getSelectedItemId();
-			if(!id){
+	device : {
+		findAllParam : function() {
+			var id = SiteMgr.deviceTree.getSelectedItemId();
+			if (!id) {
 				return SiteMgr.showMsg("请选择一个站点或设备");
 			}
-			
-			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');	
-			var data ={siteId:meta.id};
+
+			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
+			var data = {
+				siteId : meta.id
+			};
 			SiteMgr.socketIO.sendMsg("findAll", data)
 		},
-		getParamList:function(){
-			var id =  SiteMgr.deviceTree.getSelectedItemId();
-			if(!id){
+		getParamList : function() {
+			var id = SiteMgr.deviceTree.getSelectedItemId();
+			if (!id) {
 				return SiteMgr.showMsg("请选择一个站点或设备");
 			}
-			
+
 			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
-			var data ={siteId:meta.id};
+			var data = {
+				siteId : meta.id
+			};
 			SiteMgr.socketIO.sendMsg("getParams", data)
 		}
 	},
