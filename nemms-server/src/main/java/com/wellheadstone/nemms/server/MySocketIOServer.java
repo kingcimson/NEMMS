@@ -9,7 +9,11 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
-import com.wellheadstone.nemms.server.message.SocketIOMessage;
+import com.wellheadstone.nemms.server.socketio.EventName;
+import com.wellheadstone.nemms.server.socketio.EventRequest;
+import com.wellheadstone.nemms.server.socketio.GetParamListListener;
+import com.wellheadstone.nemms.server.socketio.ListenerFactory;
+import com.wellheadstone.nemms.server.socketio.QueryAllParamListener;
 
 public class MySocketIOServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(MySocketIOServer.class);
@@ -17,26 +21,14 @@ public class MySocketIOServer implements IServer {
 	@Override
 	public void start() {
 		Configuration config = new Configuration();
-		config.setHostname("192.168.10.128");
+		config.setHostname("localhost");
 		config.setPort(this.getPort());
 
 		final SocketIOServer server = new SocketIOServer(config);
-		server.addEventListener("findAll", SocketIOMessage.class, new DataListener<SocketIOMessage>() {
-			@Override
-			public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackRequest) {
-				data.setResponseText("findAll Response");
-				server.getBroadcastOperations().sendEvent("findAll", data);
-			}
-		});
-
-		server.addEventListener("getParams", SocketIOMessage.class, new DataListener<SocketIOMessage>() {
-			@Override
-			public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackRequest) {
-				data.setResponseText("getParams Response");
-				server.getBroadcastOperations().sendEvent("getParams", data);
-			}
-		});
-
+		server.addEventListener(EventName.GetParamList,EventRequest.class, ListenerFactory.create(EventName.GetParamList));
+		server.addEventListener(EventName.QueryALL, EventRequest.class, ListenerFactory.create(EventName.QueryALL));
+		server.addEventListener(EventName.QuerySelected,EventRequest.class, ListenerFactory.create(EventName.QuerySelected));
+		
 		server.start();
 
 		try {

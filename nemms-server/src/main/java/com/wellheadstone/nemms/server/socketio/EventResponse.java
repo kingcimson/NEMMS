@@ -1,8 +1,8 @@
-package com.wellheadstone.nemms.server.message;
+package com.wellheadstone.nemms.server.socketio;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class SocketIOMessage {
+public class EventResponse {
 	private int siteId;
 	private String sessionId;
 	private String serverIP;
@@ -13,7 +13,7 @@ public class SocketIOMessage {
 	private long timeStamp;
 	private boolean isCallback = true;
 
-	public SocketIOMessage() {
+	public EventResponse() {
 	}
 
 	public int getSiteId() {
