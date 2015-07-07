@@ -3,20 +3,16 @@ package com.wellheadstone.nemms.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
-import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.corundumstudio.socketio.listener.DataListener;
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.socketio.EventName;
 import com.wellheadstone.nemms.server.socketio.EventRequest;
-import com.wellheadstone.nemms.server.socketio.GetParamListListener;
 import com.wellheadstone.nemms.server.socketio.ListenerFactory;
-import com.wellheadstone.nemms.server.socketio.QueryAllParamListener;
 
 public class MySocketIOServer implements IServer {
-	private final static Logger logger = LoggerFactory.getLogger(MySocketIOServer.class);
+	private final static Logger logger = LoggerFactory
+			.getLogger(MySocketIOServer.class);
 
 	@Override
 	public void start() {
@@ -25,10 +21,13 @@ public class MySocketIOServer implements IServer {
 		config.setPort(this.getPort());
 
 		final SocketIOServer server = new SocketIOServer(config);
-		server.addEventListener(EventName.GetParamList,EventRequest.class, ListenerFactory.create(EventName.GetParamList));
-		server.addEventListener(EventName.QueryALL, EventRequest.class, ListenerFactory.create(EventName.QueryALL));
-		server.addEventListener(EventName.QuerySelected,EventRequest.class, ListenerFactory.create(EventName.QuerySelected));
-		
+		server.addEventListener(EventName.GetParamList, EventRequest.class,
+				ListenerFactory.create(EventName.GetParamList));
+		server.addEventListener(EventName.QueryALL, EventRequest.class,
+				ListenerFactory.create(EventName.QueryALL));
+		server.addEventListener(EventName.QuerySelected, EventRequest.class,
+				ListenerFactory.create(EventName.QuerySelected));
+
 		server.start();
 
 		try {
@@ -43,9 +42,12 @@ public class MySocketIOServer implements IServer {
 	private int getPort() {
 		int port = 9100;
 		try {
-			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.socketio.port"));
+			port = Integer.parseInt(PropertiesUtils
+					.getValue("nemms.server.socketio.port"));
 		} catch (Exception e) {
-			logger.error("SocketIO Server Port Parse Error,Set the default port:" + port, e);
+			logger.error(
+					"SocketIO Server Port Parse Error,Set the default port:"
+							+ port, e);
 		}
 		return port;
 	}
