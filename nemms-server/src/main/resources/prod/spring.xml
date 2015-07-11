@@ -13,7 +13,7 @@
 
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://211.149.168.70:3306/nemms?characterEncoding=UTF-8" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/nemms?characterEncoding=UTF-8" />
 		<property name="user" value="nemms" />
 		<property name="password" value="ddd" />
 		<property name="minPoolSize" value="1" />
