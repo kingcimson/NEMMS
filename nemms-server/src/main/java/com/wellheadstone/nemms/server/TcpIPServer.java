@@ -22,7 +22,7 @@ public class TcpIPServer implements IServer {
 		int port = this.getPort();
 
 		try {
-			this.bind("192.168.1.10", port);
+			this.bind("localhost", port);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

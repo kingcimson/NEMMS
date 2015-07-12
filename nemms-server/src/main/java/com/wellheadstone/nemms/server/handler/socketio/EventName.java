@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.socketio;
+package com.wellheadstone.nemms.server.handler.socketio;
 
 public class EventName {
 	/**

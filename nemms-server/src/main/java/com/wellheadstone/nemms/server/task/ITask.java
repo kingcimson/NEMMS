@@ -1,11 +1,11 @@
 package com.wellheadstone.nemms.server.task;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wellheadstone.nemms.server.socketio.EventRequest;
+import com.wellheadstone.nemms.server.protocol.socketio.SocketIOMessage;
 
 public interface ITask {
 
 	int init();
 
-	void execute(EventRequest message, JSONObject req);
+	void execute(SocketIOMessage message, JSONObject req);
 }

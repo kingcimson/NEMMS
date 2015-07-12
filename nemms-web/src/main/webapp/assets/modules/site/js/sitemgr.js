@@ -29,45 +29,6 @@ var SiteMgr = {
 			}
 		});
 	},
-	socketIO : {
-		init : function(ip, port) {
-			SiteMgr.socket = io.connect('http://' + ip + ':' + port);
-			SiteMgr.socket.on('connect', function() {
-				var rows = [];
-				var row = SiteMgr.datatables.comunicateDt.createRow();
-				row.recvContent = "Client has connected to the server!";
-				rows.push(row);
-				SiteMgr.datatables.comunicateDt.loadData(rows)
-			});
-			SiteMgr.socket.on('disconnect', function() {
-				var rows = [];
-				var row = SiteMgr.datatables.comunicateDt.createRow();
-				row.recvContent = "The client has disconnected!";
-				rows.push(row);
-				SiteMgr.datatables.comunicateDt.loadData(rows)
-			});
-			SiteMgr.socket.on('getParamList', function(data) {
-				var rows = [];
-				var row = SiteMgr.datatables.comunicateDt.createRow();
-				row.recvContent = data.responseText;
-				rows.push(row);
-				SiteMgr.datatables.comunicateDt.loadData(rows)
-			});
-			SiteMgr.socket.on('queryAll', function(data) {
-				var rows = [];
-				var row = SiteMgr.datatables.comunicateDt.createRow();
-				row.recvContent = data.responseText;
-				rows.push(row);
-				SiteMgr.datatables.comunicateDt.loadData(rows)
-			});
-		},
-		disconnect : function() {
-			SiteMgr.socket.disconnect();
-		},
-		sendMsg : function(event, data) {
-			SiteMgr.socket.emit(event, data);
-		}
-	},
 	initTree : function() {
 		var tree = new dhtmlXTreeObject("device-tree", "100%", "100%", 0);
 		var menu = new dhtmlXMenuObject();
@@ -536,10 +497,75 @@ var SiteMgr = {
 			}
 		}
 	},
+	socketIO : {
+		init : function(ip, port) {
+			SiteMgr.socket = io.connect('http://' + ip + ':' + port);
+			SiteMgr.socket.on('connect', function() {
+				var rows = [];
+				var row = SiteMgr.datatables.comunicateDt.createRow();
+				row.recvContent = "Client has connected to the server!";
+				rows.push(row);
+				SiteMgr.datatables.comunicateDt.loadData(rows)
+			});
+			SiteMgr.socket.on('disconnect', function() {
+				var rows = [];
+				var row = SiteMgr.datatables.comunicateDt.createRow();
+				row.recvContent = "The client has disconnected!";
+				rows.push(row);
+				SiteMgr.datatables.comunicateDt.loadData(rows)
+			});
+			SiteMgr.socket.on('getParamList', function(data) {
+				var rows = [];
+				var row = SiteMgr.datatables.comunicateDt.createRow();
+				console.log(data.body);
+				rows.push(row);
+				SiteMgr.datatables.comunicateDt.loadData(rows)
+			});
+			SiteMgr.socket.on('queryAll', function(data) {
+				var rows = [];
+				var row = SiteMgr.datatables.comunicateDt.createRow();
+				console.log(data);
+				rows.push(row);
+				SiteMgr.datatables.comunicateDt.loadData(rows)
+			});
+			SiteMgr.socket.on('querySelected', function(data) {
+				var rows = [];
+				var row = SiteMgr.datatables.comunicateDt.createRow();
+				console.log(data);
+				rows.push(row);
+				SiteMgr.datatables.comunicateDt.loadData(rows)
+			});
+		},
+		disconnect : function() {
+			SiteMgr.socket.disconnect();
+		},
+		sendMsg : function(event, data) {
+			SiteMgr.socket.emit(event, data);
+		}
+	},
 	//
 	// 设备参数查询
 	//
 	device : {
+		getParamList : function() {
+			var id = SiteMgr.deviceTree.getSelectedItemId();
+			if (!id) {
+				return SiteMgr.showMsg("请选择一个站点或设备");
+			}
+
+			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
+			console.log(meta);
+			var data = {
+					header : {
+						sessionId:1,
+						serverIP:"localhost"
+					},
+					body : {
+						"siteId" : meta.id
+					}
+				};
+			SiteMgr.socketIO.sendMsg("getParamList", data)
+		},
 		findAllParam : function() {
 			var id = SiteMgr.deviceTree.getSelectedItemId();
 			if (!id) {
@@ -548,11 +574,15 @@ var SiteMgr = {
 
 			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
 			var data = {
-				siteId : meta.id
+				header : {},
+				body : {
+					"siteId" : meta.id,
+					"paramIds" : "260,261,262"
+				}
 			};
-			SiteMgr.socketIO.sendMsg("findAll", data)
+			SiteMgr.socketIO.sendMsg("queryAll", data)
 		},
-		getParamList : function() {
+		findSelectedParam : function() {
 			var id = SiteMgr.deviceTree.getSelectedItemId();
 			if (!id) {
 				return SiteMgr.showMsg("请选择一个站点或设备");
@@ -560,10 +590,14 @@ var SiteMgr = {
 
 			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
 			var data = {
-				siteId : meta.id
+				header : {},
+				body : {
+					"siteId": meta.id,
+					"paramIds" : "260,261,262"
+				}
 			};
-			SiteMgr.socketIO.sendMsg("getParams", data)
-		}
+			SiteMgr.socketIO.sendMsg("querySelected", data)
+		},
 	},
 	//
 	// utils函数

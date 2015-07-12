@@ -1,9 +1,10 @@
-package com.wellheadstone.nemms.server.socketio;
+package com.wellheadstone.nemms.server.handler.socketio;
 
 import com.corundumstudio.socketio.listener.DataListener;
+import com.wellheadstone.nemms.server.protocol.socketio.SocketIOMessage;
 
 public class ListenerFactory {
-	public static DataListener<EventRequest> create(String eventName){
+	public static DataListener<SocketIOMessage> create(String eventName){
 		if(EventName.QueryALL.equals(eventName)){
 			return new QueryAllParamListener();
 		}
