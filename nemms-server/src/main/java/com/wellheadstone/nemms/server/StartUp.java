@@ -44,7 +44,7 @@ public class StartUp {
 			@Override
 			public void run() {
 				logger.info("Starting TcpIPServer");
-				new TcpIPServer().start();
+				new TcpServer().start();
 			}
 		}, "TcpIPServer").start();
 

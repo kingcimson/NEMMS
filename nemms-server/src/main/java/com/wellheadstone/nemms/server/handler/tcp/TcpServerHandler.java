@@ -1,11 +1,11 @@
-package com.wellheadstone.nemms.server;
+package com.wellheadstone.nemms.server.handler.tcp;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
-public class TcpIPServerHandler extends ChannelHandlerAdapter {
+public class TcpServerHandler extends ChannelHandlerAdapter {
 
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		ByteBuf buf = (ByteBuf) msg;

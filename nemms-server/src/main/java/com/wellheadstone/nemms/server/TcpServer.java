@@ -13,9 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
+import com.wellheadstone.nemms.server.handler.tcp.TcpServerHandler;
 
-public class TcpIPServer implements IServer {
-	private final static Logger logger = LoggerFactory.getLogger(TcpIPServer.class);
+public class TcpServer implements IServer {
+	private final static Logger logger = LoggerFactory.getLogger(TcpServer.class);
 
 	@Override
 	public void start() {
@@ -36,7 +37,8 @@ public class TcpIPServer implements IServer {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(bossGroup, workerGroup)
 					.channel(NioServerSocketChannel.class)
-					.option(ChannelOption.SO_BACKLOG, 1024)
+					.option(ChannelOption.TCP_NODELAY, true)
+					.childOption(ChannelOption.SO_KEEPALIVE, true)
 					.childHandler(new ChildChannelHandler());
 			ChannelFuture f = b.bind(ip, port).sync();
 			f.channel().closeFuture().sync();
@@ -49,7 +51,7 @@ public class TcpIPServer implements IServer {
 	private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 		@Override
 		protected void initChannel(SocketChannel arg0) throws Exception {
-			arg0.pipeline().addLast(new TcpIPServerHandler());
+			arg0.pipeline().addLast(new TcpServerHandler());
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server;
+package com.wellheadstone.nemms.server.handler.udp;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,8 +7,7 @@ import io.netty.channel.socket.DatagramPacket;
 import io.netty.util.CharsetUtil;
 import io.netty.util.internal.ThreadLocalRandom;
 
-public class UDPServerHandler extends
-		SimpleChannelInboundHandler<DatagramPacket> {
+public class UDPServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
 	// 谚语列表
 	private static final String[] DICTIONARY = { "只要功夫深，铁棒磨成针。",

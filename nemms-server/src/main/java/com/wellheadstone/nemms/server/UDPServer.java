@@ -9,6 +9,8 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wellheadstone.nemms.server.handler.udp.UDPServerHandler;
+
 public class UDPServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(UDPServer.class);
 
