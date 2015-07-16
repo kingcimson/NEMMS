@@ -212,7 +212,6 @@ var DeviceParam = {
 		if ($(formId).validate().form()) {
 			var url = DeviceParam.pageUrl + action;
 			var data = $(formId).serialize();
-			console.log(data);
 			DeviceParam.ajaxPost(data, url, function() {
 				$(modalId).modal('hide');
 			});

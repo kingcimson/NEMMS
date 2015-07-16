@@ -212,6 +212,18 @@
 								</div>
 							</div>
 						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">参数选项:</label>
+								<div class="col col-10">
+									<label class="select"> <select id="htmlElem" name="htmlElem">
+									<option value="text">文本框</option>
+									<option value="select">下拉框</option>
+									</select> <i></i>
+									</label>
+								</div>
+							</div>
+						</section>
 					</fieldset>
 					<footer>
 						<a type="button" id="add_submit" class="btn btn-primary">确定</a> <a type="button" class="btn btn-default" data-dismiss="modal">取消</a>
@@ -329,6 +341,18 @@
 								<label class="label col col-2">权限归属:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="edit_authorityRoles" name="authorityRoles">
+									</select> <i></i>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">参数控件:</label>
+								<div class="col col-10">
+									<label class="select"> <select id="edit_htmlElem" name="htmlElem">
+									<option value="text">文本框</option>
+									<option value="select">下拉框</option>
 									</select> <i></i>
 									</label>
 								</div>

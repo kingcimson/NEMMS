@@ -552,26 +552,26 @@ var SiteMgr = {
 			if (!id) {
 				return SiteMgr.showMsg("请选择一个站点或设备");
 			}
-
 			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
-			console.log(meta);
 			var data = {
-					header : {
-						sessionId:1,
-						serverIP:"localhost"
-					},
-					body : {
-						"siteId" : meta.id
-					}
-				};
+				header : {
+					sessionId : 1,
+					serverIP : "localhost"
+				},
+				body : {
+					"siteId" : meta.id
+				}
+			};
 			SiteMgr.socketIO.sendMsg("getParamList", data)
+		},
+		getParamListResult : function(data) {
+			
 		},
 		findAllParam : function() {
 			var id = SiteMgr.deviceTree.getSelectedItemId();
 			if (!id) {
 				return SiteMgr.showMsg("请选择一个站点或设备");
 			}
-
 			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
 			var data = {
 				header : {},
@@ -582,22 +582,27 @@ var SiteMgr = {
 			};
 			SiteMgr.socketIO.sendMsg("queryAll", data)
 		},
+		getFindAllParamResult : function() {
+
+		},
 		findSelectedParam : function() {
 			var id = SiteMgr.deviceTree.getSelectedItemId();
 			if (!id) {
 				return SiteMgr.showMsg("请选择一个站点或设备");
 			}
-
 			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
 			var data = {
 				header : {},
 				body : {
-					"siteId": meta.id,
+					"siteId" : meta.id,
 					"paramIds" : "260,261,262"
 				}
 			};
 			SiteMgr.socketIO.sendMsg("querySelected", data)
 		},
+		getFindSelectedParamResult : function() {
+
+		}
 	},
 	//
 	// utils函数

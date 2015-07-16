@@ -9,11 +9,14 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wellheadstone.nemms.common.serializer.CustomDateTimeSerializer;
 import com.wellheadstone.nemms.data.annotations.Column;
 
+/**
+ * 持久类
+ */
 public class DeviceParamPo implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -950194582722710175L;
+	private static final long serialVersionUID = -8398044014651562982L;
 
 	/**
 	 * 实体device_param名称
@@ -100,6 +103,11 @@ public class DeviceParamPo implements Serializable {
 	 */
 	public final static String UpdateTime = "update_time";
 
+	/**
+	 * 列名html_elem,
+	 */
+	public final static String HtmlElem = "html_elem";
+
 	@Column(name = "id", isIgnored = true)
 	private Integer id;
 
@@ -147,6 +155,9 @@ public class DeviceParamPo implements Serializable {
 
 	@Column(name = "update_time")
 	private Date updateTime = Calendar.getInstance().getTime();
+
+	@Column(name = "html_elem")
+	private String htmlElem;
 
 	/**
 	 * 获取参数id
@@ -436,5 +447,23 @@ public class DeviceParamPo implements Serializable {
 	 */
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	/**
+	 * 获取参数html控件名称(text,select,radio等)
+	 * 
+	 * @return
+	 */
+	public String getHtmlElem() {
+		return htmlElem;
+	}
+
+	/**
+	 * 设置参数html控件名称(text,select,radio等)
+	 * 
+	 * @param htmlElem
+	 */
+	public void setHtmlElem(String htmlElem) {
+		this.htmlElem = htmlElem;
 	}
 }
