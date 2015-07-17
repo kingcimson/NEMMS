@@ -106,107 +106,18 @@ tr.selected:before {
 							<div>
 								<div class="jarviswidget-editbox"></div>
 								<div class="widget-body clearfix">
-<div class="modal-body no-padding"><fieldset>
-										<section>
-											<div class="row">
-												<label class="label col col-2">名称:</label>
-												<div class="col col-10">
-													<label class="input"> <input type="text" name="name" id="name" required>
-													</label>
-												</div>
-											</div>
-										</section>
-										<section>
-											<div class="row">
-												<label class="label col col-2">类别:</label>
-												<div class="col col-4">
-													<label class="select"> <select id="categoryId" name="categoryId">
-													</select> <i></i>
-													</label>
-												</div>
-												<label class="label col col-2">模式:</label>
-												<div class="col col-4">
-													<label class="select"> <select id="mode" name="mode">
-													</select> <i></i>
-													</label>
-												</div>
-											</div>
-										</section>
-										<section>
-											<div class="row">
-												<label class="label col col-2">系数:</label>
-												<div class="col col-4">
-													<label class="input"> <input type="text" name="ratio" id="ratio" required>
-													</label>
-												</div>
-												<label class="label col col-2">单位:</label>
-												<div class="col col-4">
-													<label class="input"> <input type="text" name="unit" id="unit" required>
-													</label>
-												</div>
-											</div>
-										</section>
-										<section>
-											<div class="row">
-												<label class="label col col-2">值类型:</label>
-												<div class="col col-4">
-													<label class="select"> <select id="valueType" name="valueType">
-													</select> <i></i>
-													</label>
-												</div>
-												<label class="label col col-2">值长度:</label>
-												<div class="col col-4">
-													<label class="input"> <input type="text" name="valueLen" id="valueLen" required>
-													</label>
-												</div>
-											</div>
-										</section>
-										<section>
-											<div class="row">
-												<label class="label col col-2">值最小长度:</label>
-												<div class="col col-4">
-													<label class="input"> <input type="text" name="valueMinLen" id="valueMinLen" required>
-													</label>
-												</div>
-												<label class="label col col-2">值最大长度:</label>
-												<div class="col col-4">
-													<label class="input"> <input type="text" name="valueMaxLen" id="valueMaxLen" required>
-													</label>
-												</div>
-											</div>
-										</section>
-										<section>
-											<div class="row">
-												<label class="label col col-2">最小值:</label>
-												<div class="col col-4">
-													<label class="input"> <input type="text" name="minValue" id="minValue" required>
-													</label>
-												</div>
-												<label class="label col col-2">最大值:</label>
-												<div class="col col-4">
-													<label class="input"> <input type="text" name="maxValue" id="maxValue" required>
-													</label>
-												</div>
-											</div>
-										</section>
-										<section>
-											<div class="row">
-												<label class="label col col-2">告警级别:</label>
-												<div class="col col-4">
-													<label class="select"> <select id="warnLevel" name="warnLevel">
-													</select> <i></i>
-													</label>
-												</div>
-												<label class="label col col-2">权限归属:</label>
-												<div class="col col-4">
-													<label class="select"> <select id="authorityRoles" name="authorityRoles">
-													</select> <i></i>
-													</label>
-												</div>
-											</div>
-										</section>
-										</fieldset>
-					</div>
+									<table style="width: 100%; height: 100%;" class="report-config-table">
+										<tr class="smart-form">
+											<td class="text-align-w">参数名称:</td>
+											<td><label class="input"><input id="queryParamName" name="name" type="text" required /></label></td>
+											<td class="text-align-r">参数标题:</td>
+											<td><label class="input"><input type="text" id="queryParamText" name="text" required /></label></td>
+											<td class="text-align-r">默认值:</td>
+											<td><label class="input"><input type="text" id="queryParamDefaultValue" name="defaultValue" /></label></td>
+											<td class="text-align-r">默认标题:</td>
+											<td><label class="input"><input type="text" id="queryParamDefaultText" name="defaultText" /></label></td>
+										</tr>
+									</table>
 								</div>
 							</div>
 						</div>

@@ -3,6 +3,8 @@ var SiteMgr = {
 	searchTreeNodeDt : null,
 	comunicateDt : null,
 	socket : null,
+	deviceParamConfig:null,
+	deviceParamCategories:{},
 	pageUrl : XFrame.getContextPath() + '/site/',
 	ajaxPost : function(data, url, success) {
 		$.ajax({
@@ -61,14 +63,11 @@ var SiteMgr = {
 			SiteMgr.dialog.editTreeNodeDlg.show(meta);
 		});
 		SiteMgr.deviceTree = tree;
-
 	},
 	initEventBind : function() {
 		// 站点树相关
 		$('#btnTreeAdd').click(SiteMgr.dialog.addSiteNodeDlg.show);
 		$("#btnTreeRefresh").click(SiteMgr.tree.refreshTree);
-		// $('#btnTreeSearch').click(SiteMgr.dialog.searchTreeNodeDlg.show);
-		// $('#search').click(SiteMgr.dialog.searchTreeNodeDlg.find);
 		$('#add_site_submit').click(SiteMgr.tree.saveNode);
 		$('#edit_site_submit').click(SiteMgr.tree.saveNode);
 		$('#add_device_submit').click(SiteMgr.tree.saveNode);
@@ -142,7 +141,7 @@ var SiteMgr = {
 	},
 	initTabs : function() {
 	},
-	loadConfigItems : function() {
+	loadMonitorParamConfig : function() {
 		var url = XFrame.getContextPath() + '/system/config/getDeviceTypes'
 		$.getJSON(url, null, function(data) {
 			$('#site_deviceType').empty();
@@ -173,8 +172,24 @@ var SiteMgr = {
 			}
 		});
 	},
+	loadDeviceParamConfig : function() {
+		var url = XFrame.getContextPath() + '/system/config/getConfigItems'
+		$.getJSON(url, {
+			parentKey : "deviceParam"
+		}, function(data) {
+			SiteMgr.deviceParamConfig = data;
+			SiteMgr.initDeviceParamCategory();
+		});
+	},
+	initDeviceParamCategory : function() {
+		var categories = DeviceParam.configItems.deviceParamCategory;
+		for (var i = 0; i < categories.length; i++) {
+			SiteMgr.deviceParamCategories[categories[i].value] = categories[i].name;
+		}
+	},
 	init : function() {
-		SiteMgr.loadConfigItems();
+		SiteMgr.loadMonitorParamConfig();
+		SiteMgr.loadDeviceParamConfig();
 		SiteMgr.initTree();
 		SiteMgr.initEventBind();
 		SiteMgr.initComunicateDt();
@@ -202,7 +217,7 @@ var SiteMgr = {
 		},
 		loadData : function(meta) {
 			SiteMgr.tabs.clear();
-		},
+		}
 	},
 	//
 	// 树相关操作
@@ -517,9 +532,9 @@ var SiteMgr = {
 			SiteMgr.socket.on('getParamList', function(data) {
 				var rows = [];
 				var row = SiteMgr.datatables.comunicateDt.createRow();
-				console.log(data.body);
 				rows.push(row);
 				SiteMgr.datatables.comunicateDt.loadData(rows)
+				SiteMgr.device.getParamListResult(data);
 			});
 			SiteMgr.socket.on('queryAll', function(data) {
 				var rows = [];
@@ -565,7 +580,14 @@ var SiteMgr = {
 			SiteMgr.socketIO.sendMsg("getParamList", data)
 		},
 		getParamListResult : function(data) {
-			
+			var tabElements = {};
+			for(var i=0;i<data.length;i++){
+				var categoryId = data[i].categoryId;
+				if(!tabElements[categoryId]) {
+					tabElements[categoryId] = [];
+				}	
+				tabElements[categoryId].push(data[i]);
+			}
 		},
 		findAllParam : function() {
 			var id = SiteMgr.deviceTree.getSelectedItemId();
@@ -583,7 +605,6 @@ var SiteMgr = {
 			SiteMgr.socketIO.sendMsg("queryAll", data)
 		},
 		getFindAllParamResult : function() {
-
 		},
 		findSelectedParam : function() {
 			var id = SiteMgr.deviceTree.getSelectedItemId();
