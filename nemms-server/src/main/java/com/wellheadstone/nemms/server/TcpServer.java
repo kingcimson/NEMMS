@@ -23,7 +23,7 @@ public class TcpServer implements IServer {
 		int port = this.getPort();
 
 		try {
-			this.bind("localhost", port);
+			this.bind(this.getIPAddress(), port);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -55,6 +55,16 @@ public class TcpServer implements IServer {
 		}
 	}
 
+	private String getIPAddress() {
+		String ipAddr = "localhost";
+		try {
+			ipAddr = PropertiesUtils.getValue("nemms.server.ip");
+		} catch (Exception e) {
+			logger.error("SocketIO Server IP Parse Error,Set the default IP:" + ipAddr, e);
+		}
+		return ipAddr;
+	}
+	
 	private int getPort() {
 		int port = 8000;
 		try {

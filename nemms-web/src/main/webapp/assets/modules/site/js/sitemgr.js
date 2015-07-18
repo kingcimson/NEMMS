@@ -182,7 +182,7 @@ var SiteMgr = {
 		});
 	},
 	initDeviceParamCategory : function() {
-		var categories = DeviceParam.configItems.deviceParamCategory;
+		var categories = SiteMgr.deviceParamConfig.deviceParamCategory;
 		for (var i = 0; i < categories.length; i++) {
 			SiteMgr.deviceParamCategories[categories[i].value] = categories[i].name;
 		}
@@ -534,7 +534,8 @@ var SiteMgr = {
 				var row = SiteMgr.datatables.comunicateDt.createRow();
 				rows.push(row);
 				SiteMgr.datatables.comunicateDt.loadData(rows)
-				SiteMgr.device.getParamListResult(data);
+				console.log(data);
+				SiteMgr.device.getParamListResult(data.body);
 			});
 			SiteMgr.socket.on('queryAll', function(data) {
 				var rows = [];
@@ -588,6 +589,7 @@ var SiteMgr = {
 				}	
 				tabElements[categoryId].push(data[i]);
 			}
+			console.log(tabElements);
 		},
 		findAllParam : function() {
 			var id = SiteMgr.deviceTree.getSelectedItemId();

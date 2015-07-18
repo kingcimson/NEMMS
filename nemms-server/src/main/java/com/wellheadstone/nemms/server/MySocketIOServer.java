@@ -16,7 +16,7 @@ public class MySocketIOServer implements IServer {
 	@Override
 	public void start() {
 		Configuration config = new Configuration();
-		config.setHostname("localhost");
+		config.setHostname(this.getIPAddress());
 		config.setPort(this.getPort());
 
 		final SocketIOServer server = new SocketIOServer(config);
@@ -35,6 +35,16 @@ public class MySocketIOServer implements IServer {
 		server.stop();
 	}
 
+	private String getIPAddress() {
+		String ipAddr = "localhost";
+		try {
+			ipAddr = PropertiesUtils.getValue("nemms.server.ip");
+		} catch (Exception e) {
+			logger.error("SocketIO Server IP Parse Error,Set the default IP:" + ipAddr, e);
+		}
+		return ipAddr;
+	}
+	
 	private int getPort() {
 		int port = 9100;
 		try {

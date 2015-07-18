@@ -1,4 +1,4 @@
-﻿package com.wellheadstone.nemms.server.domain.po;
+package com.wellheadstone.nemms.server.domain.po;
 
 import java.io.Serializable;
 import java.util.Calendar;

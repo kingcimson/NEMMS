@@ -9,6 +9,7 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.handler.udp.UDPServerHandler;
 
 public class UDPServer implements IServer {
@@ -19,7 +20,7 @@ public class UDPServer implements IServer {
 		int port = this.getPort();
 
 		try {
-			this.bind("localhost", port);
+			this.bind(this.getIPAddress(), port);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -38,6 +39,16 @@ public class UDPServer implements IServer {
 		}
 	}
 
+	private String getIPAddress() {
+		String ipAddr = "localhost";
+		try {
+			ipAddr = PropertiesUtils.getValue("nemms.server.ip");
+		} catch (Exception e) {
+			logger.error("UDP Server IP Parse Error,Set the default IP:" + ipAddr, e);
+		}
+		return ipAddr;
+	}
+	
 	private int getPort() {
 		int port = 8200;
 		try {

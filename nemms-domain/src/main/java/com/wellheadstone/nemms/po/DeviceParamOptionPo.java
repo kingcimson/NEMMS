@@ -1,4 +1,4 @@
-﻿package com.wellheadstone.nemms.po;
+package com.wellheadstone.nemms.po;
 
 import java.io.Serializable;
 import java.util.Calendar;
