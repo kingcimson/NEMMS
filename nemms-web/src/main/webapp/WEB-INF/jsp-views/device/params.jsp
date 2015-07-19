@@ -35,6 +35,7 @@
 											<select id="fieldName" name="fieldName" class="form-control input-sm">
 												<option value="name">名称</option>
 												<option value="param_id">监控标识</option>
+												<option value="mcp_id">MCP协议类型</option>
 												<option value="mode">模式</option>
 												<option value="value_type">值类型</option>
 											</select>
