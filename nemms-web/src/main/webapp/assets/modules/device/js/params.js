@@ -2,6 +2,7 @@ var DeviceParam = {
 	pageUrl : XFrame.getContextPath() + '/device/params/',
 	dt : null,
 	configItems : null,
+	mcp:null,
 	ajaxPost : function(data, url, callback) {
 		$.ajax({
 			type : 'POST',
@@ -32,12 +33,47 @@ var DeviceParam = {
 		$('#add_btn').on('click', DeviceParam.showAddModal);
 	},
 	loadConfigItems : function() {
-		var url = XFrame.getContextPath() + '/system/config/getConfigItems'
+		var url = XFrame.getContextPath() + '/system/config/getDepth2Items'
 		$.getJSON(url, {
 			parentKey : "deviceParam"
 		}, function(data) {
 			DeviceParam.configItems = data;
 			DeviceParam.fillSelect();
+		});
+		
+		$.getJSON(XFrame.getContextPath() + '/system/config/getDepth1Items', {
+			parentKey : "mcpProtocol"
+		}, function(data) {
+			DeviceParam.mcp = data;
+			var map = {
+				"mcpId" : data
+			};
+
+			for ( var key in map) {
+				$('#' + key).empty();
+				$('#edit_' + key).empty();
+				$.each(map[key], function(i, item) {
+					$('#' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+					$('#edit_' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+				});
+			}
+		});
+		
+		$.getJSON(XFrame.getContextPath() + '/system/config/getDepth1Items', {
+			parentKey : "paramOption"
+		}, function(data) {
+			var map = {
+				"htmlElemKey" : data
+			};
+
+			for ( var key in map) {
+				$('#' + key).empty();
+				$('#edit_' + key).empty();
+				$.each(map[key], function(i, item) {
+					$('#' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+					$('#edit_' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
+				});
+			}
 		});
 		
 		$.getJSON( XFrame.getContextPath() + '/membership/role/getRoleList',null,function(data){
@@ -83,6 +119,12 @@ var DeviceParam = {
 						data : "id",
 						name : "id"
 					}, {
+						data : "paramId",
+						name : "param_id"
+					}, {
+						data : "mcpId",
+						name : "mcp_id"
+					}, {
 						data : "name",
 						name : "name"
 					}, {
@@ -109,13 +151,7 @@ var DeviceParam = {
 					}, {
 						data : "valueMaxLen",
 						name : "value_max_len"
-					}, {
-						data : "minValue",
-						name : "min_value"
-					}, {
-						data : "maxValue",
-						name : "max_value"
-					}, {
+					},{
 						data : "authorityRoles",
 						name : "authority_roles"
 					}, {
@@ -135,6 +171,15 @@ var DeviceParam = {
 						}
 					},{
 						"targets" : [ 2 ],
+						"data" : "mcpId",
+						"render" : function(data) {
+							var result =$.grep(DeviceParam.mcp,function(item,i){
+								return item.value == data 
+							});
+							return result.length ? result[0].name : "其他";
+						}
+					},{
+						"targets" : [ 4 ],
 						"data" : "categoryId",
 						"render" : function(data) {
 							var categories = DeviceParam.configItems.deviceParamCategory;
@@ -144,11 +189,20 @@ var DeviceParam = {
 							return result.length ? result[0].name : "其他";
 						}
 					},{
-						"targets" : [ 3 ],
+						"targets" : [ 5 ],
 						"data" : "mode",
 						"render" : function(data) {
 							var categories = DeviceParam.configItems.deviceParamMode;
 							var result =$.grep(categories,function(item,i){
+								return item.value == data 
+							});
+							return result.length ? result[0].name : "其他";
+						}
+					},{
+						"targets" : [ 8 ],
+						"data" : "valueType",
+						"render" : function(data) {
+							var result =$.grep(DeviceParam.configItems.deviceParamValueType,function(item,i){
 								return item.value == data 
 							});
 							return result.length ? result[0].name : "其他";

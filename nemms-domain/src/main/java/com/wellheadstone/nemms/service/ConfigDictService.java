@@ -34,9 +34,24 @@ public class ConfigDictService extends BaseService<ConfigDictDao, ConfigDictPo> 
 		return this.getDao().query(condition, page);
 	}
 
-	public Map<String, List<ConfigDictPo>> getConfigItems(String parentKey) {
-		Map<String, List<ConfigDictPo>> itemMap = new HashMap<String, List<ConfigDictPo>>(10);
+	/**
+	 * 获取当前父配置项下1级深入配置项
+	 * 
+	 * @param parentKey
+	 * @return
+	 */
+	public List<ConfigDictPo> getDepth1Items(String parentKey) {
+		return this.getDao().queryBy(parentKey);
+	}
 
+	/**
+	 * 获取当前父配置项下2级深度配置项
+	 * 
+	 * @param parentKey
+	 * @return
+	 */
+	public Map<String, List<ConfigDictPo>> getDepth2Items(String parentKey) {
+		Map<String, List<ConfigDictPo>> itemMap = new HashMap<String, List<ConfigDictPo>>(10);
 		List<ConfigDictPo> items = this.getDao().queryAllItem();
 		ConfigDictPo parentItem = items.stream()
 				.filter(x -> x.getKey().equals(parentKey))
@@ -52,9 +67,5 @@ public class ConfigDictService extends BaseService<ConfigDictDao, ConfigDictPo> 
 		}
 
 		return itemMap;
-	}
-
-	public List<ConfigDictPo> getDeviceTypes() {
-		return this.getDao().queryBy("deviceType");
 	}
 }

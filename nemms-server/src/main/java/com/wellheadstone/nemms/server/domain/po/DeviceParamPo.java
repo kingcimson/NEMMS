@@ -16,7 +16,7 @@ public class DeviceParamPo implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8398044014651562982L;
+	private static final long serialVersionUID = -950194582722710175L;
 
 	/**
 	 * 实体device_param名称
@@ -27,6 +27,16 @@ public class DeviceParamPo implements Serializable {
 	 * 列名id,参数id
 	 */
 	public final static String Id = "id";
+
+	/**
+	 * 列名param_id,设备参数标识(整数十六进制)
+	 */
+	public final static String ParamId = "param_id";
+
+	/**
+	 * 列名mcp_id,mcp协义类型1:mcp_a;2:mcp_b;3:mcp_c
+	 */
+	public final static String McpId = "mcp_id";
 
 	/**
 	 * 列名category_id,参数类别
@@ -108,8 +118,19 @@ public class DeviceParamPo implements Serializable {
 	 */
 	public final static String HtmlElem = "html_elem";
 
+	/**
+	 * 列名html_elem_key,
+	 */
+	public final static String HtmlElemKey = "html_elem_key";
+
 	@Column(name = "id", isIgnored = true)
 	private Integer id;
+
+	@Column(name = "param_id")
+	private String paramId;
+
+	@Column(name = "mcp_id")
+	private Integer mcpId;
 
 	@Column(name = "category_id")
 	private Integer categoryId;
@@ -159,6 +180,9 @@ public class DeviceParamPo implements Serializable {
 	@Column(name = "html_elem")
 	private String htmlElem;
 
+	@Column(name = "html_elem_key")
+	private String htmlElemKey;
+
 	/**
 	 * 获取参数id
 	 * 
@@ -175,6 +199,42 @@ public class DeviceParamPo implements Serializable {
 	 */
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	/**
+	 * 获取设备参数标识
+	 * 
+	 * @return 设备参数标识(整数十六进制)
+	 */
+	public String getParamId() {
+		return this.paramId;
+	}
+
+	/**
+	 * 设置设备参数标识(整数十六进制)
+	 * 
+	 * @param paramId
+	 */
+	public void setParamId(String paramId) {
+		this.paramId = paramId;
+	}
+
+	/**
+	 * 获取mcp协义类型1:mcp_a;2:mcp_b;3:mcp_c
+	 * 
+	 * @return mcp协义类型1:mcp_a;2:mcp_b;3:mcp_c
+	 */
+	public Integer getMcpId() {
+		return this.mcpId;
+	}
+
+	/**
+	 * 设置mcp协义类型1:mcp_a;2:mcp_b;3:mcp_c
+	 * 
+	 * @param mcpId
+	 */
+	public void setMcpId(Integer mcpId) {
+		this.mcpId = mcpId;
 	}
 
 	/**
@@ -465,5 +525,23 @@ public class DeviceParamPo implements Serializable {
 	 */
 	public void setHtmlElem(String htmlElem) {
 		this.htmlElem = htmlElem;
+	}
+
+	/**
+	 * 获取设备参数选项对应配置表(config_dict)中key值
+	 * 
+	 * @return
+	 */
+	public String getHtmlElemKey() {
+		return htmlElemKey;
+	}
+
+	/**
+	 * 设置设备参数选项对应配置表(config_dict)中key值
+	 * 
+	 * @param htmlElemKey
+	 */
+	public void setHtmlElemKey(String htmlElemKey) {
+		this.htmlElemKey = htmlElemKey;
 	}
 }

@@ -34,7 +34,7 @@
 										<div class="form-group">
 											<select id="fieldName" name="fieldName" class="form-control input-sm">
 												<option value="name">名称</option>
-												<option value="id">ID</option>
+												<option value="param_id">监控标识</option>
 												<option value="mode">模式</option>
 												<option value="value_type">值类型</option>
 											</select>
@@ -59,7 +59,9 @@
 						<table id="datatable1" class="display" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th>ID</th>
+									<th>记录ID</th>
+									<th>监控标识</th>
+									<th>MCP协议</th>
 									<th>名称</th>
 									<th>类别</th>
 									<th>模式</th>
@@ -69,8 +71,6 @@
 									<th>值长度</th>
 									<th>值最小长度</th>
 									<th>值最大长度</th>
-									<th>最小值</th>
-									<th>最大值</th>
 									<th>权限归属</th>
 									<th>告警级别</th>
 									<th>操作</th>
@@ -78,7 +78,9 @@
 							</thead>
 							<tfoot>
 								<tr>
-									<th>ID</th>
+									<th>记录ID</th>
+									<th>监控标识</th>
+									<th>MCP协议</th>
 									<th>名称</th>
 									<th>类别</th>
 									<th>模式</th>
@@ -88,8 +90,6 @@
 									<th>值长度</th>
 									<th>值最小长度</th>
 									<th>值最大长度</th>
-									<th>最小值</th>
-									<th>最大值</th>
 									<th>权限归属</th>
 									<th>告警级别</th>
 									<th>操作</th>
@@ -125,6 +125,21 @@
 						</section>
 						<section>
 							<div class="row">
+								<label class="label col col-2">监控标识:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="paramId" id="paramId" value="0x" required>
+									</label>
+								</div>
+								<label class="label col col-2">MCP协议类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="mcpId" name="mcpId">
+									</select> <i></i>
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
 								<label class="label col col-2">类别:</label>
 								<div class="col col-4">
 									<label class="select"> <select id="categoryId" name="categoryId">
@@ -143,12 +158,12 @@
 							<div class="row">
 								<label class="label col col-2">系数:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="ratio" id="ratio" required>
+									<label class="input"> <input type="text" name="ratio" id="ratio" value="1.0" required>
 									</label>
 								</div>
 								<label class="label col col-2">单位:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="unit" id="unit" required>
+									<label class="input"> <input type="text" name="unit" id="unit" value="0" required>
 									</label>
 								</div>
 							</div>
@@ -163,7 +178,7 @@
 								</div>
 								<label class="label col col-2">值长度:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="valueLen" id="valueLen" required>
+									<label class="input"> <input type="text" name="valueLen" id="valueLen" value="1" required>
 									</label>
 								</div>
 							</div>
@@ -172,12 +187,12 @@
 							<div class="row">
 								<label class="label col col-2">值最小长度:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="valueMinLen" id="valueMinLen" required>
+									<label class="input"> <input type="text" name="valueMinLen" id="valueMinLen" value="1" required>
 									</label>
 								</div>
 								<label class="label col col-2">值最大长度:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="valueMaxLen" id="valueMaxLen" required>
+									<label class="input"> <input type="text" name="valueMaxLen" id="valueMaxLen" value="8" required>
 									</label>
 								</div>
 							</div>
@@ -186,12 +201,12 @@
 							<div class="row">
 								<label class="label col col-2">最小值:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="minValue" id="minValue" required>
+									<label class="input"> <input type="text" name="minValue" id="minValue" value="0" required>
 									</label>
 								</div>
 								<label class="label col col-2">最大值:</label>
 								<div class="col col-4">
-									<label class="input"> <input type="text" name="maxValue" id="maxValue" required>
+									<label class="input"> <input type="text" name="maxValue" id="maxValue" value="255" required>
 									</label>
 								</div>
 							</div>
@@ -214,11 +229,17 @@
 						</section>
 						<section>
 							<div class="row">
-								<label class="label col col-2">参数选项:</label>
-								<div class="col col-10">
+								<label class="label col col-2">参数控件:</label>
+								<div class="col col-4">
 									<label class="select"> <select id="htmlElem" name="htmlElem">
-									<option value="text">文本框</option>
-									<option value="select">下拉框</option>
+											<option value="text">文本框</option>
+											<option value="select">下拉框</option>
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">参数配置项:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="htmlElemKey" name="htmlElemKey">
 									</select> <i></i>
 									</label>
 								</div>
@@ -251,6 +272,21 @@
 								<div class="col col-10">
 									<label class="input"> <input type="text" name="name" id="edit_name" required>
 									<input name="id" type="hidden">
+									</label>
+								</div>
+							</div>
+						</section>
+						<section>
+							<div class="row">
+								<label class="label col col-2">监控标识:</label>
+								<div class="col col-4">
+									<label class="input"> <input type="text" name="paramId" id="edit_paramId" required>
+									</label>
+								</div>
+								<label class="label col col-2">MCP协议类型:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="edit_mcpId" name="mcpId">
+									</select> <i></i>
 									</label>
 								</div>
 							</div>
@@ -349,10 +385,16 @@
 						<section>
 							<div class="row">
 								<label class="label col col-2">参数控件:</label>
-								<div class="col col-10">
+								<div class="col col-4">
 									<label class="select"> <select id="edit_htmlElem" name="htmlElem">
-									<option value="text">文本框</option>
-									<option value="select">下拉框</option>
+											<option value="text">文本框</option>
+											<option value="select">下拉框</option>
+									</select> <i></i>
+									</label>
+								</div>
+								<label class="label col col-2">参数配置项:</label>
+								<div class="col col-4">
+									<label class="select"> <select id="edit_htmlElemKey" name="htmlElemKey">
 									</select> <i></i>
 									</label>
 								</div>

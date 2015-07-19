@@ -31,16 +31,16 @@ public class ConfigController extends AbstractController {
 		return "system/config";
 	}
 
-	@RequestMapping(value = "/getConfigItems")
+	@RequestMapping(value = "/getDepth1Items")
 	@ResponseBody
-	public Map<String, List<ConfigDictPo>> getConfigItems(String parentKey, HttpServletRequest request) {
-		return this.configDictService.getConfigItems(parentKey);
+	public List<ConfigDictPo> getDepth1Items(String parentKey, HttpServletRequest request) {
+		return this.configDictService.getDepth1Items(parentKey);
 	}
 
-	@RequestMapping(value = "/getDeviceTypes")
+	@RequestMapping(value = "/getDepth2Items")
 	@ResponseBody
-	public List<ConfigDictPo> getDeviceTypes(HttpServletRequest request) {
-		return this.configDictService.getDeviceTypes();
+	public Map<String, List<ConfigDictPo>> getDepth2Items(String parentKey, HttpServletRequest request) {
+		return this.configDictService.getDepth2Items(parentKey);
 	}
 
 	@RequestMapping(value = "/list")

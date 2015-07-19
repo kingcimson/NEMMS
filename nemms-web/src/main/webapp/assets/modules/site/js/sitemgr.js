@@ -4,6 +4,7 @@ var SiteMgr = {
 	comunicateDt : null,
 	socket : null,
 	deviceParamConfig:null,
+	paramOption:null,
 	deviceParamCategories:{},
 	pageUrl : XFrame.getContextPath() + '/site/',
 	ajaxPost : function(data, url, success) {
@@ -142,8 +143,10 @@ var SiteMgr = {
 	initTabs : function() {
 	},
 	loadMonitorParamConfig : function() {
-		var url = XFrame.getContextPath() + '/system/config/getDeviceTypes'
-		$.getJSON(url, null, function(data) {
+		var url = XFrame.getContextPath() + '/system/config/getDepth1Items'
+		$.getJSON(url, {
+			parentKey : "deviceType"
+		}, function(data) {
 			$('#site_deviceType').empty();
 			$('#edit_site_deviceType').empty();
 			$.each(data, function(i, item) {
@@ -152,7 +155,7 @@ var SiteMgr = {
 			});
 		});
 
-		var url = XFrame.getContextPath() + '/system/config/getConfigItems'
+		var url = XFrame.getContextPath() + '/system/config/getDepth2Items'
 		$.getJSON(url, {
 			parentKey : "monitorParam"
 		}, function(data) {
@@ -173,12 +176,20 @@ var SiteMgr = {
 		});
 	},
 	loadDeviceParamConfig : function() {
-		var url = XFrame.getContextPath() + '/system/config/getConfigItems'
+		var url = XFrame.getContextPath() + '/system/config/getDepth2Items'
 		$.getJSON(url, {
 			parentKey : "deviceParam"
 		}, function(data) {
 			SiteMgr.deviceParamConfig = data;
 			SiteMgr.initDeviceParamCategory();
+		});
+	},
+	loadParamOptionConfig : function() {
+		var url = XFrame.getContextPath() + '/system/config/getDepth2Items'
+		$.getJSON(url, {
+			parentKey : "paramOption"
+		}, function(data) {
+			SiteMgr.paramOption = data;
 		});
 	},
 	initDeviceParamCategory : function() {
