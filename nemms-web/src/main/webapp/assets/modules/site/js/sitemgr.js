@@ -582,8 +582,9 @@ var SiteMgr = {
 			var meta = SiteMgr.deviceTree.getUserData(id, 'meta');
 			var data = {
 				header : {
+					eventName:"getParamList",
 					sessionId : 1,
-					serverIP : "localhost"
+					clientIP : "localhost"
 				},
 				body : {
 					"siteId" : meta.id

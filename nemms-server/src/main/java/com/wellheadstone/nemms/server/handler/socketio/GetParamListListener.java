@@ -8,12 +8,14 @@ import com.corundumstudio.socketio.listener.DataListener;
 import com.wellheadstone.nemms.data.util.SpringContextUtils;
 import com.wellheadstone.nemms.server.domain.po.DeviceParamPo;
 import com.wellheadstone.nemms.server.domain.service.DeviceParamService;
+import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.protocol.socketio.SocketIOMessage;
 
 public class GetParamListListener implements DataListener<SocketIOMessage> {
 
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
+		TcpSocketChannelMap.get(data.getHeader().getClientIP()).writeAndFlush(data);
 		SocketIOMessage response = new SocketIOMessage();
 		response.setBody(this.getAllParams());
 		client.sendEvent(EventName.GetParamList, response);

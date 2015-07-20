@@ -1,8 +1,9 @@
 package com.wellheadstone.nemms.server.protocol.socketio;
 
 public class SokcetIOHeader {
+	private String eventName;
 	private String sessionId;
-	private String serverIP;
+	private String clientIP;
 	private long timeStamp = System.currentTimeMillis();
 
 	public String getSessionId() {
@@ -13,12 +14,12 @@ public class SokcetIOHeader {
 		this.sessionId = sessionId;
 	}
 
-	public String getServerIP() {
-		return serverIP;
+	public String getClientIP() {
+		return clientIP;
 	}
 
-	public void setServerIP(String serverIP) {
-		this.serverIP = serverIP;
+	public void setClientIP(String clientIP) {
+		this.clientIP = clientIP;
 	}
 
 	public long getTimeStamp() {
@@ -27,5 +28,13 @@ public class SokcetIOHeader {
 
 	public void setTimeStamp(long timeStamp) {
 		this.timeStamp = timeStamp;
+	}
+
+	public String getEventName() {
+		return eventName;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
 	}
 }
