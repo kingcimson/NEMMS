@@ -8,6 +8,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,8 +54,11 @@ public class TcpServer implements IServer {
 
 	private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 		@Override
-		protected void initChannel(SocketChannel arg0) throws Exception {
-			arg0.pipeline().addLast(new TcpServerHandler());
+		protected void initChannel(SocketChannel channel) throws Exception {
+			channel.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
+			channel.pipeline().addLast("decoder", new StringDecoder());
+			channel.pipeline().addLast("encoder", new StringEncoder());
+			channel.pipeline().addLast("handler", new TcpServerHandler());
 		}
 	}
 
@@ -64,7 +71,7 @@ public class TcpServer implements IServer {
 		}
 		return ipAddr;
 	}
-	
+
 	private int getPort() {
 		int port = 8000;
 		try {
