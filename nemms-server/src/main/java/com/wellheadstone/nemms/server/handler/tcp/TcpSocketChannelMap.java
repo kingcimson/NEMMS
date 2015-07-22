@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TcpSocketChannelMap {
-	private static Map<String, SocketChannel> map = new ConcurrentHashMap<String, SocketChannel>();
+	private static Map<String, SocketChannel> map = new ConcurrentHashMap<String, SocketChannel>(100);
 
 	public static void add(String clientId, SocketChannel socketChannel) {
 		map.put(clientId, socketChannel);

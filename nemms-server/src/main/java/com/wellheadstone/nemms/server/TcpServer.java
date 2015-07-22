@@ -42,7 +42,7 @@ public class TcpServer implements IServer {
 			b.group(bossGroup, workerGroup)
 					.channel(NioServerSocketChannel.class)
 					.option(ChannelOption.TCP_NODELAY, true)
-					.childOption(ChannelOption.SO_KEEPALIVE, true)
+					.option(ChannelOption.SO_KEEPALIVE, true)
 					.childHandler(new ChildChannelHandler());
 			ChannelFuture f = b.bind(ip, port).sync();
 			f.channel().closeFuture().sync();

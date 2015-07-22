@@ -1,5 +1,7 @@
 package com.wellheadstone.nemms.server.handler.socketio;
 
+import io.netty.channel.socket.SocketChannel;
+
 import java.util.List;
 
 import com.corundumstudio.socketio.AckRequest;
@@ -15,10 +17,13 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
-		TcpSocketChannelMap.get(data.getHeader().getClientIP()).writeAndFlush(data);
-		SocketIOMessage response = new SocketIOMessage();
-		response.setBody(this.getAllParams());
-		client.sendEvent(EventName.GetParamList, response);
+		SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get("192.168.10.67");
+		if (channel != null) {
+			channel.writeAndFlush(data.getHeader().getEventName());
+		}
+		// SocketIOMessage response = new SocketIOMessage();
+		// response.setBody(this.getAllParams());
+		// client.sendEvent(EventName.GetParamList, response);
 	}
 
 	private List<DeviceParamPo> getAllParams() {

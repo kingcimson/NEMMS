@@ -3,6 +3,7 @@ package com.wellheadstone.nemms.client;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -14,6 +15,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ public class TcpClient {
 			Bootstrap b = new Bootstrap();
 			b.group(group)
 					.channel(NioSocketChannel.class)
+					.option(ChannelOption.SO_KEEPALIVE, true)
 					.handler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						protected void initChannel(SocketChannel channel) throws Exception {
@@ -44,18 +47,12 @@ public class TcpClient {
 
 			Channel ch = b.connect(getIPAddress(), getPort()).sync().channel();
 			ch.writeAndFlush("client send data: " + "\r\n");
-			/*
-			 * int i = 0;
-			 * for (;;) {
-			 * 
-			 * 向服务端发送在控制台输入的文本 并用"\r\n"结尾
-			 * 之所以用\r\n结尾 是因为我们在handler中添加了 DelimiterBasedFrameDecoder 帧解码。
-			 * 这个解码器是一个根据\n符号位分隔符的解码器。所以每条消息的最后必须加上\n否则无法识别和解码
-			 * 
-			 * ch.writeAndFlush("client send data: " + i + "\r\n");
-			 * TimeUnit.SECONDS.sleep(3);
-			 * }
-			 */
+			int i = 0;
+			for (;;) {
+				ch.writeAndFlush("client send data: " + i++ + "\r\n");
+				TimeUnit.SECONDS.sleep(3);
+			}
+
 		} finally {
 			group.shutdownGracefully();
 		}

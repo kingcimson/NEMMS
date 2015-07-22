@@ -556,6 +556,6 @@ tr.selected:before {
 	loadScript(['<%=request.getContextPath()%>/assets/modules/site/js/sitemgr.js' ],
 			function() {
 				SiteMgr.init();
-				SiteMgr.socketIO.init('localhost','9100');
+				SiteMgr.socketIO.init('192.168.10.99','9100');
 			});
 </script>
