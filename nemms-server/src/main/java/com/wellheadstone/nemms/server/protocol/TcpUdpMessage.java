@@ -1,6 +1,9 @@
 package com.wellheadstone.nemms.server.protocol;
 
-public class TcpUdpMessage {
+import java.io.Serializable;
+
+public class TcpUdpMessage implements Serializable {
+	private static final long serialVersionUID = 7625190637270731504L;
 	private byte startFlag;// 起始标志
 	private byte ap;// ap层办议类型
 	private byte vp;// 承载协议类型
@@ -11,7 +14,7 @@ public class TcpUdpMessage {
 	private byte mcp;// mcp层协议标识
 	private byte cmdId;// 命令标识
 	private byte respFlag;// 应答标志
-	private long[] body;// 监控数据多字节倒例
+	private int[] body;// 监控数据多字节倒例
 	private short crc;// CRC校验单元 2字节倒序
 	private byte endFlag;// 结束标志
 
@@ -182,7 +185,7 @@ public class TcpUdpMessage {
 	 * 
 	 * @return
 	 */
-	public long[] getBody() {
+	public int[] getBody() {
 		return body;
 	}
 
@@ -190,7 +193,7 @@ public class TcpUdpMessage {
 	 * 
 	 * @param body
 	 */
-	public void setBody(long[] body) {
+	public void setBody(int[] body) {
 		this.body = body;
 	}
 
@@ -226,4 +229,8 @@ public class TcpUdpMessage {
 		this.endFlag = endFlag;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s%s", this.startFlag, this.endFlag);
+	}
 }

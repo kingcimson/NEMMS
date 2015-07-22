@@ -1,13 +1,15 @@
 package com.wellheadstone.nemms.server.handler.tcp;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.socket.SocketChannel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TcpServerHandler extends SimpleChannelInboundHandler<String> {
+import com.wellheadstone.nemms.server.protocol.TcpUdpMessage;
+
+public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 	private final static Logger logger = LoggerFactory.getLogger(TcpServerHandler.class);
 
 	@Override
@@ -18,8 +20,18 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<String> {
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
-		logger.info("接收到设备: " + ctx.channel().remoteAddress() + "的数据：" + msg);
-		ctx.writeAndFlush("Received your message !\n");
+	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		TcpUdpMessage message = (TcpUdpMessage) msg;
+		// logger.info("接收到设备:[" + ctx.channel().remoteAddress() + "]的数据：" +
+		// message);
+	}
+
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		ctx.flush();
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 	}
 }
