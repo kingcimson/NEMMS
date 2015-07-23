@@ -15,7 +15,7 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		logger.info("设备 : " + ctx.channel().remoteAddress() + "连接通道已经激活");
-		TcpSocketChannelMap.add("192.168.10.67", (SocketChannel) ctx.channel());
+		TcpSocketChannelMap.add("client1", (SocketChannel) ctx.channel());
 		super.channelActive(ctx);
 	}
 

@@ -81,7 +81,7 @@ public class StartUp {
 				message.setPacketId((short)0x00);
 
 				while (true) {
-					Channel ch = TcpSocketChannelMap.get("192.168.10.67");
+					Channel ch = TcpSocketChannelMap.get("client1");
 					if (ch != null){
 						ch.writeAndFlush(message);
 					}

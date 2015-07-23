@@ -18,7 +18,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
-		SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get("192.168.10.67");
+		SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get("client1");
 		if (channel != null) {
 			TcpUdpMessage message = new TcpUdpMessage();
 			message.setStartFlag((byte) 0x7e);
