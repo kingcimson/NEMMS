@@ -38,8 +38,6 @@ public class StartUp {
 	}
 
 	private static void startServers() {
-		TcpServer tcpServer = new TcpServer();
-
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -52,7 +50,7 @@ public class StartUp {
 			@Override
 			public void run() {
 				logger.info("Starting TcpIPServer");
-				tcpServer.start();
+				new TcpServer().start();
 			}
 		}, "TcpIPServer").start();
 
@@ -88,7 +86,7 @@ public class StartUp {
 						ch.writeAndFlush(message);
 					}
 					try {
-						TimeUnit.SECONDS.sleep(15);
+						TimeUnit.SECONDS.sleep(150);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
