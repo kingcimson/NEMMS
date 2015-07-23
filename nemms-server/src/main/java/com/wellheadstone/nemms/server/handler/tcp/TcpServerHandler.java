@@ -7,8 +7,6 @@ import io.netty.channel.socket.SocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wellheadstone.nemms.server.protocol.TcpUdpMessage;
-
 public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 	private final static Logger logger = LoggerFactory.getLogger(TcpServerHandler.class);
 
@@ -20,8 +18,14 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		TcpSocketChannelMap.remove((SocketChannel) ctx.channel());
+	}
+
+	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		//logger.info("接收到设备:[" + ctx.channel().remoteAddress() + "]的数据：" + message);
+		// logger.info("接收到设备:[" + ctx.channel().remoteAddress() + "]的数据：" +
+		// message);
 	}
 
 	@Override

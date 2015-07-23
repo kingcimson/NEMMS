@@ -23,7 +23,6 @@ public class MySocketIOServer implements IServer {
 		server.addEventListener(EventName.GetParamList, SocketIOMessage.class, ListenerFactory.create(EventName.GetParamList));
 		server.addEventListener(EventName.QueryALL, SocketIOMessage.class, ListenerFactory.create(EventName.QueryALL));
 		server.addEventListener(EventName.QuerySelected, SocketIOMessage.class, ListenerFactory.create(EventName.QuerySelected));
-
 		server.start();
 
 		try {
@@ -44,7 +43,7 @@ public class MySocketIOServer implements IServer {
 		}
 		return ipAddr;
 	}
-	
+
 	private int getPort() {
 		int port = 9100;
 		try {

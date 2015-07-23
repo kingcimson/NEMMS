@@ -18,6 +18,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
+		SocketIOClientMap.add(client.getSessionId(), client);
 		SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get("client1");
 		if (channel != null) {
 			TcpUdpMessage message = new TcpUdpMessage();
@@ -30,14 +31,11 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			message.setMcp((byte) 0x01);
 			message.setCmdId((byte) 0x02);
 			message.setRespFlag((byte) 0xff);
-			message.setBody(new byte[] { 0x01,0x01,0x00,0x09,0x05 });
+			message.setBody(new byte[] { 0x01, 0x01, 0x00, 0x09, 0x05 });
 			message.setEndFlag((byte) 0x7e);
-			message.setPacketId((short)0x00);
+			message.setPacketId((short) 0x00);
 			channel.writeAndFlush(message);
 		}
-		// SocketIOMessage response = new SocketIOMessage();
-		// response.setBody(this.getAllParams());
-		// client.sendEvent(EventName.GetParamList, response);
 	}
 
 	private List<DeviceParamPo> getAllParams() {
