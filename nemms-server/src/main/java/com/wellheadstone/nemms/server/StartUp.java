@@ -80,14 +80,12 @@ public class StartUp {
 				message.setRespFlag((byte) 0xff);
 				message.setBody(new byte[] { 0x01,0x01,0x00,0x09,0x05 });
 				message.setEndFlag((byte) 0x7e);
+				message.setPacketId((short)0x00);
 
-				short i = 1;
 				while (true) {
 					Channel ch = TcpSocketChannelMap.get("192.168.10.67");
 					if (ch != null){
-						message.setPacketId((short)0x00);
 						ch.writeAndFlush(message);
-						break;
 					}
 					try {
 						TimeUnit.SECONDS.sleep(15);

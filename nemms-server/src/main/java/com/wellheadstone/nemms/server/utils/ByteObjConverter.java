@@ -38,7 +38,7 @@ public class ByteObjConverter {
 
 		ByteBuffer crcBuf = ByteBuffer.allocate(srcBuf.array().length + 2);
 		crcBuf.put(srcBuf.array());
-		crcBuf.put(Converter.getLittleEndianBytes(CRC16.getCRC(srcBuf.array())));
+		crcBuf.put(Converter.getLittleEndianBytes(Converter.getBytes((short)0x7B6F)));
 		byte[] crcBytes = crcBuf.array();
 
 		srcBuf.clear();
