@@ -70,7 +70,7 @@ public class StartUp {
 				message.setStartFlag((byte) 0x7e);
 				message.setAp((byte) 0x03);
 				message.setVp((byte) 0x01);
-				message.setSiteId(0x02020005);
+				message.setSiteId(0x00000000);
 				message.setDeviceId((byte) 0x00);
 				message.setVpLayerFlag((byte) 0x80);
 				message.setMcp((byte) 0x01);
@@ -86,7 +86,7 @@ public class StartUp {
 						ch.writeAndFlush(message);
 					}
 					try {
-						TimeUnit.SECONDS.sleep(150);
+						TimeUnit.SECONDS.sleep(10);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
