@@ -22,8 +22,7 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		TcpUdpMessage message = (TcpUdpMessage) msg;
-		// logger.info("接收到设备:[" + ctx.channel().remoteAddress() + "]的数据：" +
-		// message);
+		//logger.info("接收到设备:[" + ctx.channel().remoteAddress() + "]的数据：" + message);
 	}
 
 	@Override

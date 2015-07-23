@@ -2,6 +2,8 @@ package com.wellheadstone.nemms.server.utils;
 
 import java.nio.ByteBuffer;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.wellheadstone.nemms.server.protocol.TcpUdpMessage;
 
 public class ByteObjConverter {
@@ -21,21 +23,72 @@ public class ByteObjConverter {
 	}
 
 	public static byte[] objectToBytes(TcpUdpMessage obj) {
-		int length = 17 + (obj.getBody() == null ? 0 : obj.getBody().length * 4);
-		ByteBuffer bb = ByteBuffer.allocate(length);
-		bb.put(obj.getStartFlag());
-		bb.put(obj.getAp());
-		bb.put(obj.getVp());
-		bb.put(Converter.getSwapOrderBytes(obj.getSiteId()));
-		bb.put(obj.getDeviceId());
-		bb.put(Converter.getSwapOrderBytes(obj.getPacketId()));
-		bb.put(obj.getVpLayerFlag());
-		bb.put(obj.getMcp());
-		bb.put(obj.getCmdId());
-		bb.put(obj.getRespFlag());
-		bb.put(Converter.getSwapOrderBytes(obj.getBody()));
-		bb.put(Converter.getSwapOrderBytes(obj.getCrc()));
-		bb.put(obj.getEndFlag());
-		return bb.array();
+		int length = 13 + (obj.getBody() == null ? 0 : obj.getBody().length);
+		ByteBuffer srcBuf = ByteBuffer.allocate(length);
+		srcBuf.put(obj.getAp());
+		srcBuf.put(obj.getVp());
+		srcBuf.put(Converter.getLittleEndianBytes(obj.getSiteId()));
+		srcBuf.put(obj.getDeviceId());
+		srcBuf.put(Converter.getLittleEndianBytes(obj.getPacketId()));
+		srcBuf.put(obj.getVpLayerFlag());
+		srcBuf.put(obj.getMcp());
+		srcBuf.put(obj.getCmdId());
+		srcBuf.put(obj.getRespFlag());
+		srcBuf.put(Converter.getLittleEndianBytes(obj.getBody()));
+
+		ByteBuffer crcBuf = ByteBuffer.allocate(srcBuf.array().length + 2);
+		crcBuf.put(srcBuf.array());
+		crcBuf.put(Converter.getLittleEndianBytes(CRC16.getCRC(srcBuf.array())));
+		byte[] crcBytes = crcBuf.array();
+
+		srcBuf.clear();
+		crcBuf.clear();
+
+		byte[] escapeBytes = escapeEncodeBytes(crcBytes);
+		ByteBuffer byteBuf = ByteBuffer.allocate(escapeBytes.length + 2);
+		byteBuf.put(obj.getStartFlag());
+		byteBuf.put(escapeBytes);
+		byteBuf.put(obj.getEndFlag());
+		return byteBuf.array();
+	}
+
+	public static byte[] escapeEncodeBytes(byte[] crcBytes) {
+		ByteBuffer byteBuf = ByteBuffer.allocate(getEncodeByteCount(crcBytes));
+		for (byte b : crcBytes) {
+			if (b == 0x5e) {
+				byteBuf.put((byte) 0x5e);
+				byteBuf.put((byte) 0x5d);
+			} else if (b == 0x7e) {
+				byteBuf.put((byte) 0x5e);
+				byteBuf.put((byte) 0x7d);
+			} else {
+				byteBuf.put(b);
+			}
+		}
+		return byteBuf.array();
+	}
+
+	public static byte[] escapeDecodeBytes(byte[] srcBytes) {
+		ByteBuffer byteBuf = ByteBuffer.allocate(getDecodeByteCount(srcBytes));
+		for (byte b : srcBytes) {
+
+		}
+		return byteBuf.array();
+	}
+
+	private static int getEncodeByteCount(byte[] bytes) {
+		int count = bytes.length;
+		for (byte b : bytes) {
+			if (b == 0x5e) {
+				count++;
+			} else if (b == 0x7e) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	private static int getDecodeByteCount(byte[] bytes){
+		return 0;
 	}
 }

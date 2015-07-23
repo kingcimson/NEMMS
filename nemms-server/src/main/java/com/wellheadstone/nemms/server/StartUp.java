@@ -72,21 +72,23 @@ public class StartUp {
 				message.setStartFlag((byte) 0x7e);
 				message.setAp((byte) 0x03);
 				message.setVp((byte) 0x01);
-				message.setSiteId(0x33685509);
+				message.setSiteId(0x02020005);
 				message.setDeviceId((byte) 0x00);
-				message.setPacketId((short) 0x66f9);
-				message.setVpLayerFlag((byte) 0x00);
+				message.setVpLayerFlag((byte) 0x80);
 				message.setMcp((byte) 0x01);
 				message.setCmdId((byte) 0x02);
 				message.setRespFlag((byte) 0xff);
-				message.setBody(new int[] { 01040102, 01040103 });
-				message.setCrc((short) 0xc453);
+				message.setBody(new byte[] { 0x01,0x01,0x00,0x09,0x05 });
 				message.setEndFlag((byte) 0x7e);
 
+				short i = 1;
 				while (true) {
 					Channel ch = TcpSocketChannelMap.get("192.168.10.67");
-					if (ch != null)
-						ch.write(message);
+					if (ch != null){
+						message.setPacketId((short)0x00);
+						ch.writeAndFlush(message);
+						break;
+					}
 					try {
 						TimeUnit.SECONDS.sleep(15);
 					} catch (InterruptedException e) {

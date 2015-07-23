@@ -2,6 +2,9 @@ package com.wellheadstone.nemms.server.protocol;
 
 import java.io.Serializable;
 
+import com.wellheadstone.nemms.server.utils.ByteObjConverter;
+import com.wellheadstone.nemms.server.utils.Converter;
+
 public class TcpUdpMessage implements Serializable {
 	private static final long serialVersionUID = 7625190637270731504L;
 	private byte startFlag;// 起始标志
@@ -14,7 +17,7 @@ public class TcpUdpMessage implements Serializable {
 	private byte mcp;// mcp层协议标识
 	private byte cmdId;// 命令标识
 	private byte respFlag;// 应答标志
-	private int[] body;// 监控数据多字节倒例
+	private byte[] body;// 监控数据多字节倒例
 	private short crc;// CRC校验单元 2字节倒序
 	private byte endFlag;// 结束标志
 
@@ -185,7 +188,7 @@ public class TcpUdpMessage implements Serializable {
 	 * 
 	 * @return
 	 */
-	public int[] getBody() {
+	public byte[] getBody() {
 		return body;
 	}
 
@@ -193,7 +196,7 @@ public class TcpUdpMessage implements Serializable {
 	 * 
 	 * @param body
 	 */
-	public void setBody(int[] body) {
+	public void setBody(byte[] body) {
 		this.body = body;
 	}
 
@@ -231,6 +234,6 @@ public class TcpUdpMessage implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("%s%s", this.startFlag, this.endFlag);
+		return Converter.bytesToHexString(ByteObjConverter.objectToBytes(this));
 	}
 }
