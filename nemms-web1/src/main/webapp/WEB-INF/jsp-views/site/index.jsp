@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/jsp-views/frame/init.jsp"%>
-<%@ include file="/WEB-INF/jsp-views/frame/form_scripts.jsp"%>
-<%@ include file="/WEB-INF/jsp-views/frame/datatables_scripts.jsp"%>
+<%@ include file="/WEB-INF/jsp-views/includes/header.jsp"%>
+<%@ include file="/WEB-INF/jsp-views/includes/form_scripts.jsp"%>
+<%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/plugin/dhtmlxtree/skins/terrace/dhtmlxtree.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/plugin/select2/select2.css">
 <script src="<%=request.getContextPath()%>/assets/js/plugin/dhtmlxtree/dhtmlxtree.js"></script>

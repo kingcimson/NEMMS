@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/jsp-views/frame/init.jsp"%>
-<%@ include file="/WEB-INF/jsp-views/frame/form_scripts.jsp"%>
-<%@ include file="/WEB-INF/jsp-views/frame/datatables_scripts.jsp"%>
+<%@ include file="/WEB-INF/jsp-views/includes/header.jsp"%>
+<%@ include file="/WEB-INF/jsp-views/includes/form_scripts.jsp"%>
+<%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
 <style>
 #add_modal .smart-form fieldset, #edit_form fieldset, #revise_password_form fieldset {
 	padding-left: 50px;
