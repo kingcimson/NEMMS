@@ -46,7 +46,7 @@ public class HomeController extends AbstractController {
 					button, subMenu, module.getIcon(), onclick, module.getName()));
 		}
 		menuBuilder.append(String.format(
-				"<a href=\"%s/logout\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-cancel'\">退出系统</a>\r\n", contextPath));
+				"<a href=\"%s/logout\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-cancel'\">退出</a>\r\n", contextPath));
 		menuBuilder.append("</div>\r\n");
 
 		for (ModulePo module : rootModules) {
