@@ -20,6 +20,7 @@
 		<module>nemms-membership</module>
 		<module>nemms-server</module>
 		<module>nemms-client</module>
+		<module>nemms-web1</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

@@ -1,0 +1,45 @@
+.cm-table-container {
+	margin-bottom: 15px;
+}
+.cm-table-container table{
+	width: 100%;
+	height: 690px;
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	border: none;
+}
+
+.cm-table-container thead {
+	background-color: #D7D7D7;
+	color: #555;
+}
+
+.cm-table-container th, .cm-table-container td {
+	padding: 8px 10px;
+	border: 1px solid #ccc;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	max-width: 400px;
+	text-align: center;
+}
+.cm-table-container .c {
+	background-color: #f0f0f0;
+}
+.cm-table-container .back {
+	text-align: left;
+	color:#333;
+	background-color: #e9e9e9;
+}
+.cm-table-container tbody tr:hover {
+	background-color: #e9e9e9;
+}
+
+.cm-table-container tbody tr.active, .cm-table-container .active .back {
+	background-color: #408270;
+	color:#fff;
+}
+.form-group .checkbox {
+	padding-left: 25px;
+}
