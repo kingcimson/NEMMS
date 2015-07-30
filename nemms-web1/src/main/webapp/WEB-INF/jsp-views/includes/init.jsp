@@ -9,9 +9,9 @@
 					return XFrame._contextPath;
 				}
 		};
-		
 		XFrame.setContextPath('<%=request.getContextPath()%>');
-			$.ajaxSetup({
+		
+		$.ajaxSetup({
 				contentType : "application/x-www-form-urlencoded;charset=utf-8",
 				complete : function(xhr, textStatus) {
 				var sessionStatus = xhr.getResponseHeader('sessionstatus');
