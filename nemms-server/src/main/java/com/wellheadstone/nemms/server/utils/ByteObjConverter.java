@@ -23,7 +23,7 @@ public class ByteObjConverter {
 	}
 
 	public static byte[] objectToBytes(TcpUdpMessage obj) {
-		int length = 13 + (obj.getBody() == null ? 0 : obj.getBody().length);
+		int length = 13 + (obj.getPDU() == null ? 0 : obj.getPDU().length);
 		ByteBuffer srcBuf = ByteBuffer.allocate(length);
 		srcBuf.put(obj.getAp());
 		srcBuf.put(obj.getVp());
@@ -34,7 +34,7 @@ public class ByteObjConverter {
 		srcBuf.put(obj.getMcp());
 		srcBuf.put(obj.getCmdId());
 		srcBuf.put(obj.getRespFlag());
-		srcBuf.put(Converter.getLittleEndianBytes(obj.getBody()));
+		srcBuf.put(Converter.getLittleEndianBytes(obj.getPDU()));
 
 		ByteBuffer crcBuf = ByteBuffer.allocate(srcBuf.array().length + 2);
 		crcBuf.put(srcBuf.array());
@@ -71,7 +71,6 @@ public class ByteObjConverter {
 	public static byte[] escapeDecodeBytes(byte[] srcBytes) {
 		ByteBuffer byteBuf = ByteBuffer.allocate(getDecodeByteCount(srcBytes));
 		for (byte b : srcBytes) {
-
 		}
 		return byteBuf.array();
 	}
@@ -79,9 +78,7 @@ public class ByteObjConverter {
 	private static int getEncodeByteCount(byte[] bytes) {
 		int count = bytes.length;
 		for (byte b : bytes) {
-			if (b == 0x5e) {
-				count++;
-			} else if (b == 0x7e) {
+			if (b == 0x5e || b == 0x7e) {
 				count++;
 			}
 		}

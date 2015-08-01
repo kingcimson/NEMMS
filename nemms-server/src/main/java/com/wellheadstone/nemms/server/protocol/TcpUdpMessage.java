@@ -17,7 +17,7 @@ public class TcpUdpMessage implements Serializable {
 	private byte mcp;// mcp层协议标识
 	private byte cmdId;// 命令标识
 	private byte respFlag;// 应答标志
-	private byte[] body;// 监控数据多字节倒例
+	private byte[] pdu;// 监控数据单元(多字节倒例)
 	private short crc;// CRC校验单元 2字节倒序
 	private byte endFlag;// 结束标志
 
@@ -188,16 +188,16 @@ public class TcpUdpMessage implements Serializable {
 	 * 
 	 * @return
 	 */
-	public byte[] getBody() {
-		return body;
+	public byte[] getPDU() {
+		return pdu;
 	}
 
 	/**
 	 * 
-	 * @param body
+	 * @param pdu
 	 */
-	public void setBody(byte[] body) {
-		this.body = body;
+	public void setPDU(byte[] pdu) {
+		this.pdu = pdu;
 	}
 
 	/**

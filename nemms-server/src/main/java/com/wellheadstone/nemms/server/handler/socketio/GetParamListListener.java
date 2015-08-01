@@ -13,8 +13,8 @@ import com.wellheadstone.nemms.server.domain.po.SitePo;
 import com.wellheadstone.nemms.server.domain.service.DeviceParamService;
 import com.wellheadstone.nemms.server.domain.service.SiteService;
 import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
+import com.wellheadstone.nemms.server.protocol.SocketIOMessage;
 import com.wellheadstone.nemms.server.protocol.TcpUdpMessage;
-import com.wellheadstone.nemms.server.protocol.socketio.SocketIOMessage;
 
 public class GetParamListListener implements DataListener<SocketIOMessage> {
 
@@ -33,7 +33,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			message.setMcp((byte) 0x01);
 			message.setCmdId((byte) 0x02);
 			message.setRespFlag((byte) 0xff);
-			message.setBody(new byte[] { 0x01, 0x01, 0x00, 0x09, 0x05 });
+			message.setPDU(new byte[] { 0x01, 0x01, 0x00, 0x09, 0x05 });
 			message.setEndFlag((byte) 0x7e);
 			message.setPacketId((short) 0x00);
 			channel.writeAndFlush(message);

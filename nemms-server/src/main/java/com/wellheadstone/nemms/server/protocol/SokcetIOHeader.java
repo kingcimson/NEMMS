@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.protocol.socketio;
+package com.wellheadstone.nemms.server.protocol;
 
 public class SokcetIOHeader {
 	private String eventName;

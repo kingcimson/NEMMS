@@ -70,20 +70,20 @@ public class StartUp {
 				message.setStartFlag((byte) 0x7e);
 				message.setAp((byte) 0x03);
 				message.setVp((byte) 0x01);
-				message.setSiteId(0x00000000);
+				message.setSiteId(0x02020005);
 				message.setDeviceId((byte) 0x00);
+				message.setPacketId((short)0x00);
 				message.setVpLayerFlag((byte) 0x80);
 				message.setMcp((byte) 0x01);
 				message.setCmdId((byte) 0x02);
 				message.setRespFlag((byte) 0xff);
-				message.setBody(new byte[] { 0x01,0x01,0x00,0x09,0x05 });
+				message.setPDU(new byte[] { 0x01,0x01,0x00,0x09,0x05 });
 				message.setEndFlag((byte) 0x7e);
-				message.setPacketId((short)0x00);
-
+				
 				while (true) {
 					Channel ch = TcpSocketChannelMap.get("client1");
 					if (ch != null){
-						ch.writeAndFlush(message);
+						//ch.writeAndFlush(message);
 					}
 					try {
 						TimeUnit.SECONDS.sleep(10);

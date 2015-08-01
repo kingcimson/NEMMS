@@ -1,7 +1,7 @@
 package com.wellheadstone.nemms.server.handler.socketio;
 
 import com.corundumstudio.socketio.listener.DataListener;
-import com.wellheadstone.nemms.server.protocol.socketio.SocketIOMessage;
+import com.wellheadstone.nemms.server.protocol.SocketIOMessage;
 
 public class ListenerFactory {
 	public static DataListener<SocketIOMessage> create(String eventName){
