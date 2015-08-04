@@ -1,0 +1,138 @@
+* {
+	font-size: 12px;
+}
+
+body {
+	font-family: verdana, helvetica, arial, sans-serif;
+	padding: 20px;
+	font-size: 12px;
+	margin: 0;
+}
+
+h2 {
+	font-size: 18px;
+	font-weight: bold;
+	margin: 0;
+	margin-bottom: 15px;
+}
+
+.demo-info {
+	padding: 0 0 12px 0;
+}
+
+.demo-tip {
+	display: none;
+}
+
+.tabs-panels {
+	border-bottom: 0px;
+	border-left: 0px;
+	border-right: 0px
+}
+
+.datagrid {
+	border: none
+}
+
+.easyui-datagrid {
+	border: none
+}
+
+.datagrid {
+	border-bottom: 0px
+}
+
+.datagrid .panel-body {
+	border-width: 0px;
+	border-style: solid;
+}
+
+.toolbar {
+	padding: 5px
+}
+
+.textbox-invalid {
+	background-color: #FFFfff;
+	border-color: #95B8E7
+}
+
+table.table1 {
+	
+}
+
+table.table1 td {
+	padding: 5px
+}
+
+table.table1 td input.text {
+	width: 200px
+}
+
+.bg-header {
+	background: url(../images/ad3_r2_c1.jpg);
+	height: 60px
+}
+
+.bg-header .logo {
+	float: left;
+	margin: 3px 20px;
+	width: 50px;
+	height: 50px;
+	background: url(../images/logo.png)
+}
+
+.bg-header .menus {
+	margin-top: 12px;
+	margin-left: 20px;
+	padding: 8px;
+	width: auto;
+	float: right;
+}
+
+.footer {
+	width: 100%;
+	background: url(../images/ad3_r2_c1.jpg);
+	height:35px;
+	color:#FFF;
+}
+
+#footer-left {
+	float: left;
+	margin-left: 3px;
+	line-height: 30px;
+}
+
+#footer-right {
+	float: right;
+	margin-right: 3px;
+	line-height: 30px;
+}
+
+.bg-header .menus .l-btn-text {
+	color: #FFF
+}
+
+.bg-header .menus a:hover .l-btn-text {
+	color: #000
+}
+
+ul.tabs {
+	border-left: none
+}
+
+.tabs-header {
+	border-left: none
+}
+
+#site {
+	border-top: none
+}
+
+#site .panel-header {
+	border-top-width: 0px
+}
+
+#site .panel-body {
+	border-top-width: 0px;
+	border-bottom: none
+}

@@ -7,11 +7,12 @@
 <%@ include file="/WEB-INF/jsp-views/includes/header.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
 <script>
-	function addTab(title, url,iconCls) {
+	function addTab(title, url, iconCls) {
 		if ($('#main-tab').tabs('exists', title)) {
 			$('#main-tab').tabs('select', title);
 		} else {
-			var content = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+			var content = '<iframe scrolling="auto" frameborder="0"  src="'
+					+ url + '" style="width:100%;height:100%;"></iframe>';
 			$('#main-tab').tabs('add', {
 				title : title,
 				content : content,
@@ -24,8 +25,9 @@
 </head>
 <body>
 	<div class="easyui-layout" fit="true" style="height: 250px;">
-		<div region="north" style="height: 32px;">
-		${menus}
+		<div region="north" class="bg-header">
+			<div class="logo"></div>
+			<div class="menus">${menus}</div>
 		</div>
 		<div region="center">
 			<div id="main-tab" class="easyui-tabs" border="false" fit="true">
@@ -36,10 +38,11 @@
 				</div>
 			</div>
 		</div>
-		<div region="south">
-			<div id="footer">
-				<div>Copyright © 2010-2015 北京裕源大通</div>
+		<div region="south" class="footer">
+			<div id="footer-left">
+				<div>网元设备监控与管理系统</div>
 			</div>
+			<div id="footer-right">Copyright © 2010-2015 北京裕源大通科技有限公司</div>
 		</div>
 	</div>
 </body>
