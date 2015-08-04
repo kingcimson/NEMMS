@@ -19,6 +19,9 @@ hs_err_pid*
 /nemms-web/target/
 /nemms-web/.settings/
 /nemms-web/.classpath
+/nemms-web1/target/
+/nemms-web1/.settings/
+/nemms-web1/.classpath
 /nemms-data/target/
 /nemms-data/.settings/
 /nemms-data/.classpath
