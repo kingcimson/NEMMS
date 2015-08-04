@@ -11,8 +11,7 @@
 		if ($('#main-tab').tabs('exists', title)) {
 			$('#main-tab').tabs('select', title);
 		} else {
-			var content = '<iframe scrolling="auto" frameborder="0"  src="'
-					+ url + '" style="width:100%;height:100%;"></iframe>';
+			var content = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
 			$('#main-tab').tabs('add', {
 				title : title,
 				content : content,
@@ -24,8 +23,9 @@
 </script>
 </head>
 <body>
-	<div class="easyui-layout" fit="true" style="height: 250px;">
+	<div class="easyui-layout" fit="true" style="">
 		<div region="north" class="bg-header">
+			<span class="name">admin 欢迎你回来</span>
 			<div class="logo"></div>
 			<div class="menus">${menus}</div>
 		</div>

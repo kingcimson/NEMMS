@@ -70,30 +70,41 @@ table.table1 td input.text {
 
 .bg-header {
 	background: url(../images/ad3_r2_c1.jpg);
-	height: 60px
+	height: 110px;
+	width: 100%;
+	position: relative
+}
+
+.bg-header span.name {
+	position: absolute;
+	left: 20px;
+	top: 80px;
+	font-size: 14px;
+	color: #FFF
 }
 
 .bg-header .logo {
 	float: left;
-	margin: 3px 20px;
-	width: 50px;
-	height: 50px;
-	background: url(../images/logo.png)
+	margin: 0px 0px;
+	width: 613px;
+	height: 73px;
+	background: url(../images/logo.jpg)
 }
 
 .bg-header .menus {
-	margin-top: 12px;
+	margin-top: 65px;
 	margin-left: 20px;
 	padding: 8px;
 	width: auto;
 	float: right;
+	padding-bottom: 0px;
 }
 
 .footer {
 	width: 100%;
 	background: url(../images/ad3_r2_c1.jpg);
-	height:35px;
-	color:#FFF;
+	height: 35px;
+	color: #FFF;
 }
 
 #footer-left {

@@ -11,6 +11,6 @@
 	<!-- 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions) -->
     <aop:config proxy-target-class="true"></aop:config>
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
+        <property name="securityManager" ref="securityManager"/> 
     </bean>
 </beans>
