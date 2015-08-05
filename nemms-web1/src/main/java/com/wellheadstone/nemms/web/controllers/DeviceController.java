@@ -17,7 +17,6 @@ import com.wellheadstone.nemms.data.PageInfo;
 import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.po.DeviceParamPo;
 import com.wellheadstone.nemms.service.DeviceParamService;
-import com.wellheadstone.nemms.web.DataTablePageInfo;
 import com.wellheadstone.nemms.web.membership.CurrentUser;
 
 @Controller
@@ -39,30 +38,36 @@ public class DeviceController extends AbstractController {
 
 	@RequestMapping(value = "/params/list")
 	@ResponseBody
-	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataTablePageInfo dtPageInfo, HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), UserPo.CreateTime);
-		List<DeviceParamPo> list = this.deviceParamService.getParams(page, loginUser);
+	public Map<String, Object> list(@CurrentUser UserPo loginUser, Integer page, Integer rows, HttpServletRequest request) {
+		if (page == null)
+			page = 1;
+		if (rows == null)
+			rows = 30;
+
+		PageInfo pageInfo = new PageInfo((page - 1) * rows, rows);
+		List<DeviceParamPo> list = this.deviceParamService.getParams(pageInfo, loginUser);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-		modelMap.put("draw", dtPageInfo.getDraw());
-		modelMap.put("recordsTotal", page.getTotals());
-		modelMap.put("recordsFiltered", page.getTotals());
-		modelMap.put("data", list);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
 
 		return modelMap;
 	}
 
 	@RequestMapping(value = "/params/find")
 	@ResponseBody
-	public Map<String, Object> getParamsByKeyword(@CurrentUser UserPo loginUser, DataTablePageInfo dtPageInfo,
+	public Map<String, Object> getParamsByKeyword(@CurrentUser UserPo loginUser, Integer page, Integer rows,
 			String categoryId, String fieldName, String keyword, HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), UserPo.CreateTime);
-		List<DeviceParamPo> list = this.deviceParamService.getParamsByKeyword(page, loginUser, categoryId, fieldName,
-				keyword);
+		if (page == null)
+			page = 1;
+		if (rows == null)
+			rows = 30;
+
+		PageInfo pageInfo = new PageInfo((page - 1) * rows, rows);
+		List<DeviceParamPo> list = this.deviceParamService.getParamsByKeyword(pageInfo, loginUser, categoryId, fieldName, keyword);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-		modelMap.put("draw", dtPageInfo.getDraw());
-		modelMap.put("recordsTotal", page.getTotals());
-		modelMap.put("recordsFiltered", page.getTotals());
-		modelMap.put("data", list);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
+
 		return modelMap;
 	}
 

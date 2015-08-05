@@ -8,3 +8,4 @@
 <script src="<%=request.getContextPath()%>/assets/js/frames/easyui/locale/easyui-lang-zh_CN.js"></script>
 <script src="<%=request.getContextPath()%>/assets/js/plugins/jquery.extension.js"></script>
 <script src="<%=request.getContextPath()%>/assets/js/libs/artTemplate.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/utils/easyui.utils.js"></script>
