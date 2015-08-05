@@ -25,7 +25,7 @@
 <body>
 	<div class="easyui-layout" fit="true" style="">
 		<div region="north" class="bg-header">
-			<span class="name">admin 欢迎你回来</span>
+			<span class="name">${user.name},欢迎你回来!</span>
 			<div class="logo"></div>
 			<div class="menus">${menus}</div>
 		</div>

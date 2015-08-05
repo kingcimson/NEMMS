@@ -3,9 +3,8 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/frames/easyui/themes/default/easyui.css" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/js/frames/easyui/themes/icon.css" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/main.css" />
-<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/demo.css" />
 <script src="<%=request.getContextPath()%>/assets/js/frames/jquery.min.js"></script>
 <script src="<%=request.getContextPath()%>/assets/js/frames/easyui/jquery.easyui.min.js"></script>
 <script src="<%=request.getContextPath()%>/assets/js/frames/easyui/locale/easyui-lang-zh_CN.js"></script>
 <script src="<%=request.getContextPath()%>/assets/js/plugins/jquery.extension.js"></script>
-<script src="<%=request.getContextPath()%>/assets/js/plugins/artTemplate.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/libs/artTemplate.js"></script>

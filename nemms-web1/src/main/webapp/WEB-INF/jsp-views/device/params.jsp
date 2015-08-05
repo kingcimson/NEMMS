@@ -1,421 +1,158 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>北京裕源大通网元监控与管理系统-参数管理</title>
 <%@ include file="/WEB-INF/jsp-views/includes/header.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/form_scripts.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
-<style>
-#add_modal .smart-form fieldset, #edit_form fieldset, #revise_password_form fieldset {
-	padding-left: 50px;
-	padding-right: 50px;
-}
-
-.dataTables_wrapper .dataTables_info {
-	margin-left: 1em;
-}
-</style>
-<section id="widget-grid" class="">
-	<div class="row">
-		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false" data-widget-deletebutton="false">
-				<header>
-					<span class="widget-icon"> <i class="fa fa-table"></i>
-					</span>
-					<h2>设备参数</h2>
-				</header>
-				<div>
-					<div class="jarviswidget-editbox"></div>
-					<div class="widget-body no-padding">
-						<div class="widget-body-toolbar">
-							<form class="form-inline" role="form">
-								<div class="row">
-									<div class="col-sm-12 col-md-10">
-										<div class="form-group">
-											类别： <select id="filter_categoryId" name=categoryId class="form-control input-sm"></select>
-										</div>
-										<div class="form-group">
-											<select id="fieldName" name="fieldName" class="form-control input-sm">
-												<option value="name">名称</option>
-												<option value="param_id">监控标识</option>
-												<option value="mcp_id">MCP协议类型</option>
-												<option value="mode">模式</option>
-												<option value="value_type">值类型</option>
-											</select>
-										</div>
-										<div class="form-group">
-											<label>关键字</label>
-											<input type="text" id="keyword" name="keyword" class="form-control input-sm" placeholder="名称">
-										</div>
-										<div class="form-group">
-											<a href="javascript:void(0);" id="search" class="btn btn-primary"> <i class="fa fa-search"></i>搜索
-											</a>
-										</div>
-										<div class="form-group">
-											<a href="javascript:void(0);" id="add_btn" class="btn btn-primary"> <i class="fa fa-plus"></i>添加
-											</a>
-										</div>
-									</div>
-								</div>
-							</form>
-							<input id="modal_action" type="hidden" name="action" value="" />
-						</div>
-						<table id="datatable1" class="display" cellspacing="0" width="100%">
-							<thead>
-								<tr>
-									<th>记录ID</th>
-									<th>监控标识</th>
-									<th>MCP协议</th>
-									<th>名称</th>
-									<th>类别</th>
-									<th>模式</th>
-									<th>单位</th>
-									<th>系数</th>
-									<th>值类型</th>
-									<th>值长度</th>
-									<th>值最小长度</th>
-									<th>值最大长度</th>
-									<th>权限归属</th>
-									<th>告警级别</th>
-									<th>操作</th>
-								</tr>
-							</thead>
-							<tfoot>
-								<tr>
-									<th>记录ID</th>
-									<th>监控标识</th>
-									<th>MCP协议</th>
-									<th>名称</th>
-									<th>类别</th>
-									<th>模式</th>
-									<th>单位</th>
-									<th>系数</th>
-									<th>值类型</th>
-									<th>值长度</th>
-									<th>值最小长度</th>
-									<th>值最大长度</th>
-									<th>权限归属</th>
-									<th>告警级别</th>
-									<th>操作</th>
-								</tr>
-							</tfoot>
-						</table>
-					</div>
-				</div>
-			</div>
-		</article>
+<script src="<%=request.getContextPath()%>/assets/js/libs/socket.io-1.3.5.js"></script>
+</head>
+<body class="easyui-layout">
+	<table class="easyui-datagrid" title="设备参数" style=""
+		data-options="iconCls:'icon-ok',singleSelect:true,collapsible:true,url:'datagrid_data1.json',method:'get',toolbar:'#tb'">
+		<thead>
+			<tr>
+				<th data-options="field:'itemid',width:80" sortable="true">ID</th>
+				<th data-options="field:'productid',width:100" sortable="true">监控标识</th>
+				<th data-options="field:'listprice',width:80" sortable="true">MCP协议</th>
+				<th data-options="field:'unitcost',width:80" sortable="true">名称</th>
+				<th data-options="field:'attr1',width:250" sortable="true">类别</th>
+				<th data-options="field:'status',width:60" sortable="true">模式</th>
+				<th data-options="field:'status',width:60" sortable="true">单位</th>
+				<th data-options="field:'status',width:60" sortable="true">系数</th>
+				<th data-options="field:'status',width:60" sortable="true">值类型</th>
+				<th data-options="field:'status',width:60" sortable="true">值长度</th>
+				<th data-options="field:'status',width:60" sortable="true">值最小长度</th>
+				<th data-options="field:'status',width:60" sortable="true">值最大长度</th>
+				<th data-options="field:'status',width:60" sortable="true">权限归属</th>
+				<th data-options="field:'status',width:60" sortable="true">警告级别</th>
+				<th data-options="field:'status',width:60" sortable="true">操作</th>
+			</tr>
+		</thead>
+	</table>
+	<div id="tb" style="padding: 2px 5px;">
+		类型 <select class="easyui-combobox" panelHeight="auto" style="width: 100px">
+			<option value="java">全部</option>
+			<option value="c">C</option>
+			<option value="basic">Basic</option>
+			<option value="perl">Perl</option>
+			<option value="python">Python</option>
+		</select> <select class="easyui-combobox" panelHeight="auto" style="width: 100px">
+			<option value="java">名称</option>
+			<option value="c">C</option>
+			<option value="basic">Basic</option>
+			<option value="perl">Perl</option>
+			<option value="python">Python</option>
+		</select> 关键字
+		<input name="" type="text">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-search">搜索</a>&nbsp;<a onclick="$('#w').window('open')" href="#" class="easyui-linkbutton"
+				iconCls="icon-add">添加</a>
 	</div>
-</section>
-<div class="modal" id="add_modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">
-					<a id="modal_title">添加</a>
-				</h4>
-			</div>
-			<div class="modal-body no-padding">
-				<form id="add_form" name="add_form" method="post" class="smart-form">
-					<fieldset>
-						<section>
-							<div class="row">
-								<label class="label col col-2">名称:</label>
-								<div class="col col-10">
-									<label class="input"> <input type="text" name="name" id="name" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">监控标识:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="paramId" id="paramId" value="0x" required>
-									</label>
-								</div>
-								<label class="label col col-2">MCP协议类型:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="mcpId" name="mcpId">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">类别:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="categoryId" name="categoryId">
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">模式:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="mode" name="mode">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">系数:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="ratio" id="ratio" value="1.0" required>
-									</label>
-								</div>
-								<label class="label col col-2">单位:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="unit" id="unit" value="0" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">值类型:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="valueType" name="valueType">
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">值长度:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="valueLen" id="valueLen" value="1" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">值最小长度:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="valueMinLen" id="valueMinLen" value="1" required>
-									</label>
-								</div>
-								<label class="label col col-2">值最大长度:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="valueMaxLen" id="valueMaxLen" value="8" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">最小值:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="minValue" id="minValue" value="0" required>
-									</label>
-								</div>
-								<label class="label col col-2">最大值:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="maxValue" id="maxValue" value="255" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">告警级别:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="warnLevel" name="warnLevel">
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">权限归属:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="authorityRoles" name="authorityRoles">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">参数控件:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="htmlElem" name="htmlElem">
-											<option value="text">文本框</option>
-											<option value="select">下拉框</option>
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">参数配置项:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="htmlElemKey" name="htmlElemKey">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-					</fieldset>
-					<footer>
-						<a type="button" id="add_submit" class="btn btn-primary">确定</a> <a type="button" class="btn btn-default" data-dismiss="modal">取消</a>
-					</footer>
-				</form>
-			</div>
-		</div>
+	<div class="easyui-panel">
+		<div class="easyui-pagination" data-options="total:114"></div>
 	</div>
-</div>
-<div class="modal" id="edit_modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">
-					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-				</button>
-				<h4 id="edit_modal_title" class="modal-title">编辑</h4>	
-			</div>
-			<div class="modal-body no-padding">
-				<form id="edit_form" name="edit_form" method="post" class="smart-form">
-					<fieldset>
-						<section>
-							<div class="row">
-								<label class="label col col-2">名称:</label>
-								<div class="col col-10">
-									<label class="input"> <input type="text" name="name" id="edit_name" required>
-									<input name="id" type="hidden">
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">监控标识:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="paramId" id="edit_paramId" required>
-									</label>
-								</div>
-								<label class="label col col-2">MCP协议类型:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="edit_mcpId" name="mcpId">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">类别:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="edit_categoryId" name="categoryId">
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">模式:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="edit_mode" name="mode">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">系数:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="ratio" id="edit_ratio" required>
-									</label>
-								</div>
-								<label class="label col col-2">单位:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="unit" id="edit_unit" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">值类型:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="edit_valueType" name="valueType">
-											<option value="1" selected="selected">启用</option>
-											<option value="0">禁用</option>
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">值长度:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="valueLen" id="edit_valueLen" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">值最小长度:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="valueMinLen" id="edit_valueMinLen" required>
-									</label>
-								</div>
-								<label class="label col col-2">值最大长度:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="valueMaxLen" id="edit_valueMaxLen" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">最小值:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="minValue" id="edit_minValue" required>
-									</label>
-								</div>
-								<label class="label col col-2">最大值:</label>
-								<div class="col col-4">
-									<label class="input"> <input type="text" name="maxValue" id="edit_maxValue" required>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">告警级别:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="edit_warnLevel" name="warnLevel">
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">权限归属:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="edit_authorityRoles" name="authorityRoles">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-						<section>
-							<div class="row">
-								<label class="label col col-2">参数控件:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="edit_htmlElem" name="htmlElem">
-											<option value="text">文本框</option>
-											<option value="select">下拉框</option>
-									</select> <i></i>
-									</label>
-								</div>
-								<label class="label col col-2">参数配置项:</label>
-								<div class="col col-4">
-									<label class="select"> <select id="edit_htmlElemKey" name="htmlElemKey">
-									</select> <i></i>
-									</label>
-								</div>
-							</div>
-						</section>
-					</fieldset>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-				<button id="edit_submit" type="button" class="btn btn-primary">保存</button>
-			</div>
-		</div>
 	</div>
-</div>
-<div id="delete_dialog" title="">
-	<span id="delete_message"></span>
-	<input id="delete_id" type="hidden" />
-</div>
-<script src="<%=request.getContextPath()%>/assets/modules/device/js/params.js"></script>
-<script type="text/javascript">
-	pageSetUp();
-</script>
+	<div id="w" class="easyui-window" title="添加" data-options="iconCls:'icon-save',closed:true" style="width: 560px; height: 500px; padding: 10px;">
+		<form id="ff" method="post">
+			<center>
+				<table cellpadding="5" style="margin: 30px auto" class="table1">
+					<tr>
+						<td>名称:</td>
+						<td colspan="3"><input class="easyui-textbox" type="text" name="name" data-options="required:true" style="width: 380px"></input></td>
+					</tr>
+					<tr>
+						<td>监控标识:</td>
+						<td><input class="easyui-textbox" type="text" name="email" data-options="required:true"></input></td>
+						<td>MCP协议类型:</td>
+						<td><select class="easyui-combobox" name="language">
+								<option value="ar">Arabic</option>
+								<option value="bg">Bulgarian</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>类别:</td>
+						<td><select class="easyui-combobox" name="language">
+								<option value="ar">Arabic</option>
+								<option value="bg">Bulgarian</option>
+						</select></td>
+						<td>模式:</td>
+						<td><select class="easyui-combobox" name="language">
+								<option value="ar">Arabic</option>
+								<option value="bg">Bulgarian</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>系数:</td>
+						<td><input class="easyui-textbox" type="text" name="email" data-options="required:true"></input></td>
+						<td>单位:</td>
+						<td><select class="easyui-combobox" name="language">
+								<option value="ar">Arabic</option>
+								<option value="bg">Bulgarian</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>值类型:</td>
+						<td><select class="easyui-combobox" name="language">
+								<option value="ar">Arabic</option>
+								<option value="bg">Bulgarian</option>
+						</select></td>
+						<td>值长度:</td>
+						<td><input class="easyui-textbox" type="text" name="email" data-options="required:true"></input></td>
+					</tr>
+					<tr>
+						<td>值最小长度:</td>
+						<td><input class="easyui-textbox" type="text" name="email" data-options="required:true"></input></td>
+						<td>值最大长度:</td>
+						<td><input class="easyui-textbox" type="text" name="email" data-options="required:true"></input></td>
+					</tr>
+					<tr>
+						<td>最小值:</td>
+						<td><input class="easyui-textbox" type="text" name="email" data-options="required:true"></input></td>
+						<td>最大值:</td>
+						<td><input class="easyui-textbox" type="text" name="email" data-options="required:true"></input></td>
+					</tr>
+					<tr>
+						<td>警告级别:</td>
+						<td><select class="easyui-combobox" name="language">
+								<option value="ar">Arabic</option>
+								<option value="bg">Bulgarian</option>
+						</select></td>
+						<td>权限归属:</td>
+						<td><select class="easyui-combobox" name="language">
+								<option value="ar">Arabic</option>
+								<option value="bg">Bulgarian</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>参考控件:</td>
+						<td><select class="easyui-combobox" name="language">
+								<option value="ar">Arabic</option>
+								<option value="bg">Bulgarian</option>
+						</select></td>
+						<td>参数配置项:</td>
+						<td><select class="easyui-combobox" name="language">
+								<option value="ar">Arabic</option>
+								<option value="bg">Bulgarian</option>
+						</select></td>
+					</tr>
+				</table>
+			</center>
+			<div style="text-align: center; padding: 5px">
+				<a onclick="submitForm()" class="easyui-linkbutton l-btn l-btn-small" href="javascript:void(0)" group="" id=""><span class="l-btn-left"><span
+						class="l-btn-text">保存</span></span></a> <a onclick="clearForm()" class="easyui-linkbutton l-btn l-btn-small" href="javascript:void(0)" group="" id=""><span
+					class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+			</div>
+		</form>
+		<script>
+			function submitForm() {
+				$('#ff').form('submit');
+			}
+			function clearForm() {
+				$('#ff').form('clear');
+			}
+		</script>
+</body>
+</html>
