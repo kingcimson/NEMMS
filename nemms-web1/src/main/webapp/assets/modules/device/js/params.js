@@ -1,6 +1,6 @@
 var deviceParamPageUrl = XFrame.getContextPath() + '/device/';
 $(function() {
-	$('#myQueryGrid').datagrid({
+	$('#param-datagrid').datagrid({
 		method : 'get',
 		fit : true,
 		fitColumns : true,

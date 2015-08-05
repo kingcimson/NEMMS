@@ -9,31 +9,11 @@
 <%@ include file="/WEB-INF/jsp-views/includes/form_scripts.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
 <script src="<%=request.getContextPath()%>/assets/js/libs/socket.io-1.3.5.js"></script>
+<script src="<%=request.getContextPath()%>/assets/modules/device/js/params.js"></script>
 </head>
 <body class="easyui-layout">
-	<table class="easyui-datagrid"  data-options="iconCls:'icon-ok',singleSelect:true,collapsible:true,url:'datagrid_data1.json',method:'get',toolbar:'#tb'">
-		<thead>
-			<tr>
-				<th data-options="field:'itemid',width:80" sortable="true">ID</th>
-				<th data-options="field:'productid',width:100" sortable="true">监控标识</th>
-				<th data-options="field:'listprice',width:80" sortable="true">MCP协议</th>
-				<th data-options="field:'unitcost',width:80" sortable="true">名称</th>
-				<th data-options="field:'attr1',width:250" sortable="true">类别</th>
-				<th data-options="field:'status',width:60" sortable="true">模式</th>
-				<th data-options="field:'status',width:60" sortable="true">单位</th>
-				<th data-options="field:'status',width:60" sortable="true">系数</th>
-				<th data-options="field:'status',width:60" sortable="true">值类型</th>
-				<th data-options="field:'status',width:60" sortable="true">值长度</th>
-				<th data-options="field:'status',width:60" sortable="true">值最小长度</th>
-				<th data-options="field:'status',width:60" sortable="true">值最大长度</th>
-				<th data-options="field:'status',width:60" sortable="true">权限归属</th>
-				<th data-options="field:'status',width:60" sortable="true">警告级别</th>
-				<th data-options="field:'status',width:60" sortable="true">操作</th>
-			</tr>
-		</thead>
-	</table>
-	<div id="tb" style="padding: 2px 5px;">
-		类型 <select class="easyui-combobox" panelHeight="auto" style="width: 100px">
+	<div id="toolbar" class="toolbar">
+		类型 :<select class="easyui-combobox" panelHeight="auto" style="width: 100px">
 			<option value="java">全部</option>
 			<option value="c">C</option>
 			<option value="basic">Basic</option>
@@ -46,14 +26,13 @@
 			<option value="perl">Perl</option>
 			<option value="python">Python</option>
 		</select> 关键字
-		<input name="" type="text"> <a href="#" class="easyui-linkbutton" iconCls="icon-search">搜索</a>&nbsp;
-		<a onclick="$('#w').window('open')" href="#" class="easyui-linkbutton" iconCls="icon-add">添加</a>
+		<input name="" type="text" />
+		<a href="#" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
 	</div>
-	<div class="easyui-panel">
-		<div class="easyui-pagination" data-options="total:114"></div>
-	</div>
-	<div id="w" class="easyui-window" title="添加" data-options="iconCls:'icon-save',closed:true" style="width: 560px; height: 500px; padding: 10px;">
-		<form id="ff" method="post">
+	<div id="param-datagrid"></div>
+	<div id="add-param-dlg" class="easyui-window" title="添加" data-options="iconCls:'icon-save',closed:true"
+		style="width: 560px; height: 500px; padding: 10px;">
+		<form id="add_form" name="add_form" method="post">
 			<center>
 				<table cellpadding="5" style="margin: 30px auto" class="table1">
 					<tr>
@@ -138,6 +117,6 @@
 				</table>
 			</center>
 		</form>
-		</div>
+	</div>
 </body>
 </html>
