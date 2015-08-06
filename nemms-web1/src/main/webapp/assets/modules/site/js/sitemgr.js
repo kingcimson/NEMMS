@@ -62,7 +62,7 @@ $(function() {
 		}, {
 			field : 'name',
 			title : '名称',
-			width : 230
+			width : 150
 		}, {
 			field : 'uid',
 			title : '编号',
@@ -70,7 +70,7 @@ $(function() {
 		}, {
 			field : 'path',
 			title : '路径',
-			hidden : true
+			width : 150
 		} ] ],
 		onDblClickRow : function(index, row) {
 		}
@@ -82,6 +82,7 @@ $(function() {
 		modal : true,
 		width : 560,
 		height : 380,
+		iconCls:'icon-add',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -100,6 +101,7 @@ $(function() {
 		modal : true,
 		width : 560,
 		height : 380,
+		iconCls:'icon-edit',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -118,6 +120,7 @@ $(function() {
 		modal : true,
 		width : 560,
 		height : 380,
+		iconCls:'icon-add',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -136,6 +139,7 @@ $(function() {
 		modal : true,
 		width : 560,
 		height : 380,
+		iconCls:'icon-edit',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -152,8 +156,10 @@ $(function() {
 	$('#search-site-dlg').dialog({
 		closed : true,
 		modal : true,
-		width : 560,
-		height : 380,
+		width : window.screen.width - 550,
+		height : window.screen.height - 350,
+		maximizable:true,
+		iconCls:'icon-search',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -162,6 +168,9 @@ $(function() {
 			}
 		} ]
 	});
+	
+	$('#btn-search-site').bind('click',SiteMgr.siteTree.search);
+	
 //end
 });
 
@@ -261,7 +270,7 @@ var SiteMgr = {
 				$('#site-tree').tree('reload');
 			},
 			search :function() {
-				var fieldName = $('#site-field-name').val();
+				var fieldName = $('#site-field-name').combobox('getValue');
 				var keyword = $('#site-keyword').val();
 				var url = siteMgrPageUrl + 'search?fieldName=' + fieldName + '&keyword=' + keyword;
 				return EasyUIUtils.loadToDatagrid('#search-site-result', url);
@@ -302,25 +311,25 @@ var SiteMgr = {
 		dialogs:{
 			addSiteNodeDlg : {
 				open : function() {
-					$('#add-site-dlg').dialog('open');
+					$('#add-site-dlg').dialog('open').dialog('center');
 					SiteMgr.siteTree.addSiteNode();
 				}
 			},
 			editSiteNodeDlg : {
 				open : function(meta) {
-					$('#edit-site-dlg').dialog('open');
+					$('#edit-site-dlg').dialog('open').dialog('center');
 					SiteMgr.siteTree.editSiteNode(meta);
 				}
 			},
 			addDeviceNodeDlg : {
 				open : function(meta) {
-					$('#add-device-dlg').dialog('open');
+					$('#add-device-dlg').dialog('open').dialog('center');
 					SiteMgr.siteTree.addDeviceNode(meta);
 				}
 			},
 			editDeviceNodeDlg : {
 				open : function(meta) {
-					$('#edit-device-dlg').dialog('open');
+					$('#edit-device-dlg').dialog('open').dialog('center');
 					SiteMgr.siteTree.editDeviceNode(meta);
 				}
 			},
@@ -334,7 +343,7 @@ var SiteMgr = {
 			},
 			searchSiteDlg:{
 				open:function(){
-					$('#search-site-dlg').dialog('open');
+					$('#search-site-dlg').dialog('open').dialog('center');
 					EasyUIUtils.clearDatagrid('#search-site-result');
 				}
 			}

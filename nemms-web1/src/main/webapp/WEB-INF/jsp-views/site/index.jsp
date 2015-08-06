@@ -280,19 +280,16 @@
 	</div>
 	<!-- 查找树节点弹框  -->
 	<div id="search-site-dlg" title="查找站点(设备)">
-		<table cellpadding="0" class="form-table" cellspacing="0" style="width: 100%;">
-			<tr>
-				<td class="text_r blueside" width="60">选项:</td>
-				<td><select id="site-field-name" name="fieldName">
-						<option value="name">名称</option>
-						<option value="uid">编号</option>
-				</select></td>
-				<td class="text_r blueside">关键字:</td>
-				<td><input type="text" id="site-keyword" name="keyword" /> 
-				<a href="javascript:void(0)" class="easyui-linkbutton" icon="icon-ok" onclick="SiteMgr.siteTree.search();">查找</a></td>
-			</tr>
-		</table>
-		<div id="search-site-result" title="查询结果"></div>
+		<div id="toolbar" class="toolbar">
+			选项:<select class="easyui-combobox" id="field-name" name="fieldName" style="width: 120px">
+				<option value="name">名称</option>
+				<option value="uid">编号</option>
+			</select> 关键字:<input class="easyui-textbox" type="text" id="keyword" name="keyword" />
+			 <a id="btn-search-site" href="#" class="easyui-linkbutton" iconCls="icon-search"> 查找 </a>
+		</div>
+		<div style="height: 86%; padding: 2px">
+			<div id="search-site-result"></div>
+		</div>
 	</div>
 	<!-- tree右键菜单  -->
 	<div id="site-tree-ctx-menu" class="easyui-menu" data-options="onClick:SiteMgr.siteTree.contextMenu.onSelect" style="width: 150px;">

@@ -167,6 +167,7 @@ $(function() {
 		modal : true,
 		width : 660,
 		height : 450,
+		iconCls:'icon-add',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -186,6 +187,7 @@ $(function() {
 		modal : true,
 		width : 660,
 		height : 450,
+		iconCls:'icon-edit',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',

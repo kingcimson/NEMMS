@@ -20,7 +20,7 @@
 		<a id="btn-search" href="#" class="easyui-linkbutton" iconCls="icon-search"> 搜索  </a>
 		<a id="btn-clear" href="#" class="easyui-linkbutton" iconCls="icon-clear"> 清空所有日志  </a>
 	</div>
-	<div style="height: 95%; padding: 2px">
+	<div style="height: 93%; padding: 2px">
 		<div id="event-datagrid"></div>
 		<input id="current-row-index" name="current-row-index" type="hidden" value="0" />
 	</div>

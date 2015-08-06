@@ -23,7 +23,7 @@
 		<a id="btn-search" href="#" class="easyui-linkbutton" iconCls="icon-search"> 搜索  </a>
 		<input id="modal-action" type="hidden" name="action" value="" />
 	</div>
-	<div style="height: 95%; padding: 2px">
+	<div style="height: 93%; padding: 2px">
 		<div id="param-datagrid"></div>
 	</div>
 	<div id="add-param-dlg" class="easyui-dialog" title="添加设备参数">

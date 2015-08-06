@@ -21,7 +21,7 @@ import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.po.SitePo;
 import com.wellheadstone.nemms.service.SiteService;
 import com.wellheadstone.nemms.service.SiteTreeService;
-import com.wellheadstone.nemms.web.DataTablePageInfo;
+import com.wellheadstone.nemms.web.DataGridPager;
 import com.wellheadstone.nemms.web.membership.CurrentUser;
 
 @Controller
@@ -154,17 +154,17 @@ public class SiteController extends AbstractController {
 
 	@RequestMapping(value = "/search")
 	@ResponseBody
-	public Map<String, Object> search(DataTablePageInfo dtPageInfo, String fieldName, String keyword,
+	public Map<String, Object> search(DataGridPager pager, String fieldName, String keyword,
 			HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), SitePo.CreateTime);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 
 		try {
-			List<SitePo> list = this.siteService.getByPage(fieldName, keyword, page);
-			modelMap.put("draw", dtPageInfo.getDraw());
-			modelMap.put("recordsTotal", page.getTotals());
-			modelMap.put("recordsFiltered", page.getTotals());
-			modelMap.put("data", list);
+			pager.setDefaultSort(SitePo.CreateTime);
+			PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
+					pager.getRows(), pager.getSort(), pager.getOrder());
+			List<SitePo> list = this.siteService.getByPage(fieldName, keyword, pageInfo);
+			modelMap.put("total", pageInfo.getTotals());
+			modelMap.put("rows", list);
 		} catch (Exception ex) {
 			this.logException(ex);
 		}

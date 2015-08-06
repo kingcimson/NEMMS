@@ -137,3 +137,18 @@
 .icon-info{
 	background:url('icons/info.png') no-repeat center center;
 }
+.icon-prev{
+	background:url('icons/prev.png') no-repeat center center;
+}
+.icon-prev1{
+	background:url('icons/prev1.png') no-repeat center center;
+}
+.icon-next{
+	background:url('icons/next.png') no-repeat center center;
+}
+.icon-next1{
+	background:url('icons/next1.png') no-repeat center center;
+}
+.icon-avatar{
+	background:url('icons/avatar.png') no-repeat center center;
+}

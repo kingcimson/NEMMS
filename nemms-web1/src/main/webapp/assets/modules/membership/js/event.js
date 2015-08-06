@@ -84,8 +84,9 @@ $(function() {
 		closed : true,
 		modal : false,
 		maximizable:true,
-		width : 650,
-		height : 600,
+		width : window.screen.width - 550,
+		height : window.screen.height - 350,
+		iconCls:'icon-info',
 		buttons : [ {
 			text : '上一条',
 			iconCls : 'icon-prev',
