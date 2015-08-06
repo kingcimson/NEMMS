@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -8,13 +7,12 @@
 <%@ include file="/WEB-INF/jsp-views/includes/header.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/form_scripts.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
-<script src="<%=request.getContextPath()%>/assets/js/libs/socket.io-1.3.5.js"></script>
 <script src="<%=request.getContextPath()%>/assets/modules/device/js/params.js"></script>
 </head>
 <body class="easyui-layout">
 	<div id="toolbar" class="toolbar">
 		类型:<select class="easyui-combobox" id="filter-category-id" name="categoryId" data-options="valueField:'value',textField:'name'" panelHeight="auto" style="width: 100px"></select> 
-		<select class="easyui-combobox" id="field-name" name="fieldName" panelHeight="auto" style="width: 100px">
+		<select class="easyui-combobox" id="field-name" name="fieldName" panelHeight="auto" style="width: 120px">
 			<option value="name">名称</option>
 			<option value="param_id">监控标识</option>
 			<option value="mcp_id">MCP协议类型</option>

@@ -316,7 +316,7 @@ var DeviceParam = {
 		},
 		find : function() {
 			var categoryId = $('#filter-category-id').combobox('getValue');
-			var fieldName = $("#field-name").val();
+			var fieldName = $("#field-name").combobox('getValue');
 			var keyword = $("#keyword").val();
 			var url = deviceParamPageUrl + 'find?categoryId=' + categoryId+ '&fieldName=' + fieldName + '&keyword=' + keyword;
 			EasyUIUtils.loadToDatagrid('#param-datagrid', url)

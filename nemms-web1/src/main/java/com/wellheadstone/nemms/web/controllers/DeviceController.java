@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,9 +40,7 @@ public class DeviceController extends AbstractController {
 	@RequestMapping(value = "/params/list")
 	@ResponseBody
 	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager, HttpServletRequest request) {
-		if (StringUtils.isBlank(pager.getSort())) {
-			pager.setSort("id");
-		}
+		pager.setDefaultSort(DeviceParamPo.Id);
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
 		List<DeviceParamPo> list = this.deviceParamService.getParams(pageInfo, loginUser);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
@@ -57,6 +54,7 @@ public class DeviceController extends AbstractController {
 	@ResponseBody
 	public Map<String, Object> getParamsByKeyword(@CurrentUser UserPo loginUser,
 			String categoryId, String fieldName, String keyword, DataGridPager pager, HttpServletRequest request) {
+		pager.setDefaultSort(DeviceParamPo.Id);
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
 		List<DeviceParamPo> list = this.deviceParamService.getParamsByKeyword(pageInfo, loginUser, categoryId, fieldName, keyword);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);

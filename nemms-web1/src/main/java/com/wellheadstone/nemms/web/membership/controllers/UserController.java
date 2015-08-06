@@ -24,6 +24,7 @@ import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.membership.security.PasswordService;
 import com.wellheadstone.nemms.membership.service.RoleService;
 import com.wellheadstone.nemms.membership.service.UserService;
+import com.wellheadstone.nemms.web.DataGridPager;
 import com.wellheadstone.nemms.web.DataTablePageInfo;
 import com.wellheadstone.nemms.web.controllers.AbstractController;
 import com.wellheadstone.nemms.web.membership.CurrentUser;
@@ -43,22 +44,21 @@ public class UserController extends AbstractController {
 		return "membership/user";
 	}
 
-	@RequestMapping(value = "/getusers")
+	@RequestMapping(value = "/getUsers")
 	@ResponseBody
-	public Map<String, Object> getusers(@CurrentUser UserPo loginUser, DataTablePageInfo dtPageInfo,
+	public Map<String, Object> getusers(@CurrentUser UserPo loginUser, DataGridPager pager,
 			HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), UserPo.CreateTime);
-		List<UserPo> list = this.userService.getUsers(page, loginUser);
+		pager.setDefaultSort(UserPo.CreateTime);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
+		List<UserPo> list = this.userService.getUsers(pageInfo, loginUser);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-		modelMap.put("draw", dtPageInfo.getDraw());
-		modelMap.put("recordsTotal", page.getTotals());
-		modelMap.put("recordsFiltered", page.getTotals());
-		modelMap.put("data", list);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
 
 		return modelMap;
 	}
 
-	@RequestMapping(value = "/getusersbykeyword")
+	@RequestMapping(value = "/getUsersByKeyword")
 	@ResponseBody
 	public Map<String, Object> getUsersByKeyword(@CurrentUser UserPo loginUser, DataTablePageInfo dtPageInfo,
 			String fieldName, String keyword,
@@ -161,7 +161,7 @@ public class UserController extends AbstractController {
 		return result;
 	}
 
-	@RequestMapping(value = "/getroles")
+	@RequestMapping(value = "/getRoles")
 	@ResponseBody
 	public DhtmlXTreeNode getRoles(@CurrentUser UserPo loginUser, Integer id) {
 		int userId = (id == null ? 0 : id);

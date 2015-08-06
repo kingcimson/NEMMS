@@ -29,6 +29,9 @@ var EasyUIUtils = {
 	},
 	remove : function(gridId, gridUrl) {
 		var row = $(gridId).datagrid('getSelected');
+		if (!row) {
+			return $.messager.alert('警告', '请选中一条记录!', 'info');
+		}
 		EasyUIUtils.removeWithCallback(row, 'remove', {
 			id : row.id
 		}, function(data) {
@@ -37,22 +40,36 @@ var EasyUIUtils = {
 	},
 	removeWithActUrl : function(gridId, gridUrl, actUrl) {
 		var row = $(gridId).datagrid('getSelected');
+		if (!row) {
+			return $.messager.alert('警告', '请选中一条记录!', 'info');
+		}
 		EasyUIUtils.removeWithCallback(row, actUrl, {
 			id : row.id
 		}, function(data) {
 			EasyUIUtils.loadToDatagrid(gridId, gridUrl);
 		});
 	},
-	removeWithCallback : function(data, postUrl, postData, callback) {
-		if (!data) {
-			return EasyUIUtils.showMsg("请您先选择要删除的记录!");
+	removeWithIdFieldName : function(gridId, gridUrl, actUrl,idFieldName) {
+		var row = $(gridId).datagrid('getSelected');
+		if (!row) {
+			return $.messager.alert('警告', '请选中一条记录!', 'info');
+		}
+		EasyUIUtils.removeWithCallback(row, actUrl, {
+			id : row[idFieldName]
+		}, function(data) {
+			EasyUIUtils.loadToDatagrid(gridId, gridUrl);
+		});
+	},
+	removeWithCallback : function(row, postUrl, postData, callback) {
+		if (!row) {
+			return $.messager.alert('警告', '请选中一条记录!', 'info');
 		}
 		return $.messager.confirm('删除', '您确定要删除记录吗?', function(r) {
 			if (r) {
 				$.post(postUrl, postData, function(result) {
 					if (result.success) {
 						EasyUIUtils.showMsg(result.msg);
-						callback(data);
+						callback(row);
 					} else {
 						$.messager.show({
 							title : '错误',

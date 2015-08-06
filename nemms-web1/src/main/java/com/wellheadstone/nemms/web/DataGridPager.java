@@ -42,4 +42,10 @@ public class DataGridPager {
 	public void setOrder(String order) {
 		this.order = order;
 	}
+
+	public void setDefaultSort(String sort) {
+		if (StringUtils.isBlank(this.sort)) {
+			this.sort = sort;
+		}
+	}
 }

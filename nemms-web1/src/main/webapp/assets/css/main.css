@@ -210,7 +210,8 @@ h2 {
 }
 
 .toolbar {
-	padding: 5px
+	padding: 5px;
+	background: #F4F4F4;
 }
 
 .textbox-invalid {

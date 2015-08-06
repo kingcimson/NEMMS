@@ -51,7 +51,7 @@
 <body>
 	<div class="easyui-layout" fit="true">
 		<div region="north" class="bg-header">
-			<span class="name">${user.name},欢迎你回来!</span>
+			<span class="name">[<a id="btn-my-profile" href="#">${user.name}</a>],欢迎你回来!</span>
 			<div class="logo"></div>
 			<div class="menus">${menus}</div>
 		</div>
