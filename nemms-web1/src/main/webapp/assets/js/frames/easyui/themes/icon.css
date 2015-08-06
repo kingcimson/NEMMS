@@ -7,6 +7,12 @@
 .icon-edit{
 	background:url('icons/pencil.png') no-repeat center center;
 }
+.icon-edit1{
+	background:url('icons/edit1.png') no-repeat center center;
+}
+.icon-remove1{
+	background:url('icons/remove1.png') no-repeat center center;
+}
 .icon-clear{
 	background:url('icons/clear.png') no-repeat center center;
 }

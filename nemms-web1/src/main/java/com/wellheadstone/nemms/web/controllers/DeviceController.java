@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.wellheadstone.nemms.data.PageInfo;
 import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.po.DeviceParamPo;
 import com.wellheadstone.nemms.service.DeviceParamService;
+import com.wellheadstone.nemms.web.DataGridPager;
 import com.wellheadstone.nemms.web.membership.CurrentUser;
 
 @Controller
@@ -38,13 +40,11 @@ public class DeviceController extends AbstractController {
 
 	@RequestMapping(value = "/params/list")
 	@ResponseBody
-	public Map<String, Object> list(@CurrentUser UserPo loginUser, Integer page, Integer rows, HttpServletRequest request) {
-		if (page == null)
-			page = 1;
-		if (rows == null)
-			rows = 30;
-
-		PageInfo pageInfo = new PageInfo((page - 1) * rows, rows);
+	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager, HttpServletRequest request) {
+		if (StringUtils.isBlank(pager.getSort())) {
+			pager.setSort("id");
+		}
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
 		List<DeviceParamPo> list = this.deviceParamService.getParams(pageInfo, loginUser);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());
@@ -55,14 +55,9 @@ public class DeviceController extends AbstractController {
 
 	@RequestMapping(value = "/params/find")
 	@ResponseBody
-	public Map<String, Object> getParamsByKeyword(@CurrentUser UserPo loginUser, Integer page, Integer rows,
-			String categoryId, String fieldName, String keyword, HttpServletRequest request) {
-		if (page == null)
-			page = 1;
-		if (rows == null)
-			rows = 30;
-
-		PageInfo pageInfo = new PageInfo((page - 1) * rows, rows);
+	public Map<String, Object> getParamsByKeyword(@CurrentUser UserPo loginUser,
+			String categoryId, String fieldName, String keyword, DataGridPager pager, HttpServletRequest request) {
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
 		List<DeviceParamPo> list = this.deviceParamService.getParamsByKeyword(pageInfo, loginUser, categoryId, fieldName, keyword);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());

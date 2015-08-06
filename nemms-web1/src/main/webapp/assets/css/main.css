@@ -160,65 +160,6 @@ a.download-link {
 	padding: 5px;
 }
 
-table.form-table {
-	width: 100%;
-}
-
-.form-table {
-	clear: both;
-	border-collapse: collapse;
-}
-
-.form-table .text_r {
-	text-align: right;
-}
-
-.form-table .text_center {
-	text-align: center;
-}
-
-.form-table .blueside {
-	background: #F6FAFD;
-	font-weight: bold;
-}
-
-.form-table .top {
-	vertical-align: top;
-}
-
-.form-table .bold {
-	font-weight: bold;
-}
-
-.form-table .code {
-	word-wrap: break-word;
-	word-break: break-all;
-	font-family: "Monaco", "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
-}
-
-.form-table tr th {
-	text-align: left;
-	padding: 2px;
-	background: #E4F1FA;
-	border: 1px solid #E5E6E8;
-	font-size: 12px;
-}
-
-.form-table tr td {
-	padding: 2px 0px 2px 2px;
-	font-size: 12px;
-	border: 1px solid #E5E6E8;
-}
-
-.form-table tr input, .form-table tr textarea {
-	border: 1px solid #AEAEAE;
-	height: 20px;
-	line-height: 20px;
-	overflow: auto;
-	text-indent: 2px;
-	font-family: "Monaco", "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
-}
-
 * {
 	font-size: 12px;
 }
@@ -277,15 +218,15 @@ h2 {
 	border-color: #95B8E7
 }
 
-table.table1 {
+table.form-table {
 	
 }
 
-table.table1 td {
+table.form-table td {
 	padding: 5px
 }
 
-table.table1 td input.text {
+table.form-table td input.text {
 	width: 200px
 }
 
