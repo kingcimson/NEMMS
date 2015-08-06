@@ -6,47 +6,7 @@
 <title>北京裕源大通网元监控与管理系统</title>
 <%@ include file="/WEB-INF/jsp-views/includes/header.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
-<script>
-	function addTab(title, url, iconCls) {
-		if ($('#main-tabs').tabs('exists', title)) {
-			$('#main-tabs').tabs('select', title);
-		} else {
-			var content = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
-			$('#main-tabs').tabs('add', {
-				title : title,
-				content : content,
-				closable : true,
-				iconCls : iconCls
-			});
-		}
-	}
-	
-	function onTabCtxMenuClick(item) {
-		if (item.name == "current") {
-			return EasyUIUtils.closeCurrentTab('#main-tabs');
-		}
-		if (item.name == "others") {
-			return EasyUIUtils.closeOthersTab('#main-tabs');
-		}
-		if (item.name == "all") {
-			return EasyUIUtils.closeAllTab('#main-tabs');
-		}
-		return;
-	}
-	
-	$(function(){
-		// 初始化tab相关事件
-		$('#main-tabs').tabs({
-			onContextMenu : function(e, title, index) {
-				e.preventDefault();
-				$('#main-tab-ctx-menu').menu('show', {
-					left : e.pageX,
-					top : e.pageY
-				});
-			}
-		});
-	});
-</script>
+<script src="<%=request.getContextPath()%>/assets/modules/home/js/index.js"></script>
 </head>
 <body>
 	<div class="easyui-layout" fit="true">
@@ -72,10 +32,45 @@
 		</div>
 	</div>
 	<!-- tabs右键菜单  -->
-	<div id="main-tab-ctx-menu" class="easyui-menu" data-options="onClick:onTabCtxMenuClick" style="width: 120px;">
+	<div id="main-tab-ctx-menu" class="easyui-menu" data-options="onClick:HomeIndex.onTabCtxMenuClick" style="width: 120px;">
 		<div id="m-current" data-options="name:'current',iconCls:'icon-cancel'">关闭当前页</div>
 		<div id="m-others" data-options="name:'others',iconCls:''">关闭其他页</div>
 		<div id="m-all" data-options="name:'all',iconCls:''">关闭所有页</div>
+	</div>
+	<div id="my-profile-dlg" class="easyui-dialog" title="个人信息修改">
+		<form id="my-profile-form" name="my-profile-form" method="post">
+			<center>
+				<table cellpadding="5" style="margin: 30px auto" class="form-table">
+					<tr>
+						<td>用户信息:<input id="user-id" type="hidden" name="user-id" value="${user.userId}" /></td>
+						<td colspan="3"><span class="name">${user.account}(${user.name})</span></td>
+					</tr>
+					<tr>
+						<td>角色:</td>
+						<td colspan="3"><span class="name">${roleNames}</span></td>
+					</tr>
+					<tr>
+						<td>联系信息:</td>
+						<td colspan="3"><span class="name">${user.telephone},<a href="mailto:${user.email}">${user.email}</a></span></td>
+					</tr>
+					<tr>
+						<td>原密码:</td>
+						<td colspan="3"><input class="easyui-textbox" type="password" name="oldPassword" id="oldPassword" data-options="required:true"
+								style="width: 280px"></input></td>
+					</tr>
+					<tr>
+						<td>新密码:</td>
+						<td colspan="3"><input class="easyui-textbox" type="password" name="password" id="password" data-options="required:true"
+								style="width: 280px"></input></td>
+					</tr>
+					<tr>
+						<td>新密码确认:</td>
+						<td colspan="3"><input class="easyui-textbox" type="password" name="passwordRepeat" id="passwordRepeat" data-options="required:true"
+								style="width: 280px"></input></td>
+					</tr>
+				</table>
+			</center>
+		</form>
 	</div>
 </body>
 </html>

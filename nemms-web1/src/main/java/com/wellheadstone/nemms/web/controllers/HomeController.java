@@ -25,6 +25,7 @@ public class HomeController extends AbstractController {
 	public String index(@CurrentUser UserPo loginUser, Model model, HttpServletRequest req) {
 		List<ModulePo> modules = membershipFacade.getModules(loginUser.getRoles());
 		model.addAttribute("menus", this.buildMenuItems(modules, req.getContextPath()));
+		model.addAttribute("roleNames", membershipFacade.getRoleNames(loginUser.getRoles()));
 		return "home/index";
 	}
 
@@ -41,7 +42,7 @@ public class HomeController extends AbstractController {
 			String subMenu = module.isLeaf() ? "plain:true" : String.format("menu:'#mm%1$s'", module.getModuleId());
 			String button = module.isLeaf() ? "easyui-linkbutton" : "easyui-splitbutton";
 			String onclick = module.isLeaf() ?
-					String.format("onclick=\"addTab('%1$s','%2$s','%3$s')\"", module.getName(), url, module.getIcon()) : "";
+					String.format("onclick=\"HomeIndex.addTab('%1$s','%2$s','%3$s')\"", module.getName(), url, module.getIcon()) : "";
 			menuBuilder.append(String.format("<a href=\"#\" class=\"%1$s\" data-options=\"%2$s,iconCls:'%3$s'\" %4$s>%5$s</a>\r\n",
 					button, subMenu, module.getIcon(), onclick, module.getName()));
 		}
@@ -69,7 +70,7 @@ public class HomeController extends AbstractController {
 		for (ModulePo module : childModules) {
 			String url = module.getLinkType() == 1 ? module.getUrl() : String.format("%s/%s", contextPath, module.getUrl());
 			menuBuilder.append(String.format("<div data-options=\"iconCls:'%1$s'\" "
-					+ "onclick=\"addTab('%2$s','%3$s','%1$s')\">%2$s</div>\r\n", module.getIcon(), module.getName(), url));
+					+ "onclick=\"HomeIndex.addTab('%2$s','%3$s','%1$s')\">%2$s</div>\r\n", module.getIcon(), module.getName(), url));
 			this.buildMenuItems(modules, module.getModuleId(), contextPath, menuBuilder);
 		}
 		menuBuilder.append("</div>\r\n");
