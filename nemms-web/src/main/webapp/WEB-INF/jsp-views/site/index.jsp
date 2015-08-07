@@ -8,7 +8,7 @@
 <%@ include file="/WEB-INF/jsp-views/includes/form_scripts.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
 <script src="<%=request.getContextPath()%>/assets/js/libs/socket.io-1.3.5.js"></script>
-<script src="<%=request.getContextPath()%>/assets/modules/site/js/sitemgr.js"></script>
+<script src="<%=request.getContextPath()%>/assets/modules/site/js/sitemgr.js?v=<%=Math.random()%>"></script>
 </head>
 <body class="easyui-layout" id="body-layout">
 	<!-- 左边tree -->
