@@ -56,13 +56,15 @@
 					</tr>
 					<tr>
 						<td>新密码:</td>
-						<td colspan="3"><input class="easyui-textbox" type="password" name="password" id="password" data-options="required:true"
+						<td colspan="3"><input class="easyui-textbox" type="password" name="password" id="password" data-options="required:true,validType:{length:[6,20]}"
 								style="width: 280px"></input></td>
 					</tr>
 					<tr>
 						<td>新密码确认:</td>
-						<td colspan="3"><input class="easyui-textbox" type="password" name="passwordRepeat" id="passwordRepeat" data-options="required:true"
-								style="width: 280px"></input></td>
+						<td colspan="3"><input class="easyui-textbox" type="password" name="passwordRepeat" id="passwordRepeat"
+						 data-options="required:true,validType:{
+							length:[6,20],
+							equals:'#password'}" style="width: 280px"></input></td>
 					</tr>
 				</table>
 			</center>

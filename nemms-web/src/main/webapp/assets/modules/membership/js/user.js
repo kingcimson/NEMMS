@@ -1,363 +1,290 @@
-var MembershipUser = {
-	dt : null,
-	pageUrl : XFrame.getContextPath() + '/membership/user/',
-	ajaxPost : function(data, url, callback) {
-		$.ajax({
-			type : 'POST',
-			url : url,
-			data : data,
-			dataType : "json",
-			cache : false,
-			beforeSend : function(data) {
-			},
-			success : function(json) {
-				$.smallBox({
-					title : json.msg,
-					color : "#739E72",
-					iconSmall : "fa fa-times fadeInRight animated",
-					timeout : 4000
-				});
-				if (json.success) {
-					MembershipUser.loadDataTables();
-				}
-				if (callback) {
-					callback();
-				}
-			}
-		});
-	},
-	init : function() {
-		$('#search_user').on('click', MembershipUser.findUserByKeyword);
-		$('#add_user').on('click', MembershipUser.addUserModal);
-		$('#save_password').on('click', MembershipUser.revisePassword);
-		$('#add_user_submit').on('click', MembershipUser.save);
-	},
-	loadDataTables : function() {
-		var url = MembershipUser.pageUrl + 'getusers';
-		MembershipUser.dt.ajax.url(url).load();
-	},
-	runDataTables : function() {
-		var options = DataTablePaging.getAjaxPagingOptions({
-			ajaxUrl : MembershipUser.pageUrl + 'getusers',
-			order : [ 6, 'desc' ],
-			colums : [ {
-				data : "userId",
-				name : "user_id"
-			}, {
-				data : "account",
-				name : "account"
-			}, {
-				data : "name",
-				name : "name"
-			}, {
-				data : "telephone",
-				name : "telephone"
-			}, {
-				data : "email",
-				name : "email"
-			}, {
-				data : "status",
-				name : "status"
-			}, {
-				data : "createTime",
-				name : "create_time"
-			} ],
-			columsdefs : [
-					{
-						"targets" : [ 5 ],
-						"data" : "status",
-						"render" : function(data) {
-							var status = data = 1 ? "正常" : "暂停";
-							return status;
-						}
-					},
-					{
-						"targets" : [ 7 ],
-						"data" : "userId",
-						"render" : function(data, type, row, meta) {
-							var rowIndex = meta.row;
-							return "<a href=\"javascript:MembershipUser.editUserModal('" + rowIndex
-									+ "')\"><span class=\"glyphicon glyphicon-edit\"></span></a>   "
-									+ "<a href=\"javascript:MembershipUser.revisePasswordModal('" + rowIndex
-									+ "')\"><span class=\"glyphicon glyphicon-lock\"></span></a>   "
-									+ "<a href=\"javascript:MembershipUser.deleteUserDialog('" + rowIndex
-									+ "')\"><span class=\"glyphicon glyphicon-remove\"></span></a>";
-						}
-					} ]
-		});
-		var dt = MembershipUser.dt = $('#example').DataTable(options);
-	},
-	findUserByKeyword : function() {
-		var fieldName = $("#fieldName").val();
-		var keyword = $("#Keyword").val();
-		var url = MembershipUser.pageUrl + 'getusersbykeyword?fieldName=' + fieldName + '&keyword=' + keyword;
-		MembershipUser.dt.ajax.url(url).load();
-	},
-	addUserModal : function() {
-		$("#modal_title").text("添加用户");
-		$('#add_user_form').resetForm();
-		$("#user_template_action").val("add");
-		$('#add_user_modal').modal('show');
-	},
-	save : function() {
-		var action = $("#user_template_action").val();
-		var formId = action == "add" ? "#add_user_form" : "#edit_user_form";
-		var modalId = action == "add" ? "#add_user_modal" : "#edit_user_modal";
-		var roles = action == "add" ? "#add_roles" : "#edit_roles";
-		var trees = action == "add" ? tree1 : tree2;
-		$(roles).val(trees.getAllChecked());
-		if ($(formId).validate().form()) {
-			var url = MembershipUser.pageUrl + action;
-			var data = $(formId).serialize();
-			MembershipUser.ajaxPost(data, url, function() {
-				$(modalId).modal('hide');
-			});
-		}
-	},
-	revisePasswordModal : function(rowIndex) {
-		var row = MembershipUser.dt.row(rowIndex).data();
-		$("#revise_account").text(row.account);
-		$("#revise_password_id").val(row.userId);
-		$('#revise_password_modal').modal('show');
-	},
-	revisePassword : function() {
-		if ($('#revise_password_form').validate().form()) {
-			var data = {
-				userId : $("#revise_password_id").val(),
-				password : $("#revise_password").val()
-			};
-			var url = MembershipUser.pageUrl + 'updateUserPasswordById';
-			MembershipUser.ajaxPost(data, url, function() {
-				$('#revise_password_modal').modal('hide');
-			});
-		}
-	},
-	editUserModal : function(rowIndex) {
-		var row = MembershipUser.dt.row(rowIndex).data();
-		$('#edit_user_modal').modal('show');
-		$("#user_template_action").val("updateUserById");
-		$("#edit_modal_title").text("编辑[" + row.account + "]");
-		$("#edit_account").text(row.account);
-		$("#edit_user_form").autofill(row);
-		tree2.deleteChildItems("0");
-		tree2.loadJSON(MembershipUser.pageUrl + 'getroles?id=' + row.userId, function() {
-			tree2.openAllItems(0);
-		});
-		$("#edit_submit").attr("onclick", "javascript:MembershipUser.save();");
-	},
-	deleteUserDialog : function(rowIndex) {
-		var row = MembershipUser.dt.row(rowIndex).data();
-		$("#delete_message").text("确定删除[" + row.name + "]？");
-		$("#delete_id").val(row.userId);
-		$('#delete_dialog').dialog('open');
-	},
-	remove : function() {
-		var id = $("#delete_id").val();
-		var data = {
-			id : id
-		};
-		MembershipUser.ajaxPost(data, MembershipUser.pageUrl + 'removeById');
-	},
-	formValidator : function() {
-		jQuery.validator.addMethod("account", function(value, element) {
-			var account = /^[a-zA-Z0-9]+$/;
-			return this.optional(element) || (account.test(value));
-		}, "用户名只能填写数字与字母");
-
-		$('#add_user_form').validate({
-			rules : {
-				account : {
-					required : true,
-					account : true,
-					minlength : 2,
-					maxlength : 16
-				},
-				password : {
-					required : true,
-					minlength : 6,
-					maxlength : 20
-				},
-				repassword : {
-					required : true,
-					equalTo : "#password"
-				},
-				telephone : {
-					required : true,
-				},
-				email : {
-					required : true,
-					email : true
-				},
-				name : {
-					required : true,
-					minlength : 2
-				},
-				roles : {
-					required : true
-				}
-			},
-			messages : {
-				account : {
-					required : '请填写用户账号',
-					account : '用户账号只能填写数字和字母',
-					minlength : '请填写长度4-16的帐号',
-					maxlength : '请填写长度4-16的帐号'
-				},
-				password : {
-					required : '请填写登录密码',
-					minlength : '请填写长度6-20的帐号',
-					maxlength : '请填写长度6-20的帐号'
-				},
-				repassword : {
-					required : '请填写确认密码',
-					equalTo : '确认密码不正确'
-				},
-				telephone : {
-					required : '请输入电话号码',
-				},
-				email : {
-					required : '请输入电子邮箱',
-					email : '请输入正确格式的邮箱'
-				},
-				name : {
-					required : '请输入真实名称',
-					minlength : '真实名称长度不能少于2'
-				},
-				roles : {
-					required : '请选择所属角色'
-				}
-			}
-		});
-		$('#edit_user_form').validate({
-			rules : {
-				account : {
-					required : true,
-					account : true,
-					minlength : 2,
-					maxlength : 16
-				},
-				password : {
-					required : true,
-					minlength : 4
-				},
-				repassword : {
-					required : true,
-					equalTo : "#password"
-				},
-				telephone : {
-					required : true,
-				},
-				email : {
-					required : true,
-					email : true
-				},
-				name : {
-					required : true,
-					minlength : 2
-				},
-				roles : {
-					required : true
-				}
-			},
-			messages : {
-				account : {
-					required : '请填写用户账号',
-					account : '用户账号只能填写数字和字母',
-					minlength : '请填写长度4-16的帐号',
-					maxlength : '请填写长度4-16的帐号'
-				},
-				password : {
-					required : '请填写登录密码',
-					minlength : '登录密码长度为4位'
-				},
-				repassword : {
-					required : '请填写确认密码',
-					equalTo : '确认密码不正确'
-				},
-				telephone : {
-					required : '请输入电话号码',
-				},
-				email : {
-					required : '请输入电子邮箱',
-					email : '请输入正确格式的邮箱'
-				},
-				name : {
-					required : '请输入真实名称',
-					minlength : '真实名称长度不能少于2'
-				},
-				roles : {
-					required : '请选择所属角色'
-				}
-			}
-		});
-		
-		$('#revise_password_form').validate({
-			rules : {
-				password : {
-					required : true,
-					minlength : 6,
-					maxlength : 20
-				},
-				repassword : {
-					required : true,
-					minlength : 6,
-					maxlength : 20,
-					equalTo : "#revise_password"
-				}
-			},
-			messages : {
-				password : {
-					required : '请填写登录密码',
-					minlength : '请填写长度6-20的帐号',
-					maxlength : '请填写长度6-20的帐号'
-				},
-				repassword : {
-					required : '请填写登录密码',
-					minlength : '请填写长度6-20的帐号',
-					maxlength : '请填写长度6-20的帐号',
-					equalTo : '确认密码不正确'
-				}
-			}
-		});
-	}
-}
-
-$("#message_dialog").dialog({
-	autoOpen : false,
-	modal : true,
-	title : "提示",
-	buttons : [ {
-		html : "<i class='fa fa-check'></i>&nbsp; 确定",
-		"class" : "btn btn-primary",
-		click : function() {
-			$(this).dialog("close");
-		}
-	} ]
-
-});
-
-$("#delete_dialog").dialog({
-	autoOpen : false,
-	modal : true,
-	title : "提示",
-	buttons : [ {
-		html : "取消",
-		"class" : "btn btn-default",
-		click : function() {
-			$(this).dialog("close");
-		}
-	}, {
-		html : "<i class='fa fa-check'></i>&nbsp; 确定",
-		"class" : "btn btn-primary",
-		click : function() {
-			MembershipUser.remove();
-			$(this).dialog("close");
-		}
-	} ]
-});
+var membershipUserPageUrl = XFrame.getContextPath() + '/membership/user/';
 
 $(function() {
-	MembershipUser.formValidator();
-	MembershipUser.runDataTables();
+	$('#user-datagrid').datagrid({
+				method : 'get',
+				fit : true,
+				fitColumns : true,
+				singleSelect : true,
+				pagination : true,
+				rownumbers : true,
+				pageSize : 50,
+				url : membershipUserPageUrl + 'list',
+				toolbar : [ {
+					iconCls : 'icon-add',
+					handler : function() {
+						MembershipUser.add();
+					}
+				}, '-', {
+					iconCls : 'icon-edit',
+					handler : function() {
+						MembershipUser.edit();
+					}
+				}, '-', {
+					iconCls : 'icon-pwd',
+					handler : function() {
+						MembershipUser.resetPwd();
+					}
+				}, '-', {
+					iconCls : 'icon-remove1',
+					handler : function() {
+						MembershipUser.remove();
+					}
+				}, '-', {
+					iconCls : 'icon-reload',
+					handler : function() {
+						EasyUIUtils.reloadDatagrid('#user-datagrid');
+					}
+				} ],
+				columns : [ [
+						{
+							field : 'userId',
+							title : '用户ID',
+							width : 50,
+							sortable : true
+						},
+						{
+							field : 'account',
+							title : '账号',
+							width : 100,
+							sortable : true
+						},
+						{
+							field : 'name',
+							title : '姓名',
+							width : 80,
+							sortable : true,
+						},
+						{
+							field : 'telephone',
+							title : '电话',
+							width : 50,
+							sortable : true
+						},
+						{
+							field : 'email',
+							title : '邮箱',
+							width : 80,
+							sortable : true
+						},
+						{
+							field : 'status',
+							title : '状态',
+							width : 50,
+							sortable : true,
+							formatter : function(value, row, index) {
+								return value == 1 ? "正常" : "暂停";
+							}
+						},
+						{
+							field : 'createTime',
+							title : '创建时间',
+							width : 50,
+							sortable : true
+						},
+						{
+							field : 'options',
+							title : '操作',
+							width : 100,
+							formatter : function(value, row, index) {
+								var imgPath = XFrame.getContextPath() + '/assets/icons/';
+								var icons = [ {
+									"name" : "edit",
+									"title" : "编辑"
+								}, {
+									"name" : "pwd",
+									"title" : "修改密码"
+								}, {
+									"name" : "remove",
+									"title" : "删除"
+								} ];
+								var buttons = [];
+								for (var i = 0; i < icons.length; i++) {
+									var tmpl = '<a href="#" title ="{{title}}" '
+											+ 'onclick="MembershipUser.execOptionAction(\'{{index}}\',\'{{name}}\')">'
+											+ '<img src="{{imgSrc}}" alt="{{title}}"/"></a>';
+									var data = {
+										title : icons[i].title,
+										name : icons[i].name,
+										index : index,
+										imgSrc : imgPath + icons[i].name + ".png"
+									};
+									buttons.push(template.compile(tmpl)(data));
+								}
+								return buttons.join(' ');
+							}
+						} ] ],
+				onDblClickRow : function(rowIndex, rowData) {
+					return MembershipUser.edit(rowIndex, rowData);
+				}
+			});
+
+	// dialogs
+	$('#add-user-dlg').dialog({
+		closed : true,
+		modal : false,
+		width : 560,
+		height : 450,
+		iconCls : 'icon-add',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#add-user-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : MembershipUser.save
+		} ]
+	});
+
+	$('#edit-user-dlg').dialog({
+		closed : true,
+		modal : false,
+		maximizable : true,
+		width : 560,
+		height : 400,
+		iconCls : 'icon-edit',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#edit-user-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : MembershipUser.save
+		} ]
+	});
+
+	$('#reset-pwd-dlg').dialog({
+		closed : true,
+		modal : false,
+		maximizable : true,
+		width : 560,
+		height : 250,
+		iconCls : 'icon-pwd',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#reset-pwd-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : MembershipUser.save
+		} ]
+	});
+	// buttons
+	$('#btn-search').bind('click', MembershipUser.find);
+
 	MembershipUser.init();
+
+	// end
 });
+
+var MembershipUser = {
+	roleDict : {},
+	init : function() {
+		MembershipUser.loadRoleList();
+	},
+	loadRoleList : function() {
+		$.getJSON(XFrame.getContextPath() + '/membership/role/getRoleList', function(data) {
+			MembershipUser.roleDict = data;
+		});
+	},
+	execOptionAction : function(index, name) {
+		$('#user-datagrid').datagrid('selectRow', index);
+		if (name == "edit") {
+			return MembershipUser.edit();
+		}
+		if (name == "remove") {
+			return MembershipUser.remove();
+		}
+		if (name == "pwd") {
+			return MembershipUser.resetPwd();
+		}
+	},
+	fillRoleCombox : function(act,values) {
+		var id = act == "add" ? "#add-combox-roles" : "#edit-combox-roles";
+		$(id).combobox('clear');
+		var data = [];
+		var items = MembershipUser.roleDict;
+		for (var i = 0; i < items.length; i++) {
+			var item = items[i];
+			data.push({
+				"value" : item.id,
+				"name" : item.name,
+				"selected" : i == 0
+			});
+		}
+		$(id).combobox('loadData', data);
+		if(act == "edit"){
+			$(id).combobox('setValues',values);
+		}
+	},
+	add : function() {
+		$('#add-user-dlg').dialog('open').dialog('center');
+		$("#modal-action").val("add");
+		$("#add-form").form('reset');
+		MembershipUser.fillRoleCombox("add",[]);
+	},
+	edit : function() {
+		var row = $('#user-datagrid').datagrid('getSelected');
+		if (row) {
+			$('#edit-user-dlg').dialog('open').dialog('center');
+			$("#modal-action").val("edit");
+			$("#edit-form").form('reset');
+			$("#edit-account").text(row.account);
+			var roleIds = row.roles || "";
+			MembershipUser.fillRoleCombox("edit", roleIds.split(','));
+			$("#edit-form").form('load', row);
+		} else {
+			$.messager.alert('警告', '请选中一条记录!', 'info');
+		}
+	},
+	resetPwd : function() {
+		var row = $('#user-datagrid').datagrid('getSelected');
+		if (row) {
+			$('#reset-pwd-dlg').dialog('open').dialog('center');
+			$("#modal-action").val("resetPwd");
+			$("#reset-pwd-form").form('clear');
+			$("#reset-userId").val(row.userId);
+			$("#reset-account").text(row.account);
+		} else {
+			$.messager.alert('警告', '请选中一条记录!', 'info');
+		}
+	},
+	find : function() {
+		var fieldName = $("#field-name").combobox('getValue');
+		var keyword = $("#keyword").val();
+		var url = membershipUserPageUrl + 'find?fieldName=' + fieldName + '&keyword=' + keyword;
+		EasyUIUtils.loadToDatagrid('#user-datagrid', url)
+	},
+	remove : function() {
+		var gridUrl = membershipUserPageUrl + 'list';
+		var actUrl = membershipUserPageUrl + 'remove';
+		return EasyUIUtils.removeWithIdFieldName('#user-datagrid', gridUrl, actUrl, "userId");
+	},
+	save : function() {
+		var action = $('#modal-action').val();
+		if (action == "resetPwd") {
+			var url = membershipUserPageUrl + 'updateUserPasswordById';
+			EasyUIUtils.saveWithCallback('#reset-pwd-dlg', '#reset-pwd-form', url, function() {
+			});
+		} else {
+			var formId = action == "edit" ? "#edit-form" : "#add-form";
+			var dlgId = action == "edit" ? "#edit-user-dlg" : "#add-user-dlg";
+			var comboxRoleId = action == "edit" ? "#edit-combox-roles" : "#add-combox-roles";
+			var roleId = action == "edit" ? "#edit-roles" : "#add-roles";
+			var roles =  $(comboxRoleId).combobox('getValues');
+			$(roleId).val(roles);
+			var gridUrl = membershipUserPageUrl + 'list';
+			return EasyUIUtils.saveWithActUrl(dlgId, formId, '#modal-action', '#user-datagrid', gridUrl,
+					membershipUserPageUrl);
+		}
+	},
+};

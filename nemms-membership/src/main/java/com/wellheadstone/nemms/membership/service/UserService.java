@@ -33,7 +33,7 @@ public class UserService extends BaseService<UserDao, UserPo> {
 	public List<UserPo> getUsers(PageInfo page, UserPo logingUser) {
 		String[] columnNames = new String[] {
 				UserPo.UserId, UserPo.Account, UserPo.Name, UserPo.Comment,
-				UserPo.Email, UserPo.Telephone, UserPo.Status, UserPo.CreateTime
+				UserPo.Email, UserPo.Telephone, UserPo.Status, UserPo.CreateTime,UserPo.Roles
 		};
 
 		String condition = this.roleService.isSuperAdminRole(logingUser.getRoles()) ? "" :
@@ -44,7 +44,7 @@ public class UserService extends BaseService<UserDao, UserPo> {
 	public List<UserPo> getUsersByKeyword(PageInfo page, UserPo logingUser, String fieldName, String keyword) {
 		String[] columnNames = new String[] {
 				UserPo.UserId, UserPo.Account, UserPo.Name, UserPo.Comment,
-				UserPo.Email, UserPo.Telephone, UserPo.Status, UserPo.CreateTime
+				UserPo.Email, UserPo.Telephone, UserPo.Status, UserPo.CreateTime,UserPo.Roles
 		};
 
 		String condition = this.roleService.isSuperAdminRole(logingUser.getRoles()) ? "1=1 " :

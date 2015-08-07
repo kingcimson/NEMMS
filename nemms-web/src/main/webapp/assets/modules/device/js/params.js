@@ -278,7 +278,7 @@ var DeviceParam = {
 			DeviceParam.fillCombox(act,map);
 		},
 		fillCombox:function(act,map){
-			var prefix = act=="add" ? "#" : "#edit_";
+			var prefix = act=="add" ? "#" : "#edit-";
 			for ( var key in map) {
 				$(prefix + key).combobox('clear');
 				var data = [];
@@ -312,7 +312,7 @@ var DeviceParam = {
 		edit : function() {
 			var row = $('#param-datagrid').datagrid('getSelected');
 			if (row) {
-				$('#edit-param-dlg').dialog('open').dialog('center');;
+				$('#edit-param-dlg').dialog('open').dialog('center');
 				$("#modal-action").val("edit");
 				$("#edit-form").form('reset');
 				DeviceParam.initCombox("edit");

@@ -164,3 +164,9 @@
 .icon-item1{
 	background:url('icons/item1.png') no-repeat center center;
 }
+.icon-perm{
+	background:url('icons/perm.png') no-repeat center center;
+}
+.icon-pwd{
+	background:url('icons/pwd.png') no-repeat center center;
+}

@@ -215,6 +215,14 @@ $.fn.dialogParamObject = function(width,height,onBeforeClose){
 $.fn.dialogShowFullWindow = function(){
 	return this.window({fit:true,closed:true,resizable: false,collapsible:false,minimizable:false,maximizable:false,draggable: false});
 };
-                               
+               
+$.extend($.fn.validatebox.defaults.rules, {
+    equals: {
+        validator: function(value,param){
+            return value == $(param).val();
+        },
+        message: '两次输入的密码不一致.'
+    }
+});
 
 

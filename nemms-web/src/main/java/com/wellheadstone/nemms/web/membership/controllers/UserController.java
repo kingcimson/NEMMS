@@ -25,7 +25,6 @@ import com.wellheadstone.nemms.membership.security.PasswordService;
 import com.wellheadstone.nemms.membership.service.RoleService;
 import com.wellheadstone.nemms.membership.service.UserService;
 import com.wellheadstone.nemms.web.DataGridPager;
-import com.wellheadstone.nemms.web.DataTablePageInfo;
 import com.wellheadstone.nemms.web.controllers.AbstractController;
 import com.wellheadstone.nemms.web.membership.CurrentUser;
 
@@ -44,32 +43,31 @@ public class UserController extends AbstractController {
 		return "membership/user";
 	}
 
-	@RequestMapping(value = "/getUsers")
+	@RequestMapping(value = "/list")
 	@ResponseBody
-	public Map<String, Object> getusers(@CurrentUser UserPo loginUser, DataGridPager pager,
+	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager,
 			HttpServletRequest request) {
 		pager.setDefaultSort(UserPo.CreateTime);
-		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), 
+				pager.getRows(),pager.getSort(), pager.getOrder());
 		List<UserPo> list = this.userService.getUsers(pageInfo, loginUser);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());
 		modelMap.put("rows", list);
-
 		return modelMap;
 	}
 
-	@RequestMapping(value = "/getUsersByKeyword")
+	@RequestMapping(value = "/find")
 	@ResponseBody
-	public Map<String, Object> getUsersByKeyword(@CurrentUser UserPo loginUser, DataTablePageInfo dtPageInfo,
-			String fieldName, String keyword,
-			HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), UserPo.CreateTime);
-		List<UserPo> list = this.userService.getUsersByKeyword(page, loginUser, fieldName, keyword);
+	public Map<String, Object> find(@CurrentUser UserPo loginUser,
+			DataGridPager pager,String fieldName, String keyword,HttpServletRequest request) {
+		pager.setDefaultSort(UserPo.CreateTime);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), 
+				pager.getRows(),pager.getSort(), pager.getOrder());
+		List<UserPo> list = this.userService.getUsersByKeyword(pageInfo, loginUser, fieldName, keyword);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-		modelMap.put("draw", dtPageInfo.getDraw());
-		modelMap.put("recordsTotal", page.getTotals());
-		modelMap.put("recordsFiltered", page.getTotals());
-		modelMap.put("data", list);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
 		return modelMap;
 	}
 
@@ -87,7 +85,25 @@ public class UserController extends AbstractController {
 		return result;
 	}
 
-	@RequestMapping(value = "/removeById")
+	@RequestMapping(value = "/edit")
+	@ResponseBody
+	public ParamJsonResult<UserPo> edit(UserPo po, HttpServletRequest request) {
+		ParamJsonResult<UserPo> result = new ParamJsonResult<UserPo>(false, "更新用户失败!");
+		String[] args = new String[] {
+				UserPo.Name, UserPo.Email, UserPo.Status,
+				UserPo.Comment, UserPo.Roles, UserPo.Telephone
+		};
+
+		try {
+			this.userService.edit(po, po.getUserId(), args);
+			this.setSuccessResult(result, "更新用户成功！");
+		} catch (Exception ex) {
+			this.setExceptionResult(result, ex);
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/remove")
 	@ResponseBody
 	public ParamJsonResult<UserPo> remove(Integer id, HttpServletRequest request) {
 		ParamJsonResult<UserPo> result = new ParamJsonResult<UserPo>(false, "");
@@ -137,24 +153,6 @@ public class UserController extends AbstractController {
 			this.userService.encryptPassword(loginUser);
 			this.userService.edit(loginUser, loginUser.getUserId(), UserPo.Password, UserPo.Salt);
 			this.setSuccessResult(result, "更新密码成功！");
-		} catch (Exception ex) {
-			this.setExceptionResult(result, ex);
-		}
-		return result;
-	}
-
-	@RequestMapping(value = "/updateUserById")
-	@ResponseBody
-	public ParamJsonResult<UserPo> editUserById(UserPo po, HttpServletRequest request) {
-		ParamJsonResult<UserPo> result = new ParamJsonResult<UserPo>(false, "更新用户失败!");
-		String[] args = new String[] {
-				UserPo.Name, UserPo.Email, UserPo.Status,
-				UserPo.Comment, UserPo.Roles, UserPo.Telephone
-		};
-
-		try {
-			this.userService.edit(po, po.getUserId(), args);
-			this.setSuccessResult(result, "更新用户成功！");
 		} catch (Exception ex) {
 			this.setExceptionResult(result, ex);
 		}

@@ -1,4 +1,4 @@
-var configPageRootUrl = XFrame.getContextPath() + '/system/config/';
+var configDictPageUrl = XFrame.getContextPath() + '/system/config/';
 $(function() {
 	// 左边字典树
 	$('#west').panel({
@@ -16,7 +16,7 @@ $(function() {
 						handler : function() {
 							$('#configDictTree').tree('reload');
 							EasyUIUtils.loadToDatagrid('#configDictGrid',
-									configPageRootUrl + 'list?id=0');
+									configDictPageUrl + 'list?id=0');
 						}
 					} ]
 		});
@@ -24,11 +24,11 @@ $(function() {
 	$('#configDictTree').tree({
 		checkbox : false,
 		method : 'get',
-		url : configPageRootUrl + 'listChildren',
+		url : configDictPageUrl + 'listChildren',
 		onClick : function(node) {
 			$('#configDictTree').tree('expand', node.target);
-			$('#configDictTree').tree('options').url = configPageRootUrl + 'listChildren';
-			EasyUIUtils.loadToDatagrid('#configDictGrid',configPageRootUrl + 'list?id=' + node.id);
+			$('#configDictTree').tree('options').url = configDictPageUrl + 'listChildren';
+			EasyUIUtils.loadToDatagrid('#configDictGrid',configDictPageUrl + 'list?id=' + node.id);
 		},
 		onContextMenu : function(e, node) {
 			e.preventDefault();
@@ -42,7 +42,7 @@ $(function() {
 
 	// 配置字典grid
 	$('#configDictGrid').datagrid({
-		url : configPageRootUrl + 'list',
+		url : configDictPageUrl + 'list',
 		method : 'get',
 		idField : 'id',
 		pageSize : 50,
@@ -217,11 +217,11 @@ var ConfigDict = {
 		node = node ? node.attributes : null;
 		row = row || node;
 
-		EasyUIUtils.removeWithCallback(row, configPageRootUrl + 'remove', {
+		EasyUIUtils.removeWithCallback(row, configDictPageUrl + 'remove', {
 			id : row ? row.id : 0
 		}, function(data) {
 			ConfigDict.refreshNode(data.pid);
-			EasyUIUtils.loadToDatagrid('#configDictGrid', configPageRootUrl
+			EasyUIUtils.loadToDatagrid('#configDictGrid', configDictPageUrl
 					+ 'list?id=' + data.pid);
 		});
 	},
@@ -231,17 +231,17 @@ var ConfigDict = {
 			return row.id;
 		}).join();
 		EasyUIUtils.removeWithCallback(rows,
-				configPageRootUrl + 'batchRemove', {
+				configDictPageUrl + 'batchRemove', {
 					id : ids
 				}, function(data) {
 					EasyUIUtils.loadToDatagrid('#configDictGrid',
-							configPageRootUrl + 'list?id=' + data[0].pid);
+							configDictPageUrl + 'list?id=' + data[0].pid);
 				});
 	},
 	save : function() {
 		var pid = $("#configDictPid").val();
-		var url = configPageRootUrl + 'list?id=' + pid;
-		var actUrl = configPageRootUrl + $('#configDictAction').val();
+		var url = configDictPageUrl + 'list?id=' + pid;
+		var actUrl = configDictPageUrl + $('#configDictAction').val();
 		EasyUIUtils.saveWithCallback('#configDictDlg', '#configDictForm',
 				actUrl, function() {
 					ConfigDict.refreshNode(pid);
@@ -265,7 +265,7 @@ var ConfigDict = {
 		find :function() {
 			var fieldName = $('#field-name').combobox('getValue');
 			var keyword = $('#keyword').val();
-			var url = configPageRootUrl + 'find?fieldName=' + fieldName + '&keyword=' + keyword;
+			var url = configDictPageUrl + 'find?fieldName=' + fieldName + '&keyword=' + keyword;
 			return EasyUIUtils.loadToDatagrid('#search-node-result', url);
 		},
 	}

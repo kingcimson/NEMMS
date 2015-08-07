@@ -95,58 +95,58 @@
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">
 					<tr>
 						<td>名称:<input name="id" type="hidden"/></td>
-						<td colspan="3"><input class="easyui-textbox" type="text" name="name" id="edit_name" data-options="required:true" style="width: 380px"></input></td>
+						<td colspan="3"><input class="easyui-textbox" type="text" name="name" id="edit-name" data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
 						<td>参数标识:</td>
-						<td><input class="easyui-textbox" type="text" name="paramId" id="edit_paramId" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="paramId" id="edit-paramId" data-options="required:true"></input></td>
 						<td>MCP协议:</td>
-						<td><select class="easyui-combobox" id="edit_mcpId" name="mcpId" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+						<td><select class="easyui-combobox" id="edit-mcpId" name="mcpId" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 					</tr>
 					<tr>
 						<td>类别:</td>
-						<td><select class="easyui-combobox" id="edit_categoryId" name="categoryId" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+						<td><select class="easyui-combobox" id="edit-categoryId" name="categoryId" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 						<td>模式:</td>
-						<td><select class="easyui-combobox" id="edit_mode" name="mode" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+						<td><select class="easyui-combobox" id="edit-mode" name="mode" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 					</tr>
 					<tr>
 						<td>系数:</td>
-						<td><input class="easyui-textbox" type="text" name="ratio" id="edit_ratio" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="ratio" id="edit-ratio" data-options="required:true"></input></td>
 						<td>单位:</td>
-						<td><input class="easyui-textbox" type="text" name="unit" id="edit_unit" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="unit" id="edit-unit" data-options="required:true"></input></td>
 					</tr>
 					<tr>
 						<td>值类型:</td>
-						<td><select class="easyui-combobox" id="edit_valueType" name="valueType" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+						<td><select class="easyui-combobox" id="edit-valueType" name="valueType" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 						<td>值长度:</td>
-						<td><input class="easyui-textbox" type="text" name="valueLen" id="edit_valueLen" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="valueLen" id="edit-valueLen" data-options="required:true"></input></td>
 					</tr>
 					<tr>
 						<td>值最小长度:</td>
-						<td><input class="easyui-textbox" type="text" name="valueMinLen" id="edit_valueMinLen" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="valueMinLen" id="edit-valueMinLen" data-options="required:true"></input></td>
 						<td>值最大长度:</td>
-						<td><input class="easyui-textbox" type="text" name="valueMaxLen" id="edit_valueMaxLen" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="valueMaxLen" id="edit-valueMaxLen" data-options="required:true"></input></td>
 					</tr>
 					<tr>
 						<td>最小值:</td>
-						<td><input class="easyui-textbox" type="text" name="minValue" id="edit_minValue" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="minValue" id="edit-minValue" data-options="required:true"></input></td>
 						<td>最大值:</td>
-						<td><input class="easyui-textbox" type="text" name="maxValue" id="edit_maxValue" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="maxValue" id="edit-maxValue" data-options="required:true"></input></td>
 					</tr>
 					<tr>
 						<td>警告级别:</td>
-						<td><select class="easyui-combobox" id="edit_warnLevel" name="warnLevel" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+						<td><select class="easyui-combobox" id="edit-warnLevel" name="warnLevel" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 						<td>权限归属:</td>
-						<td><select class="easyui-combobox" id="edit_authorityRoles" name="authorityRoles" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+						<td><select class="easyui-combobox" id="edit-authorityRoles" name="authorityRoles" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 					</tr>
 					<tr>
 						<td>参考控件:</td>
-						<td><select class="easyui-combobox" id="edit_htmlElem" name="htmlElem" style="width: 148px">
+						<td><select class="easyui-combobox" id="edit-htmlElem" name="htmlElem" style="width: 148px">
 								<option value="text">文本框</option>
 								<option value="select">下拉框</option>
 						</select></td>
 						<td>参数配置项:</td>
-						<td><select class="easyui-combobox" id="edit_htmlElemKey" name="htmlElemKey" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+						<td><select class="easyui-combobox" id="edit-htmlElemKey" name="htmlElemKey" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 					</tr>
 				</table>
 			</center>
