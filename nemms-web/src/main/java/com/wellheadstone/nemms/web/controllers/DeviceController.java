@@ -17,7 +17,7 @@ import com.wellheadstone.nemms.data.PageInfo;
 import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.po.DeviceParamPo;
 import com.wellheadstone.nemms.service.DeviceParamService;
-import com.wellheadstone.nemms.web.DataTablePageInfo;
+import com.wellheadstone.nemms.web.DataGridPager;
 import com.wellheadstone.nemms.web.membership.CurrentUser;
 
 @Controller
@@ -39,30 +39,28 @@ public class DeviceController extends AbstractController {
 
 	@RequestMapping(value = "/params/list")
 	@ResponseBody
-	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataTablePageInfo dtPageInfo, HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), UserPo.CreateTime);
-		List<DeviceParamPo> list = this.deviceParamService.getParams(page, loginUser);
+	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager, HttpServletRequest request) {
+		pager.setDefaultSort(DeviceParamPo.Id);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
+		List<DeviceParamPo> list = this.deviceParamService.getParams(pageInfo, loginUser);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-		modelMap.put("draw", dtPageInfo.getDraw());
-		modelMap.put("recordsTotal", page.getTotals());
-		modelMap.put("recordsFiltered", page.getTotals());
-		modelMap.put("data", list);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
 
 		return modelMap;
 	}
 
 	@RequestMapping(value = "/params/find")
 	@ResponseBody
-	public Map<String, Object> getParamsByKeyword(@CurrentUser UserPo loginUser, DataTablePageInfo dtPageInfo,
-			String categoryId, String fieldName, String keyword, HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), UserPo.CreateTime);
-		List<DeviceParamPo> list = this.deviceParamService.getParamsByKeyword(page, loginUser, categoryId, fieldName,
-				keyword);
+	public Map<String, Object> getParamsByKeyword(@CurrentUser UserPo loginUser,
+			String categoryId, String fieldName, String keyword, DataGridPager pager, HttpServletRequest request) {
+		pager.setDefaultSort(DeviceParamPo.Id);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
+		List<DeviceParamPo> list = this.deviceParamService.getParamsByKeyword(pageInfo, loginUser, categoryId, fieldName, keyword);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-		modelMap.put("draw", dtPageInfo.getDraw());
-		modelMap.put("recordsTotal", page.getTotals());
-		modelMap.put("recordsFiltered", page.getTotals());
-		modelMap.put("data", list);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
+
 		return modelMap;
 	}
 

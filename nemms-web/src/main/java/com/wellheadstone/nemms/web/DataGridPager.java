@@ -1,5 +1,7 @@
 package com.wellheadstone.nemms.web;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class DataGridPager {
 	private Integer page;
 	private Integer rows;
@@ -10,7 +12,7 @@ public class DataGridPager {
 	}
 
 	public Integer getPage() {
-		return page;
+		return page == null ? 1 : this.page;
 	}
 
 	public void setPage(Integer page) {
@@ -18,7 +20,7 @@ public class DataGridPager {
 	}
 
 	public Integer getRows() {
-		return rows;
+		return rows == null ? 30 : this.rows;
 	}
 
 	public void setRows(Integer rows) {
@@ -34,10 +36,16 @@ public class DataGridPager {
 	}
 
 	public String getOrder() {
-		return order;
+		return StringUtils.isBlank(order) ? "desc" : this.order;
 	}
 
 	public void setOrder(String order) {
 		this.order = order;
+	}
+
+	public void setDefaultSort(String sort) {
+		if (StringUtils.isBlank(this.sort)) {
+			this.sort = sort;
+		}
 	}
 }

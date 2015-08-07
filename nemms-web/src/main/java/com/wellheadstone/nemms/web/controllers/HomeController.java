@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,36 +24,39 @@ public class HomeController extends AbstractController {
 	@RequestMapping(value = { "", "/", "/index" })
 	public String index(@CurrentUser UserPo loginUser, Model model, HttpServletRequest req) {
 		List<ModulePo> modules = membershipFacade.getModules(loginUser.getRoles());
-		model.addAttribute("menus", this.getMenus(modules, req.getContextPath()));
+		model.addAttribute("menus", this.buildMenuItems(modules, req.getContextPath()));
+		model.addAttribute("roleNames", membershipFacade.getRoleNames(loginUser.getRoles()));
 		return "home/index";
 	}
 
-	private String getMenus(List<ModulePo> modules, String contextPath) {
+	private String buildMenuItems(List<ModulePo> modules, String contextPath) {
 		List<ModulePo> rootModules = modules.stream()
 				.filter(x -> x.getParentId() == 0 && x.getStatus() == 1)
 				.sorted((x, y) -> x.getSequence() > y.getSequence() ? 1 : -1)
 				.collect(Collectors.toList());
 
 		StringBuilder menuBuilder = new StringBuilder();
-		for (int index = 0; index < rootModules.size(); index++) {
-			ModulePo module = rootModules.get(index);
-			String url = module.getLinkType() == 1 ? module.getUrl() : String.format("%s/%s", contextPath,
-					module.getUrl());
-			String target = StringUtils.isBlank(module.getTarget()) ? "" : String.format("target=\"%s\"",
-					module.getTarget());
-			menuBuilder.append(String.format("<li class=\"menu%s\">\r\n", index == 0 ? " menu-dashborad" : ""));
-			menuBuilder.append(String.format("	<a href=\"%s\" %s title=\"裕源大通网元监控与管理系统-%s\">\r\n", url, target,
-					module.getName()));
-			menuBuilder.append(String.format("		<i class=\"%s\"></i>\r\n", module.getIcon()));
-			menuBuilder.append(String.format("		<span class=\"menu-item-parent\">%s</span>\r\n", module.getName()));
-			menuBuilder.append("	</a>\r\n");
-			this.getChildMenus(modules, module.getModuleId(), contextPath, menuBuilder);
-			menuBuilder.append("</li>\r\n");
+		menuBuilder.append("<div style=\"padding: 2px 5px;\">\r\n");
+		for (ModulePo module : rootModules) {
+			String url = module.getLinkType() == 1 ? module.getUrl() : String.format("%s/%s", contextPath, module.getUrl());
+			String subMenu = module.isLeaf() ? "plain:true" : String.format("menu:'#mm%1$s'", module.getModuleId());
+			String button = module.isLeaf() ? "easyui-linkbutton" : "easyui-splitbutton";
+			String onclick = module.isLeaf() ?
+					String.format("onclick=\"HomeIndex.addTab('%1$s','%2$s','%3$s')\"", module.getName(), url, module.getIcon()) : "";
+			menuBuilder.append(String.format("<a href=\"#\" class=\"%1$s\" data-options=\"%2$s,iconCls:'%3$s'\" %4$s>%5$s</a>\r\n",
+					button, subMenu, module.getIcon(), onclick, module.getName()));
+		}
+		menuBuilder.append(String.format(
+				"<a href=\"%s/logout\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-cancel'\">退出</a>\r\n", contextPath));
+		menuBuilder.append("</div>\r\n");
+
+		for (ModulePo module : rootModules) {
+			this.buildMenuItems(modules, module.getModuleId(), contextPath, menuBuilder);
 		}
 		return menuBuilder.toString();
 	}
 
-	private void getChildMenus(List<ModulePo> modules, int parentId, String contextPath, StringBuilder menuBuilder) {
+	private void buildMenuItems(List<ModulePo> modules, int parentId, String contextPath, StringBuilder menuBuilder) {
 		List<ModulePo> childModules = modules.stream()
 				.filter(x -> x.getParentId() == parentId && x.getStatus() == 1)
 				.sorted((x, y) -> x.getSequence() > y.getSequence() ? 1 : -1)
@@ -63,28 +65,14 @@ public class HomeController extends AbstractController {
 		if (childModules.size() == 0) {
 			return;
 		}
-		menuBuilder.append("<ul>\r\n");
-		for (ModulePo module : childModules) {
-			String url = module.getLinkType() == 1 ? module.getUrl() : String.format("%s/%s", contextPath,
-					module.getUrl());
-			String target = StringUtils.isBlank(module.getTarget()) ? "" : String.format("target=\"%s\"",
-					module.getTarget());
 
-			if (module.isLeaf()) {
-				menuBuilder.append(String.format(
-						"<li><a href=\"%1$s\" %2$s title=\"裕源大通网元监控与管理系统-%3$s\">%3$s</a></li>\r\n", url, target,
-						module.getName()));
-			}
-			else {
-				menuBuilder.append("<li class=\"menu\">\r\n");
-				menuBuilder.append(String.format("	<a class=\"top-level-menu\" href=\"%s\" %s>\r\n", url, target));
-				menuBuilder.append(String.format("		<i class=\"%s\"></i>\r\n", module.getIcon()));
-				menuBuilder.append(String.format("		<span class=\"menu-item-parent\">%s</span>\r\n", module.getName()));
-				menuBuilder.append("	</a>\r\n");
-				this.getChildMenus(modules, module.getModuleId(), contextPath, menuBuilder);
-				menuBuilder.append("</li>\r\n");
-			}
+		menuBuilder.append(String.format("<div id=\"mm%s\" style=\"width: 150px;\">\r\n", parentId));
+		for (ModulePo module : childModules) {
+			String url = module.getLinkType() == 1 ? module.getUrl() : String.format("%s/%s", contextPath, module.getUrl());
+			menuBuilder.append(String.format("<div data-options=\"iconCls:'%1$s'\" "
+					+ "onclick=\"HomeIndex.addTab('%2$s','%3$s','%1$s')\">%2$s</div>\r\n", module.getIcon(), module.getName(), url));
+			this.buildMenuItems(modules, module.getModuleId(), contextPath, menuBuilder);
 		}
-		menuBuilder.append("</ul>\r\n");
+		menuBuilder.append("</div>\r\n");
 	}
 }

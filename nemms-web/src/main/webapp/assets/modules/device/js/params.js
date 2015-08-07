@@ -1,307 +1,344 @@
-var DeviceParam = {
-	pageUrl : XFrame.getContextPath() + '/device/params/',
-	dt : null,
-	configItems : null,
-	mcp:null,
-	ajaxPost : function(data, url, callback) {
-		$.ajax({
-			type : 'POST',
-			url : url,
-			data : data,
-			dataType : "json",
-			cache : false,
-			beforeSend : function(data) {
-			},
-			success : function(json) {
-				$.smallBox({
-					title : json.msg,
-					color : "#739E72",
-					iconSmall : "fa fa-times fadeInRight animated",
-					timeout : 4000
-				});
-				if (json.success) {
-					DeviceParam.loadDataTables();
-				}
-				if (callback) {
-					callback();
-				}
-			}
-		});
-	},
-	init : function() {
-		$('#search').on('click', DeviceParam.find);
-		$('#add_btn').on('click', DeviceParam.showAddModal);
-	},
-	loadConfigItems : function() {
-		var url = XFrame.getContextPath() + '/system/config/getDepth2Items'
-		$.getJSON(url, {
-			parentKey : "deviceParam"
-		}, function(data) {
-			DeviceParam.configItems = data;
-			DeviceParam.fillSelect();
-		});
-		
-		$.getJSON(XFrame.getContextPath() + '/system/config/getDepth1Items', {
-			parentKey : "mcpProtocol"
-		}, function(data) {
-			DeviceParam.mcp = data;
-			var map = {
-				"mcpId" : data
-			};
-
-			for ( var key in map) {
-				$('#' + key).empty();
-				$('#edit_' + key).empty();
-				$.each(map[key], function(i, item) {
-					$('#' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
-					$('#edit_' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
-				});
-			}
-		});
-		
-		$.getJSON(XFrame.getContextPath() + '/system/config/getDepth1Items', {
-			parentKey : "paramOption"
-		}, function(data) {
-			var map = {
-				"htmlElemKey" : data
-			};
-
-			for ( var key in map) {
-				$('#' + key).empty();
-				$('#edit_' + key).empty();
-				$.each(map[key], function(i, item) {
-					$('#' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
-					$('#edit_' + key).append("<option value='" + item.value + "'>" + item.name + "</option>");
-				});
-			}
-		});
-		
-		$.getJSON( XFrame.getContextPath() + '/membership/role/getRoleList',null,function(data){
-			$.each(data, function(i, item) {
-				$('#authorityRoles').append("<option value='" + item.id + "'>" + item.name + "</option>");
-				$('#edit_authorityRoles').append("<option value='" + item.id + "'>" + item.name + "</option>");
-			});
-		});
-	},
-	fillSelect:function(){
-		var map = {
-			"categoryId" : DeviceParam.configItems.deviceParamCategory,
-			"mode" : DeviceParam.configItems.deviceParamMode,
-			"valueType" : DeviceParam.configItems.deviceParamValueType,
-			"warnLevel" : DeviceParam.configItems.deviceParamWarnLevel
-		};
-		
-		$('#filter_categoryId').empty();
-		$('#filter_categoryId').append("<option value='all' selected>全部</option>");
-		$.each(map["categoryId"], function(i, item) {
-			$('#filter_categoryId').append("<option value='" + item.value + "'>" + item.name + "</option>");
-		});
-		
-		for(var key in map){
-			$('#'+key).empty();
-			$('#edit_'+key).empty();
-			$.each(map[key], function(i, item) {
-				$('#'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
-				$('#edit_'+key).append("<option value='" + item.value + "'>" + item.name + "</option>");
-			});
-		}
-	},
-	loadDataTables : function() {
-		var url = DeviceParam.pageUrl + 'list';
-		DeviceParam.dt.ajax.url(url).load();
-	},
-	initDataTables : function() {
-		var options = DataTablePaging
-				.getAjaxPagingOptions({
-					ajaxUrl : DeviceParam.pageUrl + 'list',
-					order : [ 0, 'desc' ],
-					colums : [ {
-						data : "id",
-						name : "id"
-					}, {
-						data : "paramId",
-						name : "param_id"
-					}, {
-						data : "mcpId",
-						name : "mcp_id"
-					}, {
-						data : "name",
-						name : "name"
-					}, {
-						data : "categoryId",
-						name : "category_id"
-					}, {
-						data : "mode",
-						name : "mode"
-					}, {
-						data : "unit",
-						name : "unit"
-					}, {
-						data : "ratio",
-						name : "ratio"
-					}, {
-						data : "valueType",
-						name : "value_type"
-					}, {
-						data : "valueLen",
-						name : "value_len"
-					}, {
-						data : "valueMinLen",
-						name : "value_min_len"
-					}, {
-						data : "valueMaxLen",
-						name : "value_max_len"
-					},{
-						data : "authorityRoles",
-						name : "authority_roles"
-					}, {
-						data : "warnLevel",
-						name : "warn_level"
-					} ],
-					columsdefs : [ {
-						"targets" : [ 14 ],
-						"data" : "id",
-						"render" : function(data, type, row, meta) {
-							var rowIndex = meta.row;
-							return "<a href=\"javascript:DeviceParam.showEditModal('"
-									+ rowIndex
-									+ "')\"><span class=\"glyphicon glyphicon-edit\"></span></a><a href=\"javascript:DeviceParam.showDelDialog('"
-									+ data
-									+ "')\"><span class=\"glyphicon glyphicon-remove\"></span></a>";
-						}
-					},{
-						"targets" : [ 2 ],
-						"data" : "mcpId",
-						"render" : function(data) {
-							var result =$.grep(DeviceParam.mcp,function(item,i){
-								return item.value == data 
-							});
-							return result.length ? result[0].name : "其他";
-						}
-					},{
-						"targets" : [ 4 ],
-						"data" : "categoryId",
-						"render" : function(data) {
-							var categories = DeviceParam.configItems.deviceParamCategory;
-							var result =$.grep(categories,function(item,i){
-								return item.value == data 
-							});
-							return result.length ? result[0].name : "其他";
-						}
-					},{
-						"targets" : [ 5 ],
-						"data" : "mode",
-						"render" : function(data) {
-							var categories = DeviceParam.configItems.deviceParamMode;
-							var result =$.grep(categories,function(item,i){
-								return item.value == data 
-							});
-							return result.length ? result[0].name : "其他";
-						}
-					},{
-						"targets" : [ 8 ],
-						"data" : "valueType",
-						"render" : function(data) {
-							var result =$.grep(DeviceParam.configItems.deviceParamValueType,function(item,i){
-								return item.value == data 
-							});
-							return result.length ? result[0].name : "其他";
-						}
-					},{
-						"targets" : [ 12 ],
-						"data" : "authorityRoles",
-						"render" : function(data) {
-							return data;
-						}
-					},{
-						"targets" : [ 13 ],
-						"data" : "warnLevel",
-						"render" : function(data) {
-							var categories = DeviceParam.configItems.deviceParamWarnLevel;
-							var result =$.grep(categories,function(item,i){
-								return item.value == data 
-							});
-							return result.length ? result[0].name : "其他";
-						}
-					} ]
-				});
-		var dt = DeviceParam.dt = $('#datatable1').DataTable(options);
-		$('#datatable1 tbody').on('dblclick', 'tr', function() {
-			var rowIndex = DeviceParam.dt.row(this).index();
-			DeviceParam.showEditModal(rowIndex);
-		});
-	},
-	showAddModal : function() {
-		$("#modal_action").val("add");
-		$("#add_form").resetForm();
-		$('#add_modal').modal('show');
-		$("#add_submit").attr("onclick", "javascript:DeviceParam.save();");
-	},
-	showEditModal : function(rowIndex) {
-		var row = DeviceParam.dt.row(rowIndex).data();
-		$('#edit_modal').modal('show');
-		$("#modal_action").val("edit");
-		$("#edit_form").resetForm();
-		$("#edit_modal_title").text("编辑[" + row.name + "]");
-		$("#edit_form").autofill(row);
-		$("#edit_submit").attr("onclick", "javascript:DeviceParam.save();");
-	},
-	showDelDialog : function(id) {
-		$("#delete_message").text("确定删除[" + id + "]？");
-		$("#delete_id").val(id);
-		$('#delete_dialog').dialog('open');
-	},
-	find : function() {
-		var categoryId = $("#filter_categoryId").val();
-		var fieldName = $("#fieldName").val();
-		var keyword = $("#keyword").val();
-		var url = DeviceParam.pageUrl + 'find?categoryId=' + categoryId
-				+ '&fieldName=' + fieldName + '&keyword=' + keyword;
-		DeviceParam.dt.ajax.url(url).load();
-	},
-	save : function() {
-		var action = $('#modal_action').val();
-		var formId = action == "edit" ? "#edit_form" : "#add_form";
-		var modalId = action == "edit" ? "#edit_modal" : "#add_modal";
-		if ($(formId).validate().form()) {
-			var url = DeviceParam.pageUrl + action;
-			var data = $(formId).serialize();
-			DeviceParam.ajaxPost(data, url, function() {
-				$(modalId).modal('hide');
-			});
-		}
-	},
-	remove : function(id) {
-		var data = {
-			id : id
-		};
-		DeviceParam.ajaxPost(data, DeviceParam.pageUrl + 'remove');
-	}
-}
-
-$("#delete_dialog").dialog({
-	autoOpen : false,
-	modal : true,
-	title : "提示",
-	buttons : [ {
-		html : "取消",
-		"class" : "btn btn-default",
-		click : function() {
-			$(this).dialog("close");
-		}
-	}, {
-		html : "<i class='fa fa-check'></i>&nbsp; 确定",
-		"class" : "btn btn-primary",
-		click : function() {
-			var id = $("#delete_id").val();
-			DeviceParam.remove(id);
-			$(this).dialog("close");
-		}
-	} ]
-});
+var deviceParamPageUrl = XFrame.getContextPath() + '/device/params/';
 
 $(function() {
-	DeviceParam.loadConfigItems();
-	DeviceParam.initDataTables();
-	DeviceParam.init();
+	$('#param-datagrid').datagrid({
+		method : 'get',
+		fit : true,
+		fitColumns : true,
+		singleSelect : true,
+		pagination : true,
+		rownumbers : true,
+		pageSize : 50,
+		url : deviceParamPageUrl + 'list',
+		toolbar: [{
+			iconCls: 'icon-add',
+			handler: function(){
+				DeviceParam.add();
+			}
+		},'-',{
+			iconCls: 'icon-edit1',
+			handler: function(){
+				DeviceParam.edit();
+			}
+		},'-',{
+			iconCls: 'icon-remove1',
+			handler: function(){
+				DeviceParam.remove();
+			}
+		}],
+		columns : [ [ {
+			field : 'id',
+			title : '记录ID',
+			width : 50,
+			sortable : true
+		}, {
+			field : 'paramId',
+			title : '参数标识',
+			width : 50,
+			sortable : true
+		}, {
+			field : 'mcpId',
+			title : 'MCP协议',
+			width : 50,
+			sortable : true,
+			formatter : function(value, row, index) {	
+				var result =$.grep(DeviceParam.mcpProtocolDict,function(item,i){
+					return item.value == value 
+				});
+				return result.length ? result[0].name : "其他";
+			}
+		}, {
+			field : 'name',
+			title : '名称',
+			width : 100,
+			sortable : true
+		}, {
+			field : 'categoryId',
+			title : '类别',
+			width : 50,
+			sortable : true,
+			formatter : function(value, row, index) {
+				var categories = DeviceParam.deviceParamDict.deviceParamCategory;
+				var result =$.grep(categories,function(item,i){
+					return item.value == value 
+				});
+				return result.length ? result[0].name : "其他";
+			}
+		}, {
+			field : 'mode',
+			title : '模式',
+			width : 50,
+			sortable : true,
+			formatter : function(value, row, index) {
+				var categories = DeviceParam.deviceParamDict.deviceParamMode;
+				var result =$.grep(categories,function(item,i){
+					return item.value == value 
+				});
+				return result.length ? result[0].name : "其他";
+			}
+		}, {
+			field : 'unit',
+			title : '单位',
+			width : 50,
+			sortable : true
+		}, {
+			field : 'ratio',
+			title : '系数',
+			width : 30,
+			sortable : true
+		}, {
+			field : 'valueType',
+			title : '值类型',
+			width : 50,
+			sortable : true,
+			formatter : function(value, row, index) {	
+				var result =$.grep(DeviceParam.deviceParamDict.deviceParamValueType,function(item,i){
+					return item.value == value 
+				});
+				return result.length ? result[0].name : "其他";
+			}
+		}, {
+			field : 'valueLen',
+			title : '值长度',
+			width : 50,
+			sortable : true
+		}, {
+			field : 'valueMinLen',
+			title : '值最小长度',
+			width : 80,
+			sortable : true
+		}, {
+			field : 'valueMaxLen',
+			title : '值最大长度',
+			width : 80,
+			sortable : true
+		}, {
+			field : 'authorityRoles',
+			title : '权限归属',
+			width : 50,
+			sortable : true
+		}, {
+			field : 'warnLevel',
+			title : '告警级别',
+			width : 100,
+			sortable : true,
+			formatter : function(value, row, index) {	
+				var categories = DeviceParam.deviceParamDict.deviceParamWarnLevel;
+				var result =$.grep(categories,function(item,i){
+					return item.value == value 
+				});
+				return result.length ? result[0].name : "其他";
+			}
+		}, {
+			field : 'options',
+			title : '操作',
+			width : 100,
+			formatter : function(value, row, index) {
+				var imgPath = XFrame.getContextPath() + '/assets/icons/';
+				var icons = [ {
+					"name" : "edit",
+					"title" : "编辑"
+				}, {
+					"name" : "remove",
+					"title" : "删除"
+				} ];
+				var buttons = [];
+				for (var i = 0; i < icons.length; i++) {
+					var tmpl = '<a href="#" title ="{{title}}" onclick="DeviceParam.execOptionAction(\'{{index}}\',\'{{name}}\')"><img src="{{imgSrc}}" alt="{{title}}"/"></a>';
+					var data = {
+							title : icons[i].title,
+							name : icons[i].name,
+							index : index,
+							imgSrc : imgPath + icons[i].name + ".png"
+					};						
+					buttons.push(template.compile(tmpl)(data));
+				}
+				return buttons.join(' ');
+			}
+		} ] ],
+		onDblClickRow : function(rowIndex, rowData){
+			return DeviceParam.edit();
+		}
+	});
+	
+	//dialogs
+	$('#add-param-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : 660,
+		height : 450,
+		iconCls:'icon-add',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#add-param-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : DeviceParam.save
+		} ]
+	});
+	$('#edit-param-dlg').dialog({
+		//width : window.screen.width - 280,
+		//height : window.screen.height - 250,
+		closed : true,
+		modal : true,
+		width : 660,
+		height : 450,
+		iconCls:'icon-edit',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#edit-param-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : DeviceParam.save
+		} ]
+	});
+
+	DeviceParam.bindEvents();
+	//end
 });
+
+var DeviceParam = {
+		deviceParamDict : null,
+		mcpProtocolDict:null,
+		paramOptionDict:null,
+		authorityRolesDict:null,
+		init:function(){
+			DeviceParam.loadConfigItems();
+		},
+		bindEvents:function(){
+			$('#btn-search').bind('click',DeviceParam.find);
+		},
+		loadConfigItems : function() {
+			var url = XFrame.getContextPath() + '/system/config/getDepth2Items'
+			$.getJSON(url, {
+				parentKey : "deviceParam"
+			}, function(data) {
+				DeviceParam.deviceParamDict = data;
+				$('#filter-category-id').combobox('clear');
+				var data = [];
+				data.push({
+					"value" : 'all',
+					"name" : '全部',
+					"selected" : true
+				});
+				$.each(DeviceParam.deviceParamDict.deviceParamCategory, function(i, item) {
+					data.push({
+						"value" : item.value,
+						"name" : item.name
+					});
+				});
+				$('#filter-category-id').combobox('loadData',data);
+			});
+			
+			$.getJSON(XFrame.getContextPath() + '/system/config/getDepth1Items', {
+				parentKey : "mcpProtocol"
+			}, function(data) {
+				DeviceParam.mcpProtocolDict = data;
+			});
+			
+			$.getJSON(XFrame.getContextPath() + '/system/config/getDepth1Items', {
+				parentKey : "paramOption"
+			}, function(data) {
+				DeviceParam.paramOptionDict = data;
+			});
+			
+			$.getJSON( XFrame.getContextPath() + '/membership/role/getRoleList',null,function(data){
+				DeviceParam.authorityRolesDict = [];
+				$.each(data, function(i, item) {
+					DeviceParam.authorityRolesDict.push({
+						"value" : item.id,
+						"name" : item.name
+					});
+				});
+			});
+		},
+		initCombox:function(act){
+			var map = {
+					"categoryId" : DeviceParam.deviceParamDict.deviceParamCategory,
+					"mode" : DeviceParam.deviceParamDict.deviceParamMode,
+					"valueType" : DeviceParam.deviceParamDict.deviceParamValueType,
+					"warnLevel" : DeviceParam.deviceParamDict.deviceParamWarnLevel,
+					"mcpId" : DeviceParam.mcpProtocolDict,
+					"htmlElemKey" : DeviceParam.paramOptionDict,
+					"authorityRoles" : DeviceParam.authorityRolesDict	
+			};
+			DeviceParam.fillCombox(act,map);
+		},
+		fillCombox:function(act,map){
+			var prefix = act=="add" ? "#" : "#edit_";
+			for ( var key in map) {
+				$(prefix + key).combobox('clear');
+				var data = [];
+				var items = map[key];
+				for (var i = 0; i < items.length; i++) {
+					var item = items[i];
+					data.push({
+						"value" : item.value,
+						"name" : item.name,
+						"selected" : i == 0
+					});
+				}
+				$(prefix + key).combobox('loadData',data);
+			}
+		},
+		execOptionAction:function(index,name){
+			$('#param-datagrid').datagrid('selectRow',index);
+			if(name=="edit"){
+				return DeviceParam.edit();
+			}
+			if(name=="remove"){
+				return DeviceParam.remove();
+			}
+		},
+		add : function() {
+			$('#add-param-dlg').dialog('open').dialog('center');
+			$("#modal-action").val("add");
+			$("#add-form").form('reset');
+			DeviceParam.initCombox("add");
+		},
+		edit : function() {
+			var row = $('#param-datagrid').datagrid('getSelected');
+			if (row) {
+				$('#edit-param-dlg').dialog('open').dialog('center');;
+				$("#modal-action").val("edit");
+				$("#edit-form").form('reset');
+				DeviceParam.initCombox("edit");
+				$("#edit-form").form('load',row);
+			} else {
+				$.messager.alert('警告', '请选中一条记录!', 'info');
+			}
+		},
+		find : function() {
+			var categoryId = $('#filter-category-id').combobox('getValue');
+			var fieldName = $("#field-name").combobox('getValue');
+			var keyword = $("#keyword").val();
+			var url = deviceParamPageUrl + 'find?categoryId=' + categoryId+ '&fieldName=' + fieldName + '&keyword=' + keyword;
+			EasyUIUtils.loadToDatagrid('#param-datagrid', url)
+		},
+		save : function() {
+			var action = $('#modal-action').val();
+			var formId = action == "edit" ? "#edit-form" : "#add-form";
+			var dlgId = action == "edit" ? "#edit-param-dlg" : "#add-param-dlg";
+			var gridUrl = deviceParamPageUrl + 'list';
+			EasyUIUtils.saveWithActUrl(dlgId, formId, '#modal-action', '#param-datagrid', gridUrl, deviceParamPageUrl);
+		},
+		remove:function(){
+			var row = $('#param-datagrid').datagrid('getSelected');
+			if (!row) {
+				$.messager.alert('警告', '请选中一条记录!', 'info');
+			}
+			var gridUrl = deviceParamPageUrl + 'list';
+			var actUrl = deviceParamPageUrl + 'remove';
+			return EasyUIUtils.removeWithActUrl('#param-datagrid', gridUrl, actUrl);
+		}
+};
+
+DeviceParam.init();

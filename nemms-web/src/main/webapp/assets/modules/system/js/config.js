@@ -1,175 +1,271 @@
-var DictConfig = {
-	pageUrl : XFrame.getContextPath() + '/system/config/',
-	dt : null,
-	ajaxPost : function(data, url, callback) {
-		$.ajax({
-			type : 'POST',
-			url : url,
-			data : data,
-			dataType : "json",
-			cache : false,
-			beforeSend : function(data) {
-			},
-			success : function(json) {
-				$.smallBox({
-					title : json.msg,
-					color : "#739E72",
-					iconSmall : "fa fa-times fadeInRight animated",
-					timeout : 4000
-				});
-				if (json.success) {
-					if (callback) {
-						callback();
-					}
-				}
-			}
+var configPageRootUrl = XFrame.getContextPath() + '/system/config/';
+$(function() {
+	// 左边字典树
+	$('#west').panel({
+		tools : [
+					{
+						iconCls : 'icon-search',
+						handler : ConfigDict.searchNodeDlg.open
+					},
+					{
+						iconCls : 'icon-add',
+						handler : ConfigDict.add
+					},
+					{
+						iconCls : 'icon-reload',
+						handler : function() {
+							$('#configDictTree').tree('reload');
+							EasyUIUtils.loadToDatagrid('#configDictGrid',
+									configPageRootUrl + 'list?id=0');
+						}
+					} ]
 		});
-	},
-	validator : function() {
-		$("#add_form").validate({
-			rules : {
-				sequence : {
-					digits : true
-				}
-			}
-		});
-		$("#edit_form").validate({
-			rules : {
-				sequence : {
-					digits : true,
-				}
-			}
-		});
-	},
-	load : function(id) {
-		var url = DictConfig.pageUrl + 'list?id=' + id;
-		DictConfig.dt.ajax.url(url).load();
-	},
-	init : function() {
-		$('#search').on('click', DictConfig.find);
-		$('#add_btn').on('click', DictConfig.showAddChildModal);
-		$('#add_root_btn').on('click', DictConfig.showAddRootModal);
-		$('#delete_btn').on('click', DictConfig.remove);
-		$('#list_root_btn').on('click', DictConfig.listRootConfig);
-	},
-	loadDataTables : function() {
-		var url = DictConfig.pageUrl + 'list';
-		DictConfig.dt.ajax.url(url).load();
-	},
-	runDataTables : function() {
-		var options = DataTablePaging.getAjaxPagingOptions({
-			ajaxUrl : DictConfig.pageUrl + 'list?id=0',
-			order : [ 4, 'desc' ],
-			colums : [ {
-				data : "id",
-				name : "id"
-			}, {
-				data : "name",
-				name : "name"
-			}, {
-				data : "key",
-				name : "key"
-			}, {
-				data : "value",
-				name : "value"
-			}, {
-				data : "createTime",
-				name : "create_time"
-			} ],
-			columsdefs : [ {
-				"targets" : [ 5 ],
-				"data" : "id",
-				"render" : function(data, type, row, meta) {
-					var rowIndex = meta.row;
-					return "<a href=\"javascript:DictConfig.showEditModal('" + rowIndex
-							+ "')\"><span class=\"glyphicon glyphicon-edit\"></span></a> " + "<a href=\"javascript:DictConfig.showDelDialog('" + data
-							+ "')\"><span class=\"glyphicon glyphicon-remove\"></span></a>";
-				}
-			} ]
-		});
-		var dt = DictConfig.dt = $('#dataTable1').DataTable(options);
-	},
-	showAddModal : function(pid) {
-		var name = "无";
-		if (pid > 0) {
-			var mataData = tree.getUserData(pid, 'meta');
-			name = (mataData == null ? "无" : mataData.name);
-		}
-		$("#modal_action").val("add");
-		$("#add_form").resetForm();
-		$("#parent").val(name);
-		$("#pid").val(pid);
-		$('#add_modal').modal('show');
-		$("#add_submit").attr("onclick", "javascript:DictConfig.save();");
-	},
-	showEditModal : function(rowIndex) {
-		var row = DictConfig.dt.row(rowIndex).data();
-		$('#edit_modal').modal('show');
-		$("#modal_action").val("edit");
-		$("#edit_form").resetForm();
-		$("#edit_modal_title").text("编辑[" + row.name + "]");
-		$("#edit_form").autofill(row);
-		$("#edit_submit").attr("onclick", "javascript:DictConfig.save();");
-	},
-	showDelDialog : function(id) {
-		$("#delete_alert_message").text("确定删除[" + id + "]？");
-		$("#delete_id").val(id);
-		$('#delete_message_modal').modal('show');
-	},
-	showAddChildModal : function() {
-		var id = tree.getSelectedItemId();
-		if (id == '') {
-			$.smallBox({
-				title : "请选择一个父配置项",
-				color : "#C46A69",
-				iconSmall : "fa fa-times fadeInRight animated",
-				timeout : 4000
-			});
-		} else {
-			DictConfig.showAddModal(id);
-		}
-	},
-	showAddRootModal : function() {
-		DictConfig.showAddModal(0);
-	},
-	listRootConfig : function() {
-		DictConfig.load(0);
-	},
-	find : function() {
-		var fieldName = $("#fieldName").val();
-		var keyword = $("#Keyword").val();
-		var url = DictConfig.pageUrl + 'find?fieldName=' + fieldName + '&keyword=' + keyword;
-		DictConfig.dt.ajax.url(url).load();
-	},
-	save : function() {
-		var action = $('#modal_action').val();
-		var formId = action == "edit" ? "#edit_form" : "#add_form";
-		var modalId = action == "edit" ? "#edit_modal" : "#add_modal";
-		if ($(formId).validate().form()) {
-			var url = DictConfig.pageUrl + action;
-			var data = $(formId).serialize();
-			DictConfig.ajaxPost(data, url, function() {
-				var id = tree.getSelectedItemId();
-				DictConfig.load(id);
-				$(modalId).modal('hide');
+
+	$('#configDictTree').tree({
+		checkbox : false,
+		method : 'get',
+		url : configPageRootUrl + 'listChildren',
+		onClick : function(node) {
+			$('#configDictTree').tree('expand', node.target);
+			$('#configDictTree').tree('options').url = configPageRootUrl + 'listChildren';
+			EasyUIUtils.loadToDatagrid('#configDictGrid',configPageRootUrl + 'list?id=' + node.id);
+		},
+		onContextMenu : function(e, node) {
+			e.preventDefault();
+			$('#configDictTree').tree('select', node.target);
+			$('#tree_ctx_menu').menu('show', {
+				left : e.pageX,
+				top : e.pageY
 			});
 		}
+	});
+
+	// 配置字典grid
+	$('#configDictGrid').datagrid({
+		url : configPageRootUrl + 'list',
+		method : 'get',
+		idField : 'id',
+		pageSize : 50,
+		fit : true,
+		pagination : true,
+		rownumbers : true,
+		fitColumns : true,
+		singleSelect : true,
+		toolbar : [ {
+			text : '增加',
+			iconCls : 'icon-add',
+			handler : ConfigDict.add
+		}, '-', {
+			text : '修改',
+			iconCls : 'icon-edit',
+			handler : ConfigDict.edit
+		}, '-', {
+			text : '删除',
+			iconCls : 'icon-remove',
+			handler : ConfigDict.remove
+		} ],
+		frozenColumns : [ [ {
+			field : 'ck',
+			checkbox : true
+		} ] ],
+		columns : [ [ {
+			field : 'id',
+			title : '标识',
+			width : 50
+		}, {
+			field : 'name',
+			title : '名称',
+			width : 100
+		}, {
+			field : 'key',
+			title : '键',
+			width : 100
+		}, {
+			field : 'value',
+			title : '值',
+			width : 100
+		}, {
+			field : 'createTime',
+			title : '创建时间',
+			width : 100
+		}, {
+			field : 'updateTime',
+			title : '更新时间',
+			width : 100
+		} ] ],
+		onDblClickRow : function(index, row) {
+			ConfigDict.edit();
+		}
+	});
+	
+	$('#search-node-result').datagrid({
+		method : 'get',
+		fit : true,
+		pagination : true,
+		rownumbers : true,
+		fitColumns : true,
+		singleSelect : true,
+		pageSize : 10,
+		columns : [ [ {
+			field : 'id',
+			title : '标识',
+			width : 50
+		}, {
+			field : 'pid',
+			title : '父标识',
+			hidden : true
+		}, {
+			field : 'name',
+			title : '名称',
+			width : 150
+		}, {
+			field : 'key',
+			title : '对应键',
+			width : 100
+		}, {
+			field : 'value',
+			title : '对应值',
+			width : 100
+		} ] ],
+		onDblClickRow : function(index, row) {
+		}
+	});
+
+	$('#configDictDlg').dialog({
+		closed : true,
+		modal : true,
+		width : 500,
+		height : 350,
+		iconCls:'icon-save',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#configDictDlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : ConfigDict.save
+		} ]
+	});
+	
+	$('#search-node-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : window.screen.width - 550,
+		height : window.screen.height - 350,
+		maximizable:true,
+		iconCls:'icon-search',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#search-node-dlg").dialog('close');
+			}
+		} ]
+	});
+	
+	$('#btn-search').bind('click',ConfigDict.searchNodeDlg.find);
+});
+
+var ConfigDict = {
+	treeContextMenu : function(item) {
+		if (item.name == "add") {
+			return ConfigDict.add();
+		}
+		if (item.name == "edit") {
+			return ConfigDict.edit();
+		}
+		if (item.name == "remove") {
+			return ConfigDict.remove();
+		}
+		if (item.name == "find") {
+			return ConfigDict.searchNodeDlg.open();
+		}
+		return;
+	},
+	add : function() {
+		var name = "根节点";
+		var id = "0";
+		var node = $('#configDictTree').tree('getSelected');
+
+		if (node) {
+			var configNode = node.attributes;
+			name = configNode.name;
+			id = configNode.id;
+		}
+		EasyUIUtils.add('#configDictDlg', '#configDictForm', '#configDictAction',
+						'#configDictId', '新增[' + name + ']配置字典的子项');
+		$("#configDictPid").val(id);
+		$("#configDictPNameDiv").show();
+		$("#configDictPName").html(name);
+	},
+	edit : function() {
+		$("#configDictPNameDiv").hide();
+		var row = $('#configDictGrid').datagrid('getSelected');
+		var node = $('#configDictTree').tree('getSelected');
+		node = node ? node.attributes : null;
+		row = row || node;
+		EasyUIUtils.editWithData('#configDictDlg', '#configDictForm',
+				'#configDictAction', '#configDictId', '修改ID配置字典项', row);
 	},
 	remove : function() {
-		var id = $("#delete_id").val();
-		var data = {
-			id : id
-		};
-		DictConfig.ajaxPost(data, DictConfig.pageUrl + 'remove', function() {
-			var id = tree.getSelectedItemId();
-			DictConfig.load(id);
-			$('#delete_message_modal').modal('hide');
+		var row = $('#configDictGrid').datagrid('getSelected');
+		var node = $('#configDictTree').tree('getSelected');
+		node = node ? node.attributes : null;
+		row = row || node;
+
+		EasyUIUtils.removeWithCallback(row, configPageRootUrl + 'remove', {
+			id : row ? row.id : 0
+		}, function(data) {
+			ConfigDict.refreshNode(data.pid);
+			EasyUIUtils.loadToDatagrid('#configDictGrid', configPageRootUrl
+					+ 'list?id=' + data.pid);
 		});
+	},
+	batchRemove : function() {
+		var rows = $('#configDictGrid').datagrid('getChecked');
+		var ids = $.map(rows, function(row) {
+			return row.id;
+		}).join();
+		EasyUIUtils.removeWithCallback(rows,
+				configPageRootUrl + 'batchRemove', {
+					id : ids
+				}, function(data) {
+					EasyUIUtils.loadToDatagrid('#configDictGrid',
+							configPageRootUrl + 'list?id=' + data[0].pid);
+				});
+	},
+	save : function() {
+		var pid = $("#configDictPid").val();
+		var url = configPageRootUrl + 'list?id=' + pid;
+		var actUrl = configPageRootUrl + $('#configDictAction').val();
+		EasyUIUtils.saveWithCallback('#configDictDlg', '#configDictForm',
+				actUrl, function() {
+					ConfigDict.refreshNode(pid);
+					EasyUIUtils.loadToDatagrid('#configDictGrid', url);
+				});
+	},
+	refreshNode : function(pid) {
+		if (pid == "0") {
+			$('#configDictTree').tree('reload');
+		} else {
+			var node = $('#configDictTree').tree('find', pid);
+			$('#configDictTree').tree('select', node.target);
+			$('#configDictTree').tree('reload', node.target);
+		}
+	},
+	searchNodeDlg:{
+		open:function(){
+			$('#search-node-dlg').dialog('open').dialog('center');
+			EasyUIUtils.clearDatagrid('#search-node-result');
+		},
+		find :function() {
+			var fieldName = $('#field-name').combobox('getValue');
+			var keyword = $('#keyword').val();
+			var url = configPageRootUrl + 'find?fieldName=' + fieldName + '&keyword=' + keyword;
+			return EasyUIUtils.loadToDatagrid('#search-node-result', url);
+		},
 	}
 };
-
-$(function() {
-	DictConfig.init();
-	DictConfig.runDataTables();
-	DictConfig.validator();
-});

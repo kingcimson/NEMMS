@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wellheadstone.nemms.common.util.DhtmlXTreeUtils;
-import com.wellheadstone.nemms.common.viewmodel.DhtmlXTreeNode;
 import com.wellheadstone.nemms.common.viewmodel.JsonResult;
 import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
 import com.wellheadstone.nemms.common.viewmodel.TreeNode;
@@ -24,7 +21,7 @@ import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.po.SitePo;
 import com.wellheadstone.nemms.service.SiteService;
 import com.wellheadstone.nemms.service.SiteTreeService;
-import com.wellheadstone.nemms.web.DataTablePageInfo;
+import com.wellheadstone.nemms.web.DataGridPager;
 import com.wellheadstone.nemms.web.membership.CurrentUser;
 
 @Controller
@@ -40,27 +37,23 @@ public class SiteController extends AbstractController {
 		return "site/index";
 	}
 
-	@RequestMapping(value = "/listSites")
+	@RequestMapping(value = "/listChildNodes")
 	@ResponseBody
-	public DhtmlXTreeNode listSites(Integer id, HttpServletRequest request) {
+	public List<TreeNode<SitePo>> listChildNodes(Integer id, HttpServletRequest request) {
 		if (id == null) {
 			id = 0;
 		}
 
-		List<SitePo> sites = this.siteService.getAll();
-		List<DhtmlXTreeNode> nodes = sites.stream().map(x -> {
-			DhtmlXTreeNode node = new DhtmlXTreeNode();
-			node.setId(String.valueOf(x.getId()));
-			node.setPid(x.getPid().toString());
-			node.setChild(x.getHasChild() ? 1 : 0);
-			node.setText(x.getName());
-			node.setTooltip(x.getName());
-			node.setUserdata("meta", x);
-			return node;
-		}).collect(Collectors.toList());
-
-		return DhtmlXTreeUtils.getRootNode(String.valueOf(id),
-				DhtmlXTreeUtils.getNodes(nodes, String.valueOf(id)));
+		List<TreeNode<SitePo>> treeNodes = new ArrayList<TreeNode<SitePo>>();
+		try {
+			List<SitePo> sitePos = this.siteService.getByPid(id);
+			for (SitePo po : sitePos) {
+				treeNodes.add(this.createTreeNode(po));
+			}
+		} catch (Exception ex) {
+			this.logException(ex);
+		}
+		return treeNodes;
 	}
 
 	@RequestMapping(value = "/addSite")
@@ -107,8 +100,7 @@ public class SiteController extends AbstractController {
 	@ResponseBody
 	public ParamJsonResult<List<TreeNode<SitePo>>> addDevice(SitePo po, @CurrentUser UserPo loginUser,
 			HttpServletRequest request) {
-		ParamJsonResult<List<TreeNode<SitePo>>> result =
-				new ParamJsonResult<List<TreeNode<SitePo>>>(false, "");
+		ParamJsonResult<List<TreeNode<SitePo>>> result = new ParamJsonResult<List<TreeNode<SitePo>>>(false, "");
 
 		try {
 			po.setCreateUser(loginUser.getAccount());
@@ -162,17 +154,17 @@ public class SiteController extends AbstractController {
 
 	@RequestMapping(value = "/search")
 	@ResponseBody
-	public Map<String, Object> search(DataTablePageInfo dtPageInfo, String fieldName, String keyword,
+	public Map<String, Object> search(DataGridPager pager, String fieldName, String keyword,
 			HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), SitePo.CreateTime);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 
 		try {
-			List<SitePo> list = this.siteService.getByPage(fieldName, keyword, page);
-			modelMap.put("draw", dtPageInfo.getDraw());
-			modelMap.put("recordsTotal", page.getTotals());
-			modelMap.put("recordsFiltered", page.getTotals());
-			modelMap.put("data", list);
+			pager.setDefaultSort(SitePo.CreateTime);
+			PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
+					pager.getRows(), pager.getSort(), pager.getOrder());
+			List<SitePo> list = this.siteService.getByPage(fieldName, keyword, pageInfo);
+			modelMap.put("total", pageInfo.getTotals());
+			modelMap.put("rows", list);
 		} catch (Exception ex) {
 			this.logException(ex);
 		}
@@ -187,9 +179,8 @@ public class SiteController extends AbstractController {
 		if (rows == null)
 			rows = 30;
 
-		List<SitePo> list = null;
 		PageInfo pageInfo = new PageInfo((page - 1) * rows, rows);
-		list = this.siteService.getByPage(pageInfo);
+		List<SitePo> list = this.siteService.getByPage(pageInfo);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());
 		modelMap.put("rows", list);
@@ -236,10 +227,12 @@ public class SiteController extends AbstractController {
 	}
 
 	private TreeNode<SitePo> createTreeNode(SitePo po) {
-		String configId = Integer.toString(po.getId());
+		String id = Integer.toString(po.getId());
+		String pid = Integer.toString(po.getPid());
 		String text = po.getName();
 		String state = po.getHasChild() ? "closed" : "open";
-		return new TreeNode<SitePo>(configId, text, state, po);
+		String icon = po.getPid().equals(0) ? "icon-site" : "icon-device";
+		return new TreeNode<SitePo>(id, pid, text, state, icon, false, po);
 	}
 
 	@RequestMapping(value = "/listAllChildNodes")

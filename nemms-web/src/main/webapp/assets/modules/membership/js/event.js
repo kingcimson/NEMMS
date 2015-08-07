@@ -1,115 +1,187 @@
-var MembershipEvent = {
-	dt : null,
-	loadDataTables : function() {
-		var url = XFrame.getContextPath() + '/membership/event/getevents';
-		MembershipEvent.dt.ajax.url(url).load();
-	},
-	format : function(d) {
-		return '信息:<br>' + d.message + '<br>';
-	},
-	runDataTables : function() {
-		var options = DataTablePaging.getAjaxPagingOptions({
-			ajaxUrl:XFrame.getContextPath() + '/membership/event/getevents',
-			order : [5,'desc'],
-			colums:[ {
-				"class" : "details-control",
-				orderable : false,
-				data : null,
-				defaultContent : ""}, 
-				{data : "eventId",name:"event_id"}, 
-				{data : "source",name:"source"}, 
-				{data : "account",name:"account"}, 
-				{data : "level",name:"level"}, 
-				{data : "createTime",name:"create_time"},
-			],
-			columsdefs:[ {
-				targets : [ 6 ], 
-				data : "eventId", 
-				render : function(value, type, data) { 
-					return "<a href=\"javascript:MembershipEvent.deleteEventDialog('"+ value +"')\"><span class=\"glyphicon glyphicon-remove\"></span></a>";
-				}
-			} ]
-		});
-		var dt = MembershipEvent.dt = $('#example').DataTable(options);
-		var detailRows = [];
-		$('#example tbody').on('click', 'tr td:first-child', function() {
-			var tr = $(this).closest('tr');
-			var row = dt.row(tr);
-			var idx = $.inArray(tr.attr('id'), detailRows);
-			if (row.child.isShown()) {
-				tr.removeClass('details');
-				row.child.hide();
-				detailRows.splice(idx, 1);
-			} else {
-				tr.addClass('details');
-				row.child(MembershipEvent.format(row.data())).show();
-				if (idx === -1) {
-					detailRows.push(tr.attr('id'));
-				}
-			}
-		});
-		dt.on('draw', function() {
-			$.each(detailRows, function(i, id) {
-				$('#' + id + ' td:first-child').trigger('click');
-			});
-		});
-	},
-	deleteEventDialog : function(id, name) {
-		$("#delete_message").text("确定删除？");
-		$("#delete_id").val(id);
-		$('#delete_dialog').dialog('open');
-	},
-	findEventsByKeyword : function() {
-		var fieldName = $("#fieldName").val();
-		var keyword = $("#Keyword").val();
-		var url = XFrame.getContextPath() + '/membership/event/geteventsbykeyword?fieldName=' + fieldName + '&keyword=' + keyword;
-		MembershipEvent.dt.ajax.url(url).load();
-	},
-	deleteEventById : function() {
-		$.post(XFrame.getContextPath() + '/membership/event/removeById', {
-			id : $("#delete_id").val(),
-		}, function(result) {
-			if (result.success) {
-				MembershipEvent.loadDataTables();
-			} else {
-				$("#alert_message").text(result.msg);
-				$('#message_dialog').dialog('open');
-			}
-		}, 'json');
-	},
-	clear : function() {
-		$.post(XFrame.getContextPath() + '/membership/event/clear', function(result) {
-			if (result.success) {
-				MembershipEvent.loadDataTables();
-			} else {
-				$("#alert_message").text(result.msg);
-				$('#message_dialog').dialog('open');
-			}
-		}, 'json');
-	}
-}
-
-$("#delete_dialog").dialog({
-	autoOpen : false,
-	modal : true,
-	title : "提示",
-	buttons : [ {
-		html : "取消",
-		"class" : "btn btn-default",
-		click : function() {
-			$(this).dialog("close");
-		}
-	}, {
-		html : "<i class='fa fa-check'></i>&nbsp; 确定",
-		"class" : "btn btn-primary",
-		click : function() {
-			var id = $("#delete_id").val();
-			MembershipEvent.deleteEventById(id);
-			$(this).dialog("close");
-		}
-	} ]
-});
+var membershipEventPageUrl = XFrame.getContextPath() + '/membership/event/';
 
 $(function() {
-	MembershipEvent.runDataTables();
+	$('#event-datagrid').datagrid({
+		method : 'get',
+		fit : true,
+		fitColumns : true,
+		singleSelect : true,
+		pagination : true,
+		rownumbers : true,
+		pageSize : 50,
+		url : membershipEventPageUrl + 'list',
+		toolbar : [ {
+			iconCls : 'icon-info',
+			handler : function() {
+				MembershipEvent.showDetail();
+			}
+		}, '-', {
+			iconCls : 'icon-remove1',
+			handler : function() {
+				MembershipEvent.remove();
+			}
+		}],				
+		columns : [ [ {
+			field : 'eventId',
+			title : '记录ID',
+			width : 50,
+			sortable : true
+		}, {
+			field : 'source',
+			title : '来源',
+			width : 200,
+			sortable : true
+		}, {
+			field : 'account',
+			title : '操作用户',
+			width : 50,
+			sortable : true,
+		}, {
+			field : 'level',
+			title : '级别',
+			width : 50,
+			sortable : true
+		}, {
+			field : 'createTime',
+			title : '发生时间',
+			width : 50,
+			sortable : true
+		}, {
+			field : 'options',
+			title : '操作',
+			width : 100,
+			formatter : function(value, row, index) {
+				var imgPath = XFrame.getContextPath() + '/assets/icons/';
+				var icons = [ {
+					"name" : "info",
+					"title" : "详细"
+				}, {
+					"name" : "remove",
+					"title" : "删除"
+				} ];
+				var buttons = [];
+				for (var i = 0; i < icons.length; i++) {
+					var tmpl = '<a href="#" title ="{{title}}" onclick="MembershipEvent.execOptionAction(\'{{index}}\',\'{{name}}\')"><img src="{{imgSrc}}" alt="{{title}}"/"></a>';
+					var data = {
+							title : icons[i].title,
+							name : icons[i].name,
+							index : index,
+							imgSrc : imgPath + icons[i].name + ".png"
+					};						
+					buttons.push(template.compile(tmpl)(data));
+				}
+				return buttons.join(' ');
+			}
+		} ] ],
+		onDblClickRow : function(rowIndex, rowData){
+			return MembershipEvent.detailInfoDlg.open(rowIndex,rowData);
+		}
+	});
+
+	//dialogs
+	// 查询详细信息
+	$('#detail-info-dlg').dialog({
+		closed : true,
+		modal : false,
+		maximizable:true,
+		width : window.screen.width - 550,
+		height : window.screen.height - 350,
+		iconCls:'icon-info',
+		buttons : [ {
+			text : '上一条',
+			iconCls : 'icon-prev',
+			handler : function() {
+				MembershipEvent.detailInfoDlg.prev();
+			}
+		}, {
+			text : '下一条',
+			iconCls : 'icon-next',
+			handler : function() {
+				MembershipEvent.detailInfoDlg.next();
+			}
+		}, {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#detail-info-dlg").dialog('close');
+			}
+		} ]
+	});
+
+	//buttons
+	$('#btn-search').bind('click',MembershipEvent.find);
+	$('#btn-clear').bind('click',MembershipEvent.clear);
+	
+	//end
 });
+
+var MembershipEvent = {
+	execOptionAction:function(index,name){
+			$('#event-datagrid').datagrid('selectRow',index);
+			if(name=="info"){
+				return MembershipEvent.showDetail();
+			}
+			if(name=="remove"){
+				return MembershipEvent.remove();
+			}
+		},
+	find : function() {
+		var fieldName = $("#field-name").combobox('getValue');
+		var keyword = $("#keyword").val();
+		var url = membershipEventPageUrl + 'find?fieldName=' + fieldName + '&keyword=' + keyword;
+		EasyUIUtils.loadToDatagrid('#event-datagrid', url)
+	},
+	remove : function() {
+		var gridUrl = membershipEventPageUrl + 'list';
+		var actUrl = membershipEventPageUrl + 'remove';
+		return EasyUIUtils.removeWithIdFieldName('#event-datagrid', gridUrl, actUrl, "eventId");
+	},
+	clear : function() {
+		var url = membershipEventPageUrl + 'clear';
+		$.post(url, function(result) {
+			if (result.success) {
+				EasyUIUtils.reloadDatagrid('#event-datagrid');
+			} else {
+				EasyUIUtils.showMsg(result.msg);
+			}
+		}, 'json');
+	},
+	showDetail:function(){
+		var row = $('#event-datagrid').datagrid('getSelected');
+		if(row){
+			var index =$('#event-datagrid').datagrid('getRowIndex',row);
+			return MembershipEvent.detailInfoDlg.open(index, row);
+		}
+		return $.messager.alert('警告', '请选中一条记录!', 'info');
+	},
+	detailInfoDlg : {
+		open : function(index, row) {
+			$('#detail-info-dlg').dialog('open').dialog('center');
+			$('#detail-info').text(row.message);
+		},
+		prev : function() {
+			var index = parseInt($('#current-row-index').val()) - 1;
+			$('#event-datagrid').datagrid('selectRow', index);
+			var row = $('#event-datagrid').datagrid('getSelected');
+			if (row) {
+				$('#current-row-index').val(index);
+				$('#detail-info').text(row.message);
+			} else {
+				$('#event-datagrid').datagrid('selectRow', index + 1);
+				$.messager.alert('失败', '当前已到第一条记录!', 'error');
+			}
+		},
+		next : function() {
+			var index = parseInt($('#current-row-index').val()) + 1;
+			$('#event-datagrid').datagrid('selectRow', index);
+			var row = $('#event-datagrid').datagrid('getSelected');
+			if (row) {
+				$('#current-row-index').val(index);
+				$('#detail-info').text(row.message);
+			} else {
+				$('#event-datagrid').datagrid('selectRow', index - 1);
+				$.messager.alert('失败', '当前已到最后一条记录', 'error');
+			}
+		}
+	}
+};

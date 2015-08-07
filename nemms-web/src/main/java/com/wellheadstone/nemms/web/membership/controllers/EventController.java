@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
 import com.wellheadstone.nemms.data.PageInfo;
 import com.wellheadstone.nemms.membership.po.EventPo;
-import com.wellheadstone.nemms.web.DataTablePageInfo;
+import com.wellheadstone.nemms.web.DataGridPager;
 import com.wellheadstone.nemms.web.controllers.AbstractController;
 
 @Controller
@@ -28,35 +28,32 @@ public class EventController extends AbstractController {
 		return "membership/event";
 	}
 
-	@RequestMapping(value = "/getevents")
+	@RequestMapping(value = "/list")
 	@ResponseBody
-	public Map<String, Object> getEvents(DataTablePageInfo dtPageInfo, HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), EventPo.CreateTime);
-		List<EventPo> list = this.eventService.getByPage(page);
+	public Map<String, Object> getEvents(DataGridPager pager, HttpServletRequest request) {
+		pager.setDefaultSort(EventPo.CreateTime);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
+		List<EventPo> list = this.eventService.getByPage(pageInfo);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-		modelMap.put("draw", dtPageInfo.getDraw());
-		modelMap.put("recordsTotal", page.getTotals());
-		modelMap.put("recordsFiltered", page.getTotals());
-		modelMap.put("data", list);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
 
 		return modelMap;
 	}
 
-	@RequestMapping(value = "/geteventsbykeyword")
+	@RequestMapping(value = "/find")
 	@ResponseBody
-	public Map<String, Object> getEventsByKeyword(DataTablePageInfo dtPageInfo, String fieldName, String keyword,
-			HttpServletRequest request) {
-		PageInfo page = dtPageInfo.toPageInfo(request.getParameterMap(), EventPo.CreateTime);
-		List<EventPo> list = this.eventService.getEventsByKeyword(page, fieldName, keyword);
+	public Map<String, Object> getEventsByKeyword(String fieldName, String keyword, DataGridPager pager, HttpServletRequest request) {
+		pager.setDefaultSort(EventPo.CreateTime);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
+		List<EventPo> list = this.eventService.getEventsByKeyword(pageInfo, fieldName, keyword);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-		modelMap.put("draw", dtPageInfo.getDraw());
-		modelMap.put("recordsTotal", page.getTotals());
-		modelMap.put("recordsFiltered", page.getTotals());
-		modelMap.put("data", list);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
 		return modelMap;
 	}
 
-	@RequestMapping(value = "/removeById")
+	@RequestMapping(value = "/remove")
 	@ResponseBody
 	public ParamJsonResult<EventPo> remove(Integer id, HttpServletRequest request) {
 		ParamJsonResult<EventPo> result = new ParamJsonResult<EventPo>(false, "删除日志失败！");

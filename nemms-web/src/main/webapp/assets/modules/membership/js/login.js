@@ -7,26 +7,15 @@ MembershipLogin = {
 		$("#account").focus();
 		document.onkeydown = function(e) {
 			var evt = e ? e : (window.event ? window.event : null)
-			if (evt.keyCode == 13)
-				MembershipLogin.login();
-		}
+			if (evt.keyCode == 13){MembershipLogin.login();}
+		};
+		$("#login-message-tips").hide();
 	},
-	tipsTimer: null,
-	tips: function(type, content) {
-		type = type === 'error' ? 'danger' : type;
-		var html = '<div class="login-alert alert alert-' + type + '" role="alert">'
-					+	'<button class="close" data-dismiss="alert">×</button>'
-					+	'<i class="fa-fw fa fa-' + (type === 'danger' ? 'warning' : 'check') + '"></i>'
-					+	'<span id="loginErrorTips">' + content + '</span>'
-					+'</div>';
-
-		var tipsContainer = $('#loginMessageTips');
-		tipsContainer.html(html);
-
-		this.tipsTimer && clearTimeout(this.tipsTimer);
-		this.tipsTimer = setTimeout(function() {
-			tipsContainer.html('');
-		}, 4000)
+	tipsTimer : null,
+	tips : function(type, content) {
+		var tipsContainer = $('#login-message-tips');
+		tipsContainer.html(content);
+		tipsContainer.show();
 	},
 	login : function() {
 		if ($('#login-form').validate().form()) {
@@ -46,3 +35,31 @@ MembershipLogin = {
 		}
 	}
 };
+
+$(function() {
+	$("#login-form").validate({
+		rules : {
+			account : {
+				required : true,
+			},
+			password : {
+				required : true,
+				minlength : 3,
+				maxlength : 20
+			}
+		},
+		messages : {
+			account : {
+				required : ''
+			},
+			password : {
+				required : '',
+				minlength : ''
+			}
+		},
+		errorPlacement : function(error, element) {
+			error.insertAfter(element.parent());
+		}
+	});
+	MembershipLogin.init();
+});
