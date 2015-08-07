@@ -1,20 +1,21 @@
-html,body,span,div,p,table,td,th,tr {
+html, body, span, div, p, table, td, th, tr {
 	padding: 0px;
 	margin: 0px;
 	font-size: 14px;
-	font-family: "Microsoft Yahei", "微软雅黑", Tahoma, Arial, Helvetica, STHeiti;
+	font-family: "Microsoft Yahei", "微软雅黑", Tahoma, Arial, Helvetica,
+		STHeiti;
 }
 
 * {
 	font-size: 14px;
 }
 
-.l-btn-text{
-	font-size:14px
+.l-btn-text {
+	font-size: 14px
 }
 
-.tabs-title{
-	font-size:14px
+.tabs-title {
+	font-size: 14px
 }
 
 h3 {
@@ -245,7 +246,11 @@ table.form-table td input.text {
 	font-size: 12px;
 	color: #FFF
 }
-.bg-header span.name a{ color:#FFF; text-decoration:none}
+
+.bg-header span.name a {
+	color: #FFF;
+	text-decoration: none
+}
 
 .bg-header .logo {
 	float: left;
@@ -299,16 +304,19 @@ ul.tabs {
 	border-left: none
 }
 
-#site {
+#body-layout {
 	border-top: none
 }
 
-#site .panel-header {
+#body-layout .panel-header {
 	border-top-width: 0px
 }
 
-#site .panel-body {
+#body-layout .panel-body {
 	border-top-width: 0px;
 	border-bottom: none
 }
-td.check01 .checkbox{ margin-right:10px}
+
+td.check01 .checkbox {
+	margin-right: 10px
+}

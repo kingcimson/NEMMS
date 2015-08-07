@@ -50,9 +50,11 @@ public class ConfigController extends AbstractController {
 
 		for (ConfigDictPo po : configDicts) {
 			String configId = Integer.toString(po.getId());
+			String pid = Integer.toString(po.getPid());
 			String text = po.getName();
-			String state = "closed";
-			TreeNode<ConfigDictPo> vmMode = new TreeNode<ConfigDictPo>(configId, text, state, po);
+			String state = po.getHasChild() > 0 ? "closed" : "open";
+			String icon = po.getHasChild() > 0 ? "icon-dict2" : "icon-item1";
+			TreeNode<ConfigDictPo> vmMode = new TreeNode<ConfigDictPo>(configId, pid, text, state, icon, false, po);
 			treeNodes.add(vmMode);
 		}
 

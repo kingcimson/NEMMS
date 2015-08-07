@@ -9,7 +9,7 @@
 <%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
 <script src="<%=request.getContextPath()%>/assets/modules/system/js/config.js?v=<%=Math.random()%>"></script>
 </head>
-<body class="easyui-layout" id="site">
+<body class="easyui-layout" id="body-layout">
 	<!-- 左边tree -->
 	<div id="west" data-options="region:'west',split:true" title="站点信息" style="width: 220px;">
 		<div class="easyui-panel" style="padding: 5px; border: none">

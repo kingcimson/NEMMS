@@ -10,7 +10,7 @@
 <script src="<%=request.getContextPath()%>/assets/js/libs/socket.io-1.3.5.js"></script>
 <script src="<%=request.getContextPath()%>/assets/modules/site/js/sitemgr.js"></script>
 </head>
-<body class="easyui-layout" id="site">
+<body class="easyui-layout" id="body-layout">
 	<!-- 左边tree -->
 	<div id="west" data-options="region:'west',split:true" title="站点信息" style="width: 220px;">
 		<div class="easyui-panel" style="padding: 5px; border: none">

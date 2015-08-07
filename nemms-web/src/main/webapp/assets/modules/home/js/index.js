@@ -15,7 +15,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 450,
-		height : 350,
+		height : 320,
 		iconCls:'icon-avatar',
 		buttons : [ {
 			text : '关闭',

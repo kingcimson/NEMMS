@@ -37,7 +37,7 @@ public class ConfigDictDao extends BaseDao<ConfigDictPo> {
 	}
 
 	public List<ConfigDictPo> queryBy(int pid) {
-		String sqlTemplate = "SELECT t.*,(SELECT if(count(*)>0,1,0) FROM %1$s t1 WHERE t1.pid = t.id) as has_child FROM %1$s t WHERE pid=?";
+		String sqlTemplate = "SELECT t.*,(SELECT if(count(*)>0,1,0) FROM %1$s t1 WHERE t1.pid = t.id) as has_child FROM %1$s t WHERE pid=? order by t.sequence desc";
 		return this.queryForList(String.format(sqlTemplate, ConfigDictPo.EntityName),
 				new Object[] { pid }, new int[] { Types.INTEGER }, ConfigDictPo.class);
 	}

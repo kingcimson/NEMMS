@@ -11,7 +11,7 @@
 <body>
 	<div class="easyui-layout" fit="true">
 		<div region="north" class="bg-header">
-			<span class="name">[<a id="btn-my-profile" href="#">${user.name}</a>],欢迎你回来!</span>
+			<span class="name">[<a id="btn-my-profile" title="点击修改个人信息" href="#">${user.name}</a>],欢迎你回来!</span>
 			<div class="logo"></div>
 			<div class="menus">${menus}</div>
 		</div>
@@ -48,10 +48,6 @@
 					<tr>
 						<td>角色:</td>
 						<td colspan="3"><span class="name">${roleNames}</span></td>
-					</tr>
-					<tr>
-						<td>联系信息:</td>
-						<td colspan="3"><span class="name">${user.telephone},<a href="mailto:${user.email}">${user.email}</a></span></td>
 					</tr>
 					<tr>
 						<td>原密码:</td>

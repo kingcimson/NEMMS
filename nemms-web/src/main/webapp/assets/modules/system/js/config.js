@@ -64,10 +64,6 @@ $(function() {
 			iconCls : 'icon-remove',
 			handler : ConfigDict.remove
 		} ],
-		frozenColumns : [ [ {
-			field : 'ck',
-			checkbox : true
-		} ] ],
 		columns : [ [ {
 			field : 'id',
 			title : '标识',
@@ -84,6 +80,10 @@ $(function() {
 			field : 'value',
 			title : '值',
 			width : 100
+		}, {
+			field : 'sequence',
+			title : '顺序',
+			width : 50
 		}, {
 			field : 'createTime',
 			title : '创建时间',
@@ -200,6 +200,7 @@ var ConfigDict = {
 		$("#configDictPid").val(id);
 		$("#configDictPNameDiv").show();
 		$("#configDictPName").html(name);
+		$("#sequence").textbox('setValue',10);
 	},
 	edit : function() {
 		$("#configDictPNameDiv").hide();
@@ -208,7 +209,7 @@ var ConfigDict = {
 		node = node ? node.attributes : null;
 		row = row || node;
 		EasyUIUtils.editWithData('#configDictDlg', '#configDictForm',
-				'#configDictAction', '#configDictId', '修改ID配置字典项', row);
+				'#configDictAction', '#configDictId', '修改[' + row.name + ']配置字典项', row);
 	},
 	remove : function() {
 		var row = $('#configDictGrid').datagrid('getSelected');
