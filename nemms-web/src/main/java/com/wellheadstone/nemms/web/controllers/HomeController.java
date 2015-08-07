@@ -40,7 +40,7 @@ public class HomeController extends AbstractController {
 		for (ModulePo module : rootModules) {
 			String url = module.getLinkType() == 1 ? module.getUrl() : String.format("%s/%s", contextPath, module.getUrl());
 			String subMenu = module.isLeaf() ? "plain:true" : String.format("menu:'#mm%1$s'", module.getModuleId());
-			String button = module.isLeaf() ? "easyui-linkbutton" : "easyui-splitbutton";
+			String button = module.isLeaf() ? "easyui-linkbutton" : "easyui-menubutton";
 			String onclick = module.isLeaf() ?
 					String.format("onclick=\"HomeIndex.addTab('%1$s','%2$s','%3$s')\"", module.getName(), url, module.getIcon()) : "";
 			menuBuilder.append(String.format("<a href=\"#\" class=\"%1$s\" data-options=\"%2$s,iconCls:'%3$s'\" %4$s>%5$s</a>\r\n",

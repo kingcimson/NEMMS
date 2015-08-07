@@ -20,6 +20,11 @@ $(function() {
 			handler : function() {
 				MembershipEvent.remove();
 			}
+		},'-',{
+			iconCls: 'icon-reload',
+			handler: function(){
+				EasyUIUtils.reloadDatagrid('#event-datagrid');
+			}
 		}],				
 		columns : [ [ {
 			field : 'eventId',

@@ -25,6 +25,11 @@ $(function() {
 			handler: function(){
 				DeviceParam.remove();
 			}
+		},'-',{
+			iconCls: 'icon-reload',
+			handler: function(){
+				EasyUIUtils.reloadDatagrid('#param-datagrid');
+			}
 		}],
 		columns : [ [ {
 			field : 'id',

@@ -7,7 +7,7 @@
 <%@ include file="/WEB-INF/jsp-views/includes/header.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/form_scripts.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
-<script src="<%=request.getContextPath()%>/assets/modules/device/js/params.js"></script>
+<script src="<%=request.getContextPath()%>/assets/modules/device/js/params.js?v=<%=Math.random()%>"></script>
 </head>
 <body class="easyui-layout">
 	<div id="toolbar" class="toolbar">
