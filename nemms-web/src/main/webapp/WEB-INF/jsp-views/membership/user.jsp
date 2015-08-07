@@ -12,7 +12,7 @@
 </head>
 <body class="easyui-layout">
 	<div id="toolbar" class="toolbar">
-		账号:<select class="easyui-combobox" id="field-name" name="fieldName" style="width: 100px">
+		属性:<select class="easyui-combobox" id="field-name" name="fieldName" style="width: 100px">
 			<option value="account">账号</option>
 			<option value="name">姓名</option>
 		</select> 关键字:<input class="easyui-textbox" type="text" id="keyword" name="keyword" /> 
@@ -70,7 +70,7 @@
 					<tr>
 						<td>所属角色:</td>
 						<td colspan="3"><select class="easyui-combobox"  id="add-combox-roles" name="comboxRoles" 
-						data-options="valueField:'value',textField:'name',multiple:true" style="width: 200px"></select>
+						data-options="valueField:'value',textField:'name',multiple:true" style="width: 380px"></select>
 							<input id="add-roles" type="hidden" name="roles" />
 						</td>
 					</tr>
@@ -118,7 +118,7 @@
 					<tr>
 						<td>所属角色:</td>
 						<td colspan="3"><label class="input"> <select class="easyui-combobox"  id="edit-combox-roles" name="comboxRoles" 
-						 data-options="valueField:'value',textField:'name',multiple:true" style="width: 200px"></select>
+						 data-options="valueField:'value',textField:'name',multiple:true" style="width: 380px"></select>
 							<input id="edit-roles" type="hidden" name="roles" />
 						</label></td>
 					</tr>

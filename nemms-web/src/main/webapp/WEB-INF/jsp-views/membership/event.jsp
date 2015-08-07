@@ -13,7 +13,7 @@
 </head>
 <body class="easyui-layout">
 	<div id="toolbar" class="toolbar">
-		<select class="easyui-combobox" id="field-name" name="fieldName"
+		属性:<select class="easyui-combobox" id="field-name" name="fieldName"
 			style="width: 120px">
 			<option value="account">操作用户</option>
 			<option value="level">日志级别</option>

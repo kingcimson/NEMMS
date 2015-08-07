@@ -11,25 +11,25 @@
 </head>
 <body class="easyui-layout" id="body-layout">
 	<!-- 左边tree -->
-	<div id="west" data-options="region:'west',split:true" title="站点信息" style="width: 220px;">
+	<div id="west" data-options="region:'west',split:true" title="系统模块" style="width: 220px;">
 		<div class="easyui-panel" style="padding: 5px; border: none">
-			<ul id="configDictTree"></ul>
+			<ul id="module-tree"></ul>
 		</div>
 	</div>
 	<!-- 右边 -->
 	<div region="center" data-options="region:'center'">
-		<div id="configDictDiv" style="width: 100%; height: 99%">
-			<div id="configDictGrid"></div>
+		<div  style="width: 100%; height: 99%">
+			<div id="opt-datagrid"></div>
 		</div>
 	</div>
-	<!-- 新增与修改配置字典dialog  -->
-	<div id="configDictDlg">
-		<form id="configDictForm" name="configDictForm" method="post">
+	<!-- dialog  -->
+	<div id="opt-dlg">
+		<form id="optForm" name="optForm" method="post">
 			<center>
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">
-					<tr id="configDictPNameDiv">
+					<tr id="optPNameDiv">
 						<td>父节点:</td>
-						<td colspan="3"><label id="configDictPName"></label></td>
+						<td colspan="3"><label id="optPName"></label></td>
 					</tr>
 					<tr>
 						<td>名称:</td>
@@ -54,9 +54,9 @@
 					<tr>
 						<td>说明:</td>
 						<td colspan="3"><input class="easyui-textbox" type="text" name="comment" id="comment" style="width: 280px"></input>
-							<input id="configDictPid" type="hidden" name="pid" value="0" />
-							<input id="configDictId" type="hidden" name="id" value="0" /> 
-							<input id="configDictAction" type="hidden" name="action" />
+							<input id="optPid" type="hidden" name="pid" value="0" />
+							<input id="optId" type="hidden" name="id" value="0" /> 
+							<input id="optAction" type="hidden" name="action" />
 					</td>
 					</tr>
 				</table>
@@ -78,7 +78,7 @@
 		</div>
 	</div>
 	<!-- tree右键菜单  -->
-	<div id="tree_ctx_menu" class="easyui-menu" data-options="onClick:ConfigDict.treeContextMenu" style="width: 120px;">
+	<div id="tree_ctx_menu" class="easyui-menu" data-options="onClick:MembershipOpt.treeContextMenu" style="width: 120px;">
 		<div id="m-add" data-options="name:'add',iconCls:'icon-add'">增加</div>
 		<div id="m-edit" data-options="name:'edit',iconCls:'icon-edit'">修改</div>
 		<div id="m-remove" data-options="name:'remove',iconCls:'icon-remove'">删除</div>

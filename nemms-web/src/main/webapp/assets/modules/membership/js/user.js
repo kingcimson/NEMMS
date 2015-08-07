@@ -142,7 +142,6 @@ $(function() {
 	$('#edit-user-dlg').dialog({
 		closed : true,
 		modal : false,
-		maximizable : true,
 		width : 560,
 		height : 400,
 		iconCls : 'icon-edit',
@@ -162,7 +161,6 @@ $(function() {
 	$('#reset-pwd-dlg').dialog({
 		closed : true,
 		modal : false,
-		maximizable : true,
 		width : 560,
 		height : 250,
 		iconCls : 'icon-pwd',

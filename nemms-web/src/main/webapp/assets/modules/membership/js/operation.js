@@ -1,4 +1,4 @@
-var membershipOperationPageUrl = XFrame.getContextPath() + '/membership/operation/';
+var membershipOptPageUrl = XFrame.getContextPath() + '/membership/operation/';
 
 $(function() {
 	// 左边字典树
@@ -6,34 +6,34 @@ $(function() {
 		tools : [
 					{
 						iconCls : 'icon-search',
-						handler : MembershipOperation.searchNodeDlg.open
+						handler : MembershipOpt.searchNodeDlg.open
 					},
 					{
 						iconCls : 'icon-add',
-						handler : MembershipOperation.add
+						handler : MembershipOpt.add
 					},
 					{
 						iconCls : 'icon-reload',
 						handler : function() {
-							$('#MembershipOperationTree').tree('reload');
-							EasyUIUtils.loadToDatagrid('#MembershipOperationGrid',
-									membershipOperationPageUrl + 'list?id=0');
+							$('#module-tree').tree('reload');
+							EasyUIUtils.loadToDatagrid('#opt-datagrid',
+									membershipOptPageUrl + 'list?id=0');
 						}
 					} ]
 		});
 
-	$('#MembershipOperationTree').tree({
+	$('#module-tree').tree({
 		checkbox : false,
 		method : 'get',
-		url : membershipOperationPageUrl + 'listChildren',
+		url : membershipOptPageUrl + 'listChildren',
 		onClick : function(node) {
-			$('#MembershipOperationTree').tree('expand', node.target);
-			$('#MembershipOperationTree').tree('options').url = membershipOperationPageUrl + 'listChildren';
-			EasyUIUtils.loadToDatagrid('#MembershipOperationGrid',membershipOperationPageUrl + 'list?id=' + node.id);
+			$('#module-tree').tree('expand', node.target);
+			$('#module-tree').tree('options').url = membershipOptPageUrl + 'listChildren';
+			EasyUIUtils.loadToDatagrid('#opt-datagrid',membershipOptPageUrl + 'list?id=' + node.id);
 		},
 		onContextMenu : function(e, node) {
 			e.preventDefault();
-			$('#MembershipOperationTree').tree('select', node.target);
+			$('#module-tree').tree('select', node.target);
 			$('#tree_ctx_menu').menu('show', {
 				left : e.pageX,
 				top : e.pageY
@@ -42,8 +42,8 @@ $(function() {
 	});
 
 	// 配置字典grid
-	$('#MembershipOperationGrid').datagrid({
-		url : membershipOperationPageUrl + 'list',
+	$('#opt-datagrid').datagrid({
+		url : membershipOptPageUrl + 'list',
 		method : 'get',
 		idField : 'id',
 		pageSize : 50,
@@ -55,15 +55,15 @@ $(function() {
 		toolbar : [ {
 			text : '增加',
 			iconCls : 'icon-add',
-			handler : MembershipOperation.add
+			handler : MembershipOpt.add
 		}, '-', {
 			text : '修改',
 			iconCls : 'icon-edit',
-			handler : MembershipOperation.edit
+			handler : MembershipOpt.edit
 		}, '-', {
 			text : '删除',
 			iconCls : 'icon-remove',
-			handler : MembershipOperation.remove
+			handler : MembershipOpt.remove
 		} ],
 		columns : [ [ {
 			field : 'id',
@@ -95,7 +95,7 @@ $(function() {
 			width : 100
 		} ] ],
 		onDblClickRow : function(index, row) {
-			MembershipOperation.edit();
+			MembershipOpt.edit();
 		}
 	});
 	
@@ -132,7 +132,7 @@ $(function() {
 		}
 	});
 
-	$('#MembershipOperationDlg').dialog({
+	$('#opt-dlg').dialog({
 		closed : true,
 		modal : true,
 		width : 500,
@@ -142,12 +142,12 @@ $(function() {
 			text : '关闭',
 			iconCls : 'icon-no',
 			handler : function() {
-				$("#MembershipOperationDlg").dialog('close');
+				$("#opt-dlg").dialog('close');
 			}
 		}, {
 			text : '保存',
 			iconCls : 'icon-save',
-			handler : MembershipOperation.save
+			handler : MembershipOpt.save
 		} ]
 	});
 	
@@ -167,5 +167,94 @@ $(function() {
 		} ]
 	});
 	
-	$('#btn-search').bind('click',MembershipOperation.searchNodeDlg.find);
+	$('#btn-search').bind('click',MembershipOpt.searchNodeDlg.find);
 });
+
+var MembershipOpt = {
+		treeContextMenu : function(item) {
+			if (item.name == "add") {
+				return MembershipOpt.add();
+			}
+			if (item.name == "edit") {
+				return MembershipOpt.edit();
+			}
+			if (item.name == "remove") {
+				return MembershipOpt.remove();
+			}
+			if (item.name == "find") {
+				return MembershipOpt.searchNodeDlg.open();
+			}
+			return;
+		},
+		add : function() {
+			var name = "根节点";
+			var id = "0";
+			var node = $('#module-tree').tree('getSelected');
+
+			if (node) {
+				var configNode = node.attributes;
+				name = configNode.name;
+				id = configNode.id;
+			}
+			EasyUIUtils.add('#configDictDlg', '#configDictForm', '#configDictAction',
+							'#configDictId', '新增[' + name + ']配置字典的子项');
+			$("#configDictPid").val(id);
+			$("#configDictPNameDiv").show();
+			$("#configDictPName").html(name);
+			$("#sequence").textbox('setValue',10);
+		},
+		edit : function() {
+			$("#configDictPNameDiv").hide();
+			var row = $('#configDictGrid').datagrid('getSelected');
+			var node = $('#module-tree').tree('getSelected');
+			node = node ? node.attributes : null;
+			row = row || node;
+			EasyUIUtils.editWithData('#configDictDlg', '#configDictForm',
+					'#configDictAction', '#configDictId', '修改[' + row.name + ']配置字典项', row);
+		},
+		remove : function() {
+			var row = $('#configDictGrid').datagrid('getSelected');
+			var node = $('#module-tree').tree('getSelected');
+			node = node ? node.attributes : null;
+			row = row || node;
+
+			EasyUIUtils.removeWithCallback(row, configDictPageUrl + 'remove', {
+				id : row ? row.id : 0
+			}, function(data) {
+				MembershipOpt.refreshNode(data.pid);
+				EasyUIUtils.loadToDatagrid('#configDictGrid', configDictPageUrl
+						+ 'list?id=' + data.pid);
+			});
+		},
+		save : function() {
+			var pid = $("#configDictPid").val();
+			var url = configDictPageUrl + 'list?id=' + pid;
+			var actUrl = configDictPageUrl + $('#configDictAction').val();
+			EasyUIUtils.saveWithCallback('#configDictDlg', '#configDictForm',
+					actUrl, function() {
+						MembershipOpt.refreshNode(pid);
+						EasyUIUtils.loadToDatagrid('#configDictGrid', url);
+					});
+		},
+		refreshNode : function(pid) {
+			if (pid == "0") {
+				$('#module-tree').tree('reload');
+			} else {
+				var node = $('#module-tree').tree('find', pid);
+				$('#module-tree').tree('select', node.target);
+				$('#module-tree').tree('reload', node.target);
+			}
+		},
+		searchNodeDlg:{
+			open:function(){
+				$('#search-node-dlg').dialog('open').dialog('center');
+				EasyUIUtils.clearDatagrid('#search-node-result');
+			},
+			find :function() {
+				var fieldName = $('#field-name').combobox('getValue');
+				var keyword = $('#keyword').val();
+				var url = configDictPageUrl + 'find?fieldName=' + fieldName + '&keyword=' + keyword;
+				return EasyUIUtils.loadToDatagrid('#search-node-result', url);
+			},
+		}
+	};
