@@ -16,7 +16,7 @@ $(function() {
 						MembershipModule.add();
 					}
 				}, '-', {
-					iconCls : 'icon-edit',
+					iconCls : 'icon-edit1',
 					handler : function() {
 						MembershipModule.edit();
 					}

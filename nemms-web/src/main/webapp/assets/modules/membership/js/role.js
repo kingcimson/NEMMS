@@ -16,7 +16,7 @@ $(function() {
 						MembershipRole.add();
 					}
 				}, '-', {
-					iconCls : 'icon-edit',
+					iconCls : 'icon-edit1',
 					handler : function() {
 						MembershipRole.edit();
 					}

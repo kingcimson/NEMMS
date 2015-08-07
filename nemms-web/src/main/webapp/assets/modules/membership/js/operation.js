@@ -58,7 +58,7 @@ $(function() {
 			handler : MembershipOpt.add
 		}, '-', {
 			text : '修改',
-			iconCls : 'icon-edit',
+			iconCls : 'icon-edit1',
 			handler : MembershipOpt.edit
 		}, '-', {
 			text : '删除',

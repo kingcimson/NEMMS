@@ -57,7 +57,7 @@ $(function() {
 			handler : ConfigDict.add
 		}, '-', {
 			text : '修改',
-			iconCls : 'icon-edit',
+			iconCls : 'icon-edit1',
 			handler : ConfigDict.edit
 		}, '-', {
 			text : '删除',
