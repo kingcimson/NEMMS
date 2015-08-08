@@ -21,6 +21,11 @@ $(function() {
 				DeviceParam.edit();
 			}
 		},'-',{
+			iconCls: 'icon-copy',
+			handler: function(){
+				DeviceParam.copy();
+			}
+		},'-',{
 			iconCls: 'icon-remove1',
 			handler: function(){
 				DeviceParam.remove();
@@ -143,6 +148,9 @@ $(function() {
 				var icons = [ {
 					"name" : "edit",
 					"title" : "编辑"
+				},{
+					"name" : "copy",
+					"title" : "复制"
 				}, {
 					"name" : "remove",
 					"title" : "删除"
@@ -222,7 +230,7 @@ var DeviceParam = {
 			$('#btn-search').bind('click',DeviceParam.find);
 		},
 		loadConfigItems : function() {
-			var url = XFrame.getContextPath() + '/system/config/getDepth2Items'
+			var url = XFrame.getContextPath() + '/system/dict/getDepth2Items'
 			$.getJSON(url, {
 				parentKey : "deviceParam"
 			}, function(data) {
@@ -243,13 +251,13 @@ var DeviceParam = {
 				$('#filter-category-id').combobox('loadData',data);
 			});
 			
-			$.getJSON(XFrame.getContextPath() + '/system/config/getDepth1Items', {
+			$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth1Items', {
 				parentKey : "mcpProtocol"
 			}, function(data) {
 				DeviceParam.mcpProtocolDict = data;
 			});
 			
-			$.getJSON(XFrame.getContextPath() + '/system/config/getDepth1Items', {
+			$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth1Items', {
 				parentKey : "paramOption"
 			}, function(data) {
 				DeviceParam.paramOptionDict = data;
@@ -299,11 +307,18 @@ var DeviceParam = {
 			if(name=="edit"){
 				return DeviceParam.edit();
 			}
+			if(name=="copy"){
+				return DeviceParam.copy();
+			}
 			if(name=="remove"){
 				return DeviceParam.remove();
 			}
 		},
 		add : function() {
+			$('#add-param-dlg').dialog({
+				iconCls : 'icon-add',
+				title:'添加设备参数'
+			});
 			$('#add-param-dlg').dialog('open').dialog('center');
 			$("#modal-action").val("add");
 			$("#add-form").form('reset');
@@ -317,6 +332,22 @@ var DeviceParam = {
 				$("#edit-form").form('reset');
 				DeviceParam.initCombox("edit");
 				$("#edit-form").form('load',row);
+			} else {
+				$.messager.alert('警告', '请选中一条记录!', 'info');
+			}
+		},
+		copy : function() {
+			var row = $('#param-datagrid').datagrid('getSelected');
+			if (row) {
+				$('#add-param-dlg').dialog({
+					iconCls : 'icon-copy',
+					title:'复制设备参数'
+				});
+				$('#add-param-dlg').dialog('open').dialog('center');
+				$("#modal-action").val("add");
+				$("#add-form").form('reset');
+				DeviceParam.initCombox("add");
+				$("#add-form").form('load',row);
 			} else {
 				$.messager.alert('警告', '请选中一条记录!', 'info');
 			}

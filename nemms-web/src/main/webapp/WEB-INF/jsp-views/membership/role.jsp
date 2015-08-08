@@ -19,7 +19,7 @@
 	<div style="height: 93%; padding: 2px">
 		<div id="role-datagrid"></div>
 	</div>
-	<div id="add-role-dlg" class="easyui-dialog" title="添加角色" style="width: 660px; height: 500px; padding: 10px;">
+	<div id="add-role-dlg" class="easyui-dialog" title="添加角色" style="width: 680px; height: 530px; padding: 10px;">
 		<form id="add-form" name="add-form" method="post">
 			<center>
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">
@@ -95,7 +95,7 @@
 			</center>
 		</form>
 	</div>
-	<div id="edit-role-dlg" class="easyui-dialog" title="编辑用户信息" style="width: 660px; height: 500px; padding: 10px;">
+	<div id="edit-role-dlg" class="easyui-dialog" title="编辑角色" style="width: 680px; height: 500px; padding: 10px;">
 		<form id="edit-form" name="edit-form" method="post">
 			<center>
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">

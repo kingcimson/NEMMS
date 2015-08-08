@@ -21,14 +21,14 @@ import com.wellheadstone.nemms.service.ConfigDictService;
 import com.wellheadstone.nemms.web.DataGridPager;
 
 @Controller
-@RequestMapping(value = "/system/config")
-public class ConfigController extends AbstractController {
+@RequestMapping(value = "/system/settings")
+public class ConfigSettingsController extends AbstractController {
 	@Resource
 	private ConfigDictService configDictService;
 
 	@RequestMapping(value = { "", "/", "/index" })
 	public String index() {
-		return "system/config";
+		return "system/settings";
 	}
 
 	@RequestMapping(value = "/list")

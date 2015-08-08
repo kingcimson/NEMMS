@@ -7,7 +7,7 @@
 <%@ include file="/WEB-INF/jsp-views/includes/header.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/form_scripts.jsp"%>
 <%@ include file="/WEB-INF/jsp-views/includes/init.jsp"%>
-<script src="<%=request.getContextPath()%>/assets/modules/system/js/config.js?v=<%=Math.random()%>"></script>
+<script src="<%=request.getContextPath()%>/assets/modules/system/js/settings.js?v=<%=Math.random()%>"></script>
 </head>
 <body class="easyui-layout" id="body-layout">
 	<!-- 左边tree -->

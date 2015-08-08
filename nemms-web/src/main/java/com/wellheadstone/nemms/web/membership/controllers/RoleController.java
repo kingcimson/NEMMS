@@ -1,29 +1,28 @@
 package com.wellheadstone.nemms.web.membership.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wellheadstone.nemms.common.util.DhtmlXTreeUtils;
-import com.wellheadstone.nemms.common.viewmodel.DhtmlXTreeNode;
 import com.wellheadstone.nemms.common.viewmodel.IdNamePair;
 import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
-import com.wellheadstone.nemms.data.SortType;
-import com.wellheadstone.nemms.membership.po.ModulePo;
-import com.wellheadstone.nemms.membership.po.OperationPo;
+import com.wellheadstone.nemms.data.PageInfo;
 import com.wellheadstone.nemms.membership.po.RolePo;
 import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.membership.service.ModuleService;
 import com.wellheadstone.nemms.membership.service.OperationService;
 import com.wellheadstone.nemms.membership.service.RoleService;
+import com.wellheadstone.nemms.web.DataGridPager;
 import com.wellheadstone.nemms.web.controllers.AbstractController;
 import com.wellheadstone.nemms.web.membership.CurrentUser;
 
@@ -46,25 +45,39 @@ public class RoleController extends AbstractController {
 
 	@RequestMapping(value = "/list")
 	@ResponseBody
-	public DhtmlXTreeNode list(@CurrentUser UserPo loginUser) {
-		List<RolePo> roles = this.roleService.isSuperAdminRole(loginUser.getRoles()) ?
-				this.roleService.getDao().query(RolePo.Sequence, SortType.ASC) :
-				this.roleService.getRolesBy(loginUser.getAccount());
-		List<DhtmlXTreeNode> nodes = roles.stream().map(x -> {
-			DhtmlXTreeNode node = new DhtmlXTreeNode();
-			node.setId(String.valueOf(x.getRoleId()));
-			node.setChild(0);
-			node.setText(x.getName());
-			node.setTooltip(x.getComment());
-			return node;
-		}).collect(Collectors.toList());
-		return DhtmlXTreeUtils.getRootNode("0", nodes);
+	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager,
+			HttpServletRequest request) {
+		pager.setDefaultSort(RolePo.Sequence);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
+				pager.getRows(), pager.getSort(), pager.getOrder());
+		List<RolePo> list = this.roleService.isSuperAdminRole(loginUser.getRoles()) ?
+				this.roleService.getByPage(pageInfo) :
+				this.roleService.getRolesBy(pageInfo, loginUser.getAccount());
+
+		Map<String, Object> modelMap = new HashMap<String, Object>(2);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
+		return modelMap;
+	}
+
+	@RequestMapping(value = "/find")
+	@ResponseBody
+	public Map<String, Object> find(@CurrentUser UserPo loginUser,
+			DataGridPager pager, String fieldName, String keyword, HttpServletRequest request) {
+		pager.setDefaultSort(UserPo.CreateTime);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
+				pager.getRows(), pager.getSort(), pager.getOrder());
+		List<RolePo> list = this.roleService.getRolesByKeyword(pageInfo, loginUser, fieldName, keyword);
+		Map<String, Object> modelMap = new HashMap<String, Object>(2);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
+		return modelMap;
 	}
 
 	@RequestMapping(value = "/getRoleList")
 	@ResponseBody
-	public List<IdNamePair> getRoleList() {
-		return this.roleService.getAll(RolePo.RoleId, RolePo.Name)
+	public List<IdNamePair> getRoleList(@CurrentUser UserPo loginUser) {
+		return this.roleService.getRolesList(loginUser)
 				.stream()
 				.map(x -> new IdNamePair(String.valueOf(x.getRoleId()), x.getName()))
 				.collect(Collectors.toList());
@@ -88,7 +101,7 @@ public class RoleController extends AbstractController {
 		return result;
 	}
 
-	@RequestMapping(value = "/removeById")
+	@RequestMapping(value = "/remove")
 	@ResponseBody
 	public ParamJsonResult<RolePo> remove(String id) {
 		ParamJsonResult<RolePo> result = new ParamJsonResult<RolePo>(false, "删除角色失败!");
@@ -129,54 +142,5 @@ public class RoleController extends AbstractController {
 	public RolePo getRoleById(String id) {
 		return this.roleService.getById(id);
 
-	}
-
-	@RequestMapping(value = "/getoperations")
-	@ResponseBody
-	public DhtmlXTreeNode getOperations(@CurrentUser UserPo loginUser, Integer id) {
-		int roleId = (id == null ? 0 : id);
-		RolePo role = this.roleService.getById(roleId, RolePo.Modules, RolePo.Operations);
-		String[] moduleSplit = new String[] {};
-		String[] operationSplit = new String[] {};
-		if (role != null) {
-			moduleSplit = StringUtils.split(role.getModules(), ',');
-			operationSplit = StringUtils.split(role.getOperations(), ',');
-		}
-		List<DhtmlXTreeNode> nodes = this.getModuleOperations(loginUser.getRoles(), moduleSplit, operationSplit);
-		return DhtmlXTreeUtils.getRootNode("0", DhtmlXTreeUtils.getNodes(nodes, "0"));
-	}
-
-	private List<DhtmlXTreeNode> getModuleOperations(String userRoles, String[] moduleSplit, String[] operationSplit) {
-		boolean isSuperAdminRole = this.roleService.isSuperAdminRole(userRoles);
-		List<ModulePo> modules = isSuperAdminRole ?
-				this.moduleService.getAllModules() :
-				this.moduleService.getModules(this.roleService.getModuleIds(userRoles));
-		List<DhtmlXTreeNode> moduleNodes = modules.stream().map(x -> {
-			DhtmlXTreeNode node = new DhtmlXTreeNode();
-			node.setId(String.valueOf(-x.getModuleId()));
-			node.setChild(x.isLeaf() ? 0 : 1);
-			node.setText(x.getName());
-			node.setTooltip(x.getName());
-			node.setSequence(x.getSequence());
-			node.setPid(String.valueOf(-x.getParentId()));
-			node.setChecked((ArrayUtils.contains(moduleSplit, x.getModuleId().toString())) ? -1 : 0);
-			return node;
-		}).collect(Collectors.toList());
-
-		List<OperationPo> operations = this.operationService.getAllOperations();
-		List<DhtmlXTreeNode> operationNodes = operations.stream().map(x -> {
-			DhtmlXTreeNode node = new DhtmlXTreeNode();
-			node.setId(String.valueOf(x.getOperationId()));
-			node.setChild(0);
-			node.setText(x.getName());
-			node.setTooltip(x.getComment());
-			node.setSequence(x.getSequence());
-			node.setPid(String.valueOf(-x.getModuleId()));
-			node.setChecked((ArrayUtils.contains(operationSplit, x.getOperationId().toString())) ? 1 : 0);
-			return node;
-		}).collect(Collectors.toList());
-		moduleNodes.addAll(operationNodes);
-
-		return moduleNodes;
 	}
 }

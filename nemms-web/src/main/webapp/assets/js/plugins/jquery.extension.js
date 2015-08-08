@@ -222,6 +222,13 @@ $.extend($.fn.validatebox.defaults.rules, {
             return value == $(param).val();
         },
         message: '两次输入的密码不一致.'
+    },
+    code: {
+        validator: function(value,param){
+        	var regx = /^[a-zA-Z]+$/;
+        	return regx.test(value);
+        },
+        message: '编号只能英文字符.'
     }
 });
 

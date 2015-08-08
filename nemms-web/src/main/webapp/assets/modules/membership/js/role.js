@@ -21,9 +21,9 @@ $(function() {
 						MembershipRole.edit();
 					}
 				}, '-', {
-					iconCls : 'icon-pwd',
+					iconCls : 'icon-perm',
 					handler : function() {
-						MembershipRole.resetPwd();
+						MembershipRole.authorize();
 					}
 				}, '-', {
 					iconCls : 'icon-remove1',
@@ -38,33 +38,27 @@ $(function() {
 				} ],
 				columns : [ [
 						{
-							field : 'userId',
-							title : '用户ID',
+							field : 'roleId',
+							title : '角色ID',
 							width : 50,
-							sortable : true
-						},
-						{
-							field : 'account',
-							title : '账号',
-							width : 100,
 							sortable : true
 						},
 						{
 							field : 'name',
-							title : '姓名',
+							title : '名称',
+							width : 100,
+							sortable : true
+						},
+						{
+							field : 'code',
+							title : '代号',
 							width : 80,
 							sortable : true,
 						},
 						{
-							field : 'telephone',
-							title : '电话',
+							field : 'isSystem',
+							title : '系统角色',
 							width : 50,
-							sortable : true
-						},
-						{
-							field : 'email',
-							title : '邮箱',
-							width : 80,
 							sortable : true
 						},
 						{
@@ -77,9 +71,27 @@ $(function() {
 							}
 						},
 						{
+							field : 'comment',
+							title : '说明',
+							width : 100,
+							sortable : true
+						},
+						{
+							field : 'createUser',
+							title : '创建者',
+							width : 80,
+							sortable : true
+						},
+						{
+							field : 'sequence',
+							title : '顺序',
+							width : 50,
+							sortable : true
+						},
+						{
 							field : 'createTime',
 							title : '创建时间',
-							width : 50,
+							width : 60,
 							sortable : true
 						},
 						{
@@ -92,8 +104,8 @@ $(function() {
 									"name" : "edit",
 									"title" : "编辑"
 								}, {
-									"name" : "pwd",
-									"title" : "修改密码"
+									"name" : "perm",
+									"title" : "授权"
 								}, {
 									"name" : "remove",
 									"title" : "删除"
@@ -158,7 +170,7 @@ $(function() {
 		} ]
 	});
 
-	$('#reset-pwd-dlg').dialog({
+	$('#authorize-dlg').dialog({
 		closed : true,
 		modal : false,
 		width : 560,
@@ -168,7 +180,7 @@ $(function() {
 			text : '关闭',
 			iconCls : 'icon-no',
 			handler : function() {
-				$("#reset-pwd-dlg").dialog('close');
+				$("#authorize-dlg").dialog('close');
 			}
 		}, {
 			text : '保存',
@@ -185,13 +197,16 @@ $(function() {
 });
 
 var MembershipRole = {
-	roleDict : {},
-	init : function() {
-		MembershipRole.loadRoleList();
+	operationTree : {},
+	deviceParamProps : {
+		
 	},
-	loadRoleList : function() {
-		$.getJSON(XFrame.getContextPath() + '/membership/role/getRoleList', function(data) {
-			MembershipRole.roleDict = data;
+	init : function() {
+		MembershipRole.loadOperationTree();
+	},
+	loadOperationTree : function() {
+		$.getJSON(XFrame.getContextPath() + '/membership/operation/listOperationTree', function(data) {
+			MembershipRole.operationTree = data;
 		});
 	},
 	execOptionAction : function(index, name) {
@@ -202,15 +217,15 @@ var MembershipRole = {
 		if (name == "remove") {
 			return MembershipRole.remove();
 		}
-		if (name == "pwd") {
-			return MembershipRole.resetPwd();
+		if (name == "perm") {
+			return MembershipRole.authorize();
 		}
 	},
 	fillRoleCombox : function(act,values) {
 		var id = act == "add" ? "#add-combox-roles" : "#edit-combox-roles";
 		$(id).combobox('clear');
 		var data = [];
-		var items = MembershipRole.roleDict;
+		var items = MembershipRole.operationTree;
 		for (var i = 0; i < items.length; i++) {
 			var item = items[i];
 			data.push({
@@ -244,12 +259,12 @@ var MembershipRole = {
 			$.messager.alert('警告', '请选中一条记录!', 'info');
 		}
 	},
-	resetPwd : function() {
+	authorize : function() {
 		var row = $('#role-datagrid').datagrid('getSelected');
 		if (row) {
-			$('#reset-pwd-dlg').dialog('open').dialog('center');
-			$("#modal-action").val("resetPwd");
-			$("#reset-pwd-form").form('clear');
+			$('#authorize-dlg').dialog('open').dialog('center');
+			$("#modal-action").val("authorize");
+			$("#authorize-form").form('clear');
 			$("#reset-roleId").val(row.userId);
 			$("#reset-account").text(row.account);
 		} else {
@@ -269,9 +284,9 @@ var MembershipRole = {
 	},
 	save : function() {
 		var action = $('#modal-action').val();
-		if (action == "resetPwd") {
+		if (action == "authorize") {
 			var url = membershipRolePageUrl + 'updateUserPasswordById';
-			EasyUIUtils.saveWithCallback('#reset-pwd-dlg', '#reset-pwd-form', url, function() {
+			EasyUIUtils.saveWithCallback('#authorize-dlg', '#authorize-form', url, function() {
 			});
 		} else {
 			var formId = action == "edit" ? "#edit-form" : "#add-form";

@@ -1,4 +1,4 @@
-var configDictPageUrl = XFrame.getContextPath() + '/system/config/';
+var configDictPageUrl = XFrame.getContextPath() + '/system/settings/';
 $(function() {
 	// 左边字典树
 	$('#west').panel({
@@ -175,7 +175,7 @@ var ConfigDict = {
 			return ConfigDict.add();
 		}
 		if (item.name == "edit") {
-			return ConfigDict.edit();
+			return ConfigDict.editNode();
 		}
 		if (item.name == "remove") {
 			return ConfigDict.remove();
@@ -202,14 +202,22 @@ var ConfigDict = {
 		$("#configDictPName").html(name);
 		$("#sequence").textbox('setValue',10);
 	},
+	editNode : function(){
+		$("#configDictPNameDiv").hide();
+		var node = $('#configDictTree').tree('getSelected');
+		if(node){
+			var row = node.attributes;
+			EasyUIUtils.editWithData('#configDictDlg', '#configDictForm',
+					'#configDictAction', '#configDictId', '修改[' + row.name + ']配置字典项', row);
+		}
+	},
 	edit : function() {
 		$("#configDictPNameDiv").hide();
 		var row = $('#configDictGrid').datagrid('getSelected');
-		var node = $('#configDictTree').tree('getSelected');
-		node = node ? node.attributes : null;
-		row = row || node;
-		EasyUIUtils.editWithData('#configDictDlg', '#configDictForm',
-				'#configDictAction', '#configDictId', '修改[' + row.name + ']配置字典项', row);
+		if(row){
+			EasyUIUtils.editWithData('#configDictDlg', '#configDictForm',
+					'#configDictAction', '#configDictId', '修改[' + row.name + ']配置字典项', row);
+		}
 	},
 	remove : function() {
 		var row = $('#configDictGrid').datagrid('getSelected');

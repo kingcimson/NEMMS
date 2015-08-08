@@ -128,6 +128,15 @@
 .icon-settings{
 	background:url('icons/settings.png') no-repeat center center;
 }
+.icon-settings1{
+	background:url('icons/settings1.png') no-repeat center center;
+}
+.icon-settings2{
+	background:url('icons/settings2.png') no-repeat center center;
+}
+.icon-settings3{
+	background:url('icons/settings3.png') no-repeat center center;
+}
 .icon-dict{
 	background:url('icons/dict.png') no-repeat center center;
 }
@@ -169,4 +178,7 @@
 }
 .icon-pwd{
 	background:url('icons/pwd.png') no-repeat center center;
+}
+.icon-copy{
+	background:url('icons/copy.png') no-repeat center center;
 }

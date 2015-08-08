@@ -3,23 +3,16 @@ package com.wellheadstone.nemms.web.membership.controllers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wellheadstone.nemms.common.util.DhtmlXTreeUtils;
-import com.wellheadstone.nemms.common.viewmodel.DhtmlXTreeNode;
 import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
 import com.wellheadstone.nemms.data.PageInfo;
-import com.wellheadstone.nemms.data.SortType;
-import com.wellheadstone.nemms.membership.po.RolePo;
 import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.membership.security.PasswordService;
 import com.wellheadstone.nemms.membership.service.RoleService;
@@ -48,8 +41,8 @@ public class UserController extends AbstractController {
 	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager,
 			HttpServletRequest request) {
 		pager.setDefaultSort(UserPo.CreateTime);
-		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), 
-				pager.getRows(),pager.getSort(), pager.getOrder());
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
+				pager.getRows(), pager.getSort(), pager.getOrder());
 		List<UserPo> list = this.userService.getUsers(pageInfo, loginUser);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());
@@ -60,10 +53,10 @@ public class UserController extends AbstractController {
 	@RequestMapping(value = "/find")
 	@ResponseBody
 	public Map<String, Object> find(@CurrentUser UserPo loginUser,
-			DataGridPager pager,String fieldName, String keyword,HttpServletRequest request) {
+			DataGridPager pager, String fieldName, String keyword, HttpServletRequest request) {
 		pager.setDefaultSort(UserPo.CreateTime);
-		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), 
-				pager.getRows(),pager.getSort(), pager.getOrder());
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
+				pager.getRows(), pager.getSort(), pager.getOrder());
 		List<UserPo> list = this.userService.getUsersByKeyword(pageInfo, loginUser, fieldName, keyword);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());
@@ -102,7 +95,7 @@ public class UserController extends AbstractController {
 		}
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/remove")
 	@ResponseBody
 	public ParamJsonResult<UserPo> remove(Integer id, HttpServletRequest request) {
@@ -157,32 +150,5 @@ public class UserController extends AbstractController {
 			this.setExceptionResult(result, ex);
 		}
 		return result;
-	}
-
-	@RequestMapping(value = "/getRoles")
-	@ResponseBody
-	public DhtmlXTreeNode getRoles(@CurrentUser UserPo loginUser, Integer id) {
-		int userId = (id == null ? 0 : id);
-		UserPo user = this.userService.getById(userId, UserPo.Roles);
-		String[] roleSplit = (user == null) ?
-				new String[] {} :
-				StringUtils.split(user.getRoles(), ',');
-
-		List<RolePo> roles = this.roleService.isSuperAdminRole(loginUser.getRoles()) ?
-				this.roleService.getDao().query(RolePo.Sequence, SortType.ASC) :
-				this.roleService.getRolesBy(loginUser.getAccount());
-		List<DhtmlXTreeNode> nodes = roles.stream().map(x -> {
-			DhtmlXTreeNode node = new DhtmlXTreeNode();
-			node.setId(String.valueOf(x.getRoleId()));
-			node.setChild(0);
-			node.setText(x.getName());
-			node.setTooltip(x.getComment());
-			node.setSequence(x.getSequence());
-			node.setPid("0");
-			node.setChecked(ArrayUtils.contains(roleSplit, x.getRoleId().toString()) ? 1 : 0);
-			return node;
-		}).collect(Collectors.toList());
-
-		return DhtmlXTreeUtils.getRootNode("0", DhtmlXTreeUtils.getNodes(nodes, "0"));
 	}
 }
