@@ -170,17 +170,17 @@ $(function() {
 		} ]
 	});
 
-	$('#authorize-dlg').dialog({
+	$('#perm-tree-dlg').dialog({
 		closed : true,
 		modal : false,
 		width : 560,
-		height : 250,
-		iconCls : 'icon-pwd',
+		height : 500,
+		iconCls : 'icon-perm',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
 			handler : function() {
-				$("#authorize-dlg").dialog('close');
+				$("#perm-tree-dlg").dialog('close');
 			}
 		}, {
 			text : '保存',
@@ -188,6 +188,17 @@ $(function() {
 			handler : MembershipRole.save
 		} ]
 	});
+	
+	$('#perm-tree').tree({
+		checkbox : true,
+		method : 'get',
+		cascadeCheck : true,
+		url : XFrame.getContextPath() + '/membership/operation/listOperationTree',
+		onClick : function(node) {
+			$('#perm-tree').tree('expand', node.target);
+		}
+	});
+	
 	// buttons
 	$('#btn-search').bind('click', MembershipRole.find);
 
@@ -197,17 +208,11 @@ $(function() {
 });
 
 var MembershipRole = {
-	operationTree : {},
 	deviceParamProps : {
 		
 	},
 	init : function() {
-		MembershipRole.loadOperationTree();
-	},
-	loadOperationTree : function() {
-		$.getJSON(XFrame.getContextPath() + '/membership/operation/listOperationTree', function(data) {
-			MembershipRole.operationTree = data;
-		});
+
 	},
 	execOptionAction : function(index, name) {
 		$('#role-datagrid').datagrid('selectRow', index);
@@ -262,11 +267,9 @@ var MembershipRole = {
 	authorize : function() {
 		var row = $('#role-datagrid').datagrid('getSelected');
 		if (row) {
-			$('#authorize-dlg').dialog('open').dialog('center');
+			$('#perm-tree-dlg').dialog('open').dialog('center');
 			$("#modal-action").val("authorize");
-			$("#authorize-form").form('clear');
-			$("#reset-roleId").val(row.userId);
-			$("#reset-account").text(row.account);
+			$("#perm-tree").tree('reload');
 		} else {
 			$.messager.alert('警告', '请选中一条记录!', 'info');
 		}
@@ -286,7 +289,7 @@ var MembershipRole = {
 		var action = $('#modal-action').val();
 		if (action == "authorize") {
 			var url = membershipRolePageUrl + 'updateUserPasswordById';
-			EasyUIUtils.saveWithCallback('#authorize-dlg', '#authorize-form', url, function() {
+			EasyUIUtils.saveWithCallback('#perm-tree-dlg', '#authorize-form', url, function() {
 			});
 		} else {
 			var formId = action == "edit" ? "#edit-form" : "#add-form";

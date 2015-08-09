@@ -170,5 +170,8 @@
 			</center>
 		</form>
 	</div>
+	<div id="perm-tree-dlg" class="easyui-dialog" title="给角色授权" style="width: 680px; height: 530px; padding: 10px;">
+		<div id="perm-tree" style="width:450"></div>
+	</div>
 </body>
 </html>

@@ -1,6 +1,8 @@
 package com.wellheadstone.nemms.web.membership.controllers;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wellheadstone.nemms.common.util.DhtmlXTreeUtils;
-import com.wellheadstone.nemms.common.viewmodel.TreeNode<to>;
 import com.wellheadstone.nemms.common.viewmodel.JsonResult;
 import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
+import com.wellheadstone.nemms.common.viewmodel.TreeNode;
 import com.wellheadstone.nemms.membership.po.ModulePo;
 import com.wellheadstone.nemms.membership.po.OperationPo;
 import com.wellheadstone.nemms.membership.po.RolePo;
@@ -124,7 +125,7 @@ public class OperationController extends AbstractController {
 
 	@RequestMapping(value = "/listOperationTree")
 	@ResponseBody
-	public TreeNode<String> listOperationTree(@CurrentUser UserPo loginUser, Integer id) {
+	public List<TreeNode<String>> listOperationTree(@CurrentUser UserPo loginUser, Integer id) {
 		int roleId = (id == null ? 0 : id);
 		RolePo role = this.roleService.getById(roleId, RolePo.Modules, RolePo.Operations);
 		String[] moduleSplit = new String[] {};
@@ -133,41 +134,72 @@ public class OperationController extends AbstractController {
 			moduleSplit = StringUtils.split(role.getModules(), ',');
 			operationSplit = StringUtils.split(role.getOperations(), ',');
 		}
-		List<TreeNode<to>> nodes = this.getModuleOperations(loginUser.getRoles(), moduleSplit, operationSplit);
-		return DhtmlXTreeUtils.getRootNode("0", DhtmlXTreeUtils.getNodes(nodes, "0"));
+
+		return this.buildTree(this.getModuleOperations(
+				loginUser.getRoles(),
+				moduleSplit,
+				operationSplit));
 	}
 
-	private List<TreeNode<to>> getModuleOperations(String userRoles, String[] moduleSplit, String[] operationSplit) {
+	private List<TreeNode<String>> getModuleOperations(String userRoles, String[] moduleSplit, String[] operationSplit) {
 		boolean isSuperAdminRole = this.roleService.isSuperAdminRole(userRoles);
 		List<ModulePo> modules = isSuperAdminRole ?
 				this.moduleService.getAllModules() :
 				this.moduleService.getModules(this.roleService.getModuleIds(userRoles));
-		List<TreeNode<to>> moduleNodes = modules.stream().map(x -> {
-			TreeNode<to> node = new TreeNode<to>();
-			node.setId(String.valueOf(-x.getModuleId()));
-			node.setChild(x.isLeaf() ? 0 : 1);
-			node.setText(x.getName());
-			node.setTooltip(x.getName());
-			node.setSequence(x.getSequence());
-			node.setPid(String.valueOf(-x.getParentId()));
-			node.setChecked((ArrayUtils.contains(moduleSplit, x.getModuleId().toString())) ? -1 : 0);
+		List<TreeNode<String>> moduleNodes = modules.stream().map(x -> {
+			TreeNode<String> node = new TreeNode<String>(
+					String.valueOf(-x.getModuleId()),
+					String.valueOf(-x.getParentId()),
+					x.getName(),
+					"closed",
+					"",
+					ArrayUtils.contains(moduleSplit, x.getModuleId().toString()),
+					x.getName()
+					);
 			return node;
 		}).collect(Collectors.toList());
 
 		List<OperationPo> operations = this.operationService.getAllOperations();
-		List<TreeNode<to>> operationNodes = operations.stream().map(x -> {
-			TreeNode<to> node = new TreeNode<to>();
-			node.setId(String.valueOf(x.getOperationId()));
-			node.setChild(0);
-			node.setText(x.getName());
-			node.setTooltip(x.getComment());
-			node.setSequence(x.getSequence());
-			node.setPid(String.valueOf(-x.getModuleId()));
-			node.setChecked((ArrayUtils.contains(operationSplit, x.getOperationId().toString())) ? 1 : 0);
+		List<TreeNode<String>> operationNodes = operations.stream().map(x -> {
+			TreeNode<String> node = new TreeNode<String>(
+					String.valueOf(x.getOperationId()),
+					String.valueOf(-x.getModuleId()),
+					x.getName(),
+					"open",
+					"",
+					ArrayUtils.contains(operationSplit, x.getOperationId().toString()),
+					x.getName()
+					);
 			return node;
 		}).collect(Collectors.toList());
 		moduleNodes.addAll(operationNodes);
 
 		return moduleNodes;
+	}
+
+	private List<TreeNode<String>> buildTree(Collection<TreeNode<String>> nodes) {
+		if (nodes == null || nodes.size() == 0) {
+			return new ArrayList<TreeNode<String>>(0);
+		}
+
+		List<TreeNode<String>> rootNodes = nodes.stream()
+				.filter(x -> x.getPId().equals("-0"))
+				.collect(Collectors.toList());
+
+		for (TreeNode<String> rootNode : rootNodes) {
+			getChildNodes(nodes, rootNode);
+		}
+		return rootNodes;
+	}
+
+	private void getChildNodes(Collection<TreeNode<String>> nodes, TreeNode<String> node) {
+		List<TreeNode<String>> childNodes = nodes.stream()
+				.filter(x -> x.getPId().equals(node.getId()))
+				.collect(Collectors.toList());
+
+		for (TreeNode<String> childNode : childNodes) {
+			node.getChildren().add(childNode);
+			getChildNodes(nodes, childNode);
+		}
 	}
 }
