@@ -159,7 +159,7 @@ $(function() {
 		modal : false,
 		width : 600,
 		height : 300,
-		iconCls : 'icon-edit',
+		iconCls : 'icon-edit1',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -247,9 +247,14 @@ var MembershipRole = {
 		var row = $('#role-datagrid').datagrid('getSelected');
 		if (row) {
 			$('#perm-tree-dlg').dialog('open').dialog('center');
+			$('#perm-tree-dlg-layout').css({top:"2px",left:"2px"});
 			$("#modal-action").val("authorize");
 			$("#edit-form").form('reset');
 			$('#perm-role-id').val(row.roleId);
+			$("input[name='deviceParamProps']").prop("checked",false);
+			$.each(row.deviceParamProps.split(','), function(i, n){
+				  $("#prop_"+ n).prop("checked",true);
+			});
 			var url = XFrame.getContextPath() + '/membership/role/listOperationTree';
 			$('#perm-tree').tree('options').url = url;
 			$("#perm-tree").tree('reload');

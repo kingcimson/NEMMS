@@ -102,34 +102,35 @@
 			</center>
 		</form>
 	</div>
-	<div id="perm-tree-dlg" title="给角色授权"  class="easyui-layout" id="body-layout">
+	<div id="perm-tree-dlg" title="给角色授权">
 		<form id="perm-tree-form" name="perm-tree-form" method="post">
+			<div id="perm-tree-dlg-layout" class="easyui-layout" style="width:542px;height:381px;">
 					<!-- 左边tree -->
-					<div id="west" data-options="region:'west',split:true" title="权限树" style="width: 250px;">
-						<div class="easyui-panel" style="padding: 5px; border: none;height:450px">
-							<div id="perm-tree"></div>
-						</div>
+					<div id="west" data-options="region:'west',split:true,collapsible:false" title="权限树" style="width: 250px;">
+						<div id="perm-tree"></div>
 					</div>
-					<div id="center" data-options="region:'center'">
-						<div id="param-props" class="checkboxlist" style="padding: 5px; border: none">
-								编号<input type="checkbox" name="deviceParamProps" id="prop_id" value="id" checked="checked" /><br />
-								名称<input type="checkbox" name="deviceParamProps" id="prop_name" value="name" checked="checked" /> <br />
-								类别<input type="checkbox" name="deviceParamProps" id="prop_category_id" value="category_id" checked="checked"/> <br />
-								读写属性<input type="checkbox" name="deviceParamProps" id="prop_mode" value="mode"/><br /> 
-								单位<input type="checkbox" name="deviceParamProps" id="prop_unit" value="unit"/> <br />
-								传输比或系数<input type="checkbox" name="deviceParamProps" id="prop_ratio" value="ratio"/> <br />
-								值数据类型<input type="checkbox" name="deviceParamProps" id="prop_value_type" value="value_type"/><br />
-								值数据长度<input type="checkbox" name="deviceParamProps" id="prop_value_len" value="value_len"/> <br />
-								值数据最小长度<input type="checkbox" name="deviceParamProps" id="prop_value_min_len" value="value_min_len"/><br />		
-								值数据最大长度<input type="checkbox" name="deviceParamProps" id="prop_value_max_len" value="value_max_len"/><br /> 
-								参数最小值<input type="checkbox" name="deviceParamProps" id="prop_min_value" value="min_value"/>	<br />		
-								参数最大值<input type="checkbox" name="deviceParamProps" id="prop_max_value" value="max_value"/><br /> 
-								告警级别<input type="checkbox" name="deviceParamProps" id="prop_warn_level" value="warn_level"/><br />
+					<div id="center" data-options="region:'center'" title="可查看的设备参数属性">
+						<div id="param-props" class="checkboxlist" style="padding: 5px; border: none;">
+								<input type="checkbox" name="deviceParamProps" id="prop_id" value="id" checked="checked" />编号<br />
+								<input type="checkbox" name="deviceParamProps" id="prop_name" value="name" checked="checked" />名称<br />
+								<input type="checkbox" name="deviceParamProps" id="prop_category_id" value="category_id" checked="checked"/>类别<br />
+								<input type="checkbox" name="deviceParamProps" id="prop_mode" value="mode"/>读写属性<br /> 
+								<input type="checkbox" name="deviceParamProps" id="prop_unit" value="unit"/>单位 <br />
+								<input type="checkbox" name="deviceParamProps" id="prop_ratio" value="ratio"/>传输比或系数<br />
+								<input type="checkbox" name="deviceParamProps" id="prop_value_type" value="value_type"/>值数据类型<br />
+								<input type="checkbox" name="deviceParamProps" id="prop_value_len" value="value_len"/>值数据长度<br />
+								<input type="checkbox" name="deviceParamProps" id="prop_value_min_len" value="value_min_len"/>值数据最小长度<br />		
+								<input type="checkbox" name="deviceParamProps" id="prop_value_max_len" value="value_max_len"/>值数据最大长度<br /> 
+								<input type="checkbox" name="deviceParamProps" id="prop_min_value" value="min_value"/>参数最小值<br />		
+								<input type="checkbox" name="deviceParamProps" id="prop_max_value" value="max_value"/>参数最大值<br /> 
+								<input type="checkbox" name="deviceParamProps" id="prop_warn_level" value="warn_level"/>告警级别<br />
 								<input id="operations" type="hidden" name="operations" />
 								<input id="perm-role-id" type="hidden" name="roleId" />
 							</div>
 					</div>
-		</form>			
+					</div>	
+		</form>	
+			
 	</div>
 	
 </body>
