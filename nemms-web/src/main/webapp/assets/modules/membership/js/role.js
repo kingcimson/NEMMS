@@ -59,7 +59,10 @@ $(function() {
 							field : 'isSystem',
 							title : '系统角色',
 							width : 50,
-							sortable : true
+							sortable : true,
+							formatter : function(value, row, index) {
+								return value == 1 ? "是" : "否";
+							}
 						},
 						{
 							field : 'status',
@@ -135,8 +138,8 @@ $(function() {
 	$('#add-role-dlg').dialog({
 		closed : true,
 		modal : false,
-		width : 560,
-		height : 450,
+		width : 600,
+		height : 300,
 		iconCls : 'icon-add',
 		buttons : [ {
 			text : '关闭',
@@ -154,8 +157,8 @@ $(function() {
 	$('#edit-role-dlg').dialog({
 		closed : true,
 		modal : false,
-		width : 560,
-		height : 400,
+		width : 600,
+		height : 300,
 		iconCls : 'icon-edit',
 		buttons : [ {
 			text : '关闭',
@@ -174,7 +177,7 @@ $(function() {
 		closed : true,
 		modal : false,
 		width : 560,
-		height : 500,
+		height : 460,
 		iconCls : 'icon-perm',
 		buttons : [ {
 			text : '关闭',
@@ -193,7 +196,6 @@ $(function() {
 		checkbox : true,
 		method : 'get',
 		cascadeCheck : true,
-		url : XFrame.getContextPath() + '/membership/operation/listOperationTree',
 		onClick : function(node) {
 			$('#perm-tree').tree('expand', node.target);
 		}
@@ -212,7 +214,6 @@ var MembershipRole = {
 		
 	},
 	init : function() {
-
 	},
 	execOptionAction : function(index, name) {
 		$('#role-datagrid').datagrid('selectRow', index);
@@ -226,29 +227,10 @@ var MembershipRole = {
 			return MembershipRole.authorize();
 		}
 	},
-	fillRoleCombox : function(act,values) {
-		var id = act == "add" ? "#add-combox-roles" : "#edit-combox-roles";
-		$(id).combobox('clear');
-		var data = [];
-		var items = MembershipRole.operationTree;
-		for (var i = 0; i < items.length; i++) {
-			var item = items[i];
-			data.push({
-				"value" : item.id,
-				"name" : item.name,
-				"selected" : i == 0
-			});
-		}
-		$(id).combobox('loadData', data);
-		if(act == "edit"){
-			$(id).combobox('setValues',values);
-		}
-	},
 	add : function() {
 		$('#add-role-dlg').dialog('open').dialog('center');
 		$("#modal-action").val("add");
 		$("#add-form").form('reset');
-		MembershipRole.fillRoleCombox("add",[]);
 	},
 	edit : function() {
 		var row = $('#role-datagrid').datagrid('getSelected');
@@ -256,9 +238,6 @@ var MembershipRole = {
 			$('#edit-role-dlg').dialog('open').dialog('center');
 			$("#modal-action").val("edit");
 			$("#edit-form").form('reset');
-			$("#edit-account").text(row.account);
-			var roleIds = row.roles || "";
-			MembershipRole.fillRoleCombox("edit", roleIds.split(','));
 			$("#edit-form").form('load', row);
 		} else {
 			$.messager.alert('警告', '请选中一条记录!', 'info');
@@ -269,7 +248,12 @@ var MembershipRole = {
 		if (row) {
 			$('#perm-tree-dlg').dialog('open').dialog('center');
 			$("#modal-action").val("authorize");
+			$("#edit-form").form('reset');
+			$('#perm-role-id').val(row.roleId);
+			var url = XFrame.getContextPath() + '/membership/role/listOperationTree';
+			$('#perm-tree').tree('options').url = url;
 			$("#perm-tree").tree('reload');
+			$('#perm-tree').tree('expandAll');
 		} else {
 			$.messager.alert('警告', '请选中一条记录!', 'info');
 		}
@@ -288,19 +272,15 @@ var MembershipRole = {
 	save : function() {
 		var action = $('#modal-action').val();
 		if (action == "authorize") {
-			var url = membershipRolePageUrl + 'updateUserPasswordById';
-			EasyUIUtils.saveWithCallback('#perm-tree-dlg', '#authorize-form', url, function() {
+			var url = membershipRolePageUrl + 'authorize';
+			EasyUIUtils.saveWithCallback('#perm-tree-dlg', '#perm-tree-form', url, function() {
 			});
 		} else {
 			var formId = action == "edit" ? "#edit-form" : "#add-form";
 			var dlgId = action == "edit" ? "#edit-role-dlg" : "#add-role-dlg";
-			var comboxRoleId = action == "edit" ? "#edit-combox-roles" : "#add-combox-roles";
-			var roleId = action == "edit" ? "#edit-roles" : "#add-roles";
-			var roles =  $(comboxRoleId).combobox('getValues');
-			$(roleId).val(roles);
 			var gridUrl = membershipRolePageUrl + 'list';
 			return EasyUIUtils.saveWithActUrl(dlgId, formId, '#modal-action', '#role-datagrid', gridUrl,
 					membershipRolePageUrl);
 		}
-	},
+	}
 };

@@ -1,7 +1,9 @@
 package com.wellheadstone.nemms.membership.service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -115,5 +117,37 @@ public class RoleService extends BaseService<RoleDao, RolePo> {
 		String condition = this.isSuperAdminRole(logingUser.getRoles()) ? "" :
 				String.format("%1$s = '%2$s' ", RolePo.CreateUser, logingUser.getAccount());
 		return this.getDao().query(condition, RolePo.RoleId, RolePo.Name);
+	}
+
+	public Map<String, String[]> getRoleModulesAndOperations(UserPo logingUser) {
+		String condition = "";
+		if (!this.isSuperAdminRole(logingUser.getRoles())) {
+			condition = String.format("%1$s = '%2$s' ", RolePo.CreateUser, logingUser.getAccount());
+			if (StringUtils.isNotBlank(logingUser.getRoles())) {
+				condition += String.format("OR %s in(%s)", RolePo.RoleId, logingUser.getRoles());
+			}
+		}
+
+		List<RolePo> roles = this.getDao().query(condition,
+				RolePo.RoleId, RolePo.Name, RolePo.Modules, RolePo.Operations);
+		if (roles == null || roles.size() == 0) {
+			return null;
+		}
+
+		String moduleIds = StringUtils.join(roles
+				.stream()
+				.map(x -> x.getModules())
+				.collect(Collectors.toList()), ",");
+		String operationIds = StringUtils.join(roles
+				.stream()
+				.map(x -> x.getOperations())
+				.collect(Collectors.toList()), ",");
+
+		Map<String, String[]> map = new HashMap<String, String[]>(2);
+		map.put("modules",
+				Arrays.asList(StringUtils.split(moduleIds, ',')).stream().distinct().toArray(String[]::new));
+		map.put("operations",
+				Arrays.asList(StringUtils.split(operationIds, ',')).stream().distinct().toArray(String[]::new));
+		return map;
 	}
 }

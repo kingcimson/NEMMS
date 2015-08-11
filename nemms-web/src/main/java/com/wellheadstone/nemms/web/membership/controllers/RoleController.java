@@ -1,5 +1,7 @@
 package com.wellheadstone.nemms.web.membership.controllers;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +19,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wellheadstone.nemms.common.viewmodel.IdNamePair;
 import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
+import com.wellheadstone.nemms.common.viewmodel.TreeNode;
 import com.wellheadstone.nemms.data.PageInfo;
+import com.wellheadstone.nemms.membership.po.ModulePo;
+import com.wellheadstone.nemms.membership.po.OperationPo;
 import com.wellheadstone.nemms.membership.po.RolePo;
 import com.wellheadstone.nemms.membership.po.UserPo;
 import com.wellheadstone.nemms.membership.service.ModuleService;
@@ -90,8 +96,6 @@ public class RoleController extends AbstractController {
 
 		try {
 			po.setCreateUser(loginUser.getAccount());
-			po.setOperations(StringUtils.stripEnd(po.getOperations(), ","));
-			po.setModules(operationService.getModuleIds(po.getOperations()));
 			this.roleService.add(po);
 			this.setSuccessResult(result, "创建角色成功!");
 		} catch (Exception ex) {
@@ -120,11 +124,10 @@ public class RoleController extends AbstractController {
 	@RequestMapping(value = "/edit")
 	@ResponseBody
 	public ParamJsonResult<RolePo> edit(RolePo po) {
-		po.setModules(operationService.getModuleIds(po.getOperations()));
 		ParamJsonResult<RolePo> result = new ParamJsonResult<RolePo>(false, "更新角色失败!");
 		String[] names = new String[] {
-				RolePo.Name, RolePo.Code, RolePo.IsSystem, RolePo.Status,
-				RolePo.Sequence, RolePo.Comment, RolePo.Modules, RolePo.Operations, RolePo.DeviceParamProps
+				RolePo.Name, RolePo.Code, RolePo.IsSystem,
+				RolePo.Status, RolePo.Sequence, RolePo.Comment
 		};
 
 		try {
@@ -137,10 +140,109 @@ public class RoleController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/authorize")
+	@ResponseBody
+	public ParamJsonResult<RolePo> authorize(RolePo po) {
+		ParamJsonResult<RolePo> result = new ParamJsonResult<RolePo>(false, "给角色授权失败!");
+		String[] names = new String[] {
+				RolePo.Modules,
+				RolePo.Operations,
+				RolePo.DeviceParamProps
+		};
+
+		try {
+			po.setOperations(StringUtils.stripEnd(po.getOperations(), ","));
+			po.setModules(operationService.getModuleIds(po.getOperations()));
+			this.roleService.edit(po, po.getRoleId(), names);
+			this.setSuccessResult(result, "给角色授权成功!");
+		} catch (Exception ex) {
+			this.setExceptionResult(result, ex);
+		}
+
+		return result;
+	}
+
 	@RequestMapping(value = "/getRoleById")
 	@ResponseBody
 	public RolePo getRoleById(String id) {
 		return this.roleService.getById(id);
 
+	}
+
+	@RequestMapping(value = "/listOperationTree")
+	@ResponseBody
+	public List<TreeNode<String>> listOperationTree(@CurrentUser UserPo loginUser) {
+		Map<String, String[]> roleModuleAndOperationMap =
+				this.roleService.getRoleModulesAndOperations(loginUser);
+		if (roleModuleAndOperationMap == null) {
+			return new ArrayList<TreeNode<String>>(0);
+		}
+
+		return this.buildTree(this.getModuleOperations(
+				loginUser.getRoles(),
+				roleModuleAndOperationMap.get("modules"),
+				roleModuleAndOperationMap.get("operations")));
+	}
+
+	private List<TreeNode<String>> getModuleOperations(String userRoles, String[] moduleSplit, String[] operationSplit) {
+		boolean isSuperAdminRole = this.roleService.isSuperAdminRole(userRoles);
+		List<ModulePo> modules = isSuperAdminRole ?
+				this.moduleService.getAllModules() :
+				this.moduleService.getModules(this.roleService.getModuleIds(userRoles));
+		List<TreeNode<String>> moduleNodes = modules.stream().map(x -> {
+			TreeNode<String> node = new TreeNode<String>(
+					String.valueOf(-x.getModuleId()),
+					String.valueOf(-x.getParentId()),
+					x.getName(),
+					"closed",
+					"",
+					ArrayUtils.contains(moduleSplit, x.getModuleId().toString()),
+					x.getName()
+					);
+			return node;
+		}).collect(Collectors.toList());
+
+		List<OperationPo> operations = this.operationService.getAllOperations();
+		List<TreeNode<String>> operationNodes = operations.stream().map(x -> {
+			TreeNode<String> node = new TreeNode<String>(
+					String.valueOf(x.getOperationId()),
+					String.valueOf(-x.getModuleId()),
+					x.getName(),
+					"open",
+					"",
+					ArrayUtils.contains(operationSplit, x.getOperationId().toString()),
+					x.getName()
+					);
+			return node;
+		}).collect(Collectors.toList());
+		moduleNodes.addAll(operationNodes);
+
+		return moduleNodes;
+	}
+
+	private List<TreeNode<String>> buildTree(Collection<TreeNode<String>> nodes) {
+		if (nodes == null || nodes.size() == 0) {
+			return new ArrayList<TreeNode<String>>(0);
+		}
+
+		List<TreeNode<String>> rootNodes = nodes.stream()
+				.filter(x -> x.getPId().equals("0"))
+				.collect(Collectors.toList());
+
+		for (TreeNode<String> rootNode : rootNodes) {
+			getChildNodes(nodes, rootNode);
+		}
+		return rootNodes;
+	}
+
+	private void getChildNodes(Collection<TreeNode<String>> nodes, TreeNode<String> node) {
+		List<TreeNode<String>> childNodes = nodes.stream()
+				.filter(x -> x.getPId().equals(node.getId()))
+				.collect(Collectors.toList());
+
+		for (TreeNode<String> childNode : childNodes) {
+			node.getChildren().add(childNode);
+			getChildNodes(nodes, childNode);
+		}
 	}
 }
