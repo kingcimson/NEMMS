@@ -171,9 +171,9 @@ public class RoleController extends AbstractController {
 
 	@RequestMapping(value = "/listOperationTree")
 	@ResponseBody
-	public List<TreeNode<String>> listOperationTree(@CurrentUser UserPo loginUser) {
+	public List<TreeNode<String>> listOperationTree(@CurrentUser UserPo loginUser, Integer roleId) {
 		Map<String, String[]> roleModuleAndOperationMap =
-				this.roleService.getRoleModulesAndOperations(loginUser);
+				this.roleService.getRoleModulesAndOperations(roleId);
 		if (roleModuleAndOperationMap == null) {
 			return new ArrayList<TreeNode<String>>(0);
 		}
@@ -194,10 +194,10 @@ public class RoleController extends AbstractController {
 					String.valueOf(-x.getModuleId()),
 					String.valueOf(-x.getParentId()),
 					x.getName(),
-					"closed",
+					"open",
 					"",
 					ArrayUtils.contains(moduleSplit, x.getModuleId().toString()),
-					x.getName()
+					String.valueOf(x.getModuleId())
 					);
 			return node;
 		}).collect(Collectors.toList());
@@ -211,7 +211,7 @@ public class RoleController extends AbstractController {
 					"open",
 					"",
 					ArrayUtils.contains(operationSplit, x.getOperationId().toString()),
-					x.getName()
+					String.valueOf(x.getOperationId())
 					);
 			return node;
 		}).collect(Collectors.toList());
@@ -226,7 +226,7 @@ public class RoleController extends AbstractController {
 		}
 
 		List<TreeNode<String>> rootNodes = nodes.stream()
-				.filter(x -> x.getPId().equals("0"))
+				.filter(x -> x.getPid().equals("0"))
 				.collect(Collectors.toList());
 
 		for (TreeNode<String> rootNode : rootNodes) {
@@ -237,10 +237,11 @@ public class RoleController extends AbstractController {
 
 	private void getChildNodes(Collection<TreeNode<String>> nodes, TreeNode<String> node) {
 		List<TreeNode<String>> childNodes = nodes.stream()
-				.filter(x -> x.getPId().equals(node.getId()))
+				.filter(x -> x.getPid().equals(node.getId()))
 				.collect(Collectors.toList());
 
 		for (TreeNode<String> childNode : childNodes) {
+			node.setState("closed");
 			node.getChildren().add(childNode);
 			getChildNodes(nodes, childNode);
 		}

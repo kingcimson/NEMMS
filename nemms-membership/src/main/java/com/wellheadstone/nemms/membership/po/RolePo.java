@@ -92,13 +92,13 @@ public class RolePo implements Serializable {
 	private Integer roleId;
 
 	@Column(name = "modules")
-	private String modules;
+	private String modules = "";
 
 	@Column(name = "operations")
-	private String operations;
+	private String operations = "";
 
 	@Column(name = "device_param_props")
-	private String deviceParamProps;
+	private String deviceParamProps = "";
 
 	@Column(name = "name")
 	private String name;
@@ -193,7 +193,8 @@ public class RolePo implements Serializable {
 	/**
 	 * 设置可以查看的设备参数属性(如category_id,name,mode等)
 	 * 
-	 * @param deviceParamProps 设备参数属性(如category_id,name,mode等)
+	 * @param deviceParamProps
+	 *            设备参数属性(如category_id,name,mode等)
 	 */
 	public void setDeviceParamProps(String deviceParamProps) {
 		this.deviceParamProps = deviceParamProps;

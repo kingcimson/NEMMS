@@ -42,7 +42,7 @@ public class TreeNode<T> {
 		return this.id;
 	}
 
-	public String getPId() {
+	public String getPid() {
 		return this.pid;
 	}
 
@@ -64,6 +64,34 @@ public class TreeNode<T> {
 
 	public T getAttributes() {
 		return this.attributes;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public void setIconCls(String iconCls) {
+		this.iconCls = iconCls;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+
+	public void setAttributes(T attributes) {
+		this.attributes = attributes;
 	}
 
 	public List<TreeNode<T>> getChildren() {

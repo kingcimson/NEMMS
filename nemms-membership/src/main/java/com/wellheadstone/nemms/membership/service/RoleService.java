@@ -119,15 +119,8 @@ public class RoleService extends BaseService<RoleDao, RolePo> {
 		return this.getDao().query(condition, RolePo.RoleId, RolePo.Name);
 	}
 
-	public Map<String, String[]> getRoleModulesAndOperations(UserPo logingUser) {
-		String condition = "";
-		if (!this.isSuperAdminRole(logingUser.getRoles())) {
-			condition = String.format("%1$s = '%2$s' ", RolePo.CreateUser, logingUser.getAccount());
-			if (StringUtils.isNotBlank(logingUser.getRoles())) {
-				condition += String.format("OR %s in(%s)", RolePo.RoleId, logingUser.getRoles());
-			}
-		}
-
+	public Map<String, String[]> getRoleModulesAndOperations(Integer roleId) {
+		String condition = String.format(" %1$s = %2$s ", RolePo.RoleId, roleId);
 		List<RolePo> roles = this.getDao().query(condition,
 				RolePo.RoleId, RolePo.Name, RolePo.Modules, RolePo.Operations);
 		if (roles == null || roles.size() == 0) {

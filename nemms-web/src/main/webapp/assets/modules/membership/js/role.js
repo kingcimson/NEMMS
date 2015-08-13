@@ -197,7 +197,7 @@ $(function() {
 		method : 'get',
 		cascadeCheck : true,
 		onClick : function(node) {
-			$('#perm-tree').tree('expand', node.target);
+			$('#perm-tree').tree('expandAll', node.target);
 		}
 	});
 	
@@ -210,9 +210,6 @@ $(function() {
 });
 
 var MembershipRole = {
-	deviceParamProps : {
-		
-	},
 	init : function() {
 	},
 	execOptionAction : function(index, name) {
@@ -255,13 +252,19 @@ var MembershipRole = {
 			$.each(row.deviceParamProps.split(','), function(i, n){
 				  $("#prop_"+ n).prop("checked",true);
 			});
-			var url = XFrame.getContextPath() + '/membership/role/listOperationTree';
+			var url = XFrame.getContextPath() + '/membership/role/listOperationTree?roleId='+row.roleId;
 			$('#perm-tree').tree('options').url = url;
 			$("#perm-tree").tree('reload');
-			$('#perm-tree').tree('expandAll');
 		} else {
 			$.messager.alert('警告', '请选中一条记录!', 'info');
 		}
+	},
+	getOperationIds:function(){
+		var nodes = $('#perm-tree').tree('getChecked');
+		var ids = $.map(nodes,function(node){
+			if(node.id > 0) return node.id;
+		});
+		return ids.join(',');
 	},
 	find : function() {
 		var fieldName = $("#field-name").combobox('getValue');
@@ -272,11 +275,13 @@ var MembershipRole = {
 	remove : function() {
 		var gridUrl = membershipRolePageUrl + 'list';
 		var actUrl = membershipRolePageUrl + 'remove';
-		return EasyUIUtils.removeWithIdFieldName('#role-datagrid', gridUrl, actUrl, "userId");
+		return EasyUIUtils.removeWithIdFieldName('#role-datagrid', gridUrl, actUrl, "roleId");
 	},
 	save : function() {
 		var action = $('#modal-action').val();
 		if (action == "authorize") {
+			$('#operations').val(MembershipRole.getOperationIds());	
+			console.log($('#operations').val())
 			var url = membershipRolePageUrl + 'authorize';
 			EasyUIUtils.saveWithCallback('#perm-tree-dlg', '#perm-tree-form', url, function() {
 			});
