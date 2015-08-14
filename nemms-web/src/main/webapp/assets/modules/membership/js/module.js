@@ -1,9 +1,42 @@
 var membershipModulePageUrl = XFrame.getContextPath() + '/membership/module/';
 
 $(function() {
-	$('#module-treegrid').treegrid({
-				idField:'moduleId',
-			    treeField:'name',
+	// 左边字典树
+	$('#west').panel({
+		tools : [
+					{
+						iconCls : 'icon-add',
+						handler : MembershipModule.addRoot
+					},
+					{
+						iconCls : 'icon-reload',
+						handler : function() {
+							$('#module-tree').tree('reload');
+							EasyUIUtils.loadToDatagrid('#module-datagrid',membershipModulePageUrl + 'list?id=0');
+						}
+					} ]
+		});
+	
+	$('#module-tree').tree({
+		checkbox : false,
+		method : 'get',
+		url : membershipModulePageUrl + 'getChildren',
+		onClick : function(node) {
+			$('#module-tree').tree('expand', node.target);
+			$('#module-tree').tree('options').url = membershipModulePageUrl + 'getChildren';
+			EasyUIUtils.loadToDatagrid('#module-datagrid',membershipModulePageUrl + 'list?id=' + node.id);
+		},
+		onContextMenu : function(e, node) {
+			e.preventDefault();
+			$('#module-tree').tree('select', node.target);
+			$('#tree_ctx_menu').menu('show', {
+				left : e.pageX,
+				top : e.pageY
+			});
+		}
+	});
+
+	$('#module-datagrid').datagrid({
 				method : 'get',
 				fit : true,
 				fitColumns : true,
@@ -30,7 +63,7 @@ $(function() {
 				}, '-', {
 					iconCls : 'icon-reload',
 					handler : function() {
-						EasyUIUtils.reloadDatagrid('#module-treegrid');
+						EasyUIUtils.reloadDatagrid('#module-datagrid');
 					}
 				} ],
 				columns : [ [
@@ -49,19 +82,19 @@ $(function() {
 						{
 							field : 'name',
 							title : '名称',
-							width : 80,
+							width : 50,
 							sortable : true,
 						},
 						{
 							field : 'code',
 							title : '编号',
-							width : 50,
+							width : 100,
 							sortable : true
 						},
 						{
 							field : 'icon',
 							title : '图标',
-							width : 50,
+							width : 20,
 							formatter : function(value, row, index) {
 								var fileName = value.replace("icon-","");
 								var imgSrc = XFrame.getContextPath() + '/assets/js/frames/easyui/themes/icons/'+fileName;
@@ -100,41 +133,10 @@ $(function() {
 							title : '创建时间',
 							width : 50,
 							sortable : true
-						},
-						{
-							field : 'options',
-							title : '操作',
-							width : 100,
-							formatter : function(value, row, index) {
-								var imgPath = XFrame.getContextPath() + '/assets/icons/';
-								var icons = [ {
-									"name" : "edit",
-									"title" : "编辑"
-								}, {
-									"name" : "remove",
-									"title" : "删除"
-								} ];
-								var buttons = [];
-								for (var i = 0; i < icons.length; i++) {
-									var tmpl = '<a href="#" title ="{{title}}" '
-											+ 'onclick="MembershipModule.execOptionAction(\'{{index}}\',\'{{name}}\')">'
-											+ '<img src="{{imgSrc}}" alt="{{title}}"/"></a>';
-									var data = {
-										title : icons[i].title,
-										name : icons[i].name,
-										index : index,
-										imgSrc : imgPath + icons[i].name + ".png"
-									};
-									buttons.push(template.compile(tmpl)(data));
-								}
-								return buttons.join(' ');
-							}
-						} ] ],
+						}
+						 ] ],
 				onDblClickRow : function(rowIndex, rowData) {
 					return MembershipModule.edit(rowIndex, rowData);
-				},
-				onClickRow:function(row){
-					
 				}
 			});
 
@@ -162,7 +164,7 @@ $(function() {
 		closed : true,
 		modal : false,
 		width : 560,
-		height : 400,
+		height : 420,
 		iconCls : 'icon-edit1',
 		buttons : [ {
 			text : '关闭',
@@ -177,68 +179,100 @@ $(function() {
 		} ]
 	});
 
-	// buttons
-	$('#btn-search').bind('click', MembershipModule.find);
-	
+
 	// end
 });
 
 var MembershipModule = {
-	execOptionAction : function(index, name) {
-		$('#module-treegrid').datagrid('selectRow', index);
-		if (name == "edit1") {
-			return MembershipModule.edit();
-		}
-		if (name == "remove") {
-			return MembershipModule.remove();
-		}
+	treeContextMenu : function(item) {
+			if (item.name == "add") {
+				return MembershipModule.add();
+			}
+			if (item.name == "edit") {
+				return MembershipModule.editNode();
+			}
+			if (item.name == "remove") {
+				return MembershipModule.remove();
+			}
+			return;
+		},
+	addRoot:function(){
+		var name = "主模块";
+		var id = "0";
+		MembershipModule.initAdd(id, name);
 	},
 	add : function() {
-		$('#add-module-dlg').dialog('open').dialog('center');
-		$("#modal-action").val("add");
-		$("#add-form").form('reset');
+		var node = $('#module-tree').tree('getSelected');
+		if (node) {
+			name = node.attributes.name;
+			id = node.attributes.id;
+			MembershipModule.initAdd(id, name);
+		}else{
+			$.messager.alert('警告', '请选中一个父模块!', 'info');
+		}
+	},
+	initAdd:function(id,name){
+		EasyUIUtils.add('#add-module-dlg', '#add-form', '#modal-action',
+				'#moduleId', '新增[' + name + ']的子模块');
+		$("#parentId").val(id);
+		$("#parent-module-name").text(name);
+		$("#sequence").textbox('setValue',10);
+		$('#linkType').combobox('setValue','0');
+		$('#target').combobox('setValue','0');
+		$('#status').combobox('setValue','0');
+	},
+	editNode : function(){
+		var node = $('#module-tree').tree('getSelected');
+		if(node){
+			var row = node.attributes;
+			EasyUIUtils.editWithData('#edit-module-dlg', '#edit-form',
+					'#modal-action', '#edit-moduleId', '修改[' + row.name + ']模块', row);
+		}
 	},
 	edit : function() {
-		var row = $('#module-treegrid').datagrid('getSelected');
+		var row = $('#module-datagrid').datagrid('getSelected');
 		if (row) {
-			$('#edit-module-dlg').dialog('open').dialog('center');
-			$("#modal-action").val("edit");
-			$("#edit-form").form('reset');
-			$("#edit-account").text(row.account);
-			var roleIds = row.roles || "";
-			MembershipModule.fillRoleCombox("edit", roleIds.split(','));
-			$("#edit-form").form('load', row);
+			EasyUIUtils.editWithData('#edit-module-dlg', '#edit-form',
+					'#modal-action', '#edit-moduleId', '修改[' + row.name + ']模块', row);
 		} else {
 			$.messager.alert('警告', '请选中一条记录!', 'info');
 		}
 	},
-	find : function() {
-		var fieldName = $("#field-name").combobox('getValue');
-		var keyword = $("#keyword").val();
-		var url = membershipModulePageUrl + 'find?fieldName=' + fieldName + '&keyword=' + keyword;
-		EasyUIUtils.loadToDatagrid('#module-treegrid', url)
-	},
 	remove : function() {
-		var gridUrl = membershipModulePageUrl + 'list';
-		var actUrl = membershipModulePageUrl + 'remove';
-		return EasyUIUtils.removeWithIdFieldName('#module-treegrid', gridUrl, actUrl, "userId");
+		var row = $('#module-datagrid').datagrid('getSelected');
+		var node = $('#module-tree').tree('getSelected');
+		node = node ? node.attributes : null;
+		row = row || node;
+
+		EasyUIUtils.removeWithCallback(row, membershipModulePageUrl + 'remove', {
+			id : row ? row.moduleId : 0
+		}, function(data) {
+			MembershipModule.refreshNode(row.parentId);
+			EasyUIUtils.loadToDatagrid('#module-datagrid', membershipModulePageUrl+ 'list?id=' + row.parentId);
+		});
 	},
 	save : function() {
 		var action = $('#modal-action').val();
-		if (action == "resetPwd") {
-			var url = membershipModulePageUrl + 'updateUserPasswordById';
-			EasyUIUtils.saveWithCallback('#reset-pwd-dlg', '#reset-pwd-form', url, function() {
-			});
-		} else {
-			var formId = action == "edit" ? "#edit-form" : "#add-form";
-			var dlgId = action == "edit" ? "#edit-module-dlg" : "#add-module-dlg";
-			var comboxRoleId = action == "edit" ? "#edit-combox-roles" : "#add-combox-roles";
-			var roleId = action == "edit" ? "#edit-roles" : "#add-roles";
-			var roles =  $(comboxRoleId).combobox('getValues');
-			$(roleId).val(roles);
-			var gridUrl = membershipModulePageUrl + 'list';
-			return EasyUIUtils.saveWithActUrl(dlgId, formId, '#modal-action', '#module-treegrid', gridUrl,
-					membershipModulePageUrl);
-		}
+		var dlgId = action == "edit" ? "#edit-module-dlg" : "#add-module-dlg";
+		var formId = action == "edit" ? "#edit-form" : "#add-form";
+		var parentId = action == "edit" ? "#edit-parentId" : "#parentId";
+		var pid = $(parentId).val();
+		var gridUrl = membershipModulePageUrl + 'list?id='+ pid;
+		var actUrl = membershipModulePageUrl + action;
+		EasyUIUtils.saveWithCallback(dlgId, formId,actUrl, function() {
+					MembershipModule.refreshNode(pid);
+					EasyUIUtils.loadToDatagrid('#module-datagrid', gridUrl);
+				});
 	},
+	refreshNode : function(pid) {
+		if (pid == "0") {
+			$('#module-tree').tree('reload');
+		} else {
+			var node = $('#module-tree').tree('find', pid);
+			if(node){
+				$('#module-tree').tree('select', node.target);
+				$('#module-tree').tree('reload', node.target);
+			}
+		}
+	}
 };

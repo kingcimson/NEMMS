@@ -228,9 +228,8 @@ var ConfigDict = {
 		EasyUIUtils.removeWithCallback(row, configDictPageUrl + 'remove', {
 			id : row ? row.id : 0
 		}, function(data) {
-			ConfigDict.refreshNode(data.pid);
-			EasyUIUtils.loadToDatagrid('#configDictGrid', configDictPageUrl
-					+ 'list?id=' + data.pid);
+			ConfigDict.refreshNode(row.pid);
+			EasyUIUtils.loadToDatagrid('#configDictGrid', configDictPageUrl+ 'list?id=' + row.pid);
 		});
 	},
 	batchRemove : function() {

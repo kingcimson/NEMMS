@@ -82,7 +82,7 @@ public class ModuleController extends AbstractController {
 			String configId = Integer.toString(po.getModuleId());
 			String pid = Integer.toString(po.getParentId());
 			String text = po.getName();
-			TreeNode<ModulePo> vmMode = new TreeNode<ModulePo>(configId, pid, text, "closed", "", false, po);
+			TreeNode<ModulePo> vmMode = new TreeNode<ModulePo>(configId, pid, text, "closed", po.getIcon(), false, po);
 			treeNodes.add(vmMode);
 		}
 
@@ -100,6 +100,7 @@ public class ModuleController extends AbstractController {
 		}
 		try {
 			po.setCreateTime(Calendar.getInstance().getTime());
+			po.setPath("");
 			this.moduleService.addModule(po);
 			this.setSuccessResult(result, "添加模块成功！");
 			this.moduleService.reloadCache();
@@ -130,7 +131,7 @@ public class ModuleController extends AbstractController {
 		return result;
 	}
 
-	@RequestMapping(value = "/removeById")
+	@RequestMapping(value = "/remove")
 	@ResponseBody
 	public ParamJsonResult<ModulePo> remove(String id) {
 		ParamJsonResult<ModulePo> result = new ParamJsonResult<ModulePo>(false, "删除模块失败");
