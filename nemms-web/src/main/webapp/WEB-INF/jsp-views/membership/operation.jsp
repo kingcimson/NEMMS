@@ -46,7 +46,7 @@
 						<td>说明:</td>
 						<td colspan="3"><input class="easyui-textbox" type="text" name="comment" id="comment" style="width: 280px"></input>
 							<input id="moduleId" type="hidden" name="moduleId" />
-							<input id="optId" type="hidden" name="id" /> 
+							<input id="optId" type="hidden" name="operationId" /> 
 							<input id="optAction" type="hidden" name="action" />
 					</td>
 					</tr>
