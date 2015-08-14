@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.wellheadstone.nemms.data.PageInfo;
 import com.wellheadstone.nemms.data.SortType;
 import com.wellheadstone.nemms.data.criterion.Restrictions;
 import com.wellheadstone.nemms.data.criterion.operands.Bracket;
@@ -78,5 +79,12 @@ public class ModuleDao extends BaseDao<ModulePo> {
 				.toString();
 		Object[] args = new Object[] { pid };
 		return this.query(condition, args);
+	}
+
+	public List<ModulePo> queryPageByPid(PageInfo page, int pid) {
+		String condition = Restrictions.equal(ModulePo.ParentId, "?")
+				.toString();
+		Object[] args = new Object[] { pid };
+		return this.query(condition, page, args);
 	}
 }

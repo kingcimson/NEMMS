@@ -57,11 +57,11 @@ public class ModuleController extends AbstractController {
 	@RequestMapping(value = "/list")
 	@ResponseBody
 	public Map<String, Object> list(DataGridPager pager, Integer id, HttpServletRequest request) {
-		int parentId = (id == null ? 0 : id);
+		int pid = (id == null ? 0 : id);
 		pager.setDefaultSort(EventPo.CreateTime);
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
 				pager.getRows(), pager.getSort(), pager.getOrder());
-		List<ModulePo> list = this.moduleService.getByPage(pageInfo);
+		List<ModulePo> list = this.moduleService.getDao().queryPageByPid(pageInfo, pid);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());
 		modelMap.put("rows", list);

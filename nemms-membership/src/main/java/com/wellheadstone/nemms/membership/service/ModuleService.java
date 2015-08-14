@@ -33,7 +33,8 @@ public class ModuleService extends BaseService<ModuleDao, ModulePo> {
 	private Map<Integer, ModulePo> getModuleMap() {
 		synchronized (lock) {
 			if (moduleMap == null || moduleMap.size() == 0) {
-				moduleMap = this.dao.query().stream().collect(Collectors.toMap(ModulePo::getModuleId, Function.identity()));
+				moduleMap = this.dao.query().stream()
+						.collect(Collectors.toMap(ModulePo::getModuleId, Function.identity()));
 			}
 			return moduleMap;
 		}
