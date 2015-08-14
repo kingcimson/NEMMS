@@ -16,14 +16,14 @@
 			<option value="name">名称</option>
 			<option value="code">代号</option>
 			<option value="url">URL</option>
-		</select> 关键字:<input class="easyui-textbox" type="text" id="Keyword" name="Keyword" />
+		</select> 关键字:<input class="easyui-textbox" type="text" id="keyword" name="keyword" />
 		 <a id="btn-search" href="#" class="easyui-linkbutton" iconCls="icon-search"> 搜索 </a>
 		  <input id="module-action" type="hidden" name="action" value="" />
 	</div>
 	<div style="height: 95%; padding: 2px">
 		<div id="module-treegrid"></div>
 	</div>
-	<div id="add-module-dlg" class="easyui-dialog" title="添加模块" style="width: 60px; height: 500px; padding: 10px;">
+	<div id="add-module-dlg"  title="添加模块">
 		<form id="add-form" name="add-form" method="post">
 			<center>
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">
@@ -52,29 +52,13 @@
 								data-options="required:true"></input></td>
 					</tr>
 					<tr>
-						<td>状态:</td>
-						<td><select class="easyui-combobox" id="status" name="status"
-							data-options="valueField:'value',textField:'name'" style="width: 148px">
-								<option selected="selected" value="0">启用</option>
-								<option value="1">禁用</option>
-						</select></td>
 						<td>是否外链:</td>
-						<td><select class="easyui-combobox" id="linkType" name="linkType"
-							data-options="valueField:'value',textField:'name'" style="width: 148px">
-								<option selected="selected" value="0">是</option>
-								<option value="1">否</option>
-						</select></td>
-					</tr>
-					<tr>
-						<td>状态:</td>
-						<td><select class="easyui-combobox" id="status" name="status"
-							data-options="valueField:'value',textField:'name'" style="width: 148px">
-								<option selected="selected" value="0">启用</option>
-								<option value="1">禁用</option>
+						<td><select class="easyui-combobox" id="linkType" name="linkType"  style="width: 148px">
+								<option selected="selected" value="0">否</option>
+								<option value="1">是</option>
 						</select></td>
 						<td>Url Target:</td>
-						<td><select class="easyui-combobox" id="target" name="target"
-							data-options="valueField:'value',textField:'name'" style="width: 148px">
+						<td><select class="easyui-combobox" id="target" name="target" style="width: 148px">
 								<option selected="selected" value="0">_blank</option>
 								<option value="1">_self</option>
 						</select></td>
@@ -85,6 +69,13 @@
 								data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
+						<td>状态:</td>
+						<td colspan="3"><select class="easyui-combobox" id="status" name="status" style="width: 148px">
+								<option selected="selected" value="0">启用</option>
+								<option value="1">禁用</option>
+						</select></td>
+					</tr>
+					<tr>
 						<td>排序:</td>
 						<td colspan="3"><input class="easyui-textbox" type="text" id="sequence" name="sequence"
 								data-options="required:true" style="width: 380px"></input></td>
@@ -92,86 +83,73 @@
 					<tr>
 						<td>备注:</td>
 						<td colspan="3"><input class="easyui-textbox" type="text" id="comment" name="comment"
-								data-options="required:true" style="width: 380px"></input></td>
+						 style="width: 380px"></input></td>
 					</tr>
 				</table>
 			</center>
 		</form>
 	</div>
-	<div id="edit-module-dlg" class="easyui-dialog" title="编辑模块" style="width: 600px; height: 500px; padding: 10px;">
+	<div id="edit-module-dlg" title="编辑模块">
 		<form id="edit-form" name="edit-form" method="post">
 			<center>
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">
 					<tr>
-						<td>所属模块:</td>
-						<td colspan="3"> <input class="easyui-textbox" type="text" name="moduleId" id="moduleId"
+						<td>父模块:</td>
+						<td colspan="3"> <input class="easyui-textbox" type="text" name="moduleId" id="edit-moduleId"
 								data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
-						<td>操作代码:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" name="code" id="code" value="0x"
+						<td>编码:</td>
+						<td colspan="3"><input class="easyui-textbox" type="text" name="code" id="edit-code" value="0x"
 								data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
-						<td>操作名称:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" name="name" id="name" value=""
+						<td>名称:</td>
+						<td colspan="3"><input class="easyui-textbox" type="text" name="name" id="edit-name" value=""
 								data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
 						<td>Url:</td>
-						<td><input class="easyui-textbox" type="text" name="url" id="url" value=""
+						<td><input class="easyui-textbox" type="text" name="url" id="edit-url" value=""
 								data-options="required:true"></input></td>
 
 						<td>icon:</td>
-						<td><input class="easyui-textbox" type="text" name="icon" id="icon" value=""
+						<td><input class="easyui-textbox" type="text" name="icon" id="edit-icon" value=""
 								data-options="required:true"></input></td>
 					</tr>
 					<tr>
-						<td>状态:</td>
-						<td><select class="easyui-combobox" id="status" name="status"
-							data-options="valueField:'value',textField:'name'" style="width: 148px">
-								<option selected="selected" value="0">启用</option>
-								<option value="1">禁用</option>
-						</select></td>
-
 						<td>是否外链:</td>
-
-						<td><select class="easyui-combobox" id="linkType" name="linkType"
-							data-options="valueField:'value',textField:'name'" style="width: 148px">
-								<option selected="selected" value="0">是</option>
-								<option value="1">否</option>
+						<td><select class="easyui-combobox" id="edit-linkType" name="linkType"  style="width: 148px">
+								<option selected="selected" value="0">否</option>
+								<option value="1">是</option>
 						</select></td>
-					</tr>
-					<tr>
-						<td>状态:</td>
-						<td><select class="easyui-combobox" id="status" name="status"
-							data-options="valueField:'value',textField:'name'" style="width: 148px">
-								<option selected="selected" value="0">启用</option>
-								<option value="1">禁用</option>
-						</select></td>
-
 						<td>Url Target:</td>
-
-						<td><select class="easyui-combobox" id="target" name="target"
-							data-options="valueField:'value',textField:'name'" style="width: 148px">
+						<td><select class="easyui-combobox" id="edit-target" name="target" style="width: 148px">
 								<option selected="selected" value="0">_blank</option>
 								<option value="1">_self</option>
 						</select></td>
 					</tr>
 					<tr>
 						<td>Url参数:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" id="params" name="params"
+						<td colspan="3"><input class="easyui-textbox" type="text" id="edit-params" name="params"
 								data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
+						<td>状态:</td>
+						<td colspan="3"><select class="easyui-combobox" id="edit-status" name="status" style="width: 148px">
+								<option selected="selected" value="0">启用</option>
+								<option value="1">禁用</option>
+						</select></td>
+					</tr>
+					<tr>
 						<td>排序:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" id="sequence" name="sequence"
+						<td colspan="3"><input class="easyui-textbox" type="text" id="edit-sequence" name="sequence"
 								data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
 						<td>备注:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" id="comment" name="comment"
-								data-options="required:true" style="width: 380px"></input></td>
+						<td colspan="3"><input class="easyui-textbox" type="text" id="edit-comment" name="comment"
+						 style="width: 380px"></input></td>
 					</tr>
 				</table>
 			</center>

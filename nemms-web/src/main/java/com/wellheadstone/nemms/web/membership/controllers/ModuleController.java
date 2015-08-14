@@ -2,9 +2,12 @@ package com.wellheadstone.nemms.web.membership.controllers;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -14,8 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wellheadstone.nemms.common.viewmodel.JsonResult;
 import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
 import com.wellheadstone.nemms.common.viewmodel.TreeNode;
+import com.wellheadstone.nemms.data.PageInfo;
+import com.wellheadstone.nemms.membership.po.EventPo;
 import com.wellheadstone.nemms.membership.po.ModulePo;
 import com.wellheadstone.nemms.membership.service.ModuleService;
+import com.wellheadstone.nemms.web.DataGridPager;
 import com.wellheadstone.nemms.web.controllers.AbstractController;
 
 @Controller
@@ -50,7 +56,22 @@ public class ModuleController extends AbstractController {
 
 	@RequestMapping(value = "/list")
 	@ResponseBody
-	public List<TreeNode<ModulePo>> list(Integer id)
+	public Map<String, Object> list(DataGridPager pager, Integer id, HttpServletRequest request) {
+		int parentId = (id == null ? 0 : id);
+		pager.setDefaultSort(EventPo.CreateTime);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
+				pager.getRows(), pager.getSort(), pager.getOrder());
+		List<ModulePo> list = this.moduleService.getByPage(pageInfo);
+		Map<String, Object> modelMap = new HashMap<String, Object>(2);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
+
+		return modelMap;
+	}
+
+	@RequestMapping(value = "/getChildren")
+	@ResponseBody
+	public List<TreeNode<ModulePo>> getChildren(Integer id)
 	{
 		refresh();
 		int parentId = (id == null ? 0 : id);

@@ -151,6 +151,8 @@ public class ModulePo implements Serializable {
 	@Column(name = "update_time")
 	private Date updateTime = Calendar.getInstance().getTime();
 
+	private String state = "closed";
+
 	/**
 	 * 获取系统模块标识
 	 * 
@@ -449,5 +451,13 @@ public class ModulePo implements Serializable {
 	 */
 	public boolean isLeaf() {
 		return !this.hasChild;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 }

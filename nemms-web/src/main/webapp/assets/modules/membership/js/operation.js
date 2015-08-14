@@ -20,10 +20,10 @@ $(function() {
 	$('#module-tree').tree({
 		checkbox : false,
 		method : 'get',
-		url : XFrame.getContextPath() + '/membership/module/list',
+		url : XFrame.getContextPath() + '/membership/module/getChildren',
 		onClick : function(node) {
 			$('#module-tree').tree('expand', node.target);
-			$('#module-tree').tree('options').url = XFrame.getContextPath() + '/membership/module/list';
+			$('#module-tree').tree('options').url = XFrame.getContextPath() + '/membership/module/getChildren';
 			EasyUIUtils.loadToDatagrid('#opt-datagrid',membershipOptPageUrl + 'list?id=' + node.id);
 		},
 		onContextMenu : function(e, node) {

@@ -2,6 +2,8 @@ var membershipModulePageUrl = XFrame.getContextPath() + '/membership/module/';
 
 $(function() {
 	$('#module-treegrid').treegrid({
+				idField:'moduleId',
+			    treeField:'name',
 				method : 'get',
 				fit : true,
 				fitColumns : true,
@@ -20,12 +22,7 @@ $(function() {
 					handler : function() {
 						MembershipModule.edit();
 					}
-				}, '-', {
-					iconCls : 'icon-pwd',
-					handler : function() {
-						MembershipModule.resetPwd();
-					}
-				}, '-', {
+				},'-', {
 					iconCls : 'icon-remove1',
 					handler : function() {
 						MembershipModule.remove();
@@ -38,32 +35,42 @@ $(function() {
 				} ],
 				columns : [ [
 						{
-							field : 'userId',
-							title : '用户ID',
+							field : 'moduleId',
+							title : 'ID',
 							width : 50,
 							sortable : true
 						},
 						{
-							field : 'account',
-							title : '账号',
-							width : 100,
+							field : 'parentId',
+							title : '父ID',
+							width : 50,
 							sortable : true
 						},
 						{
 							field : 'name',
-							title : '姓名',
+							title : '名称',
 							width : 80,
 							sortable : true,
 						},
 						{
-							field : 'telephone',
-							title : '电话',
+							field : 'code',
+							title : '编号',
 							width : 50,
 							sortable : true
 						},
 						{
-							field : 'email',
-							title : '邮箱',
+							field : 'icon',
+							title : '图标',
+							width : 50,
+							formatter : function(value, row, index) {
+								var fileName = value.replace("icon-","");
+								var imgSrc = XFrame.getContextPath() + '/assets/js/frames/easyui/themes/icons/'+fileName;
+								return '<img src="'+imgSrc +'.png" alt="图标"/">'
+							}
+						},
+						{
+							field : 'url',
+							title : 'URL',
 							width : 80,
 							sortable : true
 						},
@@ -75,6 +82,18 @@ $(function() {
 							formatter : function(value, row, index) {
 								return value == 1 ? "正常" : "暂停";
 							}
+						},
+						{
+							field : 'sequence',
+							title : '顺序',
+							width : 50,
+							sortable : true
+						},
+						{
+							field : 'comment',
+							title : '说明',
+							width : 50,
+							sortable : true
 						},
 						{
 							field : 'createTime',
@@ -91,9 +110,6 @@ $(function() {
 								var icons = [ {
 									"name" : "edit",
 									"title" : "编辑"
-								}, {
-									"name" : "pwd",
-									"title" : "修改密码"
 								}, {
 									"name" : "remove",
 									"title" : "删除"
@@ -116,6 +132,9 @@ $(function() {
 						} ] ],
 				onDblClickRow : function(rowIndex, rowData) {
 					return MembershipModule.edit(rowIndex, rowData);
+				},
+				onClickRow:function(row){
+					
 				}
 			});
 
@@ -144,7 +163,7 @@ $(function() {
 		modal : false,
 		width : 560,
 		height : 400,
-		iconCls : 'icon-edit',
+		iconCls : 'icon-edit1',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -158,77 +177,26 @@ $(function() {
 		} ]
 	});
 
-	$('#reset-pwd-dlg').dialog({
-		closed : true,
-		modal : false,
-		width : 560,
-		height : 250,
-		iconCls : 'icon-pwd',
-		buttons : [ {
-			text : '关闭',
-			iconCls : 'icon-no',
-			handler : function() {
-				$("#reset-pwd-dlg").dialog('close');
-			}
-		}, {
-			text : '保存',
-			iconCls : 'icon-save',
-			handler : MembershipModule.save
-		} ]
-	});
 	// buttons
 	$('#btn-search').bind('click', MembershipModule.find);
-
-	MembershipModule.init();
-
+	
 	// end
 });
 
 var MembershipModule = {
-	roleDict : {},
-	init : function() {
-		MembershipModule.loadRoleList();
-	},
-	loadRoleList : function() {
-		$.getJSON(XFrame.getContextPath() + '/membership/role/getRoleList', function(data) {
-			MembershipModule.roleDict = data;
-		});
-	},
 	execOptionAction : function(index, name) {
 		$('#module-treegrid').datagrid('selectRow', index);
-		if (name == "edit") {
+		if (name == "edit1") {
 			return MembershipModule.edit();
 		}
 		if (name == "remove") {
 			return MembershipModule.remove();
-		}
-		if (name == "pwd") {
-			return MembershipModule.resetPwd();
-		}
-	},
-	fillRoleCombox : function(act,values) {
-		var id = act == "add" ? "#add-combox-roles" : "#edit-combox-roles";
-		$(id).combobox('clear');
-		var data = [];
-		var items = MembershipModule.roleDict;
-		for (var i = 0; i < items.length; i++) {
-			var item = items[i];
-			data.push({
-				"value" : item.id,
-				"name" : item.name,
-				"selected" : i == 0
-			});
-		}
-		$(id).combobox('loadData', data);
-		if(act == "edit"){
-			$(id).combobox('setValues',values);
 		}
 	},
 	add : function() {
 		$('#add-module-dlg').dialog('open').dialog('center');
 		$("#modal-action").val("add");
 		$("#add-form").form('reset');
-		MembershipModule.fillRoleCombox("add",[]);
 	},
 	edit : function() {
 		var row = $('#module-treegrid').datagrid('getSelected');
@@ -240,18 +208,6 @@ var MembershipModule = {
 			var roleIds = row.roles || "";
 			MembershipModule.fillRoleCombox("edit", roleIds.split(','));
 			$("#edit-form").form('load', row);
-		} else {
-			$.messager.alert('警告', '请选中一条记录!', 'info');
-		}
-	},
-	resetPwd : function() {
-		var row = $('#module-treegrid').datagrid('getSelected');
-		if (row) {
-			$('#reset-pwd-dlg').dialog('open').dialog('center');
-			$("#modal-action").val("resetPwd");
-			$("#reset-pwd-form").form('clear');
-			$("#reset-moduleId").val(row.userId);
-			$("#reset-account").text(row.account);
 		} else {
 			$.messager.alert('警告', '请选中一条记录!', 'info');
 		}
