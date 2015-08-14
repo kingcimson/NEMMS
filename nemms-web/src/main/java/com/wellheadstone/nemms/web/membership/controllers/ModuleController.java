@@ -1,8 +1,8 @@
 package com.wellheadstone.nemms.web.membership.controllers;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -11,10 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wellheadstone.nemms.common.util.DhtmlXTreeUtils;
-import com.wellheadstone.nemms.common.viewmodel.DhtmlXTreeNode;
 import com.wellheadstone.nemms.common.viewmodel.JsonResult;
 import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
+import com.wellheadstone.nemms.common.viewmodel.TreeNode;
 import com.wellheadstone.nemms.membership.po.ModulePo;
 import com.wellheadstone.nemms.membership.service.ModuleService;
 import com.wellheadstone.nemms.web.controllers.AbstractController;
@@ -51,22 +50,22 @@ public class ModuleController extends AbstractController {
 
 	@RequestMapping(value = "/list")
 	@ResponseBody
-	public DhtmlXTreeNode list(Integer id)
+	public List<TreeNode<ModulePo>> list(Integer id)
 	{
 		refresh();
-		int moduleId = (id == null ? 0 : id);
-		List<ModulePo> modules = this.moduleService.getChildModules(moduleId);
-		List<DhtmlXTreeNode> nodes = modules.stream().map(x -> {
-			DhtmlXTreeNode node = new DhtmlXTreeNode();
-			node.setId(String.valueOf(x.getModuleId()));
-			node.setChild(x.isLeaf() ? 0 : 1);
-			node.setText(x.getName());
-			node.setTooltip(x.getName());
-			node.setUserdata("meta", x);
-			return node;
-		}).collect(Collectors.toList());
+		int parentId = (id == null ? 0 : id);
+		List<ModulePo> modules = this.moduleService.getChildModules(parentId);
+		List<TreeNode<ModulePo>> treeNodes = new ArrayList<TreeNode<ModulePo>>(modules.size());
 
-		return DhtmlXTreeUtils.getRootNode(String.valueOf(moduleId), nodes);
+		for (ModulePo po : modules) {
+			String configId = Integer.toString(po.getModuleId());
+			String pid = Integer.toString(po.getParentId());
+			String text = po.getName();
+			TreeNode<ModulePo> vmMode = new TreeNode<ModulePo>(configId, pid, text, "closed", "", false, po);
+			treeNodes.add(vmMode);
+		}
+
+		return treeNodes;
 	}
 
 	@RequestMapping(value = "/add")

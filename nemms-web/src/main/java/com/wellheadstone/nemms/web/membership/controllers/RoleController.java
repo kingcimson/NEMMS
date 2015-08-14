@@ -196,7 +196,7 @@ public class RoleController extends AbstractController {
 					x.getName(),
 					"open",
 					"",
-					ArrayUtils.contains(moduleSplit, x.getModuleId().toString()),
+					false,
 					String.valueOf(x.getModuleId())
 					);
 			return node;

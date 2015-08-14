@@ -48,6 +48,19 @@ public class OperationController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/list")
+	@ResponseBody
+	public Map<String, Object> list(Integer id, HttpServletRequest request) {
+		int moduleId = (id == null ? 0 : id);
+
+		List<OperationPo> list = this.operationService.getOperationByModuleId(moduleId);
+		Map<String, Object> modelMap = new HashMap<String, Object>(2);
+		modelMap.put("total", list.size());
+		modelMap.put("rows", list);
+
+		return modelMap;
+	}
+
 	@RequestMapping(value = "/add")
 	@ResponseBody
 	public ParamJsonResult<OperationPo> add(OperationPo po) {
@@ -99,17 +112,5 @@ public class OperationController extends AbstractController {
 		}
 
 		return result;
-	}
-
-	@RequestMapping(value = "/getOperations")
-	@ResponseBody
-	public Map<String, Object> getOperations(Integer id, HttpServletRequest request) {
-		int operationId = (id == null ? 0 : id);
-
-		List<OperationPo> list = this.operationService.getOperationMapById(operationId);
-		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-		modelMap.put("data", list);
-
-		return modelMap;
 	}
 }

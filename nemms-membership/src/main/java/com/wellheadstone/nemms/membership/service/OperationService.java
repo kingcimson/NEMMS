@@ -47,10 +47,10 @@ public class OperationService extends BaseService<OperationDao, OperationPo> {
 		return newId;
 	}
 
-	public List<OperationPo> getOperationMapById(Integer id) {
+	public List<OperationPo> getOperationByModuleId(Integer moduleId) {
 		List<OperationPo> opList = new ArrayList<OperationPo>();
 		for (OperationPo operationPo : operationMap.values()) {
-			if (operationPo.getModuleId() == id) {
+			if (operationPo.getModuleId() == moduleId) {
 				opList.add(operationPo);
 			}
 		}

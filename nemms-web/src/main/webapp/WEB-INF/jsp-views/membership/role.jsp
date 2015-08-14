@@ -31,7 +31,7 @@
 					<tr>
 						<td>角色代号:</td>
 						<td><input class="easyui-textbox" type="text" name="code" id="code"
-							data-options="required:true,validType:code"></input></td>
+							data-options="required:true,validType:'code'"></input></td>
 						<td>系统角色:</td>
 						<td><select class="easyui-combobox" id="isSystem" name="isSystem"
 							data-options="valueField:'value',textField:'name'" style="width: 148px">
