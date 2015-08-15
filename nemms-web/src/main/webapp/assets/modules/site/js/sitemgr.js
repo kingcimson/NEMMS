@@ -7,7 +7,7 @@ $(function() {
 			handler : SiteMgr.dialogs.searchSiteDlg.open
 		}, {
 			iconCls : 'icon-add',
-			handler : SiteMgr.dialogs.addSiteNodeDlg.open
+			handler : SiteMgr.siteTree.addSiteNode
 		}, {
 			iconCls : 'icon-reload',
 			handler : SiteMgr.siteTree.reload
@@ -42,7 +42,102 @@ $(function() {
 		}
 	});
 	
-	//datagrids
+	// datagrids
+	$('#console-datagrid').datagrid({
+		method : 'get',
+		fit : true,
+		pagination : false,
+		rownumbers : true,
+		fitColumns : true,
+		singleSelect : true,
+		// pageSize : 10,
+		toolbar: [{
+			iconCls: 'icon-clear1',
+			handler: function(){
+				EasyUIUtils.clearDatagrid('#console-datagrid');
+			}
+		},'-',{
+			iconCls: 'icon-reload',
+			handler: function(){
+				EasyUIUtils.reloadDatagrid('#console-datagrid');
+			}
+		}],
+		columns : [ [ {
+			field : 'id',
+			title : '标识',
+			width : 50
+		}, {
+			field : 'name',
+			title : '操作'
+		}, {
+			field : 'sendData',
+			title : '发送内容',
+			width : 150
+		}, {
+			field : 'recvData',
+			title : '接收内容',
+			width : 150
+		}, {
+			field : 'createUser',
+			title : '操作用户',
+			width : 50
+		}, {
+			field : 'createTime',
+			title : '操作时间',
+			width : 50
+		}  ] ],
+		onDblClickRow : function(index, row) {
+		}
+	});
+	
+	$('#connected-device-datagrid').datagrid({
+		method : 'get',
+		fit : true,
+		pagination : true,
+		rownumbers : true,
+		fitColumns : true,
+		singleSelect : true,
+		pageSize : 10,
+		toolbar: [{
+			iconCls: 'icon-clear1',
+			handler: function(){
+				EasyUIUtils.clearDatagrid('#connected-device-datagrid');
+			}
+		},'-',{
+			iconCls: 'icon-reload',
+			handler: function(){
+				EasyUIUtils.reloadDatagrid('#connected-device-datagrid');
+			}
+		}],
+		columns : [ [ {
+			field : 'id',
+			title : '标识',
+			width : 50
+		}, {
+			field : 'uid',
+			title : '站点/设备编号',
+			width : 100
+		}, {
+			field : 'clientIP',
+			title : '设备IP',
+			width : 100
+		}, {
+			field : 'serverIP',
+			title : '服务器IP',
+			width : 100
+		}, {
+			field : 'serverPort',
+			title : '服务器端口',
+			width : 80
+		}, {
+			field : 'createTime',
+			title : '建立连接时间',
+			width : 100
+		}  ] ],
+		onDblClickRow : function(index, row) {
+		}
+	});
+	
 	$('#search-site-result').datagrid({
 		method : 'get',
 		fit : true,
@@ -76,7 +171,7 @@ $(function() {
 		}
 	});
 	
-	//dialogs
+	// dialogs
 	$('#add-site-dlg').dialog({
 		closed : true,
 		modal : true,
@@ -119,7 +214,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 560,
-		height : 380,
+		height : 280,
 		iconCls:'icon-add',
 		buttons : [ {
 			text : '关闭',
@@ -138,7 +233,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 560,
-		height : 380,
+		height : 280,
 		iconCls:'icon-edit',
 		buttons : [ {
 			text : '关闭',
@@ -169,39 +264,63 @@ $(function() {
 		} ]
 	});
 	
+	// buttons
 	$('#btn-search-site').bind('click',SiteMgr.siteTree.search);
+	$('#btn-item').bind('click',SiteMgr.toolbar.queryAllItems);
+	$('#btn-search').bind('click',SiteMgr.toolbar.queryAllValues);
+	$('#btn-edit').bind('click',SiteMgr.toolbar.setup);
+	$('#btn-cancel').bind('click',SiteMgr.toolbar.cancel);
+	$('#btn-clear').bind('click',SiteMgr.toolbar.clear);
 	
-//end
+// end
 });
 
 var SiteMgr = {
+		dataDict:{},
 		paramOption:{},
-		deviceParamConfig:{},
-		deviceParamCategories:{},
 		init:function(){
-			SiteMgr.initEventBind();
+			SiteMgr.loadConfigItems();
 		},
-		initEventBind:function(){
-		},
-		ajaxPost : function(data, url, success) {
-			$.ajax({
-				type : 'POST',
-				url : url,
-				data : data,
-				dataType : "json",
-				cache : false,
-				beforeSend : function(data) {
-				},
-				success : success
+		loadConfigItems : function() {
+			var url = XFrame.getContextPath() + '/system/dict/getDepth1Items'
+			$.getJSON(url, {
+				parentKey : "deviceType"
+			}, function(data) {
+				SiteMgr.dataDict["deviceType"] = data;
+			});
+
+			var url = XFrame.getContextPath() + '/system/dict/getDepth2Items'
+			$.getJSON(url, {
+				parentKey : "monitorParam"
+			}, function(data) {
+				SiteMgr.dataDict["apProtocol"] = data.apProtocol;
+				SiteMgr.dataDict["mcpProtocol"] = data.mcpProtocol;
+				SiteMgr.dataDict["protocol"] = data.protocol;
+			});
+			
+			$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth1Items', {
+				parentKey : "paramOption"
+			}, function(data) {
+				SiteMgr.paramOption = data;
 			});
 		},
-		post : function(data, url, callback) {
-			SiteMgr.ajaxPost(data, url, function(data) {
-				EasyUIUtils.showMsg(data.msg);
-				if (callback instanceof Function) {
-					callback();
+		initCombox:function(act){
+			var prefix = act=="addSite" ? "#" : "#edit-";
+			var map = SiteMgr.dataDict;
+			for ( var key in map) {
+				$(prefix + key).combobox('clear');
+				var data = [];
+				var items = map[key];
+				for (var i = 0; i < items.length; i++) {
+					var item = items[i];
+					data.push({
+						"value" : item.value,
+						"name" : item.name,
+						"selected" : i == 0
+					});
 				}
-			});
+				$(prefix + key).combobox('loadData',data);
+			}
 		},
 		siteTree:{
 			onClickHandler:function(node){
@@ -209,59 +328,95 @@ var SiteMgr = {
 				$('#site-tree').tree('expand', node.target);
 			},
 			addSiteNode : function() {
-				$('#add-site-form').resetForm();
-				$("#treeAction").val("addSite");
+				SiteMgr.dialogs.addSiteNodeDlg.open();
+				$("#add-site-form").form('reset');
+				$("#modal-action").val("addSite");
+				SiteMgr.initCombox('addSite');
+				$('#uid').textbox('setValue',"0x");
+				$('#sequence').textbox('setValue',"10");
+				$('#ipAddr').textbox('setValue',"127.0.0.1");
+				$('#port').textbox('setValue',"8000");
 			},
-			addDeviceNode : function(meta) {
-				$('#add-device-form').resetForm();
-				$("#treeAction").val("addDevice");
-				$('#device_pid').val(meta.id);
+			addDeviceNode : function() {
+				var node = $('#site-tree').tree('getSelected');
+				if(node){
+					SiteMgr.dialogs.addDeviceNodeDlg.open();
+					$("#add-device-form").form('reset');
+					$("#modal-action").val("addDevice");
+					$("#device-pid").val(node.id);
+					$('#device-sequence').textbox('setValue',"10");
+				}
+				else{
+					$.messager.alert('警告', '请选中一个站点或设备!', 'info');
+				}
+			},
+			edit : function(){
+				var node = $('#site-tree').tree('getSelected');
+				if(node){
+					var meta = node.attributes;
+					if (meta.flag == 0) {
+						 SiteMgr.dialogs.editSiteNodeDlg.open();
+						 SiteMgr.siteTree.editSiteNode(meta);
+					}else{
+						 SiteMgr.dialogs.editDeviceNodeDlg.open();
+						 SiteMgr.siteTree.editDeviceNode(meta);
+					}
+				}else{
+					$.messager.alert('警告', '请选中一个站点或设备!', 'info');
+				}
 			},
 			editSiteNode : function(meta) {
-				$('#edit-site-form').resetForm();
-				$("#treeAction").val("editSite");
-				$('#edit-site-form').autofill(meta);
+				$("#edit-site-form").form('reset');
+				$("#modal-action").val("editSite");
+				SiteMgr.initCombox('editSite');
+				$("#edit-site-form").form('load',meta);
 			},
 			editDeviceNode : function(meta) {
-				$('#edit-device-form').resetForm();
-				$("#treeAction").val("editDevice");
-				$('#edit-device-form').autofill(meta);
+				$("#edit-device-form").form('reset');
+				$("#modal-action").val("editDevice");
+				$("#edit-device-form").form('load',meta);
 			},
 			saveNode : function() {
-				var act = $("#treeAction").val();
+				var act = $("#modal-action").val();
 				var actUrl = "";
 				var formId = "";
-				var modalId = "";
+				var dlgId = "";
 
 				if (act == "addSite") {
 					actUrl = siteMgrPageUrl + "addSite";
 					formId = "#add-site-form";
-					modalId = "#add-site-dlg"
+					dlgId = "#add-site-dlg";
 				} else if (act == "editSite") {
 					actUrl = siteMgrPageUrl + "editSite";
 					formId = "#edit-site-form";
-					modalId = "#edit-site-dlg"
+					dlgId = "#edit-site-dlg";
 				} else if (act == "addDevice") {
 					actUrl = siteMgrPageUrl + "addDevice";
 					formId = "#add-device-form";
-					modalId = "#add-device-dlg"
+					dlgId = "#add-device-dlg";
 				} else if (act == "editDevice") {
 					actUrl = siteMgrPageUrl + "editDevice";
 					formId = "#edit-device-form";
-					modalId = "#edit-device-dlg"
+					dlgId = "#edit-device-dlg";
 				}
-				SiteMgr.post($(formId).serialize(), actUrl, function() {
-					$(modalId).dialog('close');
+				EasyUIUtils.saveWithCallback(dlgId, formId, actUrl, function(){
 					SiteMgr.siteTree.reload();
 				});
 			},
-			remove : function(meta) {
-				var data = {
-					id : meta.id,
-					pid : meta.pid
-				};
-				SiteMgr.post(data, siteMgrPageUrl + 'remove');
-				SiteMgr.siteTree.reload();
+			remove : function() {
+				var node = $('#site-tree').tree('getSelected');
+				if(node){
+					var postData = {
+						id : node.id,
+						pid : node.attributes.pid
+					};
+					var postUrl = siteMgrPageUrl + 'remove';
+					EasyUIUtils.removeWithCallback(node, postUrl, postData, function(data){
+						SiteMgr.siteTree.reload();
+					});
+				}else{
+					$.messager.alert('警告', '请选中一个站点或设备!', 'info');
+				}
 			},
 			getSelectedTreeNode : function() {
 				return $('#site-tree').tree('getSelected');
@@ -277,14 +432,14 @@ var SiteMgr = {
 			},
 			contextMenu:{
 				onSelect:function(item){
-					if (item.name == "add-site") {
-						return SiteMgr.dialogs.addSiteNodeDlg.open();
+					if (item.name == "addSite") {
+						return SiteMgr.siteTree.addSiteNode();
 					}
-					if (item.name == "add-device") {
-						return SiteMgr.dialogs.addDeviceNodeDlg.open();
+					if (item.name == "addDevice") {
+						return SiteMgr.siteTree.addDeviceNode();
 					}
 					if (item.name == "edit") {
-						return SiteMgr.dialogs.editTreeNodeDlg.open();
+						return SiteMgr.siteTree.edit();
 					}
 					if (item.name == "remove") {
 						return SiteMgr.siteTree.remove();
@@ -298,47 +453,53 @@ var SiteMgr = {
 					return;
 				}
 			}
-		//end
+		// end
+		},
+		toolbar:{
+			queryAllItems:function(){
+				
+			},
+			queryAllValues:function(){
+				
+			},
+			setup:function(){
+				
+			},
+			cancel:function(){
+				
+			},
+			clear:function(){
+				
+			}
+		// end
 		},
 		paramTabs:{
 		
-		//end
+		// end
 		},
 		consoleTabs:{
 			
-		//end	
+		// end
 		},
 		dialogs:{
 			addSiteNodeDlg : {
 				open : function() {
 					$('#add-site-dlg').dialog('open').dialog('center');
-					SiteMgr.siteTree.addSiteNode();
 				}
 			},
 			editSiteNodeDlg : {
-				open : function(meta) {
+				open : function() {
 					$('#edit-site-dlg').dialog('open').dialog('center');
-					SiteMgr.siteTree.editSiteNode(meta);
 				}
 			},
 			addDeviceNodeDlg : {
-				open : function(meta) {
+				open : function() {
 					$('#add-device-dlg').dialog('open').dialog('center');
-					SiteMgr.siteTree.addDeviceNode(meta);
 				}
 			},
 			editDeviceNodeDlg : {
-				open : function(meta) {
+				open : function() {
 					$('#edit-device-dlg').dialog('open').dialog('center');
-					SiteMgr.siteTree.editDeviceNode(meta);
-				}
-			},
-			editTreeNodeDlg : {
-				open : function(meta) {
-					if (meta.flag == 0) {
-						return SiteMgr.dialogs.editSiteNodeDlg.open(meta);
-					}
-					return SiteMgr.dialogs.editDeviceNodeDlg.open(meta);
 				}
 			},
 			searchSiteDlg:{
@@ -348,5 +509,7 @@ var SiteMgr = {
 				}
 			}
 		}
-//end
+// end
 };
+
+SiteMgr.init();

@@ -105,7 +105,7 @@
 	background:url('icons/user.png') no-repeat center center;
 }
 .icon-member{
-	background:url('icons/man.png') no-repeat center center;
+	background:url('icons/member.png') no-repeat center center;
 }
 .icon-param{
 	background:url('icons/param.png') no-repeat center center;
@@ -181,4 +181,10 @@
 }
 .icon-copy{
 	background:url('icons/copy.png') no-repeat center center;
+}
+.icon-cancel1{
+	background:url('icons/cancel1.png') no-repeat center center;
+}
+.icon-clear1{
+	background:url('icons/clear1.png') no-repeat center center;
 }
