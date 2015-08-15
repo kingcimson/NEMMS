@@ -25,6 +25,7 @@ $(function() {
 		},
 		onClick : SiteMgr.siteTree.onClickHandler,
 		onDblClick : function(node) {
+			SiteMgr.siteTree.edit();
 		},
 		onBeforeLoad : function(node, param) {
 			$.messager.progress({
@@ -41,6 +42,10 @@ $(function() {
 			});
 		}
 	});
+	
+	$('#param-tabs').tabs({});
+	$('#console-tabs').tabs({});
+	
 	
 	// datagrids
 	$('#console-datagrid').datagrid({
@@ -425,8 +430,8 @@ var SiteMgr = {
 				$('#site-tree').tree('reload');
 			},
 			search :function() {
-				var fieldName = $('#site-field-name').combobox('getValue');
-				var keyword = $('#site-keyword').val();
+				var fieldName = $('#field-name').combobox('getValue');
+				var keyword = $('#keyword').val();
 				var url = siteMgrPageUrl + 'search?fieldName=' + fieldName + '&keyword=' + keyword;
 				return EasyUIUtils.loadToDatagrid('#search-site-result', url);
 			},

@@ -231,7 +231,7 @@ public class SiteController extends AbstractController {
 		String pid = Integer.toString(po.getPid());
 		String text = po.getName();
 		String state = po.getHasChild() ? "closed" : "open";
-		String icon = po.getHasChild() ? "icon-site" : "icon-device";
+		String icon = po.getPid() == 0 ? "icon-site" : "icon-device";
 		return new TreeNode<SitePo>(id, pid, text, state, icon, false, po);
 	}
 

@@ -26,24 +26,33 @@
 			<a id="btn-cancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel1',plain:true">取消设置</a>
 			<a id="btn-clear" class="easyui-linkbutton" data-options="iconCls:'icon-clear1',plain:true">清除全部</a>
 		</div>
-		<div id="param-tabs" class="easyui-tabs" style="height: 60%">
-			<div title="使用设备" style="padding: 20px">
-				
-			</div>
-			<div title="网管参数"  style="padding: 20px">
-				
-			</div>
-			<div title="警告参数"  style="padding: 20px">
-				
+		<div class="easyui-panel" title="设备参数" iconCls="icon-param" collapsible="true" 
+			style="padding:5px;width:95%;height:60%;">
+			<div id="param-tabs" class="easyui-tabs" style="width:100%">
+					<div title="使用设备" style="padding: 20px">
+						
+					</div>
+					<div title="网管参数"  style="padding: 20px">
+						
+					</div>
+					<div title="警告参数"  style="padding: 20px">
+						
+					</div>
 			</div>
 		</div>
-		<div id="console-tabs" class="easyui-tabs">
-			<div title="输出控制台" style="padding: 0px">
-			<div id="console-datagrid"></div>
-				
-			</div>
-			<div title="当前连接设备" style="padding: 0px">
-				<div id="connected-device-datagrid"></div>
+		<div class="easyui-panel" title="控制台" iconCls="icon-console" collapsible="true" 
+			style="padding:5px;width:95%;height:40%;">
+			<div id="console-tabs" class="easyui-tabs" style="width:100%">
+					<div title="输出控制台" style="padding: 0px;">
+						<div style="height:100%">
+						<div id="console-datagrid"></div>
+						</div>	
+					</div>
+					<div title="当前连接设备" style="padding: 0px;">
+						<div style="height:100%">
+						<div id="connected-device-datagrid"></div>
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>
