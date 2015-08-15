@@ -14,7 +14,7 @@
 		类型:<select class="easyui-combobox" id="filter-category-id" name="categoryId" data-options="valueField:'value',textField:'name'" panelHeight="auto" style="width: 100px"></select> 
 		<select class="easyui-combobox" id="field-name" name="fieldName" panelHeight="auto" style="width: 120px">
 			<option value="name">名称</option>
-			<option value="param_id">监控标识</option>
+			<option value="param_uid">监控标识</option>
 			<option value="mcp_id">MCP协议类型</option>
 			<option value="mode">模式</option>
 			<option value="value_type">值类型</option>
@@ -36,7 +36,7 @@
 					</tr>
 					<tr>
 						<td>参数标识:</td>
-						<td><input class="easyui-textbox" type="text" name="paramId" id="paramId" value="0x" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="paramUid" id="paramUid" value="0x" data-options="required:true"></input></td>
 						<td>MCP协议:</td>
 						<td><select class="easyui-combobox" id="mcpId" name="mcpId" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 					</tr>
@@ -99,7 +99,7 @@
 					</tr>
 					<tr>
 						<td>参数标识:</td>
-						<td><input class="easyui-textbox" type="text" name="paramId" id="edit-paramId" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" name="paramUid" id="edit-paramUid" data-options="required:true"></input></td>
 						<td>MCP协议:</td>
 						<td><select class="easyui-combobox" id="edit-mcpId" name="mcpId" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 					</tr>

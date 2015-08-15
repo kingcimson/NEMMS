@@ -28,7 +28,7 @@ public class DeviceParamPo implements Serializable {
 	/**
 	 * 列名param_id,设备参数标识(整数十六进制)
 	 */
-	public final static String ParamId = "param_id";
+	public final static String ParamUid = "param_uid";
 
 	/**
 	 * 列名mcp_id,mcp协义类型1:mcp_a;2:mcp_b;3:mcp_c
@@ -123,8 +123,8 @@ public class DeviceParamPo implements Serializable {
 	@Column(name = "id", isIgnored = true)
 	private Integer id;
 
-	@Column(name = "param_id")
-	private String paramId;
+	@Column(name = "param_uid")
+	private String paramUid;
 
 	@Column(name = "mcp_id")
 	private Integer mcpId;
@@ -203,17 +203,17 @@ public class DeviceParamPo implements Serializable {
 	 * 
 	 * @return 设备参数标识(整数十六进制)
 	 */
-	public String getParamId() {
-		return this.paramId;
+	public String getParamUid() {
+		return this.paramUid;
 	}
 
 	/**
 	 * 设置设备参数标识(整数十六进制)
 	 * 
-	 * @param paramId
+	 * @param paramUid
 	 */
-	public void setParamId(String paramId) {
-		this.paramId = paramId;
+	public void setParamUid(String paramUid) {
+		this.paramUid = paramUid;
 	}
 
 	/**

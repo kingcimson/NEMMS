@@ -42,7 +42,7 @@ $(function() {
 			width : 50,
 			sortable : true
 		}, {
-			field : 'paramId',
+			field : 'paramUid',
 			title : '参数标识',
 			width : 50,
 			sortable : true
