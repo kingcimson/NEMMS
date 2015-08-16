@@ -43,8 +43,22 @@ $(function() {
 		}
 	});
 	
-	$('#param-tabs').tabs({});
-	$('#console-tabs').tabs({});
+	$('#param-tabs').tabs({
+		tools:[{
+	        iconCls:'icon-fullscreen',
+	        handler:function(){
+	            alert('fullscreen');
+	        }
+	    }]
+	});
+	$('#console-tabs').tabs({
+		tools:[{
+	        iconCls:'icon-fullscreen',
+	        handler:function(){
+	            alert('fullscreen');
+	        }
+	    }]
+	});
 	
 	
 	// datagrids
