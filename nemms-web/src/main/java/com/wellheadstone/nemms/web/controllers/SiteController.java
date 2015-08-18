@@ -18,7 +18,9 @@ import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
 import com.wellheadstone.nemms.common.viewmodel.TreeNode;
 import com.wellheadstone.nemms.data.PageInfo;
 import com.wellheadstone.nemms.membership.po.UserPo;
+import com.wellheadstone.nemms.po.SiteParamPo;
 import com.wellheadstone.nemms.po.SitePo;
+import com.wellheadstone.nemms.service.DeviceMonitorService;
 import com.wellheadstone.nemms.service.SiteService;
 import com.wellheadstone.nemms.service.SiteTreeService;
 import com.wellheadstone.nemms.web.DataGridPager;
@@ -31,6 +33,8 @@ public class SiteController extends AbstractController {
 	private SiteService siteService;
 	@Resource
 	private SiteTreeService siteTreeService;
+	@Resource
+	private DeviceMonitorService deviceMonitorService;
 
 	@RequestMapping(value = { "", "/", "/index" })
 	public String index(@CurrentUser UserPo loginUser, Model model, HttpServletRequest req) {
@@ -186,6 +190,13 @@ public class SiteController extends AbstractController {
 		modelMap.put("rows", list);
 
 		return modelMap;
+	}
+	
+	@RequestMapping(value = "/queryAllValues")
+	@ResponseBody
+	public Map<Integer,List<SiteParamPo>> queryAllValues(Integer siteId, @CurrentUser UserPo loginUser, HttpServletRequest request){
+		siteId = siteId == null ? 0 : siteId.intValue();
+		return this.deviceMonitorService.queryAllValuesForMap(siteId);
 	}
 
 	@RequestMapping(value = "/dragTreeNode")

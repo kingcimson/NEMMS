@@ -191,3 +191,12 @@
 .icon-fullscreen{
 	background:url('icons/fullscreen.png') no-repeat center center;
 }
+.icon-timer{
+	background:url('icons/timer.png') no-repeat center center;
+}
+.icon-timer1{
+	background:url('icons/timer1.png') no-repeat center center;
+}
+.icon-console{
+	background:url('icons/console.png') no-repeat center center;
+}

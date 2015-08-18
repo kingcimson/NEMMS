@@ -20,26 +20,30 @@
 	</div>
 	<div id="center" data-options="region:'center'">
 		<div class="toolbar">
-			<a id="btn-item" class="easyui-linkbutton" data-options="iconCls:'icon-item',plain:true">获取参数列表</a> <a
-				id="btn-search" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询全部</a> <a id="btn-edit"
-				class="easyui-linkbutton" data-options="iconCls:'icon-edit1',plain:true">设置参数</a> <a id="btn-cancel"
-				class="easyui-linkbutton" data-options="iconCls:'icon-cancel1',plain:true">取消设置</a> <a id="btn-clear"
-				class="easyui-linkbutton" data-options="iconCls:'icon-clear1',plain:true">清除全部</a>
+			<a id="btn-query-item" class="easyui-linkbutton" data-options="iconCls:'icon-item',plain:true">获取参数列表</a>
+			 <a id="btn-query-all" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询全部</a> 
+			<a id="btn-query-selected" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">查询选中参数</a>
+			<a id="btn-query-schedule" class="easyui-linkbutton" data-options="iconCls:'icon-timer',plain:true">定时查询</a>
+			<a id="btn-edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit1',plain:true">设置参数</a>
+			 <a id="btn-cancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel1',plain:true">取消设置</a>
+			 <a id="btn-clear" class="easyui-linkbutton" data-options="iconCls:'icon-clear1',plain:true">清除全部</a>
 		</div>
 		<div id="param-tabs" class="easyui-tabs" style="width: 100%; height: 50%">
-			<div title="使用设备" style="padding: 20px"></div>
-			<div title="网管参数" style="padding: 20px"></div>
-			<div title="警告参数" style="padding: 20px"></div>
 		</div>
 		<div id="console-tabs" class="easyui-tabs" style="width: 100%; height: 40%">
-			<div title="输出控制台" style="padding: 0px;">
+			<div title="输出控制台" style="padding: 0px">
 				<div style="height: 200px">
 					<div id="console-datagrid"></div>
 				</div>
 			</div>
 			<div title="当前连接设备" style="padding: 0px;">
-				<div style="height: 180px">
+				<div style="height: 95%">
 					<div id="connected-device-datagrid"></div>
+				</div>
+			</div>
+			<div title="定时任务" style="padding: 0px;">
+				<div style="height: 95%">
+					<div id="schedule-task-datagrid"></div>
 				</div>
 			</div>
 		</div>
@@ -214,6 +218,10 @@
 		<div style="height: 86%; padding: 2px">
 			<div id="search-site-result"></div>
 		</div>
+	</div>
+	<div id="fullscreen-param-tabs-dlg" title="参数查询">
+	</div>
+	<div id="fullscreen-console-tabs-dlg" title="控制台">
 	</div>
 	<!-- tree右键菜单  -->
 	<div id="site-tree-ctx-menu" class="easyui-menu" data-options="onClick:SiteMgr.siteTree.contextMenu.onSelect"
