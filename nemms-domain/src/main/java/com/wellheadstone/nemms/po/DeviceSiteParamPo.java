@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.domain.po;
+package com.wellheadstone.nemms.po;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -9,122 +9,23 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import com.wellheadstone.nemms.common.serializer.CustomDateTimeSerializer;
 import com.wellheadstone.nemms.data.annotations.Column;
 
-public class DeviceParamPo implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -950194582722710175L;
+public class DeviceSiteParamPo implements Serializable {
+	private static final long serialVersionUID = 2412962331615255434L;
 
-	/**
-	 * 实体device_param名称
-	 */
-	public static String EntityName = "device_param";
+	@Column(name = "site_id")
+	private Integer siteId ;
 
-	/**
-	 * 列名id,参数id
-	 */
-	public final static String Id = "id";
-
-	/**
-	 * 列名uid,设备参数标识(整数十六进制)
-	 */
-	public final static String Uid = "uid";
-
-	/**
-	 * 列名mcp_id,mcp协义类型1:mcp_a;2:mcp_b;3:mcp_c
-	 */
-	public final static String McpId = "mcp_id";
-
-	/**
-	 * 列名category_id,参数类别
-	 */
-	public final static String CategoryId = "category_id";
-
-	/**
-	 * 列名name,参数名称
-	 */
-	public final static String Name = "name";
-
-	/**
-	 * 列名mode,读写属性
-	 */
-	public final static String Mode = "mode";
-
-	/**
-	 * 列名unit,参数单位
-	 */
-	public final static String Unit = "unit";
-
-	/**
-	 * 列名ratio,传输比或系数
-	 */
-	public final static String Ratio = "ratio";
-
-	/**
-	 * 列名value_type,参数值数据类型(uint等)
-	 */
-	public final static String ValueType = "value_type";
-
-	/**
-	 * 列名value_len,参数值数据长度
-	 */
-	public final static String ValueLen = "value_len";
-
-	/**
-	 * 列名value_min_len,参数值数据最小长度
-	 */
-	public final static String ValueMinLen = "value_min_len";
-
-	/**
-	 * 列名value_max_len,参数值数据最大长度
-	 */
-	public final static String ValueMaxLen = "value_max_len";
-
-	/**
-	 * 列名min_value,参数最小值
-	 */
-	public final static String MinValue = "min_value";
-
-	/**
-	 * 列名max_value,参数最大值
-	 */
-	public final static String MaxValue = "max_value";
-
-	/**
-	 * 列名authority_roles,参数权限归属(即系统哪些角色的用户可以使用),对应角色id
-	 */
-	public final static String AuthorityRoles = "authority_roles";
-
-	/**
-	 * 列名warn_level,参数告警级别
-	 */
-	public final static String WarnLevel = "warn_level";
-
-	/**
-	 * 列名create_time,
-	 */
-	public final static String CreateTime = "create_time";
-
-	/**
-	 * 列名update_time,
-	 */
-	public final static String UpdateTime = "update_time";
-
-	/**
-	 * 列名html_elem,
-	 */
-	public final static String HtmlElem = "html_elem";
-
-	/**
-	 * 列名html_elem_key,
-	 */
-	public final static String HtmlElemKey = "html_elem_key";
-
-	@Column(name = "id", isIgnored = true)
-	private Integer id;
-
-	@Column(name = "uid")
-	private String uid;
+	@Column(name = "site_uid")
+	private String siteUid;
+	
+	@Column(name = "param_id")
+	private Integer paramId ;
+	
+	@Column(name = "param_uid")
+	private String paramUid;
+	
+	@Column(name = "value")
+	private String value;
 
 	@Column(name = "mcp_id")
 	private Integer mcpId;
@@ -180,22 +81,36 @@ public class DeviceParamPo implements Serializable {
 	@Column(name = "html_elem_key")
 	private String htmlElemKey;
 
-	/**
-	 * 获取参数id
-	 * 
-	 * @return 参数id
-	 */
-	public Integer getId() {
-		return this.id;
+	public Integer getSiteId() {
+		return siteId;
 	}
 
-	/**
-	 * 设置参数id
-	 * 
-	 * @param id
-	 */
-	public void setId(Integer id) {
-		this.id = id;
+	public void setSiteId(Integer siteId) {
+		this.siteId = siteId;
+	}
+
+	public String getSiteUid() {
+		return siteUid;
+	}
+
+	public void setSiteUid(String siteUid) {
+		this.siteUid = siteUid;
+	}
+
+	public Integer getParamId() {
+		return paramId;
+	}
+
+	public void setParamId(Integer paramId) {
+		this.paramId = paramId;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	/**
@@ -203,17 +118,17 @@ public class DeviceParamPo implements Serializable {
 	 * 
 	 * @return 设备参数标识(整数十六进制)
 	 */
-	public String getUid() {
-		return this.uid;
+	public String getParamUid() {
+		return this.paramUid;
 	}
 
 	/**
 	 * 设置设备参数标识(整数十六进制)
 	 * 
-	 * @param uid
+	 * @param paramUid
 	 */
-	public void setUid(String uid) {
-		this.uid = uid;
+	public void setParamUid(String paramUid) {
+		this.paramUid = paramUid;
 	}
 
 	/**

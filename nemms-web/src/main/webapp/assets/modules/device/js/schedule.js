@@ -1,0 +1,1 @@
+var deviceSchedulePageUrl = XFrame.getContextPath() + '/device/schedule/';

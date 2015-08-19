@@ -1,0 +1,1 @@
+var deviceConnInfoPageUrl = XFrame.getContextPath() + '/device/conninfo/';

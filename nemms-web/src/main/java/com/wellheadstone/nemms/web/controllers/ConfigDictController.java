@@ -16,7 +16,7 @@ import com.wellheadstone.nemms.common.viewmodel.JsonResult;
 import com.wellheadstone.nemms.common.viewmodel.TreeNode;
 import com.wellheadstone.nemms.data.PageInfo;
 import com.wellheadstone.nemms.po.ConfigDictPo;
-import com.wellheadstone.nemms.po.SitePo;
+import com.wellheadstone.nemms.po.DeviceSitePo;
 import com.wellheadstone.nemms.service.ConfigDictService;
 import com.wellheadstone.nemms.web.DataGridPager;
 
@@ -68,7 +68,7 @@ public class ConfigDictController extends AbstractController {
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 
 		try {
-			pager.setDefaultSort(SitePo.CreateTime);
+			pager.setDefaultSort(DeviceSitePo.CreateTime);
 			PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
 					pager.getRows(), pager.getSort(), pager.getOrder());
 			List<ConfigDictPo> list = this.configDictService.findByKeyword(pageInfo, fieldName, keyword);

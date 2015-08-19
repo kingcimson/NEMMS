@@ -9,9 +9,9 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.wellheadstone.nemms.data.util.SpringContextUtils;
 import com.wellheadstone.nemms.server.domain.po.DeviceParamPo;
-import com.wellheadstone.nemms.server.domain.po.SitePo;
+import com.wellheadstone.nemms.server.domain.po.DeviceSitePo;
 import com.wellheadstone.nemms.server.domain.service.DeviceParamService;
-import com.wellheadstone.nemms.server.domain.service.SiteService;
+import com.wellheadstone.nemms.server.domain.service.DeviceSiteService;
 import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.protocol.SocketIOMessage;
 import com.wellheadstone.nemms.server.protocol.TcpUdpMessage;
@@ -45,12 +45,12 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 		return deviceParamService.getAll();
 	}
 
-	private SitePo getSite(int siteId) {
-		SiteService siteService = SpringContextUtils.getBean(SiteService.class);
+	private DeviceSitePo getSite(int siteId) {
+		DeviceSiteService siteService = SpringContextUtils.getBean(DeviceSiteService.class);
 		return siteService.getById(siteId);
 	}
 
-	private void send(SitePo site) {
+	private void send(DeviceSitePo site) {
 		if (site.getProtocol() == "1") {
 		}
 	}
