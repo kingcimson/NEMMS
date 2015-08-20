@@ -23,7 +23,11 @@ $(function() {
 		onLoadSuccess : function(node, data) {
 			$.messager.progress("close");
 		},
-		onClick : SiteMgr.siteTree.onClickHandler,
+		onClick : function(node) {
+			$('#site-tree').tree('options').url = siteMgrPageUrl + 'listChildNodes';
+			$('#site-tree').tree('expand', node.target);
+			SiteMgr.paramTabs.displayParamList(node.attributes.uid);
+		},
 		onDblClick : function(node) {
 			SiteMgr.siteTree.edit();
 		},
@@ -465,10 +469,6 @@ var SiteMgr = {
 		}
 	},
 	siteTree : {
-		onClickHandler : function(node) {
-			$('#site-tree').tree('options').url = siteMgrPageUrl + 'listChildNodes';
-			$('#site-tree').tree('expand', node.target);
-		},
 		addSiteNode : function() {
 			SiteMgr.dialogs.addSiteNodeDlg.open();
 			$("#add-site-form").form('reset');
@@ -602,14 +602,8 @@ var SiteMgr = {
 		queryAllValues : function() {
 			var node = $('#site-tree').tree('getSelected');
 			if (node) {
-				$.getJSON(siteMgrPageUrl + 'queryAllValues', {
-					siteUid : node.attributes.uid
-				}, function(map) {
-					for ( var key in map) {
-						var listId = "#param-tab" + key + "-list";
-						SiteMgr.paramTabs.displayParamList(listId, map[key]);
-					}
-				});
+				var siteUid = node.attributes.uid;
+				SiteMgr.paramTabs.displayParamList(siteUid);
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
 			}
@@ -626,8 +620,24 @@ var SiteMgr = {
 	// end
 	},
 	paramTabs : {
-		displayParamList : function(listId, data) {
-			$(listId).datagrid('loadData', data);
+		displayParamList : function(siteUid) {
+			$.getJSON(siteMgrPageUrl + 'queryAllValues', {
+				siteUid : siteUid
+			}, function(map) {
+				SiteMgr.paramTabs.clear();
+				for ( var key in map) {
+					var listId = "#param-tab" + key + "-list";
+					var data = map[key];
+					$(listId).datagrid('loadData', data);
+				}
+			});	
+		},
+		clear:function(){
+			for (var i = 0; i < SiteMgr.categories.length; i++) {
+				var category = SiteMgr.categories[i];
+				var listId = "#param-tab" + category.value + "-list";			
+				EasyUIUtils.clearDatagrid(listId);
+			}
 		}
 	// end
 	},

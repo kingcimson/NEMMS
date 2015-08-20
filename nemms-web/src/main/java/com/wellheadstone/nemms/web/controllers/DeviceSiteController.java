@@ -101,18 +101,24 @@ public class DeviceSiteController extends AbstractController {
 
 	@RequestMapping(value = "/addDevice")
 	@ResponseBody
-	public ParamJsonResult<List<TreeNode<DeviceSitePo>>> addDevice(DeviceSitePo po, @CurrentUser UserPo loginUser,
+	public ParamJsonResult<TreeNode<DeviceSitePo>> addDevice(DeviceSitePo po, @CurrentUser UserPo loginUser,
 			HttpServletRequest request) {
-		ParamJsonResult<List<TreeNode<DeviceSitePo>>> result = new ParamJsonResult<List<TreeNode<DeviceSitePo>>>(false, "");
+		ParamJsonResult<TreeNode<DeviceSitePo>> result = new ParamJsonResult<TreeNode<DeviceSitePo>>(false, "");
 
 		try {
+			DeviceSitePo parentPo = this.siteService.getById(po.getPid());
+			po.setUid(parentPo.getUid() + po.getUid());
+			po.setDeviceType(parentPo.getDeviceType());
+			po.setApProtocol(parentPo.getApProtocol());
+			po.setMcpProtocol(parentPo.getMcpProtocol());
+			po.setProtocol(parentPo.getProtocol());
+			po.setIpAddr(parentPo.getIpAddr());
+			po.setPort(parentPo.getPort());
 			po.setCreateUser(loginUser.getAccount());
 			po.setId(this.siteService.addSite(po));
 			po = this.siteService.getById(po.getId());
-			List<TreeNode<DeviceSitePo>> nodes = new ArrayList<TreeNode<DeviceSitePo>>();
 			TreeNode<DeviceSitePo> treeNode = this.createTreeNode(po);
-			nodes.add(treeNode);
-			result.setData(nodes);
+			result.setData(treeNode);
 			this.setSuccessResult(result, "");
 		} catch (Exception ex) {
 			this.setExceptionResult(result, ex);
@@ -193,7 +199,8 @@ public class DeviceSiteController extends AbstractController {
 
 	@RequestMapping(value = "/queryAllValues")
 	@ResponseBody
-	public Map<Integer, List<DeviceSiteParamPo>> queryAllValues(String siteUid, @CurrentUser UserPo loginUser, HttpServletRequest request) {
+	public Map<Integer, List<DeviceSiteParamPo>> queryAllValues(String siteUid, @CurrentUser UserPo loginUser,
+			HttpServletRequest request) {
 		siteUid = siteUid == null ? "" : siteUid;
 		return this.deviceMonitorService.queryAllValuesForMap(siteUid);
 	}
