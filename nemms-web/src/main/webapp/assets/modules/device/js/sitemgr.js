@@ -638,6 +638,7 @@ var SiteMgr = {
 				var listId = "#param-tab" + category.value + "-list";			
 				EasyUIUtils.clearDatagrid(listId);
 			}
+			$('#param-tabs').tabs('select', 0);
 		}
 	// end
 	},
