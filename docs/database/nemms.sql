@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50544
 File Encoding         : 65001
 
-Date: 2015-08-22 15:14:05
+Date: 2015-08-22 19:09:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -342,8 +342,8 @@ INSERT INTO `device_param` VALUES ('15', '0x0008', '1', '0', '纬度', 'ro', 'no
 INSERT INTO `device_param` VALUES ('16', '0x00000008', '3', '0', '纬度', 'ro', 'none', '1', 'str', '20', '1', '255', '0', '255', '4', '0', '2015-07-19 19:28:41', '2015-07-19 19:28:41', 'text', 'paramOptionNone');
 INSERT INTO `device_param` VALUES ('17', '0x000A', '1', '0', '监控的当前版本信息', 'ro', 'none', '1', 'str', '20', '1', '255', '0', '255', '4', '0', '2015-07-19 19:28:41', '2015-07-19 19:28:41', 'text', 'paramOptionNone');
 INSERT INTO `device_param` VALUES ('18', '0x0000000A', '3', '0', '监控的当前版本信息', 'ro', 'none', '1', 'str', '20', '1', '255', '0', '255', '4', '0', '2015-07-19 19:28:41', '2015-07-19 19:28:41', 'text', 'paramOptionNone');
-INSERT INTO `device_param` VALUES ('19', '0x000B', '1', '0', '远程数据通信模块', 'ro', 'none', '1', 'uint1', '1', '1', '255', '0', '255', '4', '0', '2015-08-22 14:15:46', '2015-08-22 14:15:46', 'select', 'paramOption1');
-INSERT INTO `device_param` VALUES ('20', '0x0000000B', '3', '0', '远程数据通信模块', 'ro', 'none', '1', 'uint1', '1', '1', '255', '0', '255', '4', '0', '2015-08-22 13:45:44', '2015-08-22 13:45:44', 'select', 'paramOption1');
+INSERT INTO `device_param` VALUES ('19', '0x000B', '1', '0', '远程数据通信模块', 'rw', 'none', '1', 'uint1', '1', '1', '255', '0', '255', '4', '0', '2015-08-22 16:59:27', '2015-08-22 16:59:27', 'select', 'paramOption1');
+INSERT INTO `device_param` VALUES ('20', '0x0000000B', '3', '0', '远程数据通信模块', 'ro', 'none', '1', 'uint1', '1', '1', '255', '0', '255', '4', '0', '2015-08-22 17:04:18', '2015-08-22 17:04:18', 'select', 'paramOption1');
 INSERT INTO `device_param` VALUES ('21', '0x0010', '1', '0', '嵌入式软件运行模式', 'ro', 'none', '1', 'uint1', '1', '1', '255', '0', '255', '4', '0', '2015-07-19 19:28:41', '2015-07-19 19:28:41', 'text', 'paramOptionNone');
 INSERT INTO `device_param` VALUES ('22', '0x00000010', '3', '0', '嵌入式软件运行模式', 'ro', 'none', '1', 'uint1', '1', '1', '255', '0', '255', '4', '0', '2015-07-19 19:28:41', '2015-07-19 19:28:41', 'text', 'paramOptionNone');
 INSERT INTO `device_param` VALUES ('23', '0x0011', '1', '0', '可支持AP:C协议的最大长度', 'ro', 'none', '1', 'uint2', '2', '1', '255', '0', '255', '4', '0', '2015-07-19 19:28:41', '2015-07-19 19:28:41', 'text', 'paramOptionNone');
@@ -2938,6 +2938,23 @@ INSERT INTO `device_param` VALUES ('3012', '0xFFFFFFFF', '3', '6', '无效的对
 INSERT INTO `device_param` VALUES ('3015', '0xFFFFFFFF', '2', '6', '无效的对象代码', 'rw', 'none', '1', 'uint1', '1', '1', '255', '0', '1', '4', '0', '2015-08-19 17:12:43', '2015-08-19 17:12:43', 'text', 'paramOptionNone');
 
 -- ----------------------------
+-- Table structure for device_report
+-- ----------------------------
+DROP TABLE IF EXISTS `device_report`;
+CREATE TABLE `device_report` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `site_uid` varchar(50) NOT NULL COMMENT '站点/设备编号',
+  `type` int(11) NOT NULL COMMENT '上报类型',
+  `content` varchar(1000) NOT NULL COMMENT '上报内容',
+  `create_time` datetime NOT NULL COMMENT '上报时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of device_report
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for device_schedule
 -- ----------------------------
 DROP TABLE IF EXISTS `device_schedule`;
@@ -2945,7 +2962,8 @@ CREATE TABLE `device_schedule` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '任务ID',
   `peroid` varchar(2) NOT NULL COMMENT '任务执行频率(取值：y每年|M每月|w每周|d每天|h每小时|m每分|s每秒)',
   `interval` int(11) NOT NULL COMMENT '任务执行间隔',
-  `time` time NOT NULL COMMENT '任务执行时间,指定任务什么时间执行',
+  `start_time` time NOT NULL COMMENT '任务开始执行时间,指定任务什么时间执行',
+  `times` int(11) NOT NULL COMMENT '任务执行次数',
   `params` varchar(2000) NOT NULL COMMENT '定时任务参数(json数据结构)',
   `comment` varchar(100) NOT NULL COMMENT '任务说明',
   `create_time` datetime NOT NULL COMMENT '任务记录创建时间',
@@ -2973,15 +2991,21 @@ CREATE TABLE `device_site` (
   `ip_addr` varchar(64) NOT NULL COMMENT '设备ip地址(UDP)',
   `port` int(50) NOT NULL COMMENT '远端端口',
   `manufactor` varchar(50) NOT NULL COMMENT '设备厂商',
+  `location` varchar(50) NOT NULL COMMENT '设备安装地点',
   `comment` varchar(200) NOT NULL COMMENT '说明备注',
-  `create_user` varchar(64) NOT NULL COMMENT '站点或设备创建用户',
+  `ap_max_len` int(11) NOT NULL COMMENT 'ap:c协议包最大长度',
+  `mcp_mode` smallint(11) NOT NULL COMMENT 'mcp:b交互机制',
+  `nc` smallint(6) NOT NULL COMMENT '连发系数(Nc)',
+  `tot1` smallint(6) NOT NULL COMMENT '设备响应超时',
+  `tg` int(11) NOT NULL COMMENT '发送间隔时间',
+  `sequence` int(11) NOT NULL COMMENT '节点在其父节点中的顺序',
+  `status` int(11) NOT NULL COMMENT '站点状态（1表示锁定，0表示编辑)',
   `flag` int(11) NOT NULL DEFAULT '0' COMMENT '记录标志,0为站点，1为设备',
   `has_child` tinyint(1) NOT NULL,
-  `status` int(11) NOT NULL COMMENT '站点状态（1表示锁定，0表示编辑)',
-  `sequence` int(11) NOT NULL COMMENT '节点在其父节点中的顺序',
   `path` varchar(200) NOT NULL,
-  `create_time` datetime NOT NULL,
+  `create_user` varchar(64) NOT NULL COMMENT '站点或设备创建用户',
   `update_time` datetime NOT NULL,
+  `create_time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_uid` (`uid`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
@@ -2989,8 +3013,8 @@ CREATE TABLE `device_site` (
 -- ----------------------------
 -- Records of device_site
 -- ----------------------------
-INSERT INTO `device_site` VALUES ('29', '0', '0x02020005', 'test', '1', '3', '1', '2', '192.168.10.77', '8000', 'test', 'test', 'admin', '0', '1', '0', '10', '29', '2015-07-18 18:49:44', '2015-07-18 18:49:44');
-INSERT INTO `device_site` VALUES ('36', '29', '0x0202000501', 'dev1', '1', '3', '1', '2', '192.168.10.77', '8000', '', '测试设备1', 'admin', '1', '0', '0', '10', '29,36', '2015-08-20 16:19:34', '2015-08-20 16:19:34');
+INSERT INTO `device_site` VALUES ('29', '0', '0x02020005', 'test', '1', '3', '1', '2', '192.168.10.77', '8000', 'test', '', 'test', '0', '0', '0', '0', '0', '10', '0', '0', '1', '29', 'admin', '2015-07-18 18:49:44', '2015-07-18 18:49:44');
+INSERT INTO `device_site` VALUES ('36', '29', '0x0202000501', 'dev1', '1', '3', '1', '2', '192.168.10.77', '8000', '', '', '测试设备1', '0', '0', '0', '0', '0', '10', '0', '1', '0', '29,36', 'admin', '2015-08-20 16:19:34', '2015-08-20 16:19:34');
 
 -- ----------------------------
 -- Table structure for event
@@ -3006,7 +3030,7 @@ CREATE TABLE `event` (
   `url` varchar(255) NOT NULL COMMENT 'url',
   `create_time` datetime NOT NULL COMMENT '日志发生的时间',
   PRIMARY KEY (`event_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1162 DEFAULT CHARSET=utf8 COMMENT='用户操作日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=1167 DEFAULT CHARSET=utf8 COMMENT='用户操作日志表';
 
 -- ----------------------------
 -- Records of event
@@ -3155,6 +3179,11 @@ INSERT INTO `event` VALUES ('1158', 'com.wellheadstone.nemms.web.membership.cont
 INSERT INTO `event` VALUES ('1159', 'com.wellheadstone.nemms.web.membership.controllers.AccountController', '-1', 'admin', 'INFO', '登录成功!', '', '2015-08-22 14:54:51');
 INSERT INTO `event` VALUES ('1160', 'com.wellheadstone.nemms.web.membership.controllers.AccountController', '-1', 'admin', 'INFO', '登录成功!', '', '2015-08-22 14:55:44');
 INSERT INTO `event` VALUES ('1161', 'com.wellheadstone.nemms.web.membership.controllers.AccountController', '-1', 'admin', 'INFO', '登录成功!', '', '2015-08-22 15:00:01');
+INSERT INTO `event` VALUES ('1162', 'com.wellheadstone.nemms.web.controllers.DeviceParamController', '-1', 'admin', 'INFO', '更新设备参数成功！', '', '2015-08-22 16:59:18');
+INSERT INTO `event` VALUES ('1163', 'com.wellheadstone.nemms.web.controllers.DeviceParamController', '-1', 'admin', 'INFO', '更新设备参数成功！', '', '2015-08-22 16:59:27');
+INSERT INTO `event` VALUES ('1164', 'com.wellheadstone.nemms.web.controllers.DeviceParamController', '-1', 'admin', 'INFO', '更新设备参数成功！', '', '2015-08-22 17:04:18');
+INSERT INTO `event` VALUES ('1165', 'com.wellheadstone.nemms.web.membership.controllers.AccountController', '-1', 'admin', 'INFO', '登录成功!', '', '2015-08-22 18:09:46');
+INSERT INTO `event` VALUES ('1166', 'com.wellheadstone.nemms.web.membership.controllers.AccountController', '-1', 'admin', 'INFO', '登录成功!', '', '2015-08-22 18:45:44');
 
 -- ----------------------------
 -- Table structure for module

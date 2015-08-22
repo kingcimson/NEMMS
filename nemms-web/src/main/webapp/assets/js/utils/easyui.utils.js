@@ -208,5 +208,14 @@ var EasyUIUtils = {
 				}
 			}
 		});
+	},
+	loading:function(){
+		$.messager.progress({
+			title : '请稍后...',
+			text : '数据正在加载中...',
+		});
+	},
+	closeLoading:function(){
+		$.messager.progress("close");
 	}
 };

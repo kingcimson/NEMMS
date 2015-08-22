@@ -21,21 +21,18 @@ $(function() {
 		dnd : true,
 		url : siteMgrPageUrl + 'listChildNodes',
 		onLoadSuccess : function(node, data) {
-			$.messager.progress("close");
+			EasyUIUtils.closeLoading();
 		},
 		onClick : function(node) {
 			$('#site-tree').tree('options').url = siteMgrPageUrl + 'listChildNodes';
 			$('#site-tree').tree('expand', node.target);
-			SiteMgr.paramTabs.displayParamList(node.attributes.uid);
+			SiteMgr.paramTabs.displayParamList(node.attributes.uid,0);
 		},
 		onDblClick : function(node) {
 			SiteMgr.siteTree.edit();
 		},
 		onBeforeLoad : function(node, param) {
-			$.messager.progress({
-				title : '请稍后...',
-				text : '数据正在加载中...',
-			});
+			EasyUIUtils.loading();
 		},
 		onContextMenu : function(e, node) {
 			e.preventDefault();
@@ -120,9 +117,9 @@ $(function() {
 		singleSelect : true,
 		// pageSize : 10,
 		toolbar : [ {
-			iconCls : 'icon-clear1',
+			iconCls : 'icon-add',
 			handler : function() {
-				EasyUIUtils.clearDatagrid('#connected-device-datagrid');
+				EasyUIUtils.reloadDatagrid('#connected-device-datagrid');
 			}
 		}, '-', {
 			iconCls : 'icon-reload',
@@ -149,6 +146,10 @@ $(function() {
 		}, {
 			field : 'serverPort',
 			title : '服务器端口',
+			width : 80
+		},{
+			field : 'status',
+			title : '状态',
 			width : 80
 		}, {
 			field : 'createTime',
@@ -362,7 +363,9 @@ $(function() {
 	$('#btn-search-site').bind('click', SiteMgr.siteTree.search);
 	$('#btn-query-item').bind('click', SiteMgr.toolbar.queryAllItems);
 	$('#btn-query-all').bind('click', SiteMgr.toolbar.queryAllValues);
-	$('#btn-edit').bind('click', SiteMgr.toolbar.setup);
+	$('#btn-query-selected').bind('click', SiteMgr.toolbar.querySelected);
+	$('#btn-query-schedule').bind('click', SiteMgr.toolbar.querySchedule);
+	$('#btn-setup').bind('click', SiteMgr.toolbar.setup);
 	$('#btn-cancel').bind('click', SiteMgr.toolbar.cancel);
 	$('#btn-clear').bind('click', SiteMgr.toolbar.clear);
 
@@ -407,25 +410,33 @@ var SiteMgr = {
 				var category = SiteMgr.categories[i];
 				var title = category.name + "参数";
 				var id = "param-tab" + category.value;
-				var listId = id + "-list";
+				var gridId = id + "-grid";
 				var content = "<div id=\"" + id + "\" style=\"padding: 10px;\">" + "<div style=\"height:500px\">"
-						+ "<div class=\"easyui-datagrid\" id=\"" + listId + "\"></div>" + "</div>" + "</div>";
+						+ "<div class=\"easyui-datagrid\" id=\"" + gridId + "\"></div>" + "</div>" + "</div>";
 				$('#param-tabs').tabs('add', {
 					title : title,
 					content : content
 				});
 				
-				$('#' + listId).datagrid({
+				$('#' + gridId).datagrid({
 					fit : true,
 					pagination : false,
 					rownumbers : true,
 					fitColumns : true,
-					singleSelect : false,
+					singleSelect : true,
 					remoteSort: false,
 					columns : [ [ {
 						field : 'ck',
-						checkbox : true,
-						width : 50
+						width : 15,
+						title : '选择',
+						formatter : function(value, row, index) {
+							var id = "ck-" + index;
+							var tmpl = '<input type="checkbox" id="{{id}}" name="{{id}}"/>';
+							return template.compile(tmpl)({
+								id : id,
+								value : value
+							});	
+						}
 					}, {
 						field : 'paramUid',
 						title : '参数标识',
@@ -445,11 +456,22 @@ var SiteMgr = {
 						field : 'value',
 						title : '值',
 						width : 100,
+						sortable : true,
 						formatter : function(value, row, index) {
 							if(row.mode == 'ro'){
+								if(row.htmlElem == "select"){
+									var items = SiteMgr.paramOption[row.htmlElemKey];
+									for(var i=0;i<items.length;i++){
+										var item = items[i];
+										if(item.value == value){
+											return item.value + "(" + item.name + ")";
+										}
+									}
+									return value;
+								}
 								return value;
 							}
-							var id = "value" + index;
+							var id = "value-" + index;
 							if(row.htmlElem == "select"){
 								var tmpl = '\
 										<select id="{{id}}" name="{{id}}" style="width:150px">\
@@ -593,6 +615,7 @@ var SiteMgr = {
 		},
 		reload : function() {
 			$('#site-tree').tree('reload');
+			SiteMgr.paramTabs.clear();
 		},
 		search : function() {
 			var fieldName = $('#field-name').combobox('getValue');
@@ -627,48 +650,76 @@ var SiteMgr = {
 	},
 	toolbar : {
 		queryAllItems : function() {
+			
 		},
 		queryAllValues : function() {
 			var node = $('#site-tree').tree('getSelected');
 			if (node) {
 				var siteUid = node.attributes.uid;
-				SiteMgr.paramTabs.displayParamList(siteUid);
+				SiteMgr.paramTabs.displayParamList(siteUid,0);
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
 			}
 		},
+		querySelected:function(){
+			
+		},
+		querySchedule : function(){
+			for (var i = 0; i < SiteMgr.categories.length; i++) {
+				var category = SiteMgr.categories[i];
+				var gridId = "#param-tab" + category.value + "-grid";			
+				
+			}
+		},
 		setup : function() {
-
+			for (var i = 0; i < SiteMgr.categories.length; i++) {
+				var category = SiteMgr.categories[i];
+				var gridId = "#param-tab" + category.value + "-grid";			
+				
+			}
 		},
 		cancel : function() {
-
+			var node = $('#site-tree').tree('getSelected');
+			if (node) {
+				var tab = $('#param-tabs').tabs('getSelected');
+				var index = $('#param-tabs').tabs('getTabIndex',tab);
+				var siteUid = node.attributes.uid;
+				SiteMgr.paramTabs.displayParamList(siteUid,index);
+			} else {
+				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
+			}
 		},
 		clear : function() {
-
+			SiteMgr.paramTabs.clear();
 		}
 	// end
 	},
 	paramTabs : {
-		displayParamList : function(siteUid) {
+		displayParamList : function(siteUid,defaultTabIndex) {
 			$.getJSON(siteMgrPageUrl + 'queryAllValues', {
 				siteUid : siteUid
 			}, function(map) {
 				SiteMgr.paramTabs.clear();
 				for ( var key in map) {
-					var listId = "#param-tab" + key + "-list";
+					var gridId = "#param-tab" + key + "-grid";
 					var data = map[key];
-					$(listId).datagrid('loadData', data);
+					$(gridId).datagrid('loadData', data);
 				}
+				SiteMgr.paramTabs.select(defaultTabIndex);
 			});	
 		},
 		clear:function(){
 			for (var i = 0; i < SiteMgr.categories.length; i++) {
 				var category = SiteMgr.categories[i];
-				var listId = "#param-tab" + category.value + "-list";			
-				EasyUIUtils.clearDatagrid(listId);
+				var gridId = "#param-tab" + category.value + "-grid";			
+				EasyUIUtils.clearDatagrid(gridId);
 			}
-			$('#param-tabs').tabs('select', 0);
-		}
+			SiteMgr.paramTabs.select(0);
+		},
+		select:function(index){
+			$('#param-tabs').tabs('select', index);
+		},
+		
 	// end
 	},
 	consoleTabs : {

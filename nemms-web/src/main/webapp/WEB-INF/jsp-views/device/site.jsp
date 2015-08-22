@@ -21,12 +21,12 @@
 	<div id="center" data-options="region:'center'">
 		<div class="toolbar">
 			<a id="btn-query-item" class="easyui-linkbutton" data-options="iconCls:'icon-item',plain:true">获取参数列表</a>
-			 <a id="btn-query-all" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询全部</a> 
+			<a id="btn-query-all" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询全部</a> 
 			<a id="btn-query-selected" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">查询选中参数</a>
 			<a id="btn-query-schedule" class="easyui-linkbutton" data-options="iconCls:'icon-timer',plain:true">定时查询</a>
-			<a id="btn-edit" class="easyui-linkbutton" data-options="iconCls:'icon-edit1',plain:true">设置参数</a>
-			 <a id="btn-cancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel1',plain:true">取消设置</a>
-			 <a id="btn-clear" class="easyui-linkbutton" data-options="iconCls:'icon-clear1',plain:true">清除全部</a>
+			<a id="btn-setup" class="easyui-linkbutton" data-options="iconCls:'icon-edit1',plain:true">设置参数</a>
+			<a id="btn-cancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel1',plain:true">取消设置</a>
+			<a id="btn-clear" class="easyui-linkbutton" data-options="iconCls:'icon-clear1',plain:true">清除全部</a>
 		</div>
 		<div id="param-tabs" class="easyui-tabs" style="width: 100%; height: 50%">
 		</div>
