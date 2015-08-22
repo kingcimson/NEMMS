@@ -541,4 +541,28 @@ public class DeviceParamPo implements Serializable {
 	public void setHtmlElemKey(String htmlElemKey) {
 		this.htmlElemKey = htmlElemKey;
 	}
+	
+	public static String getColumnName(String name){
+		if("id".equals(name)) return DeviceParamPo.Id;
+		if("uid".equals(name)) return DeviceParamPo.Uid;
+		if("mcpId".equals(name)) return DeviceParamPo.McpId;
+		if("categoryId".equals(name)) return DeviceParamPo.CategoryId;
+		if("name".equals(name)) return DeviceParamPo.Name;
+		if("mode".equals(name)) return DeviceParamPo.Mode;
+		if("unit".equals(name)) return DeviceParamPo.Unit;
+		if("ratio".equals(name)) return DeviceParamPo.Ratio;
+		if("valueType".equals(name)) return DeviceParamPo.ValueType;
+		if("valueLen".equals(name)) return DeviceParamPo.ValueLen;
+		if("valueMinLen".equals(name)) return DeviceParamPo.ValueMinLen;
+		if("valueMaxLen".equals(name)) return DeviceParamPo.ValueMaxLen;
+		if("minValue".equals(name)) return DeviceParamPo.MinValue;
+		if("maxValue".equals(name)) return DeviceParamPo.MaxValue;
+		if("authorityRoles".equals(name)) return DeviceParamPo.AuthorityRoles;
+		if("warnLevel".equals(name)) return DeviceParamPo.WarnLevel;
+		if("createTime".equals(name)) return DeviceParamPo.CreateTime;
+		if("updateTime".equals(name)) return DeviceParamPo.UpdateTime;
+		if("htmlElem".equals(name)) return DeviceParamPo.HtmlElem;
+		if("htmlElemKey".equals(name)) return DeviceParamPo.HtmlElemKey;
+		return DeviceParamPo.Id;
+	}
 }

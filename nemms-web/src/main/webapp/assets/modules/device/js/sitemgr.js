@@ -442,6 +442,9 @@ var SiteMgr = {
 						title : '值',
 						width : 100,
 						formatter : function(value, row, index) {
+							if(row.mode == 'ro'){
+								return value;
+							}
 							var id = "value" + index;
 							if(row.htmlElem == "select"){
 								var tmpl = '\

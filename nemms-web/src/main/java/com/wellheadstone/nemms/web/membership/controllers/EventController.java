@@ -32,6 +32,7 @@ public class EventController extends AbstractController {
 	@ResponseBody
 	public Map<String, Object> getEvents(DataGridPager pager, HttpServletRequest request) {
 		pager.setDefaultSort(EventPo.CreateTime);
+		pager.setSort(EventPo.getColumnName(pager.getSort()));
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
 		List<EventPo> list = this.eventService.getByPage(pageInfo);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);

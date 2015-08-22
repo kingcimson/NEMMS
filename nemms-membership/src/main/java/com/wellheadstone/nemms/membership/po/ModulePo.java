@@ -460,4 +460,12 @@ public class ModulePo implements Serializable {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
+	public static String getColumnName(String name){
+		if("moduleId".equals(name)) return ModulePo.ModuleId;
+		if("parentId".equals(name)) return ModulePo.ParentId;
+		if("createTime".equals(name)) return ModulePo.CreateTime;
+		if("updateTime".equals(name)) return ModulePo.UpdateTime;
+		return ModulePo.Sequence;
+	}
 }

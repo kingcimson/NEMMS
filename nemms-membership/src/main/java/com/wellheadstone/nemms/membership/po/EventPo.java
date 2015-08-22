@@ -231,4 +231,11 @@ public class EventPo implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+	
+	public static String getColumnName(String name){
+		if("eventId".equals(name)) return EventPo.EventId;
+		if("userId".equals(name)) return EventPo.UserId;
+		if("createTime".equals(name)) return EventPo.CreateTime;
+		return EventPo.CreateTime;
+	}
 }

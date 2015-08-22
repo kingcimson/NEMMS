@@ -54,6 +54,7 @@ public class RoleController extends AbstractController {
 	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager,
 			HttpServletRequest request) {
 		pager.setDefaultSort(RolePo.Sequence);
+		pager.setSort(RolePo.getColumnName(pager.getSort()));
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
 				pager.getRows(), pager.getSort(), pager.getOrder());
 		List<RolePo> list = this.roleService.isSuperAdminRole(loginUser.getRoles()) ?

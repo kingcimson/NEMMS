@@ -35,6 +35,7 @@ public class DeviceParamController extends AbstractController {
 	@ResponseBody
 	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager, HttpServletRequest request) {
 		pager.setDefaultSort(DeviceParamPo.Id);
+		pager.setSort(DeviceParamPo.getColumnName(pager.getSort()));
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
 		List<DeviceParamPo> list = this.deviceParamService.getParams(pageInfo, loginUser);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);

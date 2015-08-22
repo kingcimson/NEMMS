@@ -59,6 +59,7 @@ public class ModuleController extends AbstractController {
 	public Map<String, Object> list(DataGridPager pager, Integer id, HttpServletRequest request) {
 		int pid = (id == null ? 0 : id);
 		pager.setDefaultSort(EventPo.CreateTime);
+		pager.setSort(ModulePo.getColumnName(pager.getSort()));
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
 				pager.getRows(), pager.getSort(), pager.getOrder());
 		List<ModulePo> list = this.moduleService.getDao().queryPageByPid(pageInfo, pid);

@@ -345,4 +345,11 @@ public class UserPo implements Serializable {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+	
+	public static String getColumnName(String name){
+		if("userId".equals(name)) return UserPo.UserId;
+		if("createTime".equals(name)) return UserPo.CreateTime;
+		if("updateTime".equals(name)) return UserPo.UpdateTime;
+		return UserPo.CreateTime;
+	}
 }

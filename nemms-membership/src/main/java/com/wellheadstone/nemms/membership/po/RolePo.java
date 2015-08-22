@@ -364,4 +364,13 @@ public class RolePo implements Serializable {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+	
+	public static String getColumnName(String name){
+		if("roleId".equals(name)) return RolePo.RoleId;
+		if("isSystem".equals(name)) return RolePo.IsSystem;
+		if("createUser".equals(name)) return RolePo.CreateUser;
+		if("createTime".equals(name)) return RolePo.CreateTime;
+		if("updateTime".equals(name)) return RolePo.UpdateTime;
+		return RolePo.CreateTime;
+	}
 }

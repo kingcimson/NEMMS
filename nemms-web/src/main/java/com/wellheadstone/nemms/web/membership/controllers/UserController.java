@@ -41,6 +41,7 @@ public class UserController extends AbstractController {
 	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager,
 			HttpServletRequest request) {
 		pager.setDefaultSort(UserPo.CreateTime);
+		pager.setSort(UserPo.getColumnName(pager.getSort()));
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
 				pager.getRows(), pager.getSort(), pager.getOrder());
 		List<UserPo> list = this.userService.getUsers(pageInfo, loginUser);
