@@ -23,8 +23,20 @@ public class DeviceDataDao extends BaseDao<DeviceDataPo> {
 	public List<DeviceSiteParamPo> queryAllValues(String siteUid) {
 		StringBuilder sqlBuilder = new StringBuilder("");
 		sqlBuilder.append("SELECT ");
-		sqlBuilder.append("	t2.*, ");
-		sqlBuilder.append("	t1.`value` ");
+		sqlBuilder.append("	t2.id,");
+		sqlBuilder.append("	t2.category_id,");
+		sqlBuilder.append("	t2.name,");
+		sqlBuilder.append("	t2.mode,");
+		sqlBuilder.append("	t2.unit,");
+		sqlBuilder.append("	t2.ratio,");
+		sqlBuilder.append("	t2.value_type,");
+		sqlBuilder.append("	t2.html_elem,");
+		sqlBuilder.append("	t2.html_elem_key,");
+		sqlBuilder.append("	t1.site_uid,");
+		sqlBuilder.append("	t1.param_uid,");
+		sqlBuilder.append("	t1.mcp_id,");
+		sqlBuilder.append("	t1.create_time,");
+		sqlBuilder.append("	t1.`value` ");		
 		sqlBuilder.append("FROM ");
 		sqlBuilder.append("	%s t1 ");
 		sqlBuilder.append("INNER JOIN %s t2 ON t1.param_uid = t2.uid and t1.mcp_id = t2.mcp_id ");

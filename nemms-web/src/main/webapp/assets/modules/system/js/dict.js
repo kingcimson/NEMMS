@@ -60,6 +60,10 @@ $(function() {
 			iconCls : 'icon-edit1',
 			handler : ConfigDict.edit
 		}, '-', {
+			text : '复制',
+			iconCls : 'icon-copy',
+			handler : ConfigDict.copy
+		}, '-', {
 			text : '删除',
 			iconCls : 'icon-remove',
 			handler : ConfigDict.remove
@@ -217,6 +221,15 @@ var ConfigDict = {
 		if(row){
 			EasyUIUtils.editWithData('#configDictDlg', '#configDictForm',
 					'#configDictAction', '#configDictId', '修改[' + row.name + ']配置字典项', row);
+		}
+	},
+	copy : function(){
+		$("#configDictPNameDiv").hide();
+		var row = $('#configDictGrid').datagrid('getSelected');
+		if(row){
+			EasyUIUtils.editWithData('#configDictDlg', '#configDictForm',
+					'#configDictAction', '#configDictId', '复制[' + row.name + ']配置字典项', row);
+			$('#configDictAction').val("copy");
 		}
 	},
 	remove : function() {

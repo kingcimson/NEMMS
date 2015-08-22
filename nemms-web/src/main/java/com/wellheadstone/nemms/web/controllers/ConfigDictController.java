@@ -94,6 +94,20 @@ public class ConfigDictController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/copy")
+	@ResponseBody
+	public JsonResult copy(ConfigDictPo po, HttpServletRequest request) {
+		JsonResult result = new JsonResult(false, "复制系统配置项失败！");
+
+		try {
+			this.configDictService.add(po);
+			this.setSuccessResult(result, String.format("复制系统配置项[%s]成功!", po.getKey()));
+		} catch (Exception ex) {
+			this.setExceptionResult(result, ex);
+		}
+		return result;
+	}
+	
 	@RequestMapping(value = "/remove")
 	@ResponseBody
 	public JsonResult remove(String id) {

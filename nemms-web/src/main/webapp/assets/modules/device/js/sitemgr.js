@@ -393,7 +393,7 @@ var SiteMgr = {
 			SiteMgr.dataDict["protocol"] = data.protocol;
 		});
 
-		$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth1Items', {
+		$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth2Items', {
 			parentKey : "paramOption"
 		}, function(data) {
 			SiteMgr.paramOption = data;
@@ -414,6 +414,7 @@ var SiteMgr = {
 					title : title,
 					content : content
 				});
+				
 				$('#' + listId).datagrid({
 					fit : true,
 					pagination : false,
@@ -439,7 +440,28 @@ var SiteMgr = {
 					}, {
 						field : 'value',
 						title : '值',
-						width : 100
+						width : 100,
+						formatter : function(value, row, index) {
+							var id = "value" + index;
+							if(row.htmlElem == "select"){
+								var tmpl = '\
+										<select id="{{id}}" name="{{id}}" style="width:150px">\
+										{{each list}}\
+											<option value="{{$value.value}}" {{if $value.value == currValue}}selected{{/if}}>{{$value.name}}</option>\
+										{{/each}}\
+										</select>';
+								return template.compile(tmpl)({
+									id : id,
+									currValue : value,
+									list : SiteMgr.paramOption[row.htmlElemKey] 
+								});
+							}
+							var tmpl = '<input type="text" id="{{id}}" name="value" value="{{value}}" style="width:150px"/>';
+							return template.compile(tmpl)({
+								id : id,
+								value : value
+							});
+						}
 					}, {
 						field : 'createTime',
 						title : '更新时间',
