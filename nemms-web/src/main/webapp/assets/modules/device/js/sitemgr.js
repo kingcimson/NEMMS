@@ -421,6 +421,7 @@ var SiteMgr = {
 					rownumbers : true,
 					fitColumns : true,
 					singleSelect : false,
+					remoteSort: false,
 					columns : [ [ {
 						field : 'ck',
 						checkbox : true,
@@ -428,15 +429,18 @@ var SiteMgr = {
 					}, {
 						field : 'paramUid',
 						title : '参数标识',
-						width : 50
+						width : 50,
+						sortable : true
 					}, {
 						field : 'name',
 						title : '名称',
-						width : 200
+						width : 200,
+						sortable : true
 					}, {
 						field : 'valueType',
 						title : '类型',
-						width : 50
+						width : 50,
+						sortable : true
 					}, {
 						field : 'value',
 						title : '值',
