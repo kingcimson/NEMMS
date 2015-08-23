@@ -508,8 +508,8 @@ $(function() {
 
 	// buttons
 	$('#btn-search-site').bind('click', SiteMgr.siteTree.search);
-	$('#btn-query-item').bind('click', SiteMgr.toolbar.queryAllItems);
-	$('#btn-query-all').bind('click', SiteMgr.toolbar.queryAllValues);
+	$('#btn-query-item').bind('click', SiteMgr.toolbar.queryAllItem);
+	$('#btn-query-all').bind('click', SiteMgr.toolbar.queryAllValue);
 	$('#btn-query-selected').bind('click', SiteMgr.toolbar.querySelected);
 	$('#btn-query-schedule').bind('click', SiteMgr.toolbar.querySchedule);
 	$('#btn-setup').bind('click', SiteMgr.toolbar.setup);
@@ -588,11 +588,12 @@ var SiteMgr = {
 						field : 'ck',
 						width : 15,
 						title : '选择',
+						name : gridId +'-ck',
 						formatter : function(value, row, index) {
-							var id = "ck-" + index;
-							var tmpl = '<input type="checkbox" id="{{id}}" name="{{id}}"/>';
+							var chkId = $(this).get(0).name + '-' + index;
+							var tmpl = '<input type="checkbox" id={{id}} name="{{id}}"/>';
 							return template.compile(tmpl)({
-								id : id,
+								id : chkId,
 								value : value
 							});	
 						}
@@ -604,14 +605,16 @@ var SiteMgr = {
 					}, {
 						field : 'name',
 						title : '名称',
-						width : 200,
+						width : 150,
 						sortable : true
 					}, {
 						field : 'value',
 						title : '值',
-						width : 100,
+						width : 150,
 						sortable : true,
+						name : gridId +'-value',
 						formatter : function(value, row, index) {
+						    
 						    if (row.mode == 'ro') {
 							if (row.htmlElem == "select") {
 							    var items = SiteMgr.paramOption[row.htmlElemKey];
@@ -625,30 +628,31 @@ var SiteMgr = {
 							}
 							return value;
 						    }
-						    var id = "value-" + index;
+			
+						    var valueId = $(this).get(0).name + '-' + index;
 						    if (row.htmlElem == "select") {
 							var tmpl = '\
-								<select id="{{id}}" name="{{id}}" style="width:150px">\
+								<select id={{id}} name="{{id}}" style="width:150px">\
 								{{each list}}\
 									<option value="{{$value.value}}" {{if $value.value == currValue}}selected{{/if}}>{{$value.name}}</option>\
 								{{/each}}\
 								</select>';
 							return template.compile(tmpl)({
-							    id : id,
+							    id : valueId,
 							    currValue : value,
 							    list : SiteMgr.paramOption[row.htmlElemKey]
 							});
 						    }
 						    var tmpl = '<input type="text" id="{{id}}" name="value" value="{{value}}" style="width:150px"/>';
 						    return template.compile(tmpl)({
-							id : id,
+							id : valueId,
 							value : value
 						    });		
 						}
 					}, {
 						field : 'createTime',
 						title : '更新时间',
-						width : 80
+						width : 100
 					} ] ]
 				});
 			}
@@ -838,10 +842,10 @@ var SiteMgr = {
 	// end
 	},
 	toolbar : {
-        	queryAllItems : function() {
+        	queryAllItem : function() {
         
         	},
-        	queryAllValues : function() {
+        	queryAllValue : function() {
         	    var node = $('#site-tree').tree('getSelected');
         	    if (node) {
         		var siteUid = node.attributes.uid;
@@ -851,21 +855,16 @@ var SiteMgr = {
         	    }
         	},
         	querySelected : function() {
-        
+        	    var paramUids = SiteMgr.toolbar.getSelectedParamUids();
+        	    console.log(paramUids);
         	},
         	querySchedule : function() {
-        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
-        		var category = SiteMgr.categories[i];
-        		var gridId = "#param-tab" + category.value + "-grid";
-        
-        	    }
+        	    var paramUids = SiteMgr.toolbar.getSelectedParamUids();
+        	    console.log(paramUids);
         	},
         	setup : function() {
-        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
-        		var category = SiteMgr.categories[i];
-        		var gridId = "#param-tab" + category.value + "-grid";
-        
-        	    }
+        	    var paramUids = SiteMgr.toolbar.getSelectedParamUids();
+        	    console.log(paramUids);
         	},
         	cancel : function() {
         	    var node = $('#site-tree').tree('getSelected');
@@ -880,6 +879,21 @@ var SiteMgr = {
         	},
         	clear : function() {
         	    SiteMgr.paramTabs.clear();
+        	},
+        	getSelectedParamUids : function(){
+        	    var paramUidList = [];
+        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
+        		var category = SiteMgr.categories[i];
+        		var gridId = "#param-tab" + category.value + '-grid';
+        		var rows = $(gridId).datagrid('getRows');
+        		for(var j=0;j<rows.length;j++){
+        		    var chkId = gridId + '-ck-' + j;
+        		    if($(chkId).prop("checked")){
+        			paramUidList.push(rows[j].paramUid);
+        		    }
+        		}
+        	    }
+        	    return paramUidList.join();
         	}
             // end
     },
