@@ -14,7 +14,7 @@ import com.wellheadstone.nemms.data.annotations.Column;
  */
 public class DeviceSitePo implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 5904439898771651854L;
 
@@ -82,6 +82,36 @@ public class DeviceSitePo implements Serializable {
 	 * 列名comment,说明备注
 	 */
 	public final static String Comment = "comment";
+
+	/**
+	 * 列名location,设备安装地点
+	 */
+	public final static String Location = "location";
+
+	/**
+	 * 列名ap_max_len,ap:c协议包最大长度
+	 */
+	public final static String ApMaxLen = "ap_max_len";
+
+	/**
+	 * 列名mcp_mode,mcp:b交互机制
+	 */
+	public final static String McpMode = "mcp_mode";
+
+	/**
+	 * 列名nc,连发系数(Nc)
+	 */
+	public final static String Nc = "nc";
+
+	/**
+	 * 列名tot1,设备响应超时(s)
+	 */
+	public final static String Tot1 = "tot1";
+
+	/**
+	 * 列名tg,发送间隔时间(ms)
+	 */
+	public final static String Tg = "tg";
 
 	/**
 	 * 列名create_user,站点或设备创建用户
@@ -159,6 +189,24 @@ public class DeviceSitePo implements Serializable {
 	@Column(name = "comment")
 	private String comment = "";
 
+	@Column(name = "location")
+	private String location = "";
+
+	@Column(name = "ap_max_len")
+	private Integer apMaxLen = 1024;
+
+	@Column(name = "mcp_mode")
+	private Short mcpMode = 0;
+
+	@Column(name = "nc")
+	private Short nc = 1;
+
+	@Column(name = "tot1")
+	private Short tot1 = 30;
+
+	@Column(name = "tg")
+	private Integer tg = 1000;
+
 	@Column(name = "create_user")
 	private String createUser = "";
 
@@ -185,7 +233,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取记录标识
-	 * 
+	 *
 	 * @return
 	 */
 	public Integer getId() {
@@ -194,7 +242,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置记录标识
-	 * 
+	 *
 	 * @param id
 	 */
 	public void setId(Integer id) {
@@ -203,7 +251,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取站点父id
-	 * 
+	 *
 	 * @return 站点父id
 	 */
 	public Integer getPid() {
@@ -212,7 +260,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置站点父id
-	 * 
+	 *
 	 * @param pid
 	 */
 	public void setPid(Integer pid) {
@@ -221,7 +269,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取站点/设备编号
-	 * 
+	 *
 	 * @return 站点/设备编号
 	 */
 	public String getUid() {
@@ -230,7 +278,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置站点/设备编号
-	 * 
+	 *
 	 * @param uid
 	 *            站点/设备编号
 	 */
@@ -240,7 +288,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取
-	 * 
+	 *
 	 * @return
 	 */
 	public String getName() {
@@ -249,7 +297,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置
-	 * 
+	 *
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -258,7 +306,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取设备类型
-	 * 
+	 *
 	 * @return 设备类型
 	 */
 	public String getDeviceType() {
@@ -267,7 +315,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置设备类型
-	 * 
+	 *
 	 * @param deviceType
 	 */
 	public void setDeviceType(String deviceType) {
@@ -276,7 +324,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取AP协议类型
-	 * 
+	 *
 	 * @return AP协议类型
 	 */
 	public String getApProtocol() {
@@ -285,7 +333,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置AP协议类型
-	 * 
+	 *
 	 * @param apProtocol
 	 */
 	public void setApProtocol(String apProtocol) {
@@ -294,7 +342,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取mcp协议类型
-	 * 
+	 *
 	 * @return mcp协议类型
 	 */
 	public String getMcpProtocol() {
@@ -303,7 +351,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置mcp协议类型
-	 * 
+	 *
 	 * @param mcpProtocol
 	 */
 	public void setMcpProtocol(String mcpProtocol) {
@@ -312,7 +360,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取协议类型
-	 * 
+	 *
 	 * @return 协议类型
 	 */
 	public String getProtocol() {
@@ -321,7 +369,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置协议类型
-	 * 
+	 *
 	 * @param protocol
 	 */
 	public void setProtocol(String protocol) {
@@ -330,7 +378,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取设备ip地址
-	 * 
+	 *
 	 * @return 设备ip地址
 	 */
 	public String getIpAddr() {
@@ -339,7 +387,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置设备ip地址
-	 * 
+	 *
 	 * @param ipAddr
 	 */
 	public void setIpAddr(String ipAddr) {
@@ -348,7 +396,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取远端端口
-	 * 
+	 *
 	 * @return 远端端口
 	 */
 	public Integer getPort() {
@@ -357,7 +405,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置远端端口
-	 * 
+	 *
 	 * @param port
 	 */
 	public void setPort(Integer port) {
@@ -366,7 +414,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取设备厂商
-	 * 
+	 *
 	 * @return 设备厂商
 	 */
 	public String getManufactor() {
@@ -375,7 +423,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置设备厂商
-	 * 
+	 *
 	 * @param manufactor
 	 */
 	public void setManufactor(String manufactor) {
@@ -384,7 +432,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取说明备注
-	 * 
+	 *
 	 * @return 说明备注
 	 */
 	public String getComment() {
@@ -393,7 +441,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置说明备注
-	 * 
+	 *
 	 * @param comment
 	 */
 	public void setComment(String comment) {
@@ -401,8 +449,116 @@ public class DeviceSitePo implements Serializable {
 	}
 
 	/**
-	 * 获取站点或设备创建用户
+	 * 获取设备安装地点
 	 * 
+	 * @return 设备安装地点
+	 */
+	public String getLocation() {
+		return this.location;
+	}
+
+	/**
+	 * 设置设备安装地点
+	 * 
+	 * @param location
+	 */
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	/**
+	 * 获取ap:c协议包最大长度(字节)
+	 *
+	 * @return ap:c协议包最大长度(字节)
+	 */
+	public Integer getApMaxLen() {
+		return this.apMaxLen;
+	}
+
+	/**
+	 * 设置ap:c协议包最大长度(字节)
+	 *
+	 * @param apMaxLen
+	 */
+	public void setApMaxLen(Integer apMaxLen) {
+		this.apMaxLen = apMaxLen;
+	}
+
+	/**
+	 * 获取mcp:b交互机制(0:每包确认,1:多问一答)
+	 *
+	 * @return mcp:b交互机制
+	 */
+	public Short getMcpMode() {
+		return this.mcpMode;
+	}
+
+	/**
+	 * 设置mcp:b交互机制(0:每包确认,1:多问一答)
+	 *
+	 * @param mcpMode
+	 */
+	public void setMcpMode(Short mcpMode) {
+		this.mcpMode = mcpMode;
+	}
+
+	/**
+	 * 获取连发系数(Nc)
+	 *
+	 * @return 连发系数(Nc)
+	 */
+	public Short getNc() {
+		return this.nc;
+	}
+
+	/**
+	 * 设置连发系数(Nc)
+	 *
+	 * @param nc
+	 */
+	public void setNc(Short nc) {
+		this.nc = nc;
+	}
+
+	/**
+	 * 获取设备响应超时(s)
+	 *
+	 * @return 设备响应超时
+	 */
+	public Short getTot1() {
+		return this.tot1;
+	}
+
+	/**
+	 * 设置设备响应超时(s)
+	 *
+	 * @param tot1
+	 */
+	public void setTot1(Short tot1) {
+		this.tot1 = tot1;
+	}
+
+	/**
+	 * 获取发送间隔时间（ms)
+	 *
+	 * @return 发送间隔时间
+	 */
+	public Integer getTg() {
+		return this.tg;
+	}
+
+	/**
+	 * 设置发送间隔时间（ms)
+	 *
+	 * @param tg
+	 */
+	public void setTg(Integer tg) {
+		this.tg = tg;
+	}
+
+	/**
+	 * 获取站点或设备创建用户
+	 *
 	 * @return 站点或设备创建用户
 	 */
 	public String getCreateUser() {
@@ -411,7 +567,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置站点或设备创建用户
-	 * 
+	 *
 	 * @param createUser
 	 */
 	public void setCreateUser(String createUser) {
@@ -420,7 +576,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取记录标志,0为站点，1为设备
-	 * 
+	 *
 	 * @return 记录标志,0为站点，1为设备
 	 */
 	public Integer getFlag() {
@@ -429,7 +585,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置记录标志,0为站点，1为设备
-	 * 
+	 *
 	 * @param flag
 	 */
 	public void setFlag(Integer flag) {
@@ -438,7 +594,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取是否有子节点
-	 * 
+	 *
 	 * @return
 	 */
 	public Boolean getHasChild() {
@@ -447,7 +603,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置是否有子节点
-	 * 
+	 *
 	 * @param hasChild
 	 */
 	public void setHasChild(Boolean hasChild) {
@@ -456,7 +612,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取站点状态（1表示锁定，0表示编辑)
-	 * 
+	 *
 	 * @return 站点状态（1表示锁定，0表示编辑)
 	 */
 	public Integer getStatus() {
@@ -465,7 +621,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置站点状态（1表示锁定，0表示编辑)
-	 * 
+	 *
 	 * @param status
 	 */
 	public void setStatus(Integer status) {
@@ -474,7 +630,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取节点在其父节点中的顺序
-	 * 
+	 *
 	 * @return 节点在其父节点中的顺序
 	 */
 	public Integer getSequence() {
@@ -483,7 +639,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置节点在其父节点中的顺序
-	 * 
+	 *
 	 * @param sequence
 	 */
 	public void setSequence(Integer sequence) {
@@ -510,7 +666,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取记录创建时间
-	 * 
+	 *
 	 * @return
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -520,7 +676,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置记录创建时间
-	 * 
+	 *
 	 * @param createTime
 	 */
 	public void setCreateTime(Date createTime) {
@@ -529,7 +685,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 获取记录更新时间
-	 * 
+	 *
 	 * @return
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -539,7 +695,7 @@ public class DeviceSitePo implements Serializable {
 
 	/**
 	 * 设置记录更新时间
-	 * 
+	 *
 	 * @param updateTime
 	 */
 	public void setUpdateTime(Date updateTime) {

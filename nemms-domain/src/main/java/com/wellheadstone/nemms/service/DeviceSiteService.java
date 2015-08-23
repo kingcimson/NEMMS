@@ -18,7 +18,6 @@ public class DeviceSiteService extends BaseService<DeviceSiteDao, DeviceSitePo> 
 	}
 
 	public int addSite(DeviceSitePo entity) {
-		// entity.setUid(UUID.randomUUID().toString());
 		int newId = this.dao.insertWithId(entity);
 		this.setHasChild(entity.getPid());
 		this.dao.updatePath(newId, this.getPath(entity.getPid(), newId));
@@ -29,7 +28,9 @@ public class DeviceSiteService extends BaseService<DeviceSiteDao, DeviceSitePo> 
 		String[] columnNames = new String[] {
 				DeviceSitePo.Name, DeviceSitePo.Uid, DeviceSitePo.DeviceType,
 				DeviceSitePo.ApProtocol, DeviceSitePo.McpProtocol, DeviceSitePo.IpAddr, DeviceSitePo.Port,
-				DeviceSitePo.Protocol, DeviceSitePo.Manufactor, DeviceSitePo.Sequence, DeviceSitePo.Comment
+				DeviceSitePo.Protocol, DeviceSitePo.Manufactor, DeviceSitePo.Sequence, DeviceSitePo.Comment,
+				DeviceSitePo.ApMaxLen, DeviceSitePo.McpMode, DeviceSitePo.Nc, DeviceSitePo.Tot1, DeviceSitePo.Tg,
+				DeviceSitePo.Location
 		};
 		return this.edit(entity, entity.getId(), columnNames);
 	}

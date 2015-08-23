@@ -55,14 +55,14 @@
 					<tr>
 						<td>站点名称:</td>
 						<td colspan="3"><input class="easyui-textbox" type="text" id="name" name="name" data-options="required:true"
-							style="width: 380px"></input></td>
+							style="width: 410px"></input></td>
 					</tr>
 					<tr>
 						<td>站点编号:</td>
 						<td><input class="easyui-textbox" type="text" id="uid" name="uid" data-options="required:true"></input></td>
 						<td>站点顺序:</td>
 						<td><input class="easyui-textbox" type="text" id="sequence" name="sequence" data-options="required:true"
-							style="width: 115px"></input></td>
+							 style="width: 148px"></input></td>
 					</tr>
 					<tr>
 						<td>设备类型:</td>
@@ -70,7 +70,7 @@
 							data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 						<td>AP协议类型:</td>
 						<td><select class="easyui-combobox" id="apProtocol" name="apProtocol"
-							data-options="valueField:'value',textField:'name'" style="width: 115px"></select></td>
+							data-options="valueField:'value',textField:'name'"  style="width: 148px"></select></td>
 					</tr>
 					<tr>
 						<td>MCP协议类型:</td>
@@ -78,24 +78,43 @@
 							data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 						<td>通讯协议类型:</td>
 						<td><select class="easyui-combobox" id="protocol" name="protocol"
-							data-options="valueField:'value',textField:'name'" style="width: 115px"></select></td>
+							data-options="valueField:'value',textField:'name'"  style="width: 148px"></select></td>
 					</tr>
 					<tr>
 						<td>UDP协议IP地址:</td>
 						<td><input class="easyui-textbox" type="text" id="ipAddr" name="ipAddr" data-options="required:true"></input></td>
 						<td>UDP协议端口:</td>
 						<td><input class="easyui-textbox" type="text" id="port" name="port" data-options="required:true"
-							style="width: 115px"></input></td>
+							 style="width: 148px"></input></td>
 					</tr>
 					<tr>
 						<td>设备厂商:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" id="manufactor" name="manufactor"
-							style="width: 380px"></input></td>
+						<td><input class="easyui-textbox" type="text" id="manufactor" name="manufactor"></input></td>
+						<td>安装地点:</td>
+						<td><input class="easyui-textbox" type="text" id="location" name="location"   style="width: 148px"></input></td>
 					</tr>
 					<tr>
+						<td>最大包长度(字节):</td>
+						<td><input class="easyui-textbox" type="text" id="apMaxLen" name="apMaxLen"></input></td>
+						<td>交互机制:</td>
+						<td><select class="easyui-combobox" id="mcpMode" name="mcpMode"   style="width: 148px">
+								<option selected="selected" value="0">每包确认方式</option>
+								<option value="1">多问一答方式</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>连发系数:</td>
+						<td><input class="easyui-textbox" type="text" id="nc" name="nc"></input></td>
+						<td>响应超时(s):</td>
+						<td><input class="easyui-textbox" type="text" id="tot1" name="tot1"   style="width: 148px"></input></td>
+					</tr>
+					<tr>
+						<td>发送间隔(ms):</td>
+						<td><input class="easyui-textbox" type="text" id="tg" name="tg"></input></td>
 						<td>站点备注:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" id="comment" name="comment" style="width: 380px"></input>
-							<input type="hidden" name="pid" id="pid" value="0"></input> <input type="hidden" name="flag" id="flag" value="0"></input>
+						<td><input class="easyui-textbox" type="text" id="comment" name="comment"   style="width: 148px"></input>
+							<input type="hidden" name="pid" id="pid" value="0"></input> 
+							<input type="hidden" name="flag" id="flag" value="0"></input>
 						</td>
 					</tr>
 				</table>
@@ -109,14 +128,14 @@
 					<tr>
 						<td>站点名称:</td>
 						<td colspan="3"><input class="easyui-textbox" type="text" id="edit-name" name="name"
-							data-options="required:true" style="width: 380px"></input></td>
+							data-options="required:true" style="width: 410px"></input></td>
 					</tr>
 					<tr>
 						<td>站点编号:</td>
 						<td><input class="easyui-textbox" type="text" id="edit-uid" name="uid" data-options="required:true"></input></td>
 						<td>站点顺序:</td>
 						<td><input class="easyui-textbox" type="text" id="edit-sequence" name="sequence" data-options="required:true"
-							style="width: 115px"></input></td>
+							 style="width: 148px"></input></td>
 					</tr>
 					<tr>
 						<td>设备类型:</td>
@@ -124,7 +143,7 @@
 							data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 						<td>AP协议类型:</td>
 						<td><select class="easyui-combobox" id="edit-apProtocol" name="apProtocol"
-							data-options="valueField:'value',textField:'name'" style="width: 115px"></select></td>
+							data-options="valueField:'value',textField:'name'"  style="width: 148px"></select></td>
 					</tr>
 					<tr>
 						<td>MCP协议类型:</td>
@@ -132,28 +151,104 @@
 							data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 						<td>通讯协议类型:</td>
 						<td><select class="easyui-combobox" id="edit-protocol" name="protocol"
-							data-options="valueField:'value',textField:'name'" style="width: 115px"></select></td>
+							data-options="valueField:'value',textField:'name'"  style="width: 148px"></select></td>
 					</tr>
 					<tr>
 						<td>UDP协议IP地址:</td>
 						<td><input class="easyui-textbox" type="text" id="edit-ipAddr" name="ipAddr" data-options="required:true"></input></td>
 						<td>UDP协议端口:</td>
 						<td><input class="easyui-textbox" type="text" id="edit-port" name="port" data-options="required:true"
-							style="width: 115px"></input></td>
+							 style="width: 148px"></input></td>
 					</tr>
 					<tr>
 						<td>设备厂商:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" id="edit-manufactor" name="manufactor"
-							style="width: 380px"></input></td>
+						<td><input class="easyui-textbox" type="text" id="edit-manufactor" name="manufactor"></input></td>
+						<td>安装地点:</td>
+						<td><input class="easyui-textbox" type="text" id="edit-location" name="location"   style="width: 148px"></input></td>
 					</tr>
 					<tr>
+						<td>最大包长度(字节):</td>
+						<td><input class="easyui-textbox" type="text" id="edit-apMaxLen" name="apMaxLen"></input></td>
+						<td>交互机制:</td>
+						<td><select class="easyui-combobox" id="edit-mcpMode" name="mcpMode" style="width: 148px">
+								<option selected="selected" value="0">每包确认方式</option>
+								<option value="1">多问一答方式</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>连发系数:</td>
+						<td><input class="easyui-textbox" type="text" id="edit-nc" name="nc"></input></td>
+						<td>响应超时(s):</td>
+						<td><input class="easyui-textbox" type="text" id="edit-tot1" name="tot1"   style="width: 148px"></input></td>
+					</tr>
+					<tr>
+						<td>发送间隔(ms):</td>
+						<td><input class="easyui-textbox" type="text" id="edit-tg" name="tg"></input></td>
 						<td>站点备注:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" id="edit-comment" name="comment"
-							style="width: 380px"></input> <input type="hidden" name="id" id="edit-id"></input></td>
+						<td><input class="easyui-textbox" type="text" id="edit-comment" name="comment"   style="width: 148px"></input>
+						 <input type="hidden" name="id" id="edit-id"></input></td>
 					</tr>
 				</table>
 			</center>
 		</form>
+	</div>
+	<div id="view-site-dlg" title="查看站点">
+			<center>
+				<table cellpadding="5" style="margin: 30px auto" class="form-table">
+					<tr>
+						<td>站点名称:</td>
+						<td colspan="3"><label id="view-name"></label></td>
+					</tr>
+					<tr>
+						<td>站点编号:</td>
+						<td><label id="view-uid" name="uid"></label></td>
+						<td>站点顺序:</td>
+						<td><label id="view-sequence"></label></td>
+					</tr>
+					<tr>
+						<td>设备类型:</td>
+						<td><label id="view-deviceType" name="deviceType"></label></td>
+						<td>AP协议类型:</td>
+						<td><label id="view-apProtocol"></label></td>
+					</tr>
+					<tr>
+						<td>MCP协议类型:</td>
+						<td><label id="view-mcpProtocol"></label></td>
+						<td>通讯协议类型:</td>
+						<td><label id="view-protocol"></label></td>
+					</tr>
+					<tr>
+						<td>UDP协议IP地址:</td>
+						<td><label id="view-ipAddr"></label></td>
+						<td>UDP协议端口:</td>
+						<td><label id="view-port"></label></td>
+					</tr>
+					<tr>
+						<td>设备厂商:</td>
+						<td><label id="view-manufactor"></label></td>
+						<td>安装地点:</td>
+						<td><label id="view-location"></label></td>
+					</tr>
+					<tr>
+						<td>最大包长度(字节):</td>
+						<td><label id="view-apMaxLen"></label></td>
+						<td>交互机制:</td>
+						<td><label id="view-mcpMode"></label></td>
+					</tr>
+					<tr>
+						<td>连发系数:</td>
+						<td><label id="view-nc"></label></td>
+						<td>响应超时(s):</td>
+						<td><label id="view-tot1"></label></td>
+					</tr>
+					<tr>
+						<td>发送间隔(ms):</td>
+						<td><label id="view-tg"></label></td>
+						<td>站点备注:</td>
+						<td><label id="view-comment"></label>
+					</tr>
+				</table>
+			</center>
 	</div>
 	<div id="add-device-dlg" title="增加设备">
 		<form id="add-device-form" name="add-device-form" method="post">
@@ -205,6 +300,93 @@
 				</table>
 			</center>
 		</form>
+	</div>
+	<div id="view-device-dlg" title="查看设备">
+			<center>
+				<table cellpadding="5" style="margin: 30px auto" class="form-table">
+					<tr>
+						<td>设备名称:</td>
+						<td colspan="3"><label id="view-device-name"></label></td>
+					</tr>
+					<tr>
+						<td>设备编号:</td>
+						<td><label id="view-device-uid"></label></td>
+						<td>设备顺序:</td>
+						<td><label id="view-device-sequence"></label></td>
+					</tr>
+					<tr>
+						<td>设备备注:</td>
+						<td colspan="3"><label id="view-device-comment"></label></td>
+					</tr>
+				</table>
+			</center>
+	</div>
+	<div id="add-conn-dlg" title="增加连接设备">
+		<form id="add-conn-form" name="add-conn-form" method="post">
+			<center>
+				<table cellpadding="5" style="margin: 30px auto" class="form-table">
+					<tr>
+						<td>站点/设备编号:</td>
+						<td><input class="easyui-textbox" type="text" id="conn-siteUid" name="siteUid" data-options="required:true"></input></td>
+						<td>设备IP:</td>
+						<td><input class="easyui-textbox" type="text" id="conn-clientIp" name="clientIp" data-options="required:true" style="width: 138px"></input></td>
+					</tr>
+					<tr>
+						<td>连接服务器IP:</td>
+						<td><input class="easyui-textbox" type="text" id="conn-serverIp" name="serverIp" data-options="required:true"></input></td>
+						<td>连接服务器IP:</td>
+						<td><input class="easyui-textbox" type="text" id="conn-serverPort" name="serverPort" data-options="required:true" style="width: 138px"></input></td>
+					</tr>
+				</table>
+			</center>
+		</form>
+	</div>
+	<div id="edit-conn-dlg" title="编辑连接设备">
+		<form id="edit-conn-form" name="edit-conn-form" method="post">
+			<center>
+				<table cellpadding="5" style="margin: 30px auto" class="form-table">
+					<tr>
+						<td>站点/设备编号:</td>
+						<td><input class="easyui-textbox" type="text" id="edit-conn-siteUid" name="siteUid" data-options="required:true"></input></td>
+						<td>设备IP:</td>
+						<td><input class="easyui-textbox" type="text" id="edit-conn-clientIp" name="clientIp" data-options="required:true" style="width: 138px"></input></td>
+					</tr>
+					<tr>
+						<td>连接服务器IP:</td>
+						<td><input class="easyui-textbox" type="text" id="edit-conn-serverIp" name="serverIp" data-options="required:true"></input></td>
+						<td>连接服务器IP:</td>
+						<td><input class="easyui-textbox" type="text" id="edit-conn-serverPort" name="serverPort" data-options="required:true" style="width: 138px"></input>
+						 	<input type="hidden" id="edit-conn-id" name="id" ></input>
+						</td>
+					</tr>
+				</table>
+			</center>
+		</form>
+	</div>
+	<div id="add-schedule-dlg" title="增加定时任务">
+		<form id="add-schedule-form" name="add-schedule-form" method="post">
+			<center>
+				<table cellpadding="5" style="margin: 30px auto" class="form-table">
+					
+				</table>
+			</center>
+		</form>
+	</div>
+	<div id="edit-schedule-dlg" title="编辑定时任务">
+		<form id="edit-schedule-form" name="edit-schedule-form" method="post">
+			<center>
+				<table cellpadding="5" style="margin: 30px auto" class="form-table">
+					
+				</table>
+			</center>
+		</form>
+	</div>
+	<div id="view-schedule-dlg" title="查看定时任务">
+			<center>
+				<table cellpadding="5" style="margin: 30px auto" class="form-table">
+					
+				</table>
+			</center>
 	</div>
 	<!-- 查找树节点弹框  -->
 	<div id="search-site-dlg" title="查找站点(设备)">

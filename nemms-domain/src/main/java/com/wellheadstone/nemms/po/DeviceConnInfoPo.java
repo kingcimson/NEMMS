@@ -14,7 +14,7 @@ import com.wellheadstone.nemms.data.annotations.Column;
  */
 public class DeviceConnInfoPo implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -5386843424285389784L;
 
@@ -79,17 +79,17 @@ public class DeviceConnInfoPo implements Serializable {
 	private Integer serverPort;
 
 	@Column(name = "status")
-	private Integer status;
+	private Integer status = 1;
 
 	@Column(name = "startTime")
-	private Date startTime;
+	private Date startTime = Calendar.getInstance().getTime();
 
 	@Column(name = "heartTime")
-	private Date heartTime;
+	private Date heartTime = Calendar.getInstance().getTime();
 
 	/**
 	 * 获取
-	 * 
+	 *
 	 * @return
 	 */
 	public Integer getId() {
@@ -98,7 +98,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 设置
-	 * 
+	 *
 	 * @param id
 	 */
 	public void setId(Integer id) {
@@ -107,7 +107,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 获取站点与设备唯一编号（十六进制)
-	 * 
+	 *
 	 * @return 站点与设备唯一编号（十六进制)
 	 */
 	public String getSiteUid() {
@@ -116,7 +116,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 设置站点与设备唯一编号（十六进制)
-	 * 
+	 *
 	 * @param siteUid
 	 */
 	public void setSiteUid(String siteUid) {
@@ -125,7 +125,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 获取客户端设备IP
-	 * 
+	 *
 	 * @return 客户端设备IP
 	 */
 	public String getClientIp() {
@@ -134,7 +134,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 设置客户端设备IP
-	 * 
+	 *
 	 * @param clientIp
 	 */
 	public void setClientIp(String clientIp) {
@@ -143,7 +143,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 获取连接的服务器IP
-	 * 
+	 *
 	 * @return 连接的服务器IP
 	 */
 	public String getServerIp() {
@@ -152,7 +152,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 设置连接的服务器IP
-	 * 
+	 *
 	 * @param serverIp
 	 */
 	public void setServerIp(String serverIp) {
@@ -161,7 +161,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 获取连接的服务器端口
-	 * 
+	 *
 	 * @return 连接的服务器端口
 	 */
 	public Integer getServerPort() {
@@ -170,7 +170,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 设置连接的服务器端口
-	 * 
+	 *
 	 * @param serverPort
 	 */
 	public void setServerPort(Integer serverPort) {
@@ -179,7 +179,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 获取当前连接状态
-	 * 
+	 *
 	 * @return 当前连接状态
 	 */
 	public Integer getStatus() {
@@ -188,7 +188,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 设置当前连接状态
-	 * 
+	 *
 	 * @param status
 	 */
 	public void setStatus(Integer status) {
@@ -197,7 +197,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 获取连接时间
-	 * 
+	 *
 	 * @return 连接时间
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -207,7 +207,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 设置连接时间
-	 * 
+	 *
 	 * @param startTime
 	 */
 	public void setStartTime(Date startTime) {
@@ -216,7 +216,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 获取上次心跳时间
-	 * 
+	 *
 	 * @return 上次心跳时间
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -226,7 +226,7 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 设置上次心跳时间
-	 * 
+	 *
 	 * @param heartTime
 	 */
 	public void setHeartTime(Date heartTime) {

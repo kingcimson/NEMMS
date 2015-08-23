@@ -1,6 +1,8 @@
 var siteMgrPageUrl = XFrame.getContextPath() + '/device/site/';
-$(function() {
+var connInfoPageUrl = XFrame.getContextPath() + '/device/connInfo/';
+var schedulePageUrl = XFrame.getContextPath() + '/device/schedule/';
 
+$(function() {
 	$('#west').panel({
 		tools : [ {
 			iconCls : 'icon-search',
@@ -29,7 +31,7 @@ $(function() {
 			SiteMgr.paramTabs.displayParamList(node.attributes.uid,0);
 		},
 		onDblClick : function(node) {
-			SiteMgr.siteTree.edit();
+			SiteMgr.siteTree.view();
 		},
 		onBeforeLoad : function(node, param) {
 			EasyUIUtils.loading();
@@ -115,11 +117,21 @@ $(function() {
 		rownumbers : true,
 		fitColumns : true,
 		singleSelect : true,
-		// pageSize : 10,
+		url : connInfoPageUrl + 'list',
 		toolbar : [ {
 			iconCls : 'icon-add',
 			handler : function() {
-				EasyUIUtils.reloadDatagrid('#connected-device-datagrid');
+			    SiteMgr.conn.add();
+			}
+		}, '-', {
+			iconCls : 'icon-edit1',
+			handler : function() {
+			    SiteMgr.conn.edit();
+			}
+		}, '-', {
+			iconCls : 'icon-remove',
+			handler : function() {
+			    SiteMgr.conn.remove();
 			}
 		}, '-', {
 			iconCls : 'icon-reload',
@@ -132,15 +144,15 @@ $(function() {
 			title : '标识',
 			width : 50
 		}, {
-			field : 'uid',
+			field : 'siteUid',
 			title : '站点/设备编号',
 			width : 100
 		}, {
-			field : 'clientIP',
+			field : 'clientIp',
 			title : '设备IP',
 			width : 100
 		}, {
-			field : 'serverIP',
+			field : 'serverIp',
 			title : '服务器IP',
 			width : 100
 		}, {
@@ -152,11 +164,12 @@ $(function() {
 			title : '状态',
 			width : 80
 		}, {
-			field : 'createTime',
+			field : 'startTime',
 			title : '建立连接时间',
 			width : 100
 		} ] ],
 		onDblClickRow : function(index, row) {
+		    SiteMgr.conn.edit();
 		}
 	});
 
@@ -166,11 +179,22 @@ $(function() {
 		rownumbers : true,
 		fitColumns : true,
 		singleSelect : true,
+		url : schedulePageUrl + 'list',
 		// pageSize : 10,
 		toolbar : [ {
+			iconCls : 'icon-edit1',
+			handler : function() {
+			    SiteMgr.schedule.edit();
+			}
+		}, '-', {
+			iconCls : 'icon-remove',
+			handler : function() {
+			    SiteMgr.schedule.remove();
+			}
+		}, '-', {
 			iconCls : 'icon-reload',
 			handler : function() {
-				EasyUIUtils.reloadDatagrid('#console-datagrid');
+			    EasyUIUtils.reloadDatagrid('#schedule-task-datagrid');
 			}
 		} ],
 		columns : [ [ {
@@ -178,26 +202,28 @@ $(function() {
 			title : '标识',
 			width : 50
 		}, {
-			field : 'name',
-			title : '操作'
-		}, {
-			field : 'sendData',
-			title : '发送内容',
-			width : 150
-		}, {
-			field : 'recvData',
-			title : '接收内容',
-			width : 150
-		}, {
-			field : 'createUser',
-			title : '操作用户',
+			field : 'peroid',
+			title : '频率',
 			width : 50
 		}, {
-			field : 'createTime',
-			title : '操作时间',
+			field : 'interval',
+			title : '间隔',
 			width : 50
+		}, {
+			field : 'startTime',
+			title : '开始时间',
+			width : 80
+		}, {
+			field : 'times',
+			title : '次数',
+			width : 50
+		}, {
+			field : 'comment',
+			title : '说明',
+			width : 80
 		} ] ],
 		onDblClickRow : function(index, row) {
+		    SiteMgr.schedule.view();
 		}
 	});
 
@@ -238,8 +264,8 @@ $(function() {
 	$('#add-site-dlg').dialog({
 		closed : true,
 		modal : true,
-		width : 560,
-		height : 380,
+		width : 600,
+		height : 450,
 		iconCls : 'icon-add',
 		buttons : [ {
 			text : '关闭',
@@ -257,8 +283,8 @@ $(function() {
 	$('#edit-site-dlg').dialog({
 		closed : true,
 		modal : true,
-		width : 560,
-		height : 380,
+		width : 600,
+		height : 450,
 		iconCls : 'icon-edit',
 		buttons : [ {
 			text : '关闭',
@@ -270,6 +296,21 @@ $(function() {
 			text : '保存',
 			iconCls : 'icon-save',
 			handler : SiteMgr.siteTree.saveNode
+		} ]
+	});
+	
+	$('#view-site-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : 600,
+		height : 450,
+		iconCls : 'icon-item1',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#view-site-dlg").dialog('close');
+			}
 		} ]
 	});
 
@@ -308,6 +349,112 @@ $(function() {
 			text : '保存',
 			iconCls : 'icon-save',
 			handler : SiteMgr.siteTree.saveNode
+		} ]
+	});
+	
+	$('#view-device-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : 560,
+		height : 280,
+		iconCls : 'icon-item1',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#view-device-dlg").dialog('close');
+			}
+		} ]
+	});
+	
+	$('#add-conn-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : 560,
+		height : 210,
+		iconCls : 'icon-add',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#add-conn-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : SiteMgr.conn.save
+		} ]
+	});
+
+	$('#edit-conn-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : 560,
+		height : 210,
+		iconCls : 'icon-edit1',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#edit-conn-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : SiteMgr.conn.save
+		} ]
+	});
+	
+	$('#add-schedule-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : 560,
+		height : 280,
+		iconCls : 'icon-add',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#add-schedule-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : SiteMgr.schedule.save
+		} ]
+	});
+
+	$('#edit-schedule-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : 560,
+		height : 280,
+		iconCls : 'icon-edit1',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#edit-schedule-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : SiteMgr.schedule.save
+		} ]
+	});
+	
+	$('#view-schedule-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : 560,
+		height : 280,
+		iconCls : 'icon-item1',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#view-schedule-dlg").dialog('close');
+			}
 		} ]
 	});
 
@@ -379,6 +526,18 @@ var SiteMgr = {
 	init : function() {
 		SiteMgr.loadConfigItems();
 	},
+	getConfigItemName:function(key,value){
+	    if(key == "mcpMode"){
+		return value == "0" ? "每包确认方式" : "多问一答方式";
+	    }
+	    var items = SiteMgr.dataDict[key];
+	    for(var i=0;i<items.length;i++){
+		if(items[i].value == value){
+		    return items[i].name;
+		}
+	    }
+	    return "其他";
+	},
 	loadConfigItems : function() {
 		var url = XFrame.getContextPath() + '/system/dict/getDepth1Items'
 		$.getJSON(url, {
@@ -448,48 +607,43 @@ var SiteMgr = {
 						width : 200,
 						sortable : true
 					}, {
-						field : 'valueType',
-						title : '类型',
-						width : 50,
-						sortable : true
-					}, {
 						field : 'value',
 						title : '值',
 						width : 100,
 						sortable : true,
 						formatter : function(value, row, index) {
-							if(row.mode == 'ro'){
-								if(row.htmlElem == "select"){
-									var items = SiteMgr.paramOption[row.htmlElemKey];
-									for(var i=0;i<items.length;i++){
-										var item = items[i];
-										if(item.value == value){
-											return item.value + "(" + item.name + ")";
-										}
-									}
-									return value;
+						    if (row.mode == 'ro') {
+							if (row.htmlElem == "select") {
+							    var items = SiteMgr.paramOption[row.htmlElemKey];
+							    for (var i = 0; i < items.length; i++) {
+								var item = items[i];
+								if (item.value == value) {
+								    return item.value + "(" + item.name + ")";
 								}
-								return value;
+							    }
+							    return value;
 							}
-							var id = "value-" + index;
-							if(row.htmlElem == "select"){
-								var tmpl = '\
-										<select id="{{id}}" name="{{id}}" style="width:150px">\
-										{{each list}}\
-											<option value="{{$value.value}}" {{if $value.value == currValue}}selected{{/if}}>{{$value.name}}</option>\
-										{{/each}}\
-										</select>';
-								return template.compile(tmpl)({
-									id : id,
-									currValue : value,
-									list : SiteMgr.paramOption[row.htmlElemKey] 
-								});
-							}
-							var tmpl = '<input type="text" id="{{id}}" name="value" value="{{value}}" style="width:150px"/>';
+							return value;
+						    }
+						    var id = "value-" + index;
+						    if (row.htmlElem == "select") {
+							var tmpl = '\
+								<select id="{{id}}" name="{{id}}" style="width:150px">\
+								{{each list}}\
+									<option value="{{$value.value}}" {{if $value.value == currValue}}selected{{/if}}>{{$value.name}}</option>\
+								{{/each}}\
+								</select>';
 							return template.compile(tmpl)({
-								id : id,
-								value : value
+							    id : id,
+							    currValue : value,
+							    list : SiteMgr.paramOption[row.htmlElemKey]
 							});
+						    }
+						    var tmpl = '<input type="text" id="{{id}}" name="value" value="{{value}}" style="width:150px"/>';
+						    return template.compile(tmpl)({
+							id : id,
+							value : value
+						    });		
 						}
 					}, {
 						field : 'createTime',
@@ -529,6 +683,10 @@ var SiteMgr = {
 			$('#sequence').textbox('setValue', "10");
 			$('#ipAddr').textbox('setValue', "127.0.0.1");
 			$('#port').textbox('setValue', "8000");
+			$('#apMaxLen').textbox('setValue', "1024");
+			$('#nc').textbox('setValue', "1");
+			$('#tot1').textbox('setValue', "60");
+			$('#tg').textbox('setValue', "1000");
 		},
 		addDeviceNode : function() {
 			var node = $('#site-tree').tree('getSelected');
@@ -567,6 +725,37 @@ var SiteMgr = {
 			$("#edit-device-form").form('reset');
 			$("#modal-action").val("editDevice");
 			$("#edit-device-form").form('load', meta);
+		},
+		view:function(){
+		    var node = $('#site-tree').tree('getSelected');
+			if (node) {
+				var meta = node.attributes;
+				if (meta.flag == 0) {
+					SiteMgr.dialogs.viewSiteNodeDlg.open();
+					SiteMgr.siteTree.viewSiteNode(meta);
+				} else {
+					SiteMgr.dialogs.viewDeviceNodeDlg.open();
+					SiteMgr.siteTree.viewDeviceNode(meta);
+				}
+			} else {
+				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
+			}
+		},
+		viewSiteNode:function(meta){
+		    var comboxKeys=["deviceType","apProtocol","mcpProtocol","protocol","mcpMode"];
+		    for(var key in meta){
+			var id = '#view-'+key;
+			var value = (meta[key]);
+			if($.inArray(key, comboxKeys) >= 0){	
+			    value = SiteMgr.getConfigItemName(key, value);
+			}
+			$(id).text(value);
+		    }
+		},
+		viewDeviceNode:function(meta){
+		    for(var key in meta){
+			$('#view-device-'+key).text(meta[key]);
+		    }
 		},
 		saveNode : function() {
 			var act = $("#modal-action").val();
@@ -649,111 +838,217 @@ var SiteMgr = {
 	// end
 	},
 	toolbar : {
-		queryAllItems : function() {
-			
-		},
-		queryAllValues : function() {
-			var node = $('#site-tree').tree('getSelected');
-			if (node) {
-				var siteUid = node.attributes.uid;
-				SiteMgr.paramTabs.displayParamList(siteUid,0);
-			} else {
-				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
-			}
-		},
-		querySelected:function(){
-			
-		},
-		querySchedule : function(){
-			for (var i = 0; i < SiteMgr.categories.length; i++) {
-				var category = SiteMgr.categories[i];
-				var gridId = "#param-tab" + category.value + "-grid";			
-				
-			}
-		},
-		setup : function() {
-			for (var i = 0; i < SiteMgr.categories.length; i++) {
-				var category = SiteMgr.categories[i];
-				var gridId = "#param-tab" + category.value + "-grid";			
-				
-			}
-		},
-		cancel : function() {
-			var node = $('#site-tree').tree('getSelected');
-			if (node) {
-				var tab = $('#param-tabs').tabs('getSelected');
-				var index = $('#param-tabs').tabs('getTabIndex',tab);
-				var siteUid = node.attributes.uid;
-				SiteMgr.paramTabs.displayParamList(siteUid,index);
-			} else {
-				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
-			}
-		},
-		clear : function() {
-			SiteMgr.paramTabs.clear();
-		}
-	// end
+        	queryAllItems : function() {
+        
+        	},
+        	queryAllValues : function() {
+        	    var node = $('#site-tree').tree('getSelected');
+        	    if (node) {
+        		var siteUid = node.attributes.uid;
+        		SiteMgr.paramTabs.displayParamList(siteUid, 0);
+        	    } else {
+        		$.messager.alert('警告', '请选中一个站点或设备!', 'info');
+        	    }
+        	},
+        	querySelected : function() {
+        
+        	},
+        	querySchedule : function() {
+        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
+        		var category = SiteMgr.categories[i];
+        		var gridId = "#param-tab" + category.value + "-grid";
+        
+        	    }
+        	},
+        	setup : function() {
+        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
+        		var category = SiteMgr.categories[i];
+        		var gridId = "#param-tab" + category.value + "-grid";
+        
+        	    }
+        	},
+        	cancel : function() {
+        	    var node = $('#site-tree').tree('getSelected');
+        	    if (node) {
+        		var tab = $('#param-tabs').tabs('getSelected');
+        		var index = $('#param-tabs').tabs('getTabIndex', tab);
+        		var siteUid = node.attributes.uid;
+        		SiteMgr.paramTabs.displayParamList(siteUid, index);
+        	    } else {
+        		$.messager.alert('警告', '请选中一个站点或设备!', 'info');
+        	    }
+        	},
+        	clear : function() {
+        	    SiteMgr.paramTabs.clear();
+        	}
+            // end
+    },
+    conn : {
+	add : function() {
+	    SiteMgr.dialogs.addConnDlg.open();
+	    $("#modal-action").val("add");
+	    $("#add-conn-form").form('reset');
 	},
-	paramTabs : {
-		displayParamList : function(siteUid,defaultTabIndex) {
-			$.getJSON(siteMgrPageUrl + 'queryAllValues', {
-				siteUid : siteUid
-			}, function(map) {
-				SiteMgr.paramTabs.clear();
-				for ( var key in map) {
-					var gridId = "#param-tab" + key + "-grid";
-					var data = map[key];
-					$(gridId).datagrid('loadData', data);
-				}
-				SiteMgr.paramTabs.select(defaultTabIndex);
-			});	
-		},
-		clear:function(){
-			for (var i = 0; i < SiteMgr.categories.length; i++) {
-				var category = SiteMgr.categories[i];
-				var gridId = "#param-tab" + category.value + "-grid";			
-				EasyUIUtils.clearDatagrid(gridId);
-			}
-			SiteMgr.paramTabs.select(0);
-		},
-		select:function(index){
-			$('#param-tabs').tabs('select', index);
-		},
-		
-	// end
+	edit : function() {
+	    var row = $('#connected-device-datagrid').datagrid('getSelected');
+	    if (row) {
+		SiteMgr.dialogs.editConnDlg.open();
+		$("#modal-action").val("edit");
+		$("#edit-conn-form").form('reset');
+		$("#edit-conn-form").form('load', row);
+	    } else {
+		$.messager.alert('警告', '请选中一条记录!', 'info');
+	    }
 	},
-	consoleTabs : {
-
-	// end
+	remove : function() {
+	    var row = $('#connected-device-datagrid').datagrid('getSelected');
+	    if (!row) {
+		$.messager.alert('警告', '请选中一条记录!', 'info');
+	    }
+	    var gridUrl = connInfoPageUrl + 'list';
+	    var actUrl = connInfoPageUrl + 'remove';
+	    return EasyUIUtils.removeWithActUrl('#connected-device-datagrid', gridUrl, actUrl);
 	},
-	dialogs : {
-		addSiteNodeDlg : {
-			open : function() {
-				$('#add-site-dlg').dialog('open').dialog('center');
-			}
-		},
-		editSiteNodeDlg : {
-			open : function() {
-				$('#edit-site-dlg').dialog('open').dialog('center');
-			}
-		},
-		addDeviceNodeDlg : {
-			open : function() {
-				$('#add-device-dlg').dialog('open').dialog('center');
-			}
-		},
-		editDeviceNodeDlg : {
-			open : function() {
-				$('#edit-device-dlg').dialog('open').dialog('center');
-			}
-		},
-		searchSiteDlg : {
-			open : function() {
-				$('#search-site-dlg').dialog('open').dialog('center');
-				EasyUIUtils.clearDatagrid('#search-site-result');
-			}
-		}
+	save : function() {
+	    var action = $('#modal-action').val();
+	    var formId = action == "edit" ? "#edit-conn-form" : "#add-conn-form";
+	    var dlgId = action == "edit" ? "#edit-conn-dlg" : "#add-conn-dlg";
+	    var gridUrl = connInfoPageUrl + 'list';
+	    EasyUIUtils.saveWithActUrl(dlgId, formId, '#modal-action', '#connected-device-datagrid', gridUrl, connInfoPageUrl);
 	}
+    },
+    schedule : {
+	add : function() {
+	    SiteMgr.dialogs.addScheduleDlg.open();
+	    $("#modal-action").val("add");
+	    $("#add-schedule-form").form('reset');
+	},
+	edit : function() {
+	    var row = $('#schedule-task-datagrid').datagrid('getSelected');
+	    if (row) {
+		SiteMgr.dialogs.editScheduleDlg.open();
+		$("#modal-action").val("edit");
+		$("#edit-schedule-form").form('reset');
+		$("#edit-schedule-form").form('load', row);
+	    } else {
+		$.messager.alert('警告', '请选中一条记录!', 'info');
+	    }
+	},
+	remove : function() {
+	    var row = $('#schedule-task-datagrid').datagrid('getSelected');
+	    if (!row) {
+		$.messager.alert('警告', '请选中一条记录!', 'info');
+	    }
+	    var gridUrl = schedulePageUrl + 'list';
+	    var actUrl = schedulePageUrl + 'remove';
+	    return EasyUIUtils.removeWithActUrl('#schedule-task-datagrid', gridUrl, actUrl);
+	},
+	view : function() {
+	    SiteMgr.dialogs.viewScheduleDlg.open();
+	},
+	save : function() {
+	    var action = $('#modal-action').val();
+	    var formId = action == "edit" ? "#edit-schedule-form" : "#add-schedule-form";
+	    var dlgId = action == "edit" ? "#edit-schedule-dlg" : "#add-schedule-dlg";
+	    var gridUrl = schedulePageUrl + 'list';
+	    EasyUIUtils.saveWithActUrl(dlgId, formId, '#modal-action', '#schedule-task-datagrid', gridUrl, schedulePageUrl);
+	}
+    },
+    paramTabs : {
+	displayParamList : function(siteUid, defaultTabIndex) {
+	    $.getJSON(siteMgrPageUrl + 'queryAllValues', {
+		siteUid : siteUid
+	    }, function(map) {
+		SiteMgr.paramTabs.clear();
+		for ( var key in map) {
+		    var gridId = "#param-tab" + key + "-grid";
+		    var data = map[key];
+		    $(gridId).datagrid('loadData', data);
+		}
+		SiteMgr.paramTabs.select(defaultTabIndex);
+	    });
+	},
+	clear : function() {
+	    for (var i = 0; i < SiteMgr.categories.length; i++) {
+		var category = SiteMgr.categories[i];
+		var gridId = "#param-tab" + category.value + "-grid";
+		EasyUIUtils.clearDatagrid(gridId);
+	    }
+	    SiteMgr.paramTabs.select(0);
+	},
+	select : function(index) {
+	    $('#param-tabs').tabs('select', index);
+	},
+
+    // end
+    },
+    consoleTabs : {
+
+    // end
+    },
+    dialogs : {
+	addSiteNodeDlg : {
+	    open : function() {
+		$('#add-site-dlg').dialog('open').dialog('center');
+	    }
+	},
+	editSiteNodeDlg : {
+	    open : function() {
+		$('#edit-site-dlg').dialog('open').dialog('center');
+	    }
+	},
+	viewSiteNodeDlg : {
+	    open : function() {
+		$('#view-site-dlg').dialog('open').dialog('center');
+	    }
+	},
+	addDeviceNodeDlg : {
+	    open : function() {
+		$('#add-device-dlg').dialog('open').dialog('center');
+	    }
+	},
+	editDeviceNodeDlg : {
+	    open : function() {
+		$('#edit-device-dlg').dialog('open').dialog('center');
+	    }
+	},
+	viewDeviceNodeDlg : {
+	    open : function() {
+		$('#view-device-dlg').dialog('open').dialog('center');
+	    }
+	},
+	addConnDlg : {
+	    open : function() {
+		$('#add-conn-dlg').dialog('open').dialog('center');
+	    }
+	},
+	editConnDlg : {
+	    open : function() {
+		$('#edit-conn-dlg').dialog('open').dialog('center');
+	    }
+	},
+	addScheduleDlg : {
+	    open : function() {
+		$('#add-schedule-dlg').dialog('open').dialog('center');
+	    }
+	},
+	editScheduleDlg : {
+	    open : function() {
+		$('#edit-schedule-dlg').dialog('open').dialog('center');
+	    }
+	},
+	viewScheduleDlg : {
+	    open : function() {
+		$('#view-schedule-dlg').dialog('open').dialog('center');
+	    }
+	},
+	searchSiteDlg : {
+	    open : function() {
+		$('#search-site-dlg').dialog('open').dialog('center');
+		EasyUIUtils.clearDatagrid('#search-site-result');
+	    }
+	}
+    }
 // end
 };
 

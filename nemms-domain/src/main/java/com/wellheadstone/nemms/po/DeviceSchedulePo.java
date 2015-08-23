@@ -14,7 +14,7 @@ import com.wellheadstone.nemms.data.annotations.Column;
  */
 public class DeviceSchedulePo implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 2897805664117451332L;
 
@@ -39,9 +39,14 @@ public class DeviceSchedulePo implements Serializable {
 	public final static String Interval = "interval";
 
 	/**
-	 * 列名time,任务执行时间,指定任务什么时间执行
+	 * 列名start_time,任务执行时间,指定任务什么时间执行
 	 */
-	public final static String Time = "time";
+	public final static String StartTime = "start_time";
+
+	/**
+	 * 列名times,任务执次数
+	 */
+	public final static String Times = "times";
 
 	/**
 	 * 列名params,定时任务参数(json数据结构)
@@ -72,8 +77,11 @@ public class DeviceSchedulePo implements Serializable {
 	@Column(name = "interval")
 	private Integer interval;
 
-	@Column(name = "time")
-	private String time;
+	@Column(name = "start_time")
+	private String startTime;
+
+	@Column(name = "times")
+	private Integer times;
 
 	@Column(name = "params")
 	private String params;
@@ -89,7 +97,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 获取任务ID
-	 * 
+	 *
 	 * @return 任务ID
 	 */
 	public Integer getId() {
@@ -98,7 +106,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 设置任务ID
-	 * 
+	 *
 	 * @param id
 	 */
 	public void setId(Integer id) {
@@ -107,7 +115,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 获取任务执行频率(取值：y每年|M每月|w每周|d每天|h每小时|m每分|s每秒)
-	 * 
+	 *
 	 * @return 任务执行频率(取值：y每年|M每月|w每周|d每天|h每小时|m每分|s每秒)
 	 */
 	public String getPeroid() {
@@ -116,7 +124,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 设置任务执行频率(取值：y每年|M每月|w每周|d每天|h每小时|m每分|s每秒)
-	 * 
+	 *
 	 * @param peroid
 	 */
 	public void setPeroid(String peroid) {
@@ -125,7 +133,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 获取任务执行间隔
-	 * 
+	 *
 	 * @return 任务执行间隔
 	 */
 	public Integer getInterval() {
@@ -134,7 +142,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 设置任务执行间隔
-	 * 
+	 *
 	 * @param interval
 	 */
 	public void setInterval(Integer interval) {
@@ -143,25 +151,44 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 获取任务执行时间,指定任务什么时间执行
-	 * 
+	 *
 	 * @return 任务执行时间,指定任务什么时间执行
 	 */
-	public String getTime() {
-		return this.time;
+	public String getStartTime() {
+		return this.startTime;
 	}
 
 	/**
 	 * 设置任务执行时间,指定任务什么时间执行
-	 * 
-	 * @param time
+	 *
+	 * @param startTime
 	 */
-	public void setTime(String time) {
-		this.time = time;
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	/**
+	 * 获取定时任务执行次数
+	 * 
+	 * @return 执行次数
+	 */
+	public Integer getTimes() {
+		return times;
+	}
+
+	/**
+	 * 设置定时任务执行次数
+	 * 
+	 * @param times
+	 *            执行次数
+	 */
+	public void setTimes(Integer times) {
+		this.times = times;
 	}
 
 	/**
 	 * 获取定时任务参数(json数据结构)
-	 * 
+	 *
 	 * @return 定时任务参数(json数据结构)
 	 */
 	public String getParams() {
@@ -170,7 +197,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 设置定时任务参数(json数据结构)
-	 * 
+	 *
 	 * @param params
 	 */
 	public void setParams(String params) {
@@ -179,7 +206,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 获取任务说明
-	 * 
+	 *
 	 * @return 任务说明
 	 */
 	public String getComment() {
@@ -188,7 +215,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 设置任务说明
-	 * 
+	 *
 	 * @param comment
 	 */
 	public void setComment(String comment) {
@@ -197,7 +224,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 获取任务记录创建时间
-	 * 
+	 *
 	 * @return 任务记录创建时间
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -207,7 +234,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 设置任务记录创建时间
-	 * 
+	 *
 	 * @param createTime
 	 */
 	public void setCreateTime(Date createTime) {
@@ -216,7 +243,7 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 获取任务记录修改时间
-	 * 
+	 *
 	 * @return 任务记录修改时间
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -226,10 +253,23 @@ public class DeviceSchedulePo implements Serializable {
 
 	/**
 	 * 设置任务记录修改时间
-	 * 
+	 *
 	 * @param updateTime
 	 */
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public static String getColumnName(String name) {
+		if ("startTime".equals(name)) {
+			return DeviceSchedulePo.StartTime;
+		}
+		if ("createTime".equals(name)) {
+			return DeviceSchedulePo.CreateTime;
+		}
+		if ("updateTime".equals(name)) {
+			return DeviceSchedulePo.UpdateTime;
+		}
+		return DeviceParamPo.Id;
 	}
 }

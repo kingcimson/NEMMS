@@ -33,13 +33,40 @@ public class DeviceConnInfoController extends AbstractController {
 	@ResponseBody
 	public Map<String, Object> list(DataGridPager pager, HttpServletRequest request) {
 		pager.setDefaultSort(DeviceConnInfoPo.StartTime);
-		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(),
+				pager.getOrder());
 		List<DeviceConnInfoPo> list = this.deviceConnInfoService.getByPage(pageInfo);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());
 		modelMap.put("rows", list);
 
 		return modelMap;
+	}
+
+	@RequestMapping(value = "/add")
+	@ResponseBody
+	public ParamJsonResult<DeviceConnInfoPo> add(DeviceConnInfoPo po, HttpServletRequest request) {
+		ParamJsonResult<DeviceConnInfoPo> result = new ParamJsonResult<DeviceConnInfoPo>(false, "");
+		try {
+			this.deviceConnInfoService.add(po);
+			this.setSuccessResult(result, "创建设备连接信息成功!");
+		} catch (Exception ex) {
+			this.setExceptionResult(result, ex);
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/edit")
+	@ResponseBody
+	public ParamJsonResult<DeviceConnInfoPo> edit(DeviceConnInfoPo po, HttpServletRequest request) {
+		ParamJsonResult<DeviceConnInfoPo> result = new ParamJsonResult<DeviceConnInfoPo>(false, "更新设备连接信息失败!");
+		try {
+			this.deviceConnInfoService.edit(po, po.getId());
+			this.setSuccessResult(result, "更新设备连接信息成功！");
+		} catch (Exception ex) {
+			this.setExceptionResult(result, ex);
+		}
+		return result;
 	}
 
 	@RequestMapping(value = "/remove")
