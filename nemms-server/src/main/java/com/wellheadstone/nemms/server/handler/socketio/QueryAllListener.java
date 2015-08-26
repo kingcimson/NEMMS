@@ -5,12 +5,12 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.wellheadstone.nemms.server.protocol.SocketIOMessage;
 
-public class QuerySelectedParamsListener implements DataListener<SocketIOMessage> {
+public class QueryAllListener implements DataListener<SocketIOMessage> {
 
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		SocketIOMessage response = new SocketIOMessage();
-		client.sendEvent(EventName.QuerySelected, response);
+		client.sendEvent(EventName.QueryALL, response);
 	}
 
 }

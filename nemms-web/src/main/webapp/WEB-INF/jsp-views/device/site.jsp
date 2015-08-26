@@ -20,7 +20,7 @@
 	</div>
 	<div id="center" data-options="region:'center'">
 		<div class="toolbar">
-			<a id="btn-query-item" class="easyui-linkbutton" data-options="iconCls:'icon-item',plain:true">获取参数列表</a>
+			<a id="btn-get-param-list" class="easyui-linkbutton" data-options="iconCls:'icon-item',plain:true">获取参数列表</a>
 			<a id="btn-query-all" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询全部</a> 
 			<a id="btn-query-selected" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">查询选中参数</a>
 			<a id="btn-query-schedule" class="easyui-linkbutton" data-options="iconCls:'icon-timer',plain:true">定时查询</a>

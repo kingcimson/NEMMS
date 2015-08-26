@@ -508,8 +508,8 @@ $(function() {
 
 	// buttons
 	$('#btn-search-site').bind('click', SiteMgr.siteTree.search);
-	$('#btn-query-item').bind('click', SiteMgr.toolbar.queryAllItem);
-	$('#btn-query-all').bind('click', SiteMgr.toolbar.queryAllValue);
+	$('#btn-get-param-list').bind('click', SiteMgr.toolbar.getParamList);
+	$('#btn-query-all').bind('click', SiteMgr.toolbar.queryAll);
 	$('#btn-query-selected').bind('click', SiteMgr.toolbar.querySelected);
 	$('#btn-query-schedule').bind('click', SiteMgr.toolbar.querySchedule);
 	$('#btn-setup').bind('click', SiteMgr.toolbar.setup);
@@ -842,10 +842,9 @@ var SiteMgr = {
 	// end
 	},
 	toolbar : {
-        	queryAllItem : function() {
-        
+	    	getParamList : function() {
         	},
-        	queryAllValue : function() {
+        	queryAll : function() {
         	    var node = $('#site-tree').tree('getSelected');
         	    if (node) {
         		var siteUid = node.attributes.uid;
@@ -855,15 +854,15 @@ var SiteMgr = {
         	    }
         	},
         	querySelected : function() {
-        	    var paramUids = SiteMgr.toolbar.getSelectedParamUids();
+        	    var paramUids = SiteMgr.toolbar.getSelectedParamUids(true);
         	    console.log(paramUids);
         	},
         	querySchedule : function() {
-        	    var paramUids = SiteMgr.toolbar.getSelectedParamUids();
+        	    var paramUids = SiteMgr.toolbar.getSelectedParamUids(true);
         	    console.log(paramUids);
         	},
         	setup : function() {
-        	    var paramUids = SiteMgr.toolbar.getSelectedParamUids();
+        	    var paramUids = SiteMgr.toolbar.getSelectedParamUids(false);
         	    console.log(paramUids);
         	},
         	cancel : function() {
@@ -880,21 +879,22 @@ var SiteMgr = {
         	clear : function() {
         	    SiteMgr.paramTabs.clear();
         	},
-        	getSelectedParamUids : function(){
+        	getSelectedParamUids : function(isQuery){
         	    var paramUidList = [];
-        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
-        		var category = SiteMgr.categories[i];
-        		var gridId = "#param-tab" + category.value + '-grid';
-        		var rows = $(gridId).datagrid('getRows');
-        		for(var j=0;j<rows.length;j++){
-        		    var chkId = gridId + '-ck-' + j;
-        		    if($(chkId).prop("checked")){
-        			paramUidList.push(rows[j].paramUid);
-        		    }
-        		}
-        	    }
-        	    return paramUidList.join();
-        	}
+            	    for (var i = 0; i < SiteMgr.categories.length; i++) {
+            		var category = SiteMgr.categories[i];
+            		var gridId = "#param-tab" + category.value + '-grid';
+            		var rows = $(gridId).datagrid('getRows');
+            		for(var j=0;j<rows.length;j++){
+            		    var deviceParam = rows[j];
+            		    var chkId = gridId + '-ck-' + j;
+            		    if($(chkId).prop("checked") && (isQuery || deviceParam.mode =='rw')){
+            			paramUidList.push(deviceParam.paramUid);
+            		    }
+            		}
+            	    }
+            	    return paramUidList.join();
+            	}
             // end
     },
     conn : {
