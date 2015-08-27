@@ -63,7 +63,7 @@ public class NbiTcpServer implements IServer {
 			for (;;) {
 				Channel ch = TcpSocketChannelMap.get("nbi");
 				if (ch != null) {
-					ch.writeAndFlush("key=key1,value=value1;key=key2,value=value2;key=key3,value=value3\r\n");
+					ch.writeAndFlush("name=test,device_type=1,location4=,manufactor=,id=1,site_uid=0x02020005,param_uid=0x00000114,mcp_id=3,value=0,update_time=2015-08-18 00:00:00\r\n");
 				}
 				TimeUnit.SECONDS.sleep(10);
 			}
