@@ -21,7 +21,7 @@ public class TcpUdpMessageDecoder extends ByteToMessageDecoder {
 		byte[] bytes = ByteBufToBytes.read(in);
 		Object obj = ByteObjConverter.bytesToObject(bytes);
 		out.add(obj);
-		logger.info("接收[" + ctx.channel().remoteAddress() + "]的数据：" + Converter.bytesToHexString(bytes));
+		logger.info("receive [" + ctx.channel().remoteAddress() + "] data：" + Converter.bytesToHexString(bytes));
 	}
 
 	private void reportProcess(ChannelHandlerContext ctx, Object msg) {
