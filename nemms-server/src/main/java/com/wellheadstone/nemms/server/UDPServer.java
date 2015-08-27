@@ -42,20 +42,19 @@ public class UDPServer implements IServer {
 	private String getIPAddress() {
 		String ipAddr = "localhost";
 		try {
-			ipAddr = PropertiesUtils.getValue("nemms.server.ip");
+			ipAddr = PropertiesUtils.getValue("nemms.server.ip").trim();
 		} catch (Exception e) {
 			logger.error("UDP Server IP Parse Error,Set the default IP:" + ipAddr, e);
 		}
 		return ipAddr;
 	}
-	
+
 	private int getPort() {
 		int port = 8200;
 		try {
-			// port =
-			// Integer.parseInt(PropertiesUtils.getValue("nemms.server.udp.port"));
+			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.udp.port").trim());
 		} catch (Exception e) {
-			logger.warn("UDP Server Port Parse Error,Set the default port:" + port, e);
+			logger.error("UDP Server Port Parse Error,Set the default port:" + port, e);
 		}
 		return port;
 	}

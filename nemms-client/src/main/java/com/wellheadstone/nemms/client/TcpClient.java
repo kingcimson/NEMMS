@@ -9,10 +9,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.Delimiters;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.client.handler.tcp.TcpClientHandler;
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
+import com.wellheadstone.nemms.server.protocol.TcpUdpMessage;
+import com.wellheadstone.nemms.server.protocol.TcpUdpMessageEncoder;
 
 public class TcpClient {
 	private final static Logger logger = LoggerFactory.getLogger(TcpClient.class);
@@ -37,25 +35,37 @@ public class TcpClient {
 						@Override
 						protected void initChannel(SocketChannel channel) throws Exception {
 							ChannelPipeline pipeline = channel.pipeline();
-							pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
-							pipeline.addLast("decoder", new StringDecoder());
-							pipeline.addLast("encoder", new StringEncoder());
-							// 客户端的逻辑
+							pipeline.addLast("encoder", new TcpUdpMessageEncoder());
 							pipeline.addLast("handler", new TcpClientHandler());
 						}
 					});
 
 			Channel ch = b.connect(getIPAddress(), getPort()).sync().channel();
-			ch.writeAndFlush("client send data: " + "\r\n");
-			int i = 0;
 			for (;;) {
-				ch.writeAndFlush("client send data: " + i++ + "\r\n");
-				TimeUnit.SECONDS.sleep(3);
+				sendData(ch);
+				TimeUnit.SECONDS.sleep(10);
 			}
 
 		} finally {
 			group.shutdownGracefully();
 		}
+	}
+
+	private static void sendData(Channel ch) {
+		TcpUdpMessage message = new TcpUdpMessage();
+		message.setStartFlag((byte) 0x7f);
+		message.setAp((byte) 0x03);
+		message.setVp((byte) 0x01);
+		message.setSiteId(0x02020005);
+		message.setDeviceId((byte) 0x00);
+		message.setPacketId((short) 0x00);
+		message.setVpLayerFlag((byte) 0x80);
+		message.setMcp((byte) 0x01);
+		message.setCmdId((byte) 0x02);
+		message.setRespFlag((byte) 0xff);
+		message.setPDU(new byte[] { 0x01, 0x01, 0x00, 0x09, 0x05 });
+		message.setEndFlag((byte) 0x7f);
+		ch.writeAndFlush(message);
 	}
 
 	private static String getIPAddress() {

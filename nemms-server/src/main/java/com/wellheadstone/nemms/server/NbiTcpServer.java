@@ -5,21 +5,31 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
-import com.wellheadstone.nemms.server.handler.tcp.TcpServerHandler;
-import com.wellheadstone.nemms.server.protocol.TcpUdpMessageDecoder;
-import com.wellheadstone.nemms.server.protocol.TcpUdpMessageEncoder;
+import com.wellheadstone.nemms.server.handler.tcp.NbiTcpServerHandler;
+import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 
-public class TcpServer implements IServer {
-	private final static Logger logger = LoggerFactory.getLogger(TcpServer.class);
+/**
+ * 北向接口服务端
+ *
+ */
+public class NbiTcpServer implements IServer {
+	private final static Logger logger = LoggerFactory.getLogger(NbiTcpServer.class);
 	private Channel channel;
 
 	@Override
@@ -50,7 +60,14 @@ public class TcpServer implements IServer {
 					.childHandler(new ChildChannelHandler());
 			ChannelFuture f = b.bind(ip, port).sync();
 			this.channel = f.channel();
-			f.channel().closeFuture().sync();
+			for (;;) {
+				Channel ch = TcpSocketChannelMap.get("nbi");
+				if (ch != null) {
+					ch.writeAndFlush("key1=value1&key2=valu2&key3=value3\r\n");
+				}
+				TimeUnit.SECONDS.sleep(10);
+			}
+			// f.channel().closeFuture().sync();
 		} finally {
 			bossGroup.shutdownGracefully();
 			workerGroup.shutdownGracefully();
@@ -60,9 +77,11 @@ public class TcpServer implements IServer {
 	private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 		@Override
 		protected void initChannel(SocketChannel channel) throws Exception {
-			channel.pipeline().addLast("decoder", new TcpUdpMessageDecoder());
-			channel.pipeline().addLast("encoder", new TcpUdpMessageEncoder());
-			channel.pipeline().addLast("handler", new TcpServerHandler());
+			ChannelPipeline pipeline = channel.pipeline();
+			pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
+			pipeline.addLast("decoder", new StringDecoder());
+			pipeline.addLast("encoder", new StringEncoder());
+			pipeline.addLast("handler", new NbiTcpServerHandler());
 		}
 	}
 
@@ -71,17 +90,17 @@ public class TcpServer implements IServer {
 		try {
 			ipAddr = PropertiesUtils.getValue("nemms.server.ip").trim();
 		} catch (Exception e) {
-			logger.error("TCP Server IP Parse Error,Set the default IP:" + ipAddr, e);
+			logger.error("NBI Server IP Parse Error,Set the default IP:" + ipAddr, e);
 		}
 		return ipAddr;
 	}
 
 	private int getPort() {
-		int port = 8000;
+		int port = 8001;
 		try {
-			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.tcp.port").trim());
+			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.nbi.port").trim());
 		} catch (Exception e) {
-			logger.error("TCP Server Port Parse Error,Set the default port:" + port, e);
+			logger.error("NBI Server Port Parse Error,Set the default port:" + port, e);
 		}
 		return port;
 	}

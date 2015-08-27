@@ -20,9 +20,14 @@ public class MySocketIOServer implements IServer {
 		config.setPort(this.getPort());
 
 		final SocketIOServer server = new SocketIOServer(config);
-		server.addEventListener(EventName.GetParamList, SocketIOMessage.class, ListenerFactory.create(EventName.GetParamList));
-		server.addEventListener(EventName.QueryALL, SocketIOMessage.class, ListenerFactory.create(EventName.QueryALL));
-		server.addEventListener(EventName.QuerySelected, SocketIOMessage.class, ListenerFactory.create(EventName.QuerySelected));
+		server.addEventListener(EventName.GetParamList, SocketIOMessage.class,
+				ListenerFactory.create(EventName.GetParamList));
+		server.addEventListener(EventName.QueryALL, SocketIOMessage.class,
+				ListenerFactory.create(EventName.QueryALL));
+		server.addEventListener(EventName.QuerySelected, SocketIOMessage.class,
+				ListenerFactory.create(EventName.QuerySelected));
+		server.addEventListener(EventName.Setup, SocketIOMessage.class,
+				ListenerFactory.create(EventName.Setup));
 		server.start();
 
 		try {
@@ -37,7 +42,7 @@ public class MySocketIOServer implements IServer {
 	private String getIPAddress() {
 		String ipAddr = "localhost";
 		try {
-			ipAddr = PropertiesUtils.getValue("nemms.server.ip");
+			ipAddr = PropertiesUtils.getValue("nemms.server.ip").trim();
 		} catch (Exception e) {
 			logger.error("SocketIO Server IP Parse Error,Set the default IP:" + ipAddr, e);
 		}
@@ -47,7 +52,7 @@ public class MySocketIOServer implements IServer {
 	private int getPort() {
 		int port = 9100;
 		try {
-			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.socketio.port"));
+			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.socketio.port").trim());
 		} catch (Exception e) {
 			logger.error("SocketIO Server Port Parse Error,Set the default port:" + port, e);
 		}

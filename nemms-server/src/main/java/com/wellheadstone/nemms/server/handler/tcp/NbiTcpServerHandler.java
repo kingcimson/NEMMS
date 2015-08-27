@@ -9,28 +9,28 @@ import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.utils.RemoteAdressFormatter;
 
-public class TcpServerHandler extends ChannelInboundHandlerAdapter {
-	private final static Logger logger = LoggerFactory.getLogger(TcpServerHandler.class);
+public class NbiTcpServerHandler extends ChannelInboundHandlerAdapter {
+	private final static Logger logger = LoggerFactory.getLogger(NbiTcpServerHandler.class);
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
-		logger.info("device[" + clientIP + "] is actived");
-		TcpSocketChannelMap.add(clientIP, (SocketChannel) ctx.channel());
+		logger.info("NBI [" + clientIP + "] is actived");
+		TcpSocketChannelMap.add("nbi", (SocketChannel) ctx.channel());
 		super.channelActive(ctx);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
-		logger.info("device[" + clientIP + "] is inactived");
+		logger.info("NBI [" + clientIP + "] is inactived");
 		TcpSocketChannelMap.remove((SocketChannel) ctx.channel());
 	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
-		logger.info("received[" + clientIP + "] data:" + msg);
+		logger.info("NBI [" + clientIP + "] data:" + msg);
 	}
 
 	@Override
