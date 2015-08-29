@@ -1,6 +1,5 @@
 package com.wellheadstone.nemms.web.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,95 +11,58 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wellheadstone.nemms.common.viewmodel.JsonResult;
-import com.wellheadstone.nemms.common.viewmodel.TreeNode;
+import com.wellheadstone.nemms.common.viewmodel.ParamJsonResult;
 import com.wellheadstone.nemms.data.PageInfo;
-import com.wellheadstone.nemms.po.ConfigDictPo;
-import com.wellheadstone.nemms.po.DeviceSitePo;
-import com.wellheadstone.nemms.service.ConfigDictService;
+import com.wellheadstone.nemms.po.ConfigSettingsPo;
+import com.wellheadstone.nemms.service.ConfigSettingsService;
 import com.wellheadstone.nemms.web.DataGridPager;
 
 @Controller
 @RequestMapping(value = "/system/settings")
 public class ConfigSettingsController extends AbstractController {
+
 	@Resource
-	private ConfigDictService configDictService;
+	private ConfigSettingsService settingsService;
 
 	@RequestMapping(value = { "", "/", "/index" })
-	public String index() {
+	public String index(HttpServletRequest req) {
 		return "system/settings";
 	}
 
 	@RequestMapping(value = "/list")
 	@ResponseBody
-	public List<ConfigDictPo> list(Integer id) {
-		if (id == null)
-			id = 0;
-		return this.configDictService.getDao().queryBy(id);
-	}
+	public Map<String, Object> list(DataGridPager pager, HttpServletRequest request) {
+		pager.setDefaultSort(ConfigSettingsPo.CreateTime);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(),
+				pager.getOrder());
+		List<ConfigSettingsPo> list = this.settingsService.getByPage(pageInfo);
+		Map<String, Object> modelMap = new HashMap<String, Object>(2);
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
 
-	@RequestMapping(value = "/listChildren")
-	@ResponseBody
-	public List<TreeNode<ConfigDictPo>> listChildNodes(Integer id) {
-		if (id == null)
-			id = 0;
-
-		List<ConfigDictPo> configDicts = this.configDictService.getDao().queryBy(id);
-		List<TreeNode<ConfigDictPo>> treeNodes = new ArrayList<TreeNode<ConfigDictPo>>(configDicts.size());
-
-		for (ConfigDictPo po : configDicts) {
-			String configId = Integer.toString(po.getId());
-			String pid = Integer.toString(po.getPid());
-			String text = po.getName();
-			String state = po.getHasChild() > 0 ? "closed" : "open";
-			String icon = po.getHasChild() > 0 ? "icon-dict2" : "icon-item1";
-			TreeNode<ConfigDictPo> vmMode = new TreeNode<ConfigDictPo>(configId, pid, text, state, icon, false, po);
-			treeNodes.add(vmMode);
-		}
-
-		return treeNodes;
+		return modelMap;
 	}
 
 	@RequestMapping(value = "/find")
 	@ResponseBody
-	public Map<String, Object> find(DataGridPager pager, String fieldName, String keyword,
-			HttpServletRequest request) {
+	public Map<String, Object> find(DataGridPager pager, String fieldName, String keyword, HttpServletRequest request) {
+		pager.setDefaultSort(ConfigSettingsPo.CreateTime);
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
+				pager.getRows(), pager.getSort(), pager.getOrder());
+		List<ConfigSettingsPo> list = this.settingsService.getByKeyword(pageInfo, fieldName, keyword);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
-
-		try {
-			pager.setDefaultSort(DeviceSitePo.CreateTime);
-			PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
-					pager.getRows(), pager.getSort(), pager.getOrder());
-			List<ConfigDictPo> list = this.configDictService.findByKeyword(pageInfo, fieldName, keyword);
-			modelMap.put("total", pageInfo.getTotals());
-			modelMap.put("rows", list);
-		} catch (Exception ex) {
-			this.logException(ex);
-		}
+		modelMap.put("total", pageInfo.getTotals());
+		modelMap.put("rows", list);
 		return modelMap;
 	}
 
 	@RequestMapping(value = "/add")
 	@ResponseBody
-	public JsonResult add(ConfigDictPo po, HttpServletRequest request) {
-		JsonResult result = new JsonResult(false, "创建系统配置项失败！");
-
+	public ParamJsonResult<ConfigSettingsPo> add(ConfigSettingsPo po, HttpServletRequest request) {
+		ParamJsonResult<ConfigSettingsPo> result = new ParamJsonResult<ConfigSettingsPo>(false, "");
 		try {
-			this.configDictService.add(po);
-			this.setSuccessResult(result, String.format("创建系统配置项[%s]成功!", po.getKey()));
-		} catch (Exception ex) {
-			this.setExceptionResult(result, ex);
-		}
-		return result;
-	}
-
-	@RequestMapping(value = "/remove")
-	@ResponseBody
-	public JsonResult remove(String id) {
-		JsonResult result = new JsonResult(false, String.format("删除系统配置项[%s]成功!", id));
-		try {
-			this.configDictService.remove(id);
-			this.setSuccessResult(result, String.format("删除系统配置项[%s]成功!", id));
+			this.settingsService.add(po);
+			this.setSuccessResult(result, "创建系统配置信息成功!");
 		} catch (Exception ex) {
 			this.setExceptionResult(result, ex);
 		}
@@ -109,31 +71,29 @@ public class ConfigSettingsController extends AbstractController {
 
 	@RequestMapping(value = "/edit")
 	@ResponseBody
-	public JsonResult edit(ConfigDictPo po) {
-		JsonResult result = new JsonResult(false, String.format("修改系统配置项[%s]成功!", po.getKey()));
-		String[] args = new String[] {
-				ConfigDictPo.Key, ConfigDictPo.Name, ConfigDictPo.Value,
-				ConfigDictPo.Sequence, ConfigDictPo.Comment
-		};
-
+	public ParamJsonResult<ConfigSettingsPo> edit(ConfigSettingsPo po, HttpServletRequest request) {
+		ParamJsonResult<ConfigSettingsPo> result = new ParamJsonResult<ConfigSettingsPo>(false, "更新系统配置信息失败!");
 		try {
-			this.configDictService.edit(po, po.getId(), args);
-			this.setSuccessResult(result, String.format("修改系统配置项[%s]成功!", po.getKey()));
+			this.settingsService.edit(po, po.getId());
+			this.setSuccessResult(result, "更新系统配置信息成功！");
 		} catch (Exception ex) {
 			this.setExceptionResult(result, ex);
 		}
 		return result;
 	}
 
-	@RequestMapping(value = "/getDepth1Items")
+	@RequestMapping(value = "/remove")
 	@ResponseBody
-	public List<ConfigDictPo> getDepth1Items(String parentKey, HttpServletRequest request) {
-		return this.configDictService.getDepth1Items(parentKey);
-	}
-
-	@RequestMapping(value = "/getDepth2Items")
-	@ResponseBody
-	public Map<String, List<ConfigDictPo>> getDepth2Items(String parentKey, HttpServletRequest request) {
-		return this.configDictService.getDepth2Items(parentKey);
+	public ParamJsonResult<ConfigSettingsPo> remove(Integer id, HttpServletRequest request) {
+		ParamJsonResult<ConfigSettingsPo> result = new ParamJsonResult<ConfigSettingsPo>(false, "");
+		try {
+			this.settingsService.remove(id);
+			result.setSuccess(this.settingsService.remove(id));
+			this.setSuccessResult(result, "删除系统配置记录成功!");
+			return result;
+		} catch (Exception ex) {
+			this.setExceptionResult(result, ex);
+		}
+		return result;
 	}
 }
