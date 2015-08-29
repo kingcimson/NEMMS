@@ -25,6 +25,11 @@ $(function() {
 			handler: function(){
 				EasyUIUtils.reloadDatagrid('#event-datagrid');
 			}
+		},'-',{
+			iconCls: 'icon-clear1',
+			handler: function(){
+				MembershipEvent.clear();
+			}
 		}],				
 		columns : [ [ {
 			field : 'eventId',
@@ -115,7 +120,6 @@ $(function() {
 
 	//buttons
 	$('#btn-search').bind('click',MembershipEvent.find);
-	$('#btn-clear').bind('click',MembershipEvent.clear);
 	
 	//end
 });
