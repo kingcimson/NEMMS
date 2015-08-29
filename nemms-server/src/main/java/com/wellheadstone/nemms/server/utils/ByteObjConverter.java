@@ -2,8 +2,6 @@ package com.wellheadstone.nemms.server.utils;
 
 import java.nio.ByteBuffer;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.wellheadstone.nemms.server.protocol.TcpUdpMessage;
 
 public class ByteObjConverter {
@@ -84,8 +82,8 @@ public class ByteObjConverter {
 		}
 		return count;
 	}
-	
-	private static int getDecodeByteCount(byte[] bytes){
+
+	private static int getDecodeByteCount(byte[] bytes) {
 		return 0;
 	}
 }

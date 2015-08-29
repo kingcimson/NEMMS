@@ -1,6 +1,7 @@
 package com.wellheadstone.nemms.server.utils;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -54,7 +55,17 @@ public class Converter {
 		return src;
 	}
 
+	public static String getHexString(byte[] src, int startIndex, int endIndex) {
+		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
+		bytes = getLittleEndianBytes(bytes);
+		return bytesToHexString(bytes, "").trim().toLowerCase();
+	}
+
 	public static String bytesToHexString(byte[] src) {
+		return bytesToHexString(src, " ");
+	}
+
+	public static String bytesToHexString(byte[] src, String space) {
 		StringBuilder stringBuilder = new StringBuilder("");
 		if (src == null || src.length <= 0) {
 			return null;
@@ -65,7 +76,7 @@ public class Converter {
 			if (hv.length() < 2) {
 				stringBuilder.append(0);
 			}
-			stringBuilder.append(hv).append(" ");
+			stringBuilder.append(hv).append(space);
 		}
 		return stringBuilder.toString().toUpperCase();
 	}
@@ -89,7 +100,7 @@ public class Converter {
 		return (byte) "0123456789ABCDEF".indexOf(c);
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		short value = 0x66f9;
 		System.out.println(bytesToBit(getBytes(value)));
 		System.out.println(bytesToBit(getLittleEndianBytes(value)));

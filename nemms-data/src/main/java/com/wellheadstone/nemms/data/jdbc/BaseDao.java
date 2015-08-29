@@ -43,14 +43,20 @@ public abstract class BaseDao<T> extends BaseJdbcDao implements IBaseDao<T> {
 	}
 
 	@Override
+	public int replaceInsert(T entity) {
+		SqlExpression sqlExpr = this.generateInsertSqlExpression(this.getColumnMap(entity), this.tableName, "REPLACE");
+		return this.update(sqlExpr.getCommandText(), sqlExpr.getParameters());
+	}
+
+	@Override
 	public int insert(T entity) {
-		SqlExpression sqlExpr = this.generateInsertSqlExpression(this.getColumnMap(entity), this.tableName);
+		SqlExpression sqlExpr = this.generateInsertSqlExpression(this.getColumnMap(entity), this.tableName, "INSERT");
 		return this.update(sqlExpr.getCommandText(), sqlExpr.getParameters());
 	}
 
 	@Override
 	public int insertWithId(T entity) {
-		SqlExpression sqlExpr = this.generateInsertSqlExpression(this.getColumnMap(entity), this.tableName);
+		SqlExpression sqlExpr = this.generateInsertSqlExpression(this.getColumnMap(entity), this.tableName, "INSERT");
 		return this.updateWithId(sqlExpr.getCommandText(), sqlExpr.getParameters());
 	}
 
@@ -354,7 +360,7 @@ public abstract class BaseDao<T> extends BaseJdbcDao implements IBaseDao<T> {
 		return this.isExist(condition);
 	}
 
-	protected SqlExpression generateInsertSqlExpression(ColumnMap columnMap, String tableName) {
+	protected SqlExpression generateInsertSqlExpression(ColumnMap columnMap, String tableName, String insertOrReplace) {
 		if (columnMap == null || columnMap.size() == 0) {
 			throw new NullPointerException("columnMap:列映射对象不能为空或没有值");
 		}
@@ -373,8 +379,8 @@ public abstract class BaseDao<T> extends BaseJdbcDao implements IBaseDao<T> {
 			i++;
 		}
 
-		String commandText = String.format("INSERT INTO %1$s (%2$s) VALUES (%3$s)", tableName, StringUtils.join(fields,
-				','), StringUtils.join(argSymbols, ','));
+		String commandText = String.format("%1$s INTO %2$s (%3$s) VALUES (%4$s)", insertOrReplace, tableName,
+				StringUtils.join(fields, ','), StringUtils.join(argSymbols, ','));
 		return new SqlExpression(commandText, args, argTypes);
 	}
 

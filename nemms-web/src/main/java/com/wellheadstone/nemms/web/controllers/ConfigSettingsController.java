@@ -96,4 +96,10 @@ public class ConfigSettingsController extends AbstractController {
 		}
 		return result;
 	}
+
+	@RequestMapping(value = "/getSettings")
+	@ResponseBody
+	public Map<String, String> getSettings(HttpServletRequest request) {
+		return this.settingsService.getSettings();
+	}
 }
