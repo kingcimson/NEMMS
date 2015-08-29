@@ -77,11 +77,6 @@ $(function() {
 	    handler : function() {
 		EasyUIUtils.clearDatagrid('#console-datagrid');
 	    }
-	}, '-', {
-	    iconCls : 'icon-reload',
-	    handler : function() {
-		EasyUIUtils.reloadDatagrid('#console-datagrid');
-	    }
 	} ],
 	columns : [ [ {
 	    field : 'name',

@@ -3,8 +3,6 @@ package com.wellheadstone.nemms.server.utils;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 public class Converter {
 	public static byte[] getBytes(short value) {
 		ByteBuffer buffer = ByteBuffer.allocate(2);
@@ -38,26 +36,40 @@ public class Converter {
 				+ (byte) ((b >> 0) & 0x1);
 	}
 
-	public static byte[] getLittleEndianBytes(short x) {
-		return getLittleEndianBytes(getBytes(x));
+	public static byte[] getReverseBytes(short x) {
+		return getReverseBytes(getBytes(x));
 	}
 
-	public static byte[] getLittleEndianBytes(int x) {
-		return getLittleEndianBytes(getBytes(x));
+	public static byte[] getReverseBytes(int x) {
+		return getReverseBytes(getBytes(x));
 	}
 
-	public static byte[] getLittleEndianBytes(long x) {
-		return getLittleEndianBytes(getBytes(x));
+	public static byte[] getReverseBytes(long x) {
+		return getReverseBytes(getBytes(x));
 	}
 
-	public static byte[] getLittleEndianBytes(byte[] src) {
-		ArrayUtils.reverse(src);
-		return src;
+	public static byte[] getReverseBytes(byte[] src) {
+		return getReverseBytes(src, 0, src.length);
+	}
+
+	public static byte[] getReverseBytes(byte[] src, int startIndexInclusive, int endIndexExclusive) {
+		if (src == null) {
+			return null;
+		}
+
+		int start = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+		int end = Math.min(src.length, endIndexExclusive);
+		int length = end - start;
+		byte[] dest = new byte[length];
+		for (int i = 0; i < length; i++) {
+			dest[i] = src[end - i - 1];
+		}
+		return dest;
 	}
 
 	public static String getHexString(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
-		bytes = getLittleEndianBytes(bytes);
+		bytes = getReverseBytes(bytes);
 		return bytesToHexString(bytes, "").trim().toLowerCase();
 	}
 
@@ -103,6 +115,6 @@ public class Converter {
 	public static void main(String[] args) {
 		short value = 0x66f9;
 		System.out.println(bytesToBit(getBytes(value)));
-		System.out.println(bytesToBit(getLittleEndianBytes(value)));
+		System.out.println(bytesToBit(getReverseBytes(value)));
 	}
 }

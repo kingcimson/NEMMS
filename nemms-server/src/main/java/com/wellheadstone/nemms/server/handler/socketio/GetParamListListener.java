@@ -18,7 +18,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 		String clientIP = RemoteAdressFormatter.getIP(client.getRemoteAddress());
 		SocketIOClientMap.add(clientIP, client);
 
-		TcpUdpMessage message = this.getRequestMessage();
+		TcpUdpMessage message = this.getRequestMessage(data);
 		data.setRequestText(message.toString());
 
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
@@ -39,7 +39,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 		client.sendEvent(data.getEventName(), data);
 	}
 
-	private TcpUdpMessage getRequestMessage() {
+	private TcpUdpMessage getRequestMessage(SocketIOMessage data) {
 		TcpUdpMessage message = new TcpUdpMessage();
 		message.setStartFlag((byte) 0x7e);
 		message.setAp((byte) 0x03);

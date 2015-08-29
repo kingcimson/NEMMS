@@ -35,7 +35,10 @@ public class TcpUdpMessageDecoder extends ByteToMessageDecoder {
 			po.setServerPort(RemoteAdressFormatter.getPort(ctx.channel().localAddress()));
 			ServiceFacade.addNewDeviceConn(po);
 		}
-		logger.info("receive [" + ctx.channel().remoteAddress() + "] data：" + Converter.bytesToHexString(bytes));
+
+		String info = String.format("receive from[%s][%s]bytes:%s",
+				ctx.channel().remoteAddress(), bytes.length, Converter.bytesToHexString(bytes));
+		logger.info(info);
 	}
 
 	private void reportProcess(ChannelHandlerContext ctx, Object msg) {

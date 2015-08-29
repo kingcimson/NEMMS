@@ -25,18 +25,18 @@ public class ByteObjConverter {
 		ByteBuffer srcBuf = ByteBuffer.allocate(length);
 		srcBuf.put(obj.getAp());
 		srcBuf.put(obj.getVp());
-		srcBuf.put(Converter.getLittleEndianBytes(obj.getSiteId()));
+		srcBuf.put(Converter.getReverseBytes(obj.getSiteId()));
 		srcBuf.put(obj.getDeviceId());
-		srcBuf.put(Converter.getLittleEndianBytes(obj.getPacketId()));
+		srcBuf.put(Converter.getReverseBytes(obj.getPacketId()));
 		srcBuf.put(obj.getVpLayerFlag());
 		srcBuf.put(obj.getMcp());
 		srcBuf.put(obj.getCmdId());
 		srcBuf.put(obj.getRespFlag());
-		srcBuf.put(Converter.getLittleEndianBytes(obj.getPDU()));
+		srcBuf.put(Converter.getReverseBytes(obj.getPDU()));
 
 		ByteBuffer crcBuf = ByteBuffer.allocate(srcBuf.array().length + 2);
 		crcBuf.put(srcBuf.array());
-		crcBuf.put(Converter.getLittleEndianBytes(CRC16.getCRC(srcBuf.array())));
+		crcBuf.put(Converter.getReverseBytes(CRC16.getCRC(srcBuf.array())));
 		byte[] crcBytes = crcBuf.array();
 
 		srcBuf.clear();
