@@ -32,17 +32,17 @@
 		</div>
 		<div id="console-tabs" class="easyui-tabs" style="width: 100%; height: 40%">
 			<div title="输出控制台" style="padding: 0px">
-				<div style="height: 200px">
+				<div style="height: 300px">
 					<div id="console-datagrid"></div>
 				</div>
 			</div>
 			<div title="当前连接设备" style="padding: 0px;">
-				<div style="height: 95%">
+				<div style="height: 300px">
 					<div id="connected-device-datagrid"></div>
 				</div>
 			</div>
 			<div title="定时任务" style="padding: 0px;">
-				<div style="height: 95%">
+				<div style="height: 300px">
 					<div id="schedule-task-datagrid"></div>
 				</div>
 			</div>

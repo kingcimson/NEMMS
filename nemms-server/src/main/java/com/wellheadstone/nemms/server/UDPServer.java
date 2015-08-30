@@ -30,9 +30,10 @@ public class UDPServer implements IServer {
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
 			Bootstrap b = new Bootstrap();
-			b.group(group).channel(NioDatagramChannel.class)
-					.option(ChannelOption.SO_BROADCAST, true)
-					.handler(new UDPServerHandler());
+			b.group(group)
+				.channel(NioDatagramChannel.class)
+				.option(ChannelOption.SO_BROADCAST, true)
+				.handler(new UDPServerHandler());
 			b.bind(ip, port).sync().channel().closeFuture().await();
 		} finally {
 			group.shutdownGracefully();
@@ -50,7 +51,7 @@ public class UDPServer implements IServer {
 	}
 
 	private int getPort() {
-		int port = 8200;
+		int port = 8002;
 		try {
 			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.udp.port").trim());
 		} catch (Exception e) {
