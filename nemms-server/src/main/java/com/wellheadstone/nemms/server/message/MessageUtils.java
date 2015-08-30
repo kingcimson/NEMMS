@@ -5,19 +5,10 @@ import com.wellheadstone.nemms.server.util.Converter;
 public class MessageUtils {
 
 	public static TcpUdpMessage getHeartReqMessage(TcpUdpMessage msg) {
-		TcpUdpMessage message = new TcpUdpMessage();
-		message.setStartFlag((byte) 0x7e);
-		message.setAp(msg.getAp());
-		message.setVp(msg.getVp());
-		message.setSiteId(msg.getSiteId());
-		message.setDeviceId(msg.getDeviceId());
-		message.setPacketId(msg.getPacketId());
-		message.setVpLayerFlag((byte) 0x00);
-		message.setMcp(msg.getMcp());
-		message.setRespFlag((byte) 0x00);
-		message.setPDU(Converter.getReverseBytes(getHeartPDU(msg.getMcp())));
-		message.setEndFlag((byte) 0x7e);
-		return message;
+		msg.setVpLayerFlag((byte) 0x00);
+		msg.setRespFlag((byte) 0x00);
+		msg.setPDU(Converter.getReverseBytes(getHeartPDU(msg.getMcp())));
+		return msg;
 	}
 
 	public static TcpUdpMessage getParamListReqMessage(SocketIOMessage data) {
@@ -102,11 +93,11 @@ public class MessageUtils {
 	public static byte[] getHeartPDU(byte mcp) {
 		// mcp:a 参数标识为2字节
 		if (mcp == 1) {
-			return new byte[] { 0x07, 0x41, 0x01, 0x04 };
+			return new byte[] { 0x07,0x01,0x41,0x04 };
 		}
 		// mcp:c 参数标识为4字节
 		if (mcp == 3) {
-			return new byte[] { 0x07, 0x41, 0x01, 0x00, 0x00, 0x05 };
+			return new byte[] { 0x07, 0x01, 0x41, 0x00, 0x00, 0x05 };
 		}
 
 		return new byte[] { 0x00 };
