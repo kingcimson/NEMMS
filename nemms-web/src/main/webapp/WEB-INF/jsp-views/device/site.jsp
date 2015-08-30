@@ -46,6 +46,11 @@
 					<div id="schedule-task-datagrid"></div>
 				</div>
 			</div>
+			<div title="北向接口状态" style="padding: 0px;">
+				<div style="height: 300px">
+					<div id="nbi-datagrid"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="add-site-dlg" title="添加站点">

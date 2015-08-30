@@ -2,6 +2,7 @@ var siteMgrPageUrl = XFrame.getContextPath() + '/device/site/';
 var connInfoPageUrl = XFrame.getContextPath() + '/device/connInfo/';
 var schedulePageUrl = XFrame.getContextPath() + '/device/schedule/';
 var settingsPageUrl = XFrame.getContextPath() + '/system/settings/';
+var nmsstatusPageUrl = XFrame.getContextPath() + '/device/nmsstatus/';
 
 $(function() {
 	$('#west').panel({
@@ -147,7 +148,10 @@ $(function() {
 		}, {
 			field : 'status',
 			title : '状态',
-			width : 80
+			width : 80,
+			formatter : function(value, row, index) {
+				return value == "1" ? "正常" : "断开";
+			}
 		}, {
 			field : 'startTime',
 			title : '建立连接时间',
@@ -209,6 +213,49 @@ $(function() {
 		} ] ],
 		onDblClickRow : function(index, row) {
 			SiteMgr.schedule.view();
+		}
+	});
+	
+	$('#nbi-datagrid').datagrid({
+		fit : true,
+		pagination : false,
+		rownumbers : true,
+		fitColumns : true,
+		singleSelect : true,
+		// pageSize : 10,
+		url : nmsstatusPageUrl + 'list',
+		toolbar : [ {
+			iconCls : 'icon-reload',
+			handler : function() {
+				EasyUIUtils.reloadDatagrid('#nbi-datagrid');
+			}
+		} ],
+		columns : [ [ {
+			field : 'id',
+			title : '标识',
+			width : 50
+		}, {
+			field : 'nmsName',
+			title : '名称',
+			width : 50
+		},{
+			field : 'serviceName',
+			title : '名称',
+			width : 50
+		},{
+			field : 'serviceUrl',
+			title : 'url',
+			width : 100
+		},{
+			field : 'serviceStatus',
+			title : '状态',
+			width : 50
+		},{
+			field : 'updateTime',
+			title : '列新时间',
+			width : 80
+		} ] ],
+		onDblClickRow : function(index, row) {
 		}
 	});
 
