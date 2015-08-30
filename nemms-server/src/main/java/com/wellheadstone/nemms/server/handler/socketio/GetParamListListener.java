@@ -46,13 +46,13 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 		message.setVp((byte) 0x01);
 		message.setSiteId(0x00000000);
 		message.setDeviceId((byte) 0x00);
+		message.setPacketId((short) 0x00);
 		message.setVpLayerFlag((byte) 0x80);
 		message.setMcp((byte) 0x01);
 		message.setCmdId((byte) 0x02);
 		message.setRespFlag((byte) 0xff);
 		message.setPDU(new byte[] { 0x01, 0x01, 0x00, 0x09, 0x05 });
 		message.setEndFlag((byte) 0x7e);
-		message.setPacketId((short) 0x00);
 		return message;
 	}
 }
