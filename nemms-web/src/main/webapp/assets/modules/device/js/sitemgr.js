@@ -236,19 +236,19 @@ $(function() {
 			width : 50
 		}, {
 			field : 'nmsName',
-			title : '名称',
-			width : 50
+			title : 'nms名称',
+			width : 80
 		},{
 			field : 'serviceName',
-			title : '名称',
-			width : 50
+			title : '服务名称',
+			width : 80
 		},{
 			field : 'serviceUrl',
-			title : 'url',
+			title : '服务URL',
 			width : 100
 		},{
 			field : 'serviceStatus',
-			title : '状态',
+			title : '服务状态',
 			width : 50
 		},{
 			field : 'updateTime',
