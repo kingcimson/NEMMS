@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.utils;
+package com.wellheadstone.nemms.server.util;
 
 import java.net.SocketAddress;
 

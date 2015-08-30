@@ -8,7 +8,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.handler.socketio.EventName;
 import com.wellheadstone.nemms.server.handler.socketio.ListenerFactory;
-import com.wellheadstone.nemms.server.protocol.SocketIOMessage;
+import com.wellheadstone.nemms.server.message.SocketIOMessage;
 
 public class MySocketIOServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(MySocketIOServer.class);

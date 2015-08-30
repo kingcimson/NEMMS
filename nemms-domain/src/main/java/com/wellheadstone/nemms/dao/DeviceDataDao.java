@@ -30,6 +30,7 @@ public class DeviceDataDao extends BaseDao<DeviceDataPo> {
 		sqlBuilder.append("	t2.unit,");
 		sqlBuilder.append("	t2.ratio,");
 		sqlBuilder.append("	t2.value_type,");
+		sqlBuilder.append("	t2.value_len,");
 		sqlBuilder.append("	t2.html_elem,");
 		sqlBuilder.append("	t2.html_elem_key,");
 		sqlBuilder.append("	t1.site_uid,");

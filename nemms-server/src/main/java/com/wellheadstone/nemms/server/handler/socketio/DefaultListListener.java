@@ -3,7 +3,7 @@ package com.wellheadstone.nemms.server.handler.socketio;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
-import com.wellheadstone.nemms.server.protocol.SocketIOMessage;
+import com.wellheadstone.nemms.server.message.SocketIOMessage;
 
 public class DefaultListListener implements DataListener<SocketIOMessage> {
 	@Override

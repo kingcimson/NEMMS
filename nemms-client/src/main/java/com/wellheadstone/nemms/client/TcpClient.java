@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.client.handler.tcp.TcpClientHandler;
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
-import com.wellheadstone.nemms.server.protocol.TcpUdpMessage;
-import com.wellheadstone.nemms.server.protocol.TcpUdpMessageEncoder;
+import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.TcpUdpMessageEncoder;
 
 public class TcpClient {
 	private final static Logger logger = LoggerFactory.getLogger(TcpClient.class);

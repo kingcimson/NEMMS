@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.utils;
+package com.wellheadstone.nemms.server.util;
 
 public class CRC16 {
 	public static short getCRC(byte[] bytes) {

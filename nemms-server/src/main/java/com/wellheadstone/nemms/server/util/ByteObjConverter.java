@@ -1,8 +1,9 @@
-package com.wellheadstone.nemms.server.utils;
+package com.wellheadstone.nemms.server.util;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
-import com.wellheadstone.nemms.server.protocol.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.TcpUdpMessage;
 
 public class ByteObjConverter {
 	public static TcpUdpMessage bytesToObject(byte[] bytes) {
@@ -14,11 +15,24 @@ public class ByteObjConverter {
 		obj.setStartFlag(bytes[0]);
 		obj.setAp(bytes[1]);
 		obj.setVp(bytes[2]);
-		obj.setSiteId(bytes[0]);
+		obj.setSiteId(Converter.getReverseInt(bytes,3,7));
 		obj.setDeviceId(bytes[7]);
-		obj.setPacketId(bytes[0]);
+		obj.setPacketId(Converter.getReverseShort(bytes,8,10));
+		obj.setVpLayerFlag(bytes[10]);
+		obj.setMcp(bytes[11]);
+		obj.setCmdId(bytes[12]);
+		obj.setRespFlag(bytes[13]);
+		obj.setPDU(getPDU(bytes,14,bytes.length-3));
+		obj.setCrc(Converter.getReverseShort(bytes,bytes.length-3,bytes.length-1));
+		obj.setEndFlag(bytes[bytes.length-1]);
+		
 		return obj;
 	}
+	
+	private static byte[] getPDU(byte[] src,int startIndex,int endIndex){
+		return Arrays.copyOfRange(src, startIndex, endIndex);
+	}
+
 
 	public static byte[] objectToBytes(TcpUdpMessage obj) {
 		int length = 13 + (obj.getPDU() == null ? 0 : obj.getPDU().length);
@@ -32,7 +46,7 @@ public class ByteObjConverter {
 		srcBuf.put(obj.getMcp());
 		srcBuf.put(obj.getCmdId());
 		srcBuf.put(obj.getRespFlag());
-		srcBuf.put(Converter.getReverseBytes(obj.getPDU()));
+		srcBuf.put(obj.getPDU());
 
 		ByteBuffer crcBuf = ByteBuffer.allocate(srcBuf.array().length + 2);
 		crcBuf.put(srcBuf.array());

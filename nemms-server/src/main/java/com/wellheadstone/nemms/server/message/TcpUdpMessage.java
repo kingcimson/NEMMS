@@ -1,9 +1,9 @@
-package com.wellheadstone.nemms.server.protocol;
+package com.wellheadstone.nemms.server.message;
 
 import java.io.Serializable;
 
-import com.wellheadstone.nemms.server.utils.ByteObjConverter;
-import com.wellheadstone.nemms.server.utils.Converter;
+import com.wellheadstone.nemms.server.util.ByteObjConverter;
+import com.wellheadstone.nemms.server.util.Converter;
 
 public class TcpUdpMessage implements Serializable {
 	private static final long serialVersionUID = 7625190637270731504L;

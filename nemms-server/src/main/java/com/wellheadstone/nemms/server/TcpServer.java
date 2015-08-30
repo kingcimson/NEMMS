@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.handler.tcp.TcpServerHandler;
-import com.wellheadstone.nemms.server.protocol.TcpUdpMessageDecoder;
-import com.wellheadstone.nemms.server.protocol.TcpUdpMessageEncoder;
+import com.wellheadstone.nemms.server.message.TcpUdpMessageDecoder;
+import com.wellheadstone.nemms.server.message.TcpUdpMessageEncoder;
 
 public class TcpServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(TcpServer.class);

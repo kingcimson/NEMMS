@@ -142,16 +142,16 @@ public class DeviceConnInfoPo implements Serializable {
 	}
 
 	/**
-	 * 获取连接的服务器IP
+	 * 鑾峰彇杩炴帴鐨勬湇鍔″櫒IP
 	 *
-	 * @return 连接的服务器IP
+	 * @return 杩炴帴鐨勬湇鍔″櫒IP
 	 */
 	public String getServerIp() {
 		return this.serverIp;
 	}
 
 	/**
-	 * 设置连接的服务器IP
+	 * 璁剧疆杩炴帴鐨勬湇鍔″櫒IP
 	 *
 	 * @param serverIp
 	 */

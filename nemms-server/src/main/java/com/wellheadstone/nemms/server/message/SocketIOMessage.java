@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.protocol;
+package com.wellheadstone.nemms.server.message;
 
 import java.io.Serializable;
 

@@ -7,7 +7,7 @@ import io.netty.channel.socket.SocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wellheadstone.nemms.server.utils.RemoteAdressFormatter;
+import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
 
 public class NbiTcpServerHandler extends ChannelInboundHandlerAdapter {
 	private final static Logger logger = LoggerFactory.getLogger(NbiTcpServerHandler.class);
