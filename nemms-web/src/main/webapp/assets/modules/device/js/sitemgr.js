@@ -249,7 +249,10 @@ $(function() {
 		},{
 			field : 'serviceStatus',
 			title : '服务状态',
-			width : 50
+			width : 50,
+			formatter : function(value, row, index) {
+				return value == "1" ? "正常" : "异常";
+			}
 		},{
 			field : 'updateTime',
 			title : '列新时间',
