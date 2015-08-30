@@ -105,6 +105,7 @@ public class HeartTask extends AbstractTask implements ITask {
 		for (int i = pdu[0]; i < pdu.length;) {
 			byte byteCountOfUnit = pdu[i];
 			String id = Converter.getReverseHexString(pdu, i + 1, i + pdu[i] - 1);
+			id = Converter.getHexStringWith0X(id);
 			String value = String.valueOf(pdu[i + pdu[i] - 1]);
 			list.add(new IdValuePair(id, value));
 			i = i + byteCountOfUnit;
