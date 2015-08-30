@@ -21,4 +21,16 @@ public class DeviceConnInfoDao extends BaseDao<DeviceConnInfoPo> {
 		Object[] args = new Object[] { siteUid };
 		return this.queryOne(condition, args);
 	}
+	
+	public int deleteByClientIP(String clientIP) {
+		String condition = Restrictions.equal(DeviceConnInfoPo.ClientIp, "?").toString();
+		Object[] args = new Object[] { clientIP };
+		return this.delete(condition, args);
+	}
+	
+	public int deleteBySiteUid(String siteUid) {
+		String condition = Restrictions.equal(DeviceConnInfoPo.SiteUid, "?").toString();
+		Object[] args = new Object[] { siteUid };
+		return this.delete(condition, args);
+	}
 }

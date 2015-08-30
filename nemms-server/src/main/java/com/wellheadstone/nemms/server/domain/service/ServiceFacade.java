@@ -15,6 +15,14 @@ public class ServiceFacade {
 	public static void addNewDeviceConn(DeviceConnInfoPo po) {
 		connInfoService.getDao().replaceInsert(po);
 	}
+	
+	public static void removeDeviceConnByIP(String clientIP) {
+		connInfoService.getDao().deleteByClientIP(clientIP);
+	}
+	
+	public static void removeDeviceConnBySiteUid(String siteUid) {
+		connInfoService.getDao().deleteBySiteUid(siteUid);
+	}
 
 	public static void addAlarmReport(DeviceReportPo po) {
 		reportService.add(po);
