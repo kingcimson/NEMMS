@@ -15,14 +15,11 @@ import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
-import java.util.concurrent.TimeUnit;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.handler.tcp.NbiTcpServerHandler;
-import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 
 /**
  * 北向接口服务端
@@ -53,21 +50,11 @@ public class NbiTcpServer implements IServer {
 
 		try {
 			ServerBootstrap b = new ServerBootstrap();
-			b.group(bossGroup, workerGroup)
-					.channel(NioServerSocketChannel.class)
-					.option(ChannelOption.TCP_NODELAY, true)
-					.option(ChannelOption.SO_KEEPALIVE, true)
+			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+					.option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_KEEPALIVE, true)
 					.childHandler(new ChildChannelHandler());
 			ChannelFuture f = b.bind(ip, port).sync();
-			this.channel = f.channel();
-			for (;;) {
-				Channel ch = TcpSocketChannelMap.get("nbi");
-				if (ch != null) {
-					ch.writeAndFlush("name=test,device_type=1,location=,manufactor=,id=1,site_uid=0x02020005,param_uid=0x00000114,mcp_id=3,value=0,update_time=2015-08-18 00:00:00\r\n");
-				}
-				TimeUnit.SECONDS.sleep(10);
-			}
-			// f.channel().closeFuture().sync();
+			f.channel().closeFuture().sync();
 		} finally {
 			bossGroup.shutdownGracefully();
 			workerGroup.shutdownGracefully();

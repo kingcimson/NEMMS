@@ -7,7 +7,6 @@ public class MessageUtils {
 	public static TcpUdpMessage getHeartReqMessage(TcpUdpMessage msg) {
 		msg.setVpLayerFlag((byte) 0x00);
 		msg.setRespFlag((byte) 0x00);
-		msg.setPDU(Converter.getReverseBytes(getHeartPDU(msg.getMcp())));
 		return msg;
 	}
 
@@ -93,7 +92,7 @@ public class MessageUtils {
 	public static byte[] getHeartPDU(byte mcp) {
 		// mcp:a 参数标识为2字节
 		if (mcp == 1) {
-			return new byte[] { 0x07,0x01,0x41,0x04 };
+			return new byte[] { 0x07, 0x01, 0x41, 0x04 };
 		}
 		// mcp:c 参数标识为4字节
 		if (mcp == 3) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.wellheadstone.nemms.data.criterion.Restrictions;
 import com.wellheadstone.nemms.data.jdbc.BaseDao;
 import com.wellheadstone.nemms.server.domain.po.DeviceDataPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceParamPo;
@@ -32,5 +33,15 @@ public class DeviceDataDao extends BaseDao<DeviceDataPo> {
 		sqlBuilder.append("	t1.site_uid = ? ");
 		String sql = String.format(sqlBuilder.toString(), DeviceDataPo.EntityName, DeviceParamPo.EntityName);
 		return this.queryForList(sql, new Object[] { siteUid }, new int[] { Types.VARCHAR }, DeviceSiteParamPo.class);
+	}
+
+	public int updateAlarm(DeviceDataPo po) {
+		String condition = Restrictions.equal(DeviceDataPo.SiteUid, "?")
+				.append(Restrictions.And)
+				.append(Restrictions.equal(DeviceDataPo.ParamUid, "?"))
+				.append(Restrictions.And)
+				.append(Restrictions.equal(DeviceDataPo.McpId, "?")).toString();
+		return this.update(po, condition,
+				new Object[] { po.getSiteUid(), po.getParamUid(), po.getMcpId() }, DeviceDataPo.Value);
 	}
 }

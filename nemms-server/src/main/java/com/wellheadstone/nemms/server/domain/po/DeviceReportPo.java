@@ -58,10 +58,10 @@ public class DeviceReportPo implements Serializable {
 	private Integer type;
 
 	@Column(name = "content")
-	private String content;
+	private String content = "";
 
 	@Column(name = "create_time")
-	private Date createTime;
+	private Date createTime = Calendar.getInstance().getTime();
 
 	/**
 	 * 获取

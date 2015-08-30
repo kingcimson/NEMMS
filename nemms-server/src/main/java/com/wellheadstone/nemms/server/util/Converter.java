@@ -26,29 +26,29 @@ public class Converter {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getShort(getReverseBytes(bytes));
 	}
-	
+
 	public static short getShort(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getShort(bytes);
 	}
-	
+
 	public static short getShort(byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.allocate(2);
 		buffer.put(bytes, 0, bytes.length);
 		buffer.flip();
 		return buffer.getShort();
 	}
-	
+
 	public static int getReverseInt(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getInt(getReverseBytes(bytes));
 	}
-	
+
 	public static int getInt(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getInt(bytes);
 	}
-	
+
 	public static int getInt(byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.allocate(4);
 		buffer.put(bytes, 0, bytes.length);
@@ -60,19 +60,19 @@ public class Converter {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getLong(getReverseBytes(bytes));
 	}
-	
+
 	public static long getLong(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getLong(bytes);
 	}
-	
+
 	public static long getLong(byte[] bytes) {
 		ByteBuffer buffer = ByteBuffer.allocate(8);
 		buffer.put(bytes, 0, bytes.length);
 		buffer.flip();
 		return buffer.getLong();
 	}
-	
+
 	public static String bytesToBit(byte[] bytes) {
 		StringBuilder sb = new StringBuilder();
 		for (byte b : bytes) {
@@ -118,26 +118,30 @@ public class Converter {
 		return dest;
 	}
 
+	public static String getHexStringWith0X(String hexStr) {
+		return "0x" + hexStr;
+	}
+
 	public static String getHexString(byte src) {
-		byte[] bytes = new byte[]{src};
+		byte[] bytes = new byte[] { src };
 		return bytesToHexString(bytes, "").trim().toLowerCase();
 	}
-	
+
 	public static String getHexString(short src) {
 		byte[] bytes = getBytes(src);
 		return bytesToHexString(bytes, "").trim().toLowerCase();
 	}
-	
+
 	public static String getHexString(int src) {
 		byte[] bytes = getBytes(src);
 		return bytesToHexString(bytes, "").trim().toLowerCase();
 	}
-	
+
 	public static String getHexString(long src) {
 		byte[] bytes = getBytes(src);
 		return bytesToHexString(bytes, "").trim().toLowerCase();
 	}
-	
+
 	public static String getHexString(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return bytesToHexString(bytes, "").trim().toLowerCase();
@@ -152,7 +156,7 @@ public class Converter {
 		byte[] bytes = getReverseBytes(src);
 		return bytesToHexString(bytes, "").trim().toLowerCase();
 	}
-	
+
 	public static String bytesToHexString(byte[] src) {
 		return bytesToHexString(src, " ");
 	}
