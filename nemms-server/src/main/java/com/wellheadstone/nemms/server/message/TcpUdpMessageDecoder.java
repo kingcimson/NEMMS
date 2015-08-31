@@ -23,7 +23,7 @@ public class TcpUdpMessageDecoder extends ByteToMessageDecoder {
 		byte[] escapeBytes = ByteObjConverter.escapeDecodeBytes(bytes);
 		TcpUdpMessage msg = ByteObjConverter.bytesToObject(escapeBytes);
 
-		String info = String.format("receive from[%s][%s]bytes:%s",
+		String info = String.format("receive from [%s][%s] bytes:%s",
 				ctx.channel().remoteAddress(), escapeBytes.length, Converter.bytesToHexString(escapeBytes));
 		logger.info(info);
 

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.wellheadstone.nemms.server.util.ByteObjConverter;
 import com.wellheadstone.nemms.server.util.Converter;
 
-public class TcpUdpMessageEncoder extends MessageToByteEncoder<TcpUdpMessage>  {
+public class TcpUdpMessageEncoder extends MessageToByteEncoder<TcpUdpMessage> {
 	private final static Logger logger = LoggerFactory.getLogger(TcpUdpMessageEncoder.class);
 
 	@Override
@@ -18,6 +18,9 @@ public class TcpUdpMessageEncoder extends MessageToByteEncoder<TcpUdpMessage>  {
 		byte[] bytes = ByteObjConverter.objectToBytes(msg);
 		out.writeBytes(bytes);
 		ctx.flush();
-		logger.info(String.format("send [%s] bytes: %s", bytes.length, Converter.bytesToHexString(bytes)));
+
+		String info = String.format("send to [%s][%s] bytes:%s",
+				ctx.channel().remoteAddress(), bytes.length, Converter.bytesToHexString(bytes));
+		logger.info(info);
 	}
 }
