@@ -1,5 +1,11 @@
 package com.wellheadstone.nemms.server.message;
 
+import java.nio.charset.Charset;
+import java.util.Arrays;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.wellheadstone.nemms.server.domain.po.DeviceParamPo;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class MessageUtils {
@@ -80,6 +86,49 @@ public class MessageUtils {
 
 		String uid = siteId.substring(10);
 		return Byte.valueOf(uid, 16);
+	}
+
+	public static String getParamValue(byte[] pdu, int startIndex, int endIndex, DeviceParamPo po) {
+		if (po == null) {
+			return StringUtils.EMPTY;
+		}
+		byte[] bytes = Arrays.copyOfRange(pdu, startIndex, endIndex);
+		if (po.getValueType().equals("uint1")) {
+			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
+			return String.valueOf(Converter.getShort(src));
+		}
+		if (po.getValueType().equals("uint2")) {
+			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 4);
+			return String.valueOf(Converter.getInt(src));
+		}
+		if (po.getValueType().equals("uint3")) {
+			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 4);
+			return String.valueOf(Converter.getInt(src));
+		}
+		if (po.getValueType().equals("uint4")) {
+			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 8);
+			return String.valueOf(Converter.getLong(src));
+		}
+		if (po.getValueType().equals("sint1")) {
+			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
+			return String.valueOf(Converter.getShort(src));
+		}
+		if (po.getValueType().equals("sint2")) {
+			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
+			return String.valueOf(Converter.getShort(src));
+		}
+		if (po.getValueType().equals("bit")) {
+			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
+			return String.valueOf(Converter.getShort(src));
+		}
+		if (po.getValueType().equals("str")) {
+			return new String(bytes, Charset.forName("US-ASCII"));
+		}
+		if (po.getValueType().equals("dstr")) {
+			return new String(bytes, Charset.forName("US-ASCII"));
+		}
+
+		return StringUtils.EMPTY;
 	}
 
 	private static byte[] getParamListPDU(byte mcp) {

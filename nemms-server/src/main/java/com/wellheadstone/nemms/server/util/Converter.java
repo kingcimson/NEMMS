@@ -27,6 +27,10 @@ public class Converter {
 		return getShort(getReverseBytes(bytes));
 	}
 
+	public static short getReverseShort(byte[] src) {
+		return getShort(getReverseBytes(src));
+	}
+
 	public static short getShort(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getShort(bytes);
@@ -44,6 +48,10 @@ public class Converter {
 		return getInt(getReverseBytes(bytes));
 	}
 
+	public static int getReverseInt(byte[] src) {
+		return getInt(getReverseBytes(src));
+	}
+
 	public static int getInt(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getInt(bytes);
@@ -59,6 +67,10 @@ public class Converter {
 	public static long getReverseLong(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getLong(getReverseBytes(bytes));
+	}
+
+	public static long getReverseLong(byte[] src) {
+		return getLong(getReverseBytes(src));
 	}
 
 	public static long getLong(byte[] src, int startIndex, int endIndex) {
@@ -192,13 +204,28 @@ public class Converter {
 		return d;
 	}
 
+	public static byte[] getBytes(byte[] src, int length) {
+		if (length <= src.length) {
+			return src;
+		}
+		byte[] bytes = new byte[length];
+		for (int i = 0; i < bytes.length; i++) {
+			bytes[i] = 0;
+		}
+		for (int i = 0; i < src.length; i++) {
+			bytes[bytes.length - 1 - i] = src[src.length - 1 - i];
+		}
+		return bytes;
+	}
+
 	private static byte charToByte(char c) {
 		return (byte) "0123456789ABCDEF".indexOf(c);
 	}
 
 	public static void main(String[] args) {
-		short value = 0x66f9;
-		System.out.println(bytesToBit(getBytes(value)));
-		System.out.println(bytesToBit(getReverseBytes(value)));
+		short value = 6234;
+		System.out.println(getInt(getBytes(getBytes(value), 4)));
+		// System.out.println(bytesToBit(getBytes(value)));
+		// System.out.println(bytesToBit(getReverseBytes(value)));
 	}
 }
