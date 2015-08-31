@@ -1182,8 +1182,10 @@ var SiteMgr = {
 					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
 				});
-				SiteMgr.paramTabs.displayParamList(data.uid, 0);
-				EasyUIUtils.closeLoading();
+				setTimeout(function(){
+				    SiteMgr.paramTabs.displayParamList(data.uid, 0);
+				    EasyUIUtils.closeLoading();
+				},5000);
 			});
 			SiteMgr.socket.on('queryAll', function(data) {
 				SiteMgr.console.output({
