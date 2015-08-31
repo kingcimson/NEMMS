@@ -24,10 +24,10 @@ public class SetupTask extends AbstractTask implements ITask {
 	@Override
 	public void execute() {
 		try {
-			String siteUid = Converter.getHexStringWith0X(Converter.getHexString(msg.getSiteId()));
-			logger.info(">>>获取参数列表查询完成<<<");
+			Converter.getHexStringWith0X(Converter.getHexString(msg.getSiteId()));
+			logger.info(">>>set param value finished<<<");
 		} catch (Exception ex) {
-			logger.error("GetParamListTask execute error.", ex);
+			logger.error("SetupTask execute error.", ex);
 		}
 	}
 

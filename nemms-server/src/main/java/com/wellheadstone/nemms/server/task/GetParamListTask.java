@@ -37,7 +37,7 @@ public class GetParamListTask extends AbstractTask implements ITask {
 				ctx.channel().writeAndFlush(MessageUtils.getParamListReqMessage(msg));
 				return;
 			}
-			logger.info(">>>获取参数列表查询完成<<<");
+			logger.info(">>>get param list query finished<<<");
 		} catch (Exception ex) {
 			logger.error("GetParamListTask execute error.", ex);
 		}

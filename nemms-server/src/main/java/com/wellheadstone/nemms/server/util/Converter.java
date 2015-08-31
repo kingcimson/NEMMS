@@ -124,27 +124,27 @@ public class Converter {
 
 	public static String getHexString(byte src) {
 		byte[] bytes = new byte[] { src };
-		return bytesToHexString(bytes, "").trim().toLowerCase();
+		return bytesToHexString(bytes, "").trim();
 	}
 
 	public static String getHexString(short src) {
 		byte[] bytes = getBytes(src);
-		return bytesToHexString(bytes, "").trim().toLowerCase();
+		return bytesToHexString(bytes, "").trim();
 	}
 
 	public static String getHexString(int src) {
 		byte[] bytes = getBytes(src);
-		return bytesToHexString(bytes, "").trim().toLowerCase();
+		return bytesToHexString(bytes, "").trim();
 	}
 
 	public static String getHexString(long src) {
 		byte[] bytes = getBytes(src);
-		return bytesToHexString(bytes, "").trim().toLowerCase();
+		return bytesToHexString(bytes, "").trim();
 	}
 
 	public static String getHexString(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
-		return bytesToHexString(bytes, "").trim().toLowerCase();
+		return bytesToHexString(bytes, "").trim();
 	}
 
 	public static String getReverseHexString(byte[] src, int startIndex, int endIndex) {
@@ -154,7 +154,7 @@ public class Converter {
 
 	public static String getReverseHexString(byte[] src) {
 		byte[] bytes = getReverseBytes(src);
-		return bytesToHexString(bytes, "").trim().toLowerCase();
+		return bytesToHexString(bytes, "").trim();
 	}
 
 	public static String bytesToHexString(byte[] src) {
