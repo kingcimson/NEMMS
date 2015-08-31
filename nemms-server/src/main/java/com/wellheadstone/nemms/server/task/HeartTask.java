@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wellheadstone.nemms.common.viewmodel.IdValuePair;
 import com.wellheadstone.nemms.server.domain.po.DeviceConnInfoPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceDataPo;
@@ -20,6 +23,7 @@ import com.wellheadstone.nemms.server.util.Converter;
 import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
 
 public class HeartTask extends AbstractTask implements ITask {
+	private final static Logger logger = LoggerFactory.getLogger(HeartTask.class);
 
 	protected HeartTask(ChannelHandlerContext ctx, TcpUdpMessage msg) {
 		super(ctx, msg);
@@ -32,13 +36,17 @@ public class HeartTask extends AbstractTask implements ITask {
 
 	@Override
 	public void execute() {
-		String siteUid = Converter.getHexStringWith0X(Converter.getHexString(msg.getSiteId()));
-		byte reportType = this.getReportType(msg.getPDU());
-		if (reportType == 6 || reportType == 7) {
-			this.addNewConn(ctx, msg, siteUid);
+		try {
+			String siteUid = Converter.getHexStringWith0X(Converter.getHexString(msg.getSiteId()));
+			byte reportType = this.getReportType(msg.getPDU());
+			if (reportType == 6 || reportType == 7) {
+				this.addNewConn(ctx, msg, siteUid);
+			}
+			this.report(msg.getMcp(), msg.getPDU(), reportType, siteUid);
+			ctx.channel().writeAndFlush(MessageUtils.getHeartResMessage(msg));
+		} catch (Exception ex) {
+			logger.error("HeartTask execute error.", ex);
 		}
-		this.report(msg.getMcp(), msg.getPDU(), reportType, siteUid);
-		ctx.channel().writeAndFlush(MessageUtils.getHeartResMessage(msg));
 	}
 
 	private void addNewConn(ChannelHandlerContext ctx, TcpUdpMessage msg, String siteUid) {

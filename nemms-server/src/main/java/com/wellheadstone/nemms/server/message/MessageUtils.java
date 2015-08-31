@@ -1,9 +1,5 @@
 package com.wellheadstone.nemms.server.message;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.wellheadstone.nemms.common.viewmodel.IdValuePair;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class MessageUtils {
@@ -86,7 +82,7 @@ public class MessageUtils {
 		return Byte.valueOf(uid, 16);
 	}
 
-	public static byte[] getParamListPDU(byte mcp) {
+	private static byte[] getParamListPDU(byte mcp) {
 		// mcp:a 参数标识为2字节
 		if (mcp == 1) {
 			return new byte[] { 0x01, 0x01, 0x00, 0x09, 0x05 };
@@ -97,37 +93,5 @@ public class MessageUtils {
 		}
 
 		return new byte[] { 0x00 };
-	}
-
-	public static byte[] getHeartPDU(byte mcp) {
-		// mcp:a 参数标识为2字节
-		if (mcp == 1) {
-			return new byte[] { 0x07, 0x01, 0x41, 0x04 };
-		}
-		// mcp:c 参数标识为4字节
-		if (mcp == 3) {
-			return new byte[] { 0x07, 0x01, 0x41, 0x00, 0x00, 0x05 };
-		}
-
-		return new byte[] { 0x00 };
-	}
-
-	public static List<IdValuePair> parseDataUnit(byte[] pdu) {
-		if (pdu == null || pdu.length < 4) {
-			return new ArrayList<IdValuePair>(0);
-		}
-
-		int size = pdu.length / pdu[0];
-		List<IdValuePair> list = new ArrayList<IdValuePair>(size);
-		for (int i = pdu[0]; i < pdu.length;) {
-			byte byteCountOfUnit = pdu[i];
-			String id = Converter.getReverseHexString(pdu, i + 1, i + pdu[i] - 1);
-			id = Converter.getHexStringWith0X(id);
-			String value = String.valueOf(pdu[i + pdu[i] - 1]);
-			list.add(new IdValuePair(id, value));
-			i = i + byteCountOfUnit;
-		}
-
-		return list;
 	}
 }

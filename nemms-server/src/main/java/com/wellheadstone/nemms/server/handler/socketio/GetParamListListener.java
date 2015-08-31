@@ -30,6 +30,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			if (channel == null) {
 				data.setRequestText("未找到当前站点或设备的连接通道.");
 			} else {
+				ServiceFacade.removeDeviceDataBy(data.getUid());
 				channel.writeAndFlush(message);
 			}
 		}

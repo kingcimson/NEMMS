@@ -26,7 +26,7 @@
 		</div>
 		<div region="south" class="footer">
 			<div id="footer-left">
-				<div>网元设备监控与管理系统</div>
+				<div>网元设备监控与管理系统(Version3.1)</div>
 			</div>
 			<div id="footer-right">Copyright © 2010-2015 北京裕源大通科技有限公司</div>
 		</div>

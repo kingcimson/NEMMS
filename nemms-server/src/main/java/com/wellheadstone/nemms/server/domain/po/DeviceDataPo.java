@@ -14,7 +14,7 @@ import com.wellheadstone.nemms.data.annotations.Column;
  */
 public class DeviceDataPo implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -735508049732725862L;
 
@@ -71,17 +71,17 @@ public class DeviceDataPo implements Serializable {
 	private Integer mcpId;
 
 	@Column(name = "value")
-	private String value;
+	private String value = "";
 
 	@Column(name = "create_time")
-	private Date createTime;
+	private Date createTime = Calendar.getInstance().getTime();
 
 	@Column(name = "update_time")
-	private Date updateTime;
+	private Date updateTime = Calendar.getInstance().getTime();
 
 	/**
 	 * 获取自增ID
-	 * 
+	 *
 	 * @return 自增ID
 	 */
 	public Long getId() {
@@ -90,7 +90,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 设置自增ID
-	 * 
+	 *
 	 * @param id
 	 */
 	public void setId(Long id) {
@@ -99,7 +99,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 获取站点uid
-	 * 
+	 *
 	 * @return 站点uid
 	 */
 	public String getSiteUid() {
@@ -108,7 +108,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 设置站点Uid
-	 * 
+	 *
 	 * @param siteUid
 	 */
 	public void setSiteUid(String siteUid) {
@@ -117,7 +117,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 获取设备参数Uid
-	 * 
+	 *
 	 * @return 设备参数UID
 	 */
 	public String getParamUid() {
@@ -126,7 +126,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 设置设备参数Uid
-	 * 
+	 *
 	 * @param paramUid
 	 */
 	public void setParamUid(String paramUid) {
@@ -135,7 +135,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 获取参数mcp协议类型标识(1:MCP_A,2:MCP_B,3:MCP_C 其他保留)
-	 * 
+	 *
 	 * @return 1:MCP_A,2:MCP_B,3:MCP_C 其他保留
 	 */
 	public Integer getMcpId() {
@@ -144,8 +144,9 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 设置参数mcp协议类型标识(1:MCP_A,2:MCP_B,3:MCP_C 其他保留)
-	 * 
-	 * @param mcpId (1:MCP_A,2:MCP_B,3:MCP_C 其他保留)
+	 *
+	 * @param mcpId
+	 *            (1:MCP_A,2:MCP_B,3:MCP_C 其他保留)
 	 */
 	public void setMcpId(Integer mcpId) {
 		this.mcpId = mcpId;
@@ -153,7 +154,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 获取监控值
-	 * 
+	 *
 	 * @return 监控值
 	 */
 	public String getValue() {
@@ -162,7 +163,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 设置监控值
-	 * 
+	 *
 	 * @param value
 	 */
 	public void setValue(String value) {
@@ -171,7 +172,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 获取监控时间
-	 * 
+	 *
 	 * @return 监控时间
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -181,7 +182,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 设置监控时间
-	 * 
+	 *
 	 * @param createTime
 	 */
 	public void setCreateTime(Date createTime) {
@@ -190,7 +191,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 获取监控更新时间
-	 * 
+	 *
 	 * @return 监控更新时间
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -200,7 +201,7 @@ public class DeviceDataPo implements Serializable {
 
 	/**
 	 * 设置监控更新时间
-	 * 
+	 *
 	 * @param updateTime
 	 */
 	public void setUpdateTime(Date updateTime) {

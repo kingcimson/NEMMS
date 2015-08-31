@@ -81,10 +81,10 @@ public class ByteObjConverter {
 
 	public static byte[] escapeDecodeBytes(byte[] srcBytes) {
 		ByteBuffer byteBuf = ByteBuffer.allocate(getDecodeByteCount(srcBytes));
-		byteBuf.put(srcBytes[0]);
-		int count = srcBytes.length - 1;
+		byteBuf.put((byte) 0x7e);
+		int count = srcBytes.length;
 		int last2Count = count - 1;
-		for (int i = 1; i < count; i++) {
+		for (int i = 0; i < count; i++) {
 			byte b1 = srcBytes[i];
 			if (b1 == 0x5e && (i < last2Count)) {
 				byte b2 = srcBytes[i + 1];
@@ -98,7 +98,7 @@ public class ByteObjConverter {
 				byteBuf.put(b1);
 			}
 		}
-		byteBuf.put(srcBytes[srcBytes.length - 1]);
+		byteBuf.put((byte) 0x7e);
 		return byteBuf.array();
 	}
 
@@ -114,11 +114,11 @@ public class ByteObjConverter {
 
 	private static int getDecodeByteCount(byte[] bytes) {
 		int count = 0;
-		for (int i = 1; i < bytes.length - 1; i++) {
+		for (int i = 0; i < bytes.length; i++) {
 			if (bytes[i] == 0x5e) {
 				count++;
 			}
 		}
-		return bytes.length - count;
+		return bytes.length + 2 - count;
 	}
 }

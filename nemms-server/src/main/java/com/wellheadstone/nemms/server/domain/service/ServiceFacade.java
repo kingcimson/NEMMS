@@ -1,5 +1,7 @@
 package com.wellheadstone.nemms.server.domain.service;
 
+import java.util.List;
+
 import com.wellheadstone.nemms.data.util.SpringContextUtils;
 import com.wellheadstone.nemms.server.domain.po.DeviceConnInfoPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceDataPo;
@@ -7,7 +9,7 @@ import com.wellheadstone.nemms.server.domain.po.DeviceReportPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceSitePo;
 
 public class ServiceFacade {
-	private static DeviceConnInfoService connInfoService = SpringContextUtils.getBean(DeviceConnInfoService.class); 
+	private static DeviceConnInfoService connInfoService = SpringContextUtils.getBean(DeviceConnInfoService.class);
 	private static DeviceReportService reportService = SpringContextUtils.getBean(DeviceReportService.class);
 	private static DeviceSiteService deviceSiteService = SpringContextUtils.getBean(DeviceSiteService.class);
 	private static DeviceDataService deviceDataService = SpringContextUtils.getBean(DeviceDataService.class);
@@ -38,5 +40,13 @@ public class ServiceFacade {
 
 	public static int updateAlarmReport(DeviceDataPo po) {
 		return deviceDataService.getDao().updateAlarm(po);
+	}
+
+	public static int addParamList(List<DeviceDataPo> entities) {
+		return deviceDataService.getDao().batchInsert(entities);
+	}
+
+	public static int removeDeviceDataBy(String siteUid) {
+		return deviceDataService.getDao().deleteBySiteUid(siteUid);
 	}
 }

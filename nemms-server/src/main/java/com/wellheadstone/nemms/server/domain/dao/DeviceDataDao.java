@@ -44,4 +44,9 @@ public class DeviceDataDao extends BaseDao<DeviceDataPo> {
 		return this.update(po, condition,
 				new Object[] { po.getSiteUid(), po.getParamUid(), po.getMcpId() }, DeviceDataPo.Value);
 	}
+
+	public int deleteBySiteUid(String siteUid) {
+		String condition = Restrictions.equal(DeviceDataPo.SiteUid, "?").toString();
+		return this.delete(condition, new Object[] { siteUid });
+	}
 }

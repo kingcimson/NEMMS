@@ -24,7 +24,7 @@ public class TcpUdpMessageDecoder extends ByteToMessageDecoder {
 		TcpUdpMessage msg = ByteObjConverter.bytesToObject(escapeBytes);
 
 		String info = String.format("receive from[%s][%s]bytes:%s",
-				ctx.channel().remoteAddress(), bytes.length, Converter.bytesToHexString(escapeBytes));
+				ctx.channel().remoteAddress(), escapeBytes.length, Converter.bytesToHexString(escapeBytes));
 		logger.info(info);
 
 		TaskFactory.creator(ctx, msg).execute();

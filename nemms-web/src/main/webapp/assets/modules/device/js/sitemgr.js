@@ -1178,28 +1178,29 @@ var SiteMgr = {
 			SiteMgr.socket.on('getParamList', function(data) {
 				SiteMgr.console.output({
 					name : "获取查询列表",
-					content : "发送:" + data.requestText + ";接收:" + data.responseText,
+					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
 				});
+				SiteMgr.paramTabs.displayParamList(data.uid, 0);
 			});
 			SiteMgr.socket.on('queryAll', function(data) {
 				SiteMgr.console.output({
 					name : "查询所有参数",
-					content : "发送:" + data.requestText + ";接收:" + data.responseText,
+					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
 				});
 			});
 			SiteMgr.socket.on('querySelected', function(data) {
 				SiteMgr.console.output({
 					name : "查询选中参数",
-					content : "发送:" + data.requestText + ";接收:" + data.responseText,
+					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
 				});
 			});
 			SiteMgr.socket.on('setup', function(data) {
 				SiteMgr.console.output({
 					name : "设置参数",
-					content : "发送:" + data.requestText + ";接收:" + data.responseText,
+					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
 				});
 			});

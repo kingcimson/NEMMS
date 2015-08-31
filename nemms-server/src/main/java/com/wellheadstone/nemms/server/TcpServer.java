@@ -62,7 +62,7 @@ public class TcpServer implements IServer {
 		@Override
 		protected void initChannel(SocketChannel channel) throws Exception {
 
-			channel.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192, false,
+			channel.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192,
 					new ByteBuf[] { Unpooled.wrappedBuffer(new byte[] { 0x7e }) }));
 			channel.pipeline().addLast("decoder", new TcpUdpMessageDecoder());
 			channel.pipeline().addLast("encoder", new TcpUdpMessageEncoder());
