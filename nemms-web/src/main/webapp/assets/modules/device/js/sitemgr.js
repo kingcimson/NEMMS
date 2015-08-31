@@ -898,6 +898,7 @@ var SiteMgr = {
 			if (node) {
 				var data = node.attributes;
 				SiteMgr.socket.emit('getParamList', data);
+				EasyUIUtils.loading();
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
 			}
@@ -1182,6 +1183,7 @@ var SiteMgr = {
 					createTime : new Date().toLocaleString()
 				});
 				SiteMgr.paramTabs.displayParamList(data.uid, 0);
+				EasyUIUtils.closeLoading();
 			});
 			SiteMgr.socket.on('queryAll', function(data) {
 				SiteMgr.console.output({
