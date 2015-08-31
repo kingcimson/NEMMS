@@ -218,6 +218,17 @@ public class Converter {
 		return bytes;
 	}
 
+	public static byte[] getFixedLengthBytes(int length) {
+		if (length <= 0) {
+			return new byte[] { 0x0 };
+		}
+		byte[] bytes = new byte[length];
+		for (int i = 0; i < bytes.length; i++) {
+			bytes[i] = 0;
+		}
+		return bytes;
+	}
+
 	private static byte charToByte(char c) {
 		return (byte) "0123456789ABCDEF".indexOf(c);
 	}

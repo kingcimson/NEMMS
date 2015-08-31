@@ -663,15 +663,13 @@ var SiteMgr = {
 																sortable : true,
 																name : gridId + '-value',
 																formatter : function(value, row, index) {
-
 																	if (row.mode == 'ro') {
 																		if (row.htmlElem == "select") {
 																			var items = SiteMgr.paramOption[row.htmlElemKey];
 																			for (var i = 0; i < items.length; i++) {
 																				var item = items[i];
 																				if (item.value == value) {
-																					return item.value + "(" + item.name
-																							+ ")";
+																					return item.value + "(" + item.name + ")";
 																				}
 																			}
 																			return value;
@@ -910,25 +908,26 @@ var SiteMgr = {
 				var data = node.attributes;
 				data.paramUids = paramUidList.join();
 				SiteMgr.socket.emit('queryAll', data);
-				SiteMgr.paramTabs.displayParamList(siteUid, 0);
+				EasyUIUtils.loading();
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备,并确定站点或设备是否存在查询参数!', 'info');
 			}
 		},
 		querySelected : function() {
 			var node = $('#site-tree').tree('getSelected');
-			var paramUidList = SiteMgr.toolbar.getSelectedParamUidList(true);
+			var paramUidList = SiteMgr.toolbar.getSelectedParamUidList();
 			if (node && paramUidList.length > 0) {
 				var data = node.attributes;
 				data.paramUids = paramUidList.join();
-				SiteMgr.socket.emit('queryAll', data);
+				SiteMgr.socket.emit('querySelected', data);
+				EasyUIUtils.loading();
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备,并确定是否选中参数!', 'info');
 			}
 		},
 		querySchedule : function() {
 			var node = $('#site-tree').tree('getSelected');
-			var paramUidList = SiteMgr.toolbar.getSelectedParamUidList(true);
+			var paramUidList = SiteMgr.toolbar.getSelectedParamUidList();
 			if (node && paramUidList.length > 0) {
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备,并确定是否选中参数!', 'info');
@@ -936,11 +935,12 @@ var SiteMgr = {
 		},
 		setup : function() {
 			var node = $('#site-tree').tree('getSelected');
-			var paramUidList = SiteMgr.toolbar.getSelectedParamUidList(false);
-			if (node && paramUidList.length > 0) {
+			var idValueList = SiteMgr.toolbar.getSetupParamIdValueList();
+			if (node && idValueList.length > 0) {
 				var data = node.attributes;
-				data.paramUids = paramUidList.join();
+				data.paramUids = JSON.stringify(idValueList);
 				SiteMgr.socket.emit('setup', data);
+				EasyUIUtils.loading();
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备,并确定是否选中参数!', 'info');
 			}
@@ -972,7 +972,7 @@ var SiteMgr = {
 			}
 			return paramUidList;
 		},
-		getSelectedParamUidList : function(isQuery) {
+		getSelectedParamUidList : function() {
 			var paramUidList = [];
 			for (var i = 0; i < SiteMgr.categories.length; i++) {
 				var category = SiteMgr.categories[i];
@@ -987,6 +987,26 @@ var SiteMgr = {
 				}
 			}
 			return paramUidList;
+		},
+		getSetupParamIdValueList : function() {
+			var idValueList = [];
+			for (var i = 0; i < SiteMgr.categories.length; i++) {
+				var category = SiteMgr.categories[i];
+				var gridId = "#param-tab" + category.value + '-grid';
+				var rows = $(gridId).datagrid('getRows');
+				for (var j = 0; j < rows.length; j++) {
+					var deviceParam = rows[j];
+					var chkId = gridId + '-ck-' + j;
+					var valueId = gridId + '-value-' + j;
+					if ($(chkId).prop("checked") && deviceParam.mode == 'rw') {
+					    idValueList.push({
+						    id : deviceParam.paramUid,
+						    value : $(valueId).val()
+						});
+					}
+				}
+			}
+			return  idValueList;
 		}
 	// end
 	},
@@ -1193,6 +1213,10 @@ var SiteMgr = {
 					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
 				});
+				setTimeout(function(){
+				    SiteMgr.paramTabs.displayParamList(data.uid, 0);
+				    EasyUIUtils.closeLoading();
+				},5000);
 			});
 			SiteMgr.socket.on('querySelected', function(data) {
 				SiteMgr.console.output({
@@ -1200,6 +1224,10 @@ var SiteMgr = {
 					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
 				});
+				setTimeout(function(){
+				    
+				    EasyUIUtils.closeLoading();
+				},5000);
 			});
 			SiteMgr.socket.on('setup', function(data) {
 				SiteMgr.console.output({
@@ -1207,6 +1235,10 @@ var SiteMgr = {
 					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
 				});
+				setTimeout(function(){
+				    
+				    EasyUIUtils.closeLoading();
+				},5000);
 			});
 		}
 	}
