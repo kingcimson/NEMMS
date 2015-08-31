@@ -1,5 +1,7 @@
 package com.wellheadstone.nemms.server.handler.socketio;
 
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.socket.SocketChannel;
 
 import com.corundumstudio.socketio.AckRequest;
@@ -31,11 +33,17 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 				data.setRequestText("未找到当前站点或设备的连接通道.");
 			} else {
 				ServiceFacade.removeDeviceDataBy(data.getUid());
-				channel.writeAndFlush(message);
+				channel.writeAndFlush(message).addListener(new ChannelFutureListener() {
+					@Override
+					public void operationComplete(ChannelFuture future) throws Exception {
+						if (future.isSuccess()) {
+							data.setEventName(EventName.GetParamList);
+							client.sendEvent(data.getEventName(), data);
+						}
+					}
+				});
 			}
+			//
 		}
-
-		data.setEventName(EventName.GetParamList);
-		client.sendEvent(data.getEventName(), data);
 	}
 }
