@@ -98,18 +98,17 @@ public class HeartTask extends AbstractTask implements ITask {
 	}
 
 	private List<IdValuePair> getReportDataList(byte[] pdu) {
-		List<IdValuePair> list = new ArrayList<IdValuePair>(5);
 		if (pdu == null || pdu.length < 4) {
-			return null;
+			return new ArrayList<IdValuePair>(5);
 		}
 
+		List<IdValuePair> list = new ArrayList<IdValuePair>(5);
 		for (int i = pdu[0]; i < pdu.length;) {
-			byte byteCountOfUnit = pdu[i];
 			String id = Converter.getReverseHexString(pdu, i + 1, i + pdu[i] - 1);
 			id = Converter.getHexStringWith0X(id);
 			String value = String.valueOf(pdu[i + pdu[i] - 1]);
 			list.add(new IdValuePair(id, value));
-			i = i + byteCountOfUnit;
+			i = i + pdu[i];
 		}
 
 		return list;
