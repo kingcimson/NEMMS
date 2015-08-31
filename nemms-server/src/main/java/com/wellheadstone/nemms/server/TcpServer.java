@@ -1,6 +1,8 @@
 package com.wellheadstone.nemms.server;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -9,6 +11,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +46,8 @@ public class TcpServer implements IServer {
 
 		try {
 			ServerBootstrap b = new ServerBootstrap();
-			b.group(bossGroup, workerGroup)
-					.channel(NioServerSocketChannel.class)
-					.option(ChannelOption.TCP_NODELAY, true)
-					.option(ChannelOption.SO_KEEPALIVE, true)
+			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+					.option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_KEEPALIVE, true)
 					.childHandler(new ChildChannelHandler());
 			ChannelFuture f = b.bind(ip, port).sync();
 			this.channel = f.channel();
@@ -60,11 +61,9 @@ public class TcpServer implements IServer {
 	private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 		@Override
 		protected void initChannel(SocketChannel channel) throws Exception {
-			/*
-			 * channel.pipeline().addLast("framer", new
-			 * DelimiterBasedFrameDecoder(8192, new ByteBuf[] {
-			 * Unpooled.wrappedBuffer(new byte[] { 0x7e }) }));
-			 */
+
+			channel.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192, false,
+					new ByteBuf[] { Unpooled.wrappedBuffer(new byte[] { 0x7e }) }));
 			channel.pipeline().addLast("decoder", new TcpUdpMessageDecoder());
 			channel.pipeline().addLast("encoder", new TcpUdpMessageEncoder());
 			channel.pipeline().addLast("handler", new TcpServerHandler());

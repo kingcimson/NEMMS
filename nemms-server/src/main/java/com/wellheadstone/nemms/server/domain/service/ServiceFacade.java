@@ -7,7 +7,7 @@ import com.wellheadstone.nemms.server.domain.po.DeviceReportPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceSitePo;
 
 public class ServiceFacade {
-	private static DeviceConnInfoService connInfoService = SpringContextUtils.getBean(DeviceConnInfoService.class);
+	private static DeviceConnInfoService connInfoService = SpringContextUtils.getBean(DeviceConnInfoService.class); 
 	private static DeviceReportService reportService = SpringContextUtils.getBean(DeviceReportService.class);
 	private static DeviceSiteService deviceSiteService = SpringContextUtils.getBean(DeviceSiteService.class);
 	private static DeviceDataService deviceDataService = SpringContextUtils.getBean(DeviceDataService.class);

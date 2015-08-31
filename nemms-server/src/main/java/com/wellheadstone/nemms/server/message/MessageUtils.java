@@ -1,12 +1,22 @@
 package com.wellheadstone.nemms.server.message;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.wellheadstone.nemms.common.viewmodel.IdValuePair;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class MessageUtils {
 
-	public static TcpUdpMessage getHeartReqMessage(TcpUdpMessage msg) {
+	public static TcpUdpMessage getHeartResMessage(TcpUdpMessage msg) {
 		msg.setVpLayerFlag((byte) 0x00);
 		msg.setRespFlag((byte) 0x00);
+		return msg;
+	}
+
+	public static TcpUdpMessage getParamListReqMessage(TcpUdpMessage msg) {
+		msg.setVpLayerFlag((byte) 0x80);
+		msg.setRespFlag((byte) 0xff);
 		return msg;
 	}
 
@@ -100,5 +110,24 @@ public class MessageUtils {
 		}
 
 		return new byte[] { 0x00 };
+	}
+
+	public static List<IdValuePair> parseDataUnit(byte[] pdu) {
+		if (pdu == null || pdu.length < 4) {
+			return new ArrayList<IdValuePair>(0);
+		}
+
+		int size = pdu.length / pdu[0];
+		List<IdValuePair> list = new ArrayList<IdValuePair>(size);
+		for (int i = pdu[0]; i < pdu.length;) {
+			byte byteCountOfUnit = pdu[i];
+			String id = Converter.getReverseHexString(pdu, i + 1, i + pdu[i] - 1);
+			id = Converter.getHexStringWith0X(id);
+			String value = String.valueOf(pdu[i + pdu[i] - 1]);
+			list.add(new IdValuePair(id, value));
+			i = i + byteCountOfUnit;
+		}
+
+		return list;
 	}
 }

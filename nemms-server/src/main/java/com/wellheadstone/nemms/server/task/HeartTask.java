@@ -38,7 +38,7 @@ public class HeartTask extends AbstractTask implements ITask {
 			this.addNewConn(ctx, msg, siteUid);
 		}
 		this.report(msg.getMcp(), msg.getPDU(), reportType, siteUid);
-		ctx.channel().writeAndFlush(MessageUtils.getHeartReqMessage(msg));
+		ctx.channel().writeAndFlush(MessageUtils.getHeartResMessage(msg));
 	}
 
 	private void addNewConn(ChannelHandlerContext ctx, TcpUdpMessage msg, String siteUid) {
@@ -66,13 +66,6 @@ public class HeartTask extends AbstractTask implements ITask {
 		return 0;
 	}
 
-	/**
-	 * 站点告警上报
-	 *
-	 * @param pdu
-	 * @param reportType
-	 * @param siteUid
-	 */
 	private void report(byte mcpId, byte[] pdu, byte reportType, String siteUid) {
 		Channel ch = TcpSocketChannelMap.get("nbi");
 		if (ch != null) {
