@@ -60,6 +60,11 @@ public class TcpServer implements IServer {
 	private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 		@Override
 		protected void initChannel(SocketChannel channel) throws Exception {
+			/*
+			 * channel.pipeline().addLast("framer", new
+			 * DelimiterBasedFrameDecoder(8192, new ByteBuf[] {
+			 * Unpooled.wrappedBuffer(new byte[] { 0x7e }) }));
+			 */
 			channel.pipeline().addLast("decoder", new TcpUdpMessageDecoder());
 			channel.pipeline().addLast("encoder", new TcpUdpMessageEncoder());
 			channel.pipeline().addLast("handler", new TcpServerHandler());

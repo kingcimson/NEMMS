@@ -22,13 +22,13 @@ public class StartUp {
 	}
 
 	private static void initializeConfiguration() {
-		PropertyConfigurator.configure("conf/log4j.properties");
+		PropertyConfigurator.configure("target/conf/log4j.properties");
 
 		SpringContextUtils springContextUtil = new SpringContextUtils();
-		ApplicationContext appContext = new FileSystemXmlApplicationContext("conf/spring.xml");
+		ApplicationContext appContext = new FileSystemXmlApplicationContext("target/conf/spring.xml");
 		springContextUtil.setApplicationContext(appContext);
 
-		PropertiesUtils.configure("conf/resource.properties");
+		PropertiesUtils.configure("target/conf/resource.properties");
 	}
 
 	private static void startServers() {
