@@ -1,5 +1,6 @@
 package com.wellheadstone.nemms.server.message;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,18 +39,21 @@ public class MessageUtils {
 	public static TcpUdpMessage getQueryAllReqMessage(SocketIOMessage data) {
 		TcpUdpMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
 		message.setCmdId((byte) 0x02);
+		message.setPDU(new byte[] { 0x00 });
 		return message;
 	}
 
 	public static TcpUdpMessage getQuerySelectedReqMessage(SocketIOMessage data) {
 		TcpUdpMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
 		message.setCmdId((byte) 0x02);
+		message.setPDU(new byte[] { 0x00 });
 		return message;
 	}
 
 	public static TcpUdpMessage getSetupReqMessage(SocketIOMessage data) {
 		TcpUdpMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
 		message.setCmdId((byte) 0x03);
+		message.setPDU(new byte[] { 0x00 });
 		return message;
 	}
 
@@ -109,7 +113,8 @@ public class MessageUtils {
 			po.setSiteUid(siteUid);
 			po.setParamUid(Converter.getHexStringWith0X(paramUid));
 			po.setMcpId((int) mcp);
-			po.setValue(MessageUtils.getParamValue(pdu, endIndex, i + unitLength, paramMap.get(po.getParamUid())));
+			po.setValue(MessageUtils.getParamValue(pdu, endIndex, i + unitLength,
+					paramMap.get(po.getParamUid().toUpperCase())));
 			entities.add(po);
 
 			i = i + unitLength;
@@ -158,6 +163,37 @@ public class MessageUtils {
 		}
 
 		return StringUtils.EMPTY;
+	}
+
+	public static byte[] getUnitBytes(int mcp, DeviceParamPo po) {
+		int length = (mcp == 1) ? (3 + po.getValueLen()) : (5 + po.getValueLen());
+		ByteBuffer buffer = ByteBuffer.allocate(length);
+		buffer.put((byte) length);
+		buffer.put(getParamIdBytes(mcp, po.getUid().trim()));
+		buffer.put(Converter.getFixedLengthBytes(po.getValueLen()));
+		buffer.flip();
+		return buffer.array();
+	}
+
+	public static byte[] getPdu(ArrayList<Byte> list) {
+		byte[] bytes = new byte[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			bytes[i] = list.get(i).byteValue();
+		}
+		return bytes;
+	}
+
+	public static void setPdu(ArrayList<Byte> list, byte[] unit) {
+		for (byte b : unit) {
+			list.add(b);
+		}
+	}
+
+	public static byte[] getParamIdBytes(int mcp, String id) {
+		if (mcp == 1) {
+			return Converter.getReverseBytes(Short.valueOf(id.substring(2), 16).shortValue());
+		}
+		return Converter.getReverseBytes(Integer.valueOf(id.substring(2), 16).intValue());
 	}
 
 	private static byte[] getParamListPDU(byte mcp) {

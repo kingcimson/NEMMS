@@ -2,7 +2,6 @@ package com.wellheadstone.nemms.server.handler.socketio;
 
 import io.netty.channel.socket.SocketChannel;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -20,7 +19,6 @@ import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
 import com.wellheadstone.nemms.server.message.TcpUdpMessage;
-import com.wellheadstone.nemms.server.util.Converter;
 import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
 
 public class QueryAllListener implements DataListener<SocketIOMessage> {
@@ -61,51 +59,21 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 				if (po == null) {
 					continue;
 				}
-				byte[] unit = this.getUnitBytes(message.getMcp(), po);
+				byte[] unit = MessageUtils.getUnitBytes(message.getMcp(), po);
 				if (list.size() + unit.length < 235) {
-					this.setPdu(list, unit);
-					if (i < paramIdList.length) {
+					MessageUtils.setPdu(list, unit);
+					if (i < paramIdList.length - 1) {
 						continue;
 					}
 				}
-				message.setPDU(this.getPdu(list));
+				message.setPDU(MessageUtils.getPdu(list));
 				channel.writeAndFlush(message);
 				list.clear();
-				this.setPdu(list, unit);
+				MessageUtils.setPdu(list, unit);
 			}
 		} catch (Exception ex) {
 			logger.error("QueryAllListener send message error.", ex);
 		}
 	}
 
-	private byte[] getUnitBytes(int mcp, DeviceParamPo po) {
-		int length = (mcp == 1) ? (3 + po.getValueLen()) : (5 + po.getValueLen());
-		ByteBuffer buffer = ByteBuffer.allocate(length);
-		buffer.put((byte) length);
-		buffer.put(this.getParamIdBytes(mcp, po.getUid().trim()));
-		buffer.put(Converter.getFixedLengthBytes(po.getValueLen()));
-		buffer.flip();
-		return buffer.array();
-	}
-
-	private byte[] getPdu(ArrayList<Byte> list) {
-		byte[] bytes = new byte[list.size()];
-		for (int i = 0; i < list.size(); i++) {
-			bytes[i] = list.get(i).byteValue();
-		}
-		return bytes;
-	}
-
-	private void setPdu(ArrayList<Byte> list, byte[] unit) {
-		for (byte b : unit) {
-			list.add(b);
-		}
-	}
-
-	private byte[] getParamIdBytes(int mcp, String id) {
-		if (mcp == 1) {
-			return Converter.getReverseBytes(Short.valueOf(id.substring(2)).shortValue());
-		}
-		return Converter.getReverseBytes(Integer.valueOf(id.substring(2)).intValue());
-	}
 }

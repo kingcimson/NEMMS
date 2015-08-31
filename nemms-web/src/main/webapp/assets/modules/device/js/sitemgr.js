@@ -981,7 +981,7 @@ var SiteMgr = {
 				for (var j = 0; j < rows.length; j++) {
 					var deviceParam = rows[j];
 					var chkId = gridId + '-ck-' + j;
-					if ($(chkId).prop("checked") && (isQuery || deviceParam.mode == 'rw')) {
+					if ($(chkId).prop("checked")) {
 						paramUidList.push(deviceParam.paramUid);
 					}
 				}
@@ -1113,6 +1113,10 @@ var SiteMgr = {
 		},
 		select : function(index) {
 			$('#param-tabs').tabs('select', index);
+		},
+		getSelectedIndex:function(){
+			var tab = $('#param-tabs').tabs('getSelected');
+			return $('#param-tabs').tabs('getTabIndex',tab);
 		}
 	// end
 	},
@@ -1224,8 +1228,9 @@ var SiteMgr = {
 					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
 				});
-				setTimeout(function(){
-				    
+				setTimeout(function(){    
+					var index = SiteMgr.paramTabs.getSelectedIndex();
+					SiteMgr.paramTabs.displayParamList(data.uid, index);
 				    EasyUIUtils.closeLoading();
 				},5000);
 			});
@@ -1236,7 +1241,8 @@ var SiteMgr = {
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function(){
-				    
+					var index = SiteMgr.paramTabs.getSelectedIndex();
+					SiteMgr.paramTabs.displayParamList(data.uid, index);
 				    EasyUIUtils.closeLoading();
 				},5000);
 			});
