@@ -30,7 +30,7 @@
 		</div>
 		<div id="param-tabs" class="easyui-tabs" style="width: 100%; height: 50%">
 		</div>
-		<div id="console-tabs" class="easyui-tabs" style="width: 100%; height: 40%">
+		<div id="console-tabs" class="easyui-tabs" style="width: 100%; height:40%;">
 			<div title="输出控制台" style="padding: 0px">
 				<div style="height: 300px">
 					<div id="console-datagrid"></div>

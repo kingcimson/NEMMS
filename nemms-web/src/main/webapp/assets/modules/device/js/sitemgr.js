@@ -608,13 +608,14 @@ var SiteMgr = {
 						},
 						function(data) {
 							SiteMgr.categories = data;
+							var height = $('#param-tabs').height()-30;
 							for (var i = 0; i < SiteMgr.categories.length; i++) {
 								var category = SiteMgr.categories[i];
 								var title = category.name + "参数";
 								var id = "param-tab" + category.value;
 								var gridId = id + "-grid";
-								var content = "<div id=\"" + id + "\" style=\"padding: 10px;\">"
-										+ "<div style=\"height:500px\">" + "<div class=\"easyui-datagrid\" id=\""
+								var content = "<div id=\"" + id + "\" style=\"padding: 2px;\">"
+										+ "<div style=\"height:"+ height +"px\">" + "<div class=\"easyui-datagrid\" id=\""
 										+ gridId + "\"></div>" + "</div>" + "</div>";
 								$('#param-tabs').tabs('add', {
 									title : title,
