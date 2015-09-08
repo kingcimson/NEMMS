@@ -19,8 +19,7 @@ public class TcpUdpMessageEncoder extends MessageToByteEncoder<TcpUdpMessage> {
 		out.writeBytes(bytes);
 		ctx.flush();
 
-		String info = String.format("send to [%s][%s] bytes:%s",
-				ctx.channel().remoteAddress(), bytes.length, Converter.bytesToHexString(bytes));
-		logger.info(info);
+		logger.info(String.format("send to [%s][%s] bytes:%s",
+				ctx.channel().remoteAddress(), bytes.length, Converter.bytesToHexString(bytes)));
 	}
 }

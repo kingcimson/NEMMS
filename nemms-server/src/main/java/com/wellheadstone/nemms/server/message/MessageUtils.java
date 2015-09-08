@@ -102,7 +102,7 @@ public class MessageUtils {
 		int byteCount = mcp == 1 ? 2 : 4;
 		int size = pdu.length / byteCount;
 		List<DeviceDataPo> entities = new ArrayList<DeviceDataPo>(size);
-		Map<String, DeviceParamPo> paramMap = ServiceFacade.getParamList(mcp);
+		Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
 		for (int i = 0; i < pdu.length;) {
 			int unitLength = pdu[i];
 			int startIndex = i + 1;
@@ -114,7 +114,7 @@ public class MessageUtils {
 			po.setParamUid(Converter.getHexStringWith0X(paramUid));
 			po.setMcpId((int) mcp);
 			po.setValue(MessageUtils.getParamValue(pdu, endIndex, i + unitLength,
-					paramMap.get(po.getParamUid().toUpperCase())));
+					paramMap.get(MessageUtils.getDeviceParamKey(po.getParamUid(), mcp))));
 			entities.add(po);
 
 			i = i + unitLength;
@@ -207,5 +207,9 @@ public class MessageUtils {
 		}
 
 		return new byte[] { 0x00 };
+	}
+
+	public static String getDeviceParamKey(String uid, int mcpId) {
+		return String.format("%s-%s", uid.trim().toUpperCase(), mcpId);
 	}
 }

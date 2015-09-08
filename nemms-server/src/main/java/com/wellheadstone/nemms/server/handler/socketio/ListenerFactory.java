@@ -14,8 +14,8 @@ public class ListenerFactory {
 		if (EventName.QuerySelected.equals(eventName)) {
 			return new QuerySelectedListener();
 		}
-		if (EventName.Setup.equals(eventName)) {
-			return new SetupListener();
+		if (EventName.Settings.equals(eventName)) {
+			return new SettingsListener();
 		}
 		return new DefaultListListener();
 	}

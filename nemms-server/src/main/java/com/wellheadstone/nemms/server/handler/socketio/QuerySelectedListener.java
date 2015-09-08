@@ -19,16 +19,12 @@ import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
 import com.wellheadstone.nemms.server.message.TcpUdpMessage;
-import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
 
 public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 	private final static Logger logger = LoggerFactory.getLogger(QuerySelectedListener.class);
 
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
-		String clientIP = RemoteAdressFormatter.getIP(client.getRemoteAddress());
-		SocketIOClientMap.add(clientIP, client);
-
 		TcpUdpMessage message = MessageUtils.getQuerySelectedReqMessage(data);
 		data.setRequestText(message.toString());
 
@@ -43,19 +39,17 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 				this.sendMessage(channel, data, message);
 			}
 		}
-
-		data.setEventName(EventName.QuerySelected);
-		client.sendEvent(data.getEventName(), data);
+		client.sendEvent(EventName.QuerySelected, data);
 	}
 
 	private void sendMessage(SocketChannel channel, SocketIOMessage data, TcpUdpMessage message) {
 		try {
 			String[] paramIdList = StringUtils.split(data.getParamUids(), ',');
-			Map<String, DeviceParamPo> paramMap = ServiceFacade.getParamList(message.getMcp());
+			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
 			ArrayList<Byte> list = new ArrayList<Byte>(235);
 			for (int i = 0; i < paramIdList.length; i++) {
-				String paramId = paramIdList[i].trim().toUpperCase();
-				DeviceParamPo po = paramMap.get(paramId);
+				String paramKey = MessageUtils.getDeviceParamKey(paramIdList[i], message.getMcp());
+				DeviceParamPo po = paramMap.get(paramKey);
 				if (po == null) {
 					continue;
 				}
@@ -67,6 +61,7 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 					}
 				}
 				message.setPDU(MessageUtils.getPdu(list));
+				data.setRequestText(message.toString() + ";" + data.getRequestText());
 				channel.writeAndFlush(message);
 				list.clear();
 				MessageUtils.setPdu(list, unit);

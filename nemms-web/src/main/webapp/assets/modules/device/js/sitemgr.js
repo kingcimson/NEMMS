@@ -939,7 +939,7 @@ var SiteMgr = {
 			if (node && idValueList.length > 0) {
 				var data = node.attributes;
 				data.paramUids = JSON.stringify(idValueList);
-				SiteMgr.socket.emit('setup', data);
+				SiteMgr.socket.emit('settings', data);
 				EasyUIUtils.loading();
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备,并确定是否选中参数!', 'info');
@@ -1234,7 +1234,7 @@ var SiteMgr = {
 				    EasyUIUtils.closeLoading();
 				},5000);
 			});
-			SiteMgr.socket.on('setup', function(data) {
+			SiteMgr.socket.on('settings', function(data) {
 				SiteMgr.console.output({
 					name : "设置参数",
 					content : "发送:" + data.requestText,

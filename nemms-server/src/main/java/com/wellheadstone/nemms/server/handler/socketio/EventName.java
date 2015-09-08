@@ -20,5 +20,5 @@ public class EventName {
 	/**
 	 * 设置参数事件名称
 	 */
-	public static final String Setup = "setup";
+	public static final String Settings = "settings";
 }

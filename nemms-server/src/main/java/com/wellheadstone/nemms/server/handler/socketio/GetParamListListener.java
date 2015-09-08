@@ -11,17 +11,11 @@ import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
 import com.wellheadstone.nemms.server.message.TcpUdpMessage;
-import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
 
 public class GetParamListListener implements DataListener<SocketIOMessage> {
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
-		String clientIP = RemoteAdressFormatter.getIP(client.getRemoteAddress());
-		SocketIOClientMap.add(clientIP, client);
-
 		TcpUdpMessage message = MessageUtils.getParamListReqMessage(data);
-		data.setRequestText(message.toString());
-
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
 			data.setResponseText("未找到当前站点与设备的连接服务器ip与port.");
@@ -30,12 +24,11 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			if (channel == null) {
 				data.setRequestText("未找到当前站点或设备的连接通道.");
 			} else {
+				data.setRequestText(message.toString());
 				ServiceFacade.removeDeviceDataBy(data.getUid());
 				channel.writeAndFlush(message);
 			}
 		}
-
-		data.setEventName(EventName.GetParamList);
-		client.sendEvent(data.getEventName(), data);
+		client.sendEvent(EventName.GetParamList, data);
 	}
 }

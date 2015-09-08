@@ -8,6 +8,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.data.util.SpringContextUtils;
+import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 
 public class StartUp {
 	protected final static Logger logger = LoggerFactory.getLogger(StartUp.class);
@@ -15,6 +16,7 @@ public class StartUp {
 	public static void main(String[] args) {
 		try {
 			initializeConfiguration();
+			initData();
 			startServers();
 		} catch (Exception e) {
 			logger.debug(e.toString());
@@ -29,6 +31,10 @@ public class StartUp {
 		springContextUtil.setApplicationContext(appContext);
 
 		PropertiesUtils.configure("target/conf/resource.properties");
+	}
+
+	private static void initData() {
+		ServiceFacade.loadData();
 	}
 
 	private static void startServers() {

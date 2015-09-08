@@ -21,16 +21,12 @@ import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
 import com.wellheadstone.nemms.server.message.TcpUdpMessage;
-import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
 
-public class SetupListener implements DataListener<SocketIOMessage> {
-	private final static Logger logger = LoggerFactory.getLogger(SetupListener.class);
+public class SettingsListener implements DataListener<SocketIOMessage> {
+	private final static Logger logger = LoggerFactory.getLogger(SettingsListener.class);
 
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
-		String clientIP = RemoteAdressFormatter.getIP(client.getRemoteAddress());
-		SocketIOClientMap.add(clientIP, client);
-
 		TcpUdpMessage message = MessageUtils.getSetupReqMessage(data);
 		data.setRequestText(message.toString());
 
@@ -45,20 +41,19 @@ public class SetupListener implements DataListener<SocketIOMessage> {
 				this.sendMessage(channel, data, message);
 			}
 		}
-
-		data.setEventName(EventName.Setup);
-		client.sendEvent(data.getEventName(), data);
+		client.sendEvent(EventName.Settings, data);
 	}
 
 	private void sendMessage(SocketChannel channel, SocketIOMessage data, TcpUdpMessage message) {
 		try {
 			List<IdValuePair> paramList = JSON.parseArray(data.getParamUids(), IdValuePair.class);
-			Map<String, DeviceParamPo> paramMap = ServiceFacade.getParamList(message.getMcp());
+			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
 			ArrayList<Byte> list = new ArrayList<Byte>(235);
 			for (int i = 0; i < paramList.size(); i++) {
-				String paramId = paramList.get(i).getId().trim().toUpperCase();
+				String paramId = paramList.get(i).getId();
 				// String value = paramList.get(i).getValue().trim();
-				DeviceParamPo po = paramMap.get(paramId);
+				String paramKey = MessageUtils.getDeviceParamKey(paramId, message.getMcp());
+				DeviceParamPo po = paramMap.get(paramKey);
 				if (po == null) {
 					continue;
 				}
@@ -70,6 +65,7 @@ public class SetupListener implements DataListener<SocketIOMessage> {
 					}
 				}
 				message.setPDU(MessageUtils.getPdu(list));
+				data.setRequestText(message.toString() + ";" + data.getRequestText());
 				channel.writeAndFlush(message);
 				list.clear();
 				MessageUtils.setPdu(list, unit);

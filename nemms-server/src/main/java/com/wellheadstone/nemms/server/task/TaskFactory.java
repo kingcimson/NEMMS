@@ -23,7 +23,7 @@ public class TaskFactory {
 		}
 		// 设置
 		if (msg.getCmdId() == 0x03) {
-			return new SetupTask(ctx, msg);
+			return new SettingsTask(ctx, msg);
 		}
 
 		return new DefaultTask(ctx, msg);

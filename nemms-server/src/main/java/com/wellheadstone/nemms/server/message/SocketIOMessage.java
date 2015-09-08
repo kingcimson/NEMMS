@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 public class SocketIOMessage implements Serializable {
 	private static final long serialVersionUID = -5122436055704695237L;
-	private String eventName;
-	private String clientIP;
 	private Integer id;
 	private Integer pid = 0;
 	private String uid;
@@ -29,42 +27,6 @@ public class SocketIOMessage implements Serializable {
 	private String requestText = "";
 	private String responseText = "";
 	private Long timeStamp = System.currentTimeMillis();
-
-	/**
-	 * 获取事件名称
-	 *
-	 * @return
-	 */
-	public String getEventName() {
-		return eventName;
-	}
-
-	/**
-	 * 设置事件名称
-	 *
-	 * @param eventName
-	 */
-	public void setEventName(String eventName) {
-		this.eventName = eventName;
-	}
-
-	/**
-	 * 获取ClientIP
-	 *
-	 * @return
-	 */
-	public String getClientIP() {
-		return clientIP;
-	}
-
-	/**
-	 * 设置ClientIP
-	 *
-	 * @param clientIP
-	 */
-	public void setClientIP(String clientIP) {
-		this.clientIP = clientIP;
-	}
 
 	/**
 	 * 获取站点记录标识

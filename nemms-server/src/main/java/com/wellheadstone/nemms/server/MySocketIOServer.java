@@ -26,8 +26,8 @@ public class MySocketIOServer implements IServer {
 				ListenerFactory.create(EventName.QueryALL));
 		server.addEventListener(EventName.QuerySelected, SocketIOMessage.class,
 				ListenerFactory.create(EventName.QuerySelected));
-		server.addEventListener(EventName.Setup, SocketIOMessage.class,
-				ListenerFactory.create(EventName.Setup));
+		server.addEventListener(EventName.Settings, SocketIOMessage.class,
+				ListenerFactory.create(EventName.Settings));
 		server.start();
 
 		try {

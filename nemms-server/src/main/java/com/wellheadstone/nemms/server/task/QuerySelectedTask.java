@@ -26,7 +26,6 @@ public class QuerySelectedTask extends AbstractTask implements ITask {
 		try {
 			String siteUid = Converter.getHexStringWith0X(Converter.getHexString(msg.getSiteId()));
 			MessageUtils.parseDataUnit(siteUid, msg.getMcp(), msg.getPDU());
-			logger.info(">>>query params value finished<<<");
 		} catch (Exception ex) {
 			logger.error("QuerySelectedTask execute error.", ex);
 		}

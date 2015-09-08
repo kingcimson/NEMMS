@@ -10,6 +10,7 @@ import com.wellheadstone.nemms.server.domain.po.DeviceDataPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceParamPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceReportPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceSitePo;
+import com.wellheadstone.nemms.server.message.MessageUtils;
 
 public class ServiceFacade {
 	private static DeviceConnInfoService connInfoService = SpringContextUtils.getBean(DeviceConnInfoService.class);
@@ -17,6 +18,11 @@ public class ServiceFacade {
 	private static DeviceSiteService deviceSiteService = SpringContextUtils.getBean(DeviceSiteService.class);
 	private static DeviceDataService deviceDataService = SpringContextUtils.getBean(DeviceDataService.class);
 	private static DeviceParamService deviceParamService = SpringContextUtils.getBean(DeviceParamService.class);
+	private static Map<String, DeviceParamPo> deviceParamMap;
+
+	public static void loadData() {
+		loadDeviceParamData();
+	}
 
 	public static DeviceConnInfoPo getConnInfoBy(String siteUid) {
 		return connInfoService.getDao().queryBy(siteUid);
@@ -54,6 +60,13 @@ public class ServiceFacade {
 		return deviceDataService.getDao().deleteBySiteUid(siteUid);
 	}
 
+	public static Map<String, DeviceParamPo> getDeviceParamMap() {
+		if (deviceParamMap == null) {
+			return new HashMap<String, DeviceParamPo>(0);
+		}
+		return deviceParamMap;
+	}
+
 	public static Map<String, DeviceParamPo> getParamList(int mcp) {
 		List<DeviceParamPo> params = deviceParamService.getDao().queryParamListBy(mcp);
 		Map<String, DeviceParamPo> paramMap = new HashMap<String, DeviceParamPo>(params.size());
@@ -66,6 +79,15 @@ public class ServiceFacade {
 	public static void updateParamListValue(List<DeviceDataPo> entities) {
 		for (DeviceDataPo entity : entities) {
 			deviceDataService.getDao().replaceInsert(entity);
+		}
+	}
+
+	private static void loadDeviceParamData() {
+		List<DeviceParamPo> params = deviceParamService.getDao().query();
+		deviceParamMap = new HashMap<String, DeviceParamPo>(params.size());
+		for (DeviceParamPo param : params) {
+			String key = MessageUtils.getDeviceParamKey(param.getUid(), param.getMcpId());
+			deviceParamMap.put(key, param);
 		}
 	}
 }
