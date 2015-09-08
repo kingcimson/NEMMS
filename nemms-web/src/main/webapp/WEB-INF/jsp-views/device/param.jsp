@@ -77,13 +77,19 @@
 						<td><select class="easyui-combobox" id="authorityRoles" name="authorityRoles" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 					</tr>
 					<tr>
-						<td>参考控件:</td>
+						<td>参数控件:</td>
 						<td><select class="easyui-combobox" id="htmlElem" name="htmlElem" style="width: 148px">
 								<option value="text">文本框</option>
 								<option value="select">下拉框</option>
 						</select></td>
 						<td>参数配置项:</td>
 						<td><select class="easyui-combobox" id="htmlElemKey" name="htmlElemKey" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+					</tr>
+					<tr>
+						<td>参数显示格式:</td>
+						<td><select class="easyui-combobox" id="format" name="format" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+						<td></td>
+						<td></td>
 					</tr>
 				</table>
 			</center>
@@ -140,13 +146,19 @@
 						<td><select class="easyui-combobox" id="edit-authorityRoles" name="authorityRoles" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
 					</tr>
 					<tr>
-						<td>参考控件:</td>
+						<td>参数控件:</td>
 						<td><select class="easyui-combobox" id="edit-htmlElem" name="htmlElem" style="width: 148px">
 								<option value="text">文本框</option>
 								<option value="select">下拉框</option>
 						</select></td>
 						<td>参数配置项:</td>
 						<td><select class="easyui-combobox" id="edit-htmlElemKey" name="htmlElemKey" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+					</tr>
+					<tr>
+						<td>参数显示格式:</td>
+						<td><select class="easyui-combobox" id="edit-format" name="format" data-options="valueField:'value',textField:'name'" style="width: 148px"></select></td>
+						<td></td>
+						<td></td>
 					</tr>
 				</table>
 			</center>

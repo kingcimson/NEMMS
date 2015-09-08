@@ -179,7 +179,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 660,
-		height : 450,
+		height : 480,
 		iconCls:'icon-add',
 		buttons : [ {
 			text : '关闭',
@@ -199,7 +199,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 660,
-		height : 450,
+		height : 480,
 		iconCls:'icon-edit',
 		buttons : [ {
 			text : '关闭',
@@ -281,7 +281,8 @@ var DeviceParam = {
 					"warnLevel" : DeviceParam.deviceParamDict.deviceParamWarnLevel,
 					"mcpId" : DeviceParam.mcpProtocolDict,
 					"htmlElemKey" : DeviceParam.paramOptionDict,
-					"authorityRoles" : DeviceParam.authorityRolesDict	
+					"authorityRoles" : DeviceParam.authorityRolesDict,
+					"format" : DeviceParam.deviceParamDict.deviceParamFormat
 			};
 			DeviceParam.fillCombox(act,map);
 		},

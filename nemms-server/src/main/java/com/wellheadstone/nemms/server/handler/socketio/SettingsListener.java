@@ -28,8 +28,6 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		TcpUdpMessage message = MessageUtils.getSetupReqMessage(data);
-		data.setRequestText(message.toString());
-
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
 			data.setResponseText("未找到当前站点与设备的连接服务器ip与port.");
@@ -49,6 +47,7 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 			List<IdValuePair> paramList = JSON.parseArray(data.getParamUids(), IdValuePair.class);
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
 			ArrayList<Byte> list = new ArrayList<Byte>(235);
+			short count = 0;
 			for (int i = 0; i < paramList.size(); i++) {
 				String paramId = paramList.get(i).getId();
 				// String value = paramList.get(i).getValue().trim();
@@ -64,6 +63,7 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 						continue;
 					}
 				}
+				message.setPacketId(count++);
 				message.setPDU(MessageUtils.getPdu(list));
 				data.setRequestText(message.toString() + ";" + data.getRequestText());
 				channel.writeAndFlush(message);

@@ -159,7 +159,7 @@ public class MessageUtils {
 			return new String(bytes, Charset.forName("US-ASCII"));
 		}
 		if (po.getValueType().equals("dstr")) {
-			return new String(bytes, Charset.forName("US-ASCII"));
+			return getDStringValue(po.getFormat(), bytes);
 		}
 
 		return StringUtils.EMPTY;
@@ -211,5 +211,27 @@ public class MessageUtils {
 
 	public static String getDeviceParamKey(String uid, int mcpId) {
 		return String.format("%s-%s", uid.trim().toUpperCase(), mcpId);
+	}
+
+	public static String getDStringValue(String format, byte[] bytes) {
+		if ("ip".equals(format.trim().toLowerCase())) {
+			return String.format("%s.%s.%s.%s",
+					Converter.byteToShort(bytes[0]),
+					Converter.byteToShort(bytes[1]),
+					Converter.byteToShort(bytes[2]),
+					Converter.byteToShort(bytes[3]));
+		}
+		if ("dt".equals(format.trim().toLowerCase())) {
+			return String.format("%s %s %s %s  %s:%s:%s",
+					Converter.byteToShort(bytes[0]),
+					Converter.byteToShort(bytes[1]),
+					Converter.byteToShort(bytes[2]),
+					Converter.byteToShort(bytes[3]),
+					Converter.byteToShort(bytes[4]),
+					Converter.byteToShort(bytes[5]),
+					Converter.byteToShort(bytes[6]),
+					Converter.byteToShort(bytes[7]));
+		}
+		return "";
 	}
 }

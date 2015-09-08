@@ -33,7 +33,8 @@ public class EventController extends AbstractController {
 	public Map<String, Object> getEvents(DataGridPager pager, HttpServletRequest request) {
 		pager.setDefaultSort(EventPo.CreateTime);
 		pager.setSort(EventPo.getColumnName(pager.getSort()));
-		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(),
+				pager.getOrder());
 		List<EventPo> list = this.eventService.getByPage(pageInfo);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());
@@ -44,9 +45,12 @@ public class EventController extends AbstractController {
 
 	@RequestMapping(value = "/find")
 	@ResponseBody
-	public Map<String, Object> getEventsByKeyword(String fieldName, String keyword, DataGridPager pager, HttpServletRequest request) {
+	public Map<String, Object> getEventsByKeyword(String fieldName, String keyword, DataGridPager pager,
+			HttpServletRequest request) {
 		pager.setDefaultSort(EventPo.CreateTime);
-		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(), pager.getOrder());
+		pager.setSort(EventPo.getColumnName(pager.getSort()));
+		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(),
+				pager.getOrder());
 		List<EventPo> list = this.eventService.getEventsByKeyword(pageInfo, fieldName, keyword);
 		Map<String, Object> modelMap = new HashMap<String, Object>(2);
 		modelMap.put("total", pageInfo.getTotals());

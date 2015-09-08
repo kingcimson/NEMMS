@@ -71,7 +71,8 @@ public class RoleController extends AbstractController {
 	@ResponseBody
 	public Map<String, Object> find(@CurrentUser UserPo loginUser,
 			DataGridPager pager, String fieldName, String keyword, HttpServletRequest request) {
-		pager.setDefaultSort(UserPo.CreateTime);
+		pager.setDefaultSort(RolePo.CreateTime);
+		pager.setSort(RolePo.getColumnName(pager.getSort()));
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(),
 				pager.getRows(), pager.getSort(), pager.getOrder());
 		List<RolePo> list = this.roleService.getRolesByKeyword(pageInfo, loginUser, fieldName, keyword);

@@ -11,7 +11,7 @@ import com.wellheadstone.nemms.data.annotations.Column;
 
 public class DeviceParamPo implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -950194582722710175L;
 
@@ -120,6 +120,11 @@ public class DeviceParamPo implements Serializable {
 	 */
 	public final static String HtmlElemKey = "html_elem_key";
 
+	/**
+	 * 列名format,
+	 */
+	public final static String Format = "format";
+
 	@Column(name = "id", isIgnored = true)
 	private Integer id;
 
@@ -180,9 +185,12 @@ public class DeviceParamPo implements Serializable {
 	@Column(name = "html_elem_key")
 	private String htmlElemKey;
 
+	@Column(name = "format")
+	private String format = "default";
+
 	/**
 	 * 获取参数id
-	 * 
+	 *
 	 * @return 参数id
 	 */
 	public Integer getId() {
@@ -191,7 +199,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数id
-	 * 
+	 *
 	 * @param id
 	 */
 	public void setId(Integer id) {
@@ -200,7 +208,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取设备参数标识
-	 * 
+	 *
 	 * @return 设备参数标识(整数十六进制)
 	 */
 	public String getUid() {
@@ -209,7 +217,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置设备参数标识(整数十六进制)
-	 * 
+	 *
 	 * @param uid
 	 */
 	public void setUid(String uid) {
@@ -218,7 +226,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取mcp协义类型1:mcp_a;2:mcp_b;3:mcp_c
-	 * 
+	 *
 	 * @return mcp协义类型1:mcp_a;2:mcp_b;3:mcp_c
 	 */
 	public Integer getMcpId() {
@@ -227,7 +235,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置mcp协义类型1:mcp_a;2:mcp_b;3:mcp_c
-	 * 
+	 *
 	 * @param mcpId
 	 */
 	public void setMcpId(Integer mcpId) {
@@ -236,7 +244,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数类别
-	 * 
+	 *
 	 * @return 参数类别
 	 */
 	public Integer getCategoryId() {
@@ -245,7 +253,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数类别
-	 * 
+	 *
 	 * @param categoryId
 	 */
 	public void setCategoryId(Integer categoryId) {
@@ -254,7 +262,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数名称
-	 * 
+	 *
 	 * @return 参数名称
 	 */
 	public String getName() {
@@ -263,7 +271,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数名称
-	 * 
+	 *
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -272,7 +280,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取读写属性
-	 * 
+	 *
 	 * @return 读写属性
 	 */
 	public String getMode() {
@@ -281,7 +289,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置读写属性
-	 * 
+	 *
 	 * @param mode
 	 */
 	public void setMode(String mode) {
@@ -290,7 +298,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数单位
-	 * 
+	 *
 	 * @return 参数单位
 	 */
 	public String getUnit() {
@@ -299,7 +307,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数单位
-	 * 
+	 *
 	 * @param unit
 	 */
 	public void setUnit(String unit) {
@@ -308,7 +316,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取传输比或系数
-	 * 
+	 *
 	 * @return 传输比或系数
 	 */
 	public String getRatio() {
@@ -317,7 +325,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置传输比或系数
-	 * 
+	 *
 	 * @param ratio
 	 */
 	public void setRatio(String ratio) {
@@ -326,7 +334,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数值数据类型(uint等)
-	 * 
+	 *
 	 * @return 参数值数据类型(uint等)
 	 */
 	public String getValueType() {
@@ -335,7 +343,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数值数据类型(uint等)
-	 * 
+	 *
 	 * @param valueType
 	 */
 	public void setValueType(String valueType) {
@@ -344,7 +352,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数值数据长度
-	 * 
+	 *
 	 * @return 参数值数据长度
 	 */
 	public Integer getValueLen() {
@@ -353,7 +361,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数值数据长度
-	 * 
+	 *
 	 * @param valueLen
 	 */
 	public void setValueLen(Integer valueLen) {
@@ -362,7 +370,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数值数据最小长度
-	 * 
+	 *
 	 * @return 参数值数据最小长度
 	 */
 	public Integer getValueMinLen() {
@@ -371,7 +379,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数值数据最小长度
-	 * 
+	 *
 	 * @param valueMinLen
 	 */
 	public void setValueMinLen(Integer valueMinLen) {
@@ -380,7 +388,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数值数据最大长度
-	 * 
+	 *
 	 * @return 参数值数据最大长度
 	 */
 	public Integer getValueMaxLen() {
@@ -389,7 +397,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数值数据最大长度
-	 * 
+	 *
 	 * @param valueMaxLen
 	 */
 	public void setValueMaxLen(Integer valueMaxLen) {
@@ -398,7 +406,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数最小值
-	 * 
+	 *
 	 * @return 参数最小值
 	 */
 	public String getMinValue() {
@@ -407,7 +415,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数最小值
-	 * 
+	 *
 	 * @param minValue
 	 */
 	public void setMinValue(String minValue) {
@@ -416,7 +424,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数最大值
-	 * 
+	 *
 	 * @return 参数最大值
 	 */
 	public String getMaxValue() {
@@ -425,7 +433,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数最大值
-	 * 
+	 *
 	 * @param maxValue
 	 */
 	public void setMaxValue(String maxValue) {
@@ -434,7 +442,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数权限归属(即系统哪些角色的用户可以使用),对应角色id
-	 * 
+	 *
 	 * @return 参数权限归属(即系统哪些角色的用户可以使用),对应角色id
 	 */
 	public String getAuthorityRoles() {
@@ -443,7 +451,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数权限归属(即系统哪些角色的用户可以使用),对应角色id
-	 * 
+	 *
 	 * @param authorityRoles
 	 */
 	public void setAuthorityRoles(String authorityRoles) {
@@ -452,7 +460,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数告警级别
-	 * 
+	 *
 	 * @return 参数告警级别
 	 */
 	public String getWarnLevel() {
@@ -461,7 +469,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数告警级别
-	 * 
+	 *
 	 * @param warnLevel
 	 */
 	public void setWarnLevel(String warnLevel) {
@@ -470,7 +478,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取
-	 * 
+	 *
 	 * @return
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -480,7 +488,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置
-	 * 
+	 *
 	 * @param createTime
 	 */
 	public void setCreateTime(Date createTime) {
@@ -489,7 +497,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取
-	 * 
+	 *
 	 * @return
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -499,7 +507,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置
-	 * 
+	 *
 	 * @param updateTime
 	 */
 	public void setUpdateTime(Date updateTime) {
@@ -508,7 +516,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取参数html控件名称(text,select,radio等)
-	 * 
+	 *
 	 * @return
 	 */
 	public String getHtmlElem() {
@@ -517,7 +525,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置参数html控件名称(text,select,radio等)
-	 * 
+	 *
 	 * @param htmlElem
 	 */
 	public void setHtmlElem(String htmlElem) {
@@ -526,7 +534,7 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 获取设备参数选项对应配置表(config_dict)中key值
-	 * 
+	 *
 	 * @return
 	 */
 	public String getHtmlElemKey() {
@@ -535,10 +543,28 @@ public class DeviceParamPo implements Serializable {
 
 	/**
 	 * 设置设备参数选项对应配置表(config_dict)中key值
-	 * 
+	 *
 	 * @param htmlElemKey
 	 */
 	public void setHtmlElemKey(String htmlElemKey) {
 		this.htmlElemKey = htmlElemKey;
+	}
+
+	/**
+	 * 获取显示格式(default默认,ipIP地址,dt日期时间,其他保留)
+	 *
+	 * @return
+	 */
+	public String getFormat() {
+		return this.format == null ? "default" : this.format;
+	}
+
+	/**
+	 * 设置显示格式(default默认,ipIP地址,dt日期时间,其他保留)
+	 *
+	 * @param format
+	 */
+	public void setFormat(String format) {
+		this.format = format;
 	}
 }

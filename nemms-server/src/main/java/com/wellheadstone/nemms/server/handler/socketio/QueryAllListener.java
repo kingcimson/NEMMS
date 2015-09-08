@@ -45,6 +45,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 			String[] paramIdList = StringUtils.split(data.getParamUids(), ',');
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
 			ArrayList<Byte> list = new ArrayList<Byte>(235);
+			short count = 0;
 			for (int i = 0; i < paramIdList.length; i++) {
 				String paramKey = MessageUtils.getDeviceParamKey(paramIdList[i], message.getMcp());
 				DeviceParamPo po = paramMap.get(paramKey);
@@ -58,6 +59,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 						continue;
 					}
 				}
+				message.setPacketId(count++);
 				message.setPDU(MessageUtils.getPdu(list));
 				data.setRequestText(message.toString() + ";" + data.getRequestText());
 				channel.writeAndFlush(message);

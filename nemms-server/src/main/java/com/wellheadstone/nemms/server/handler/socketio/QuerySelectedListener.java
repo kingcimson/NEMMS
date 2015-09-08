@@ -26,8 +26,6 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		TcpUdpMessage message = MessageUtils.getQuerySelectedReqMessage(data);
-		data.setRequestText(message.toString());
-
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
 			data.setResponseText("未找到当前站点与设备的连接服务器ip与port.");
@@ -47,6 +45,7 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 			String[] paramIdList = StringUtils.split(data.getParamUids(), ',');
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
 			ArrayList<Byte> list = new ArrayList<Byte>(235);
+			short count = 0;
 			for (int i = 0; i < paramIdList.length; i++) {
 				String paramKey = MessageUtils.getDeviceParamKey(paramIdList[i], message.getMcp());
 				DeviceParamPo po = paramMap.get(paramKey);
@@ -60,6 +59,7 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 						continue;
 					}
 				}
+				message.setPacketId(count++);
 				message.setPDU(MessageUtils.getPdu(list));
 				data.setRequestText(message.toString() + ";" + data.getRequestText());
 				channel.writeAndFlush(message);

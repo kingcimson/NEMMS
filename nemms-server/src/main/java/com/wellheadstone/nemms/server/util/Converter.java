@@ -4,6 +4,14 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class Converter {
+	public static short byteToShort(byte b) {
+		ByteBuffer buffer = ByteBuffer.allocate(2);
+		buffer.put((byte) 0);
+		buffer.put(b);
+		buffer.flip();
+		return buffer.getShort();
+	}
+
 	public static byte[] getBytes(short value) {
 		ByteBuffer buffer = ByteBuffer.allocate(2);
 		buffer.putShort(value);
