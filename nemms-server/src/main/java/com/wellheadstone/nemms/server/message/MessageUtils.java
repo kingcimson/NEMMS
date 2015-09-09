@@ -156,6 +156,9 @@ public class MessageUtils {
 			return String.valueOf(Converter.getShort(src));
 		}
 		if (po.getValueType().equals("str")) {
+			if (bytes[0] == 0x30) {
+				return "0";
+			}
 			return new String(bytes, Charset.forName("US-ASCII"));
 		}
 		if (po.getValueType().equals("dstr")) {
@@ -214,14 +217,14 @@ public class MessageUtils {
 	}
 
 	public static String getDStringValue(String format, byte[] bytes) {
-		if ("ip".equals(format.trim().toLowerCase())) {
+		if ("ip".equals(format.trim().toLowerCase()) && bytes != null && bytes.length > 3) {
 			return String.format("%s.%s.%s.%s",
 					Converter.byteToShort(bytes[0]),
 					Converter.byteToShort(bytes[1]),
 					Converter.byteToShort(bytes[2]),
 					Converter.byteToShort(bytes[3]));
 		}
-		if ("dt".equals(format.trim().toLowerCase())) {
+		if ("dt".equals(format.trim().toLowerCase()) && bytes != null && bytes.length > 6) {
 			return String.format("%s %s %s %s  %s:%s:%s",
 					Converter.byteToShort(bytes[0]),
 					Converter.byteToShort(bytes[1]),
@@ -229,8 +232,7 @@ public class MessageUtils {
 					Converter.byteToShort(bytes[3]),
 					Converter.byteToShort(bytes[4]),
 					Converter.byteToShort(bytes[5]),
-					Converter.byteToShort(bytes[6]),
-					Converter.byteToShort(bytes[7]));
+					Converter.byteToShort(bytes[6]));
 		}
 		return "";
 	}

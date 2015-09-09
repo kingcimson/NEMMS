@@ -63,6 +63,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 				message.setPDU(MessageUtils.getPdu(list));
 				data.setRequestText(message.toString() + ";" + data.getRequestText());
 				channel.writeAndFlush(message);
+				Thread.sleep(2000);
 				list.clear();
 				MessageUtils.setPdu(list, unit);
 			}
