@@ -1172,9 +1172,9 @@ var SiteMgr = {
         	    for (var i = 0; i < SiteMgr.categories.length; i++) {
         		var category = SiteMgr.categories[i];
         		var gridId = "#param-tab" + category.value + '-grid';
-        		var rows = $(gridId).datagrid('getData');
-        		for (var j = 0; j < rows.length; j++) {
-        		    var deviceParam = rows[j];
+        		var data = $(gridId).datagrid('getData');
+        		for (var j = 0; j < data.total; j++) {
+        		    var deviceParam = data.rows[j];
         		    var chkId = gridId + '-ck-' + j;
         		    if ($.inArray(deviceParam.paramUid, paramUids) >= 0) {
         			$(chkId).prop("checked", true);
