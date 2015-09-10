@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,7 @@ import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
 import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.util.Converter;
 
 public class SettingsListener implements DataListener<SocketIOMessage> {
 	private final static Logger logger = LoggerFactory.getLogger(SettingsListener.class);
@@ -36,17 +38,18 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 			if (channel == null) {
 				data.setRequestText("未找到当前站点或设备的连接通道.");
 			} else {
-				this.sendMessage(channel, data, message);
+				List<IdValuePair> paramList = JSON.parseArray(data.getParamUids(), IdValuePair.class);
+				data.setRequestText(this.sendMessage(channel, paramList, message));
 			}
 		}
 		client.sendEvent(EventName.Settings, data);
 	}
 
-	private void sendMessage(SocketChannel channel, SocketIOMessage data, TcpUdpMessage message) {
+	private String sendMessage(SocketChannel channel, List<IdValuePair> paramList, TcpUdpMessage message) {
+		List<String> msgList = new ArrayList<String>(6);
 		try {
-			List<IdValuePair> paramList = JSON.parseArray(data.getParamUids(), IdValuePair.class);
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
-			ArrayList<Byte> list = new ArrayList<Byte>(235);
+			List<Byte> list = new ArrayList<Byte>(235);
 			short count = 0;
 			for (int i = 0; i < paramList.size(); i++) {
 				String paramId = paramList.get(i).getId();
@@ -58,20 +61,22 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 				}
 				byte[] unit = MessageUtils.getUnitBytes(message.getMcp(), po);
 				if (list.size() + unit.length < 235) {
-					MessageUtils.setPdu(list, unit);
+					Converter.copyArrayToList(unit, list);
 					if (i < paramList.size() - 1) {
 						continue;
 					}
 				}
 				message.setPacketId(count++);
-				message.setPDU(MessageUtils.getPdu(list));
-				data.setRequestText(message.toString() + ";" + data.getRequestText());
+				message.setPDU(Converter.listToArray(list));
+				msgList.add(message.toString());
 				channel.writeAndFlush(message);
+
 				list.clear();
-				MessageUtils.setPdu(list, unit);
+				Converter.copyArrayToList(unit, list);
 			}
 		} catch (Exception ex) {
 			logger.error("SetupListener send message error.", ex);
 		}
+		return StringUtils.join(msgList, ";");
 	}
 }

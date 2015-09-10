@@ -2,6 +2,7 @@ package com.wellheadstone.nemms.server.util;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.List;
 
 public class Converter {
 	public static short byteToShort(byte b) {
@@ -235,6 +236,20 @@ public class Converter {
 			bytes[i] = 0;
 		}
 		return bytes;
+	}
+
+	public static byte[] listToArray(List<Byte> list) {
+		byte[] bytes = new byte[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			bytes[i] = list.get(i).byteValue();
+		}
+		return bytes;
+	}
+
+	public static void copyArrayToList(byte[] unit, List<Byte> list) {
+		for (byte b : unit) {
+			list.add(b);
+		}
 	}
 
 	private static byte charToByte(char c) {

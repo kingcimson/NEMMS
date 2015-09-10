@@ -37,12 +37,12 @@ public class DeviceDataDao extends BaseDao<DeviceDataPo> {
 		sqlBuilder.append("	t1.param_uid,");
 		sqlBuilder.append("	t1.mcp_id,");
 		sqlBuilder.append("	t1.create_time,");
-		sqlBuilder.append("	t1.`value` ");		
+		sqlBuilder.append("	t1.`value` ");
 		sqlBuilder.append("FROM ");
 		sqlBuilder.append("	%s t1 ");
 		sqlBuilder.append("INNER JOIN %s t2 ON t1.param_uid = t2.uid and t1.mcp_id = t2.mcp_id ");
 		sqlBuilder.append("WHERE ");
-		sqlBuilder.append("	t1.site_uid = ? ");
+		sqlBuilder.append("	t1.site_uid = ? order by t2.category_id,t1.param_uid asc ");
 		String sql = String.format(sqlBuilder.toString(), DeviceDataPo.EntityName, DeviceParamPo.EntityName);
 		return this.queryForList(sql, new Object[] { siteUid }, new int[] { Types.VARCHAR }, DeviceSiteParamPo.class);
 	}

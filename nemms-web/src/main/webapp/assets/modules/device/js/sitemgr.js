@@ -93,6 +93,8 @@ $(function() {
 			width : 70
 		} ] ],
 		onDblClickRow : function(index, row) {
+		    $('#console-info-dlg').dialog('open').dialog('center');
+		    $('#console-detail-info').text(row.content);
 		}
 	});
 
@@ -401,6 +403,52 @@ $(function() {
 			}
 		} ]
 	});
+	
+	$('#console-info-dlg').dialog({
+		closed : true,
+		modal : false,
+		maximizable:true,
+		width : window.screen.width - 650,
+		height : window.screen.height - 350,
+		iconCls:'icon-info',
+		buttons : [ {
+			text : '上一条',
+			iconCls : 'icon-prev',
+			handler : function() {
+			    var index = parseInt($('#current-row-index').val()) - 1;
+				$('#console-datagrid').datagrid('selectRow', index);
+				var row = $('#console-datagrid').datagrid('getSelected');
+				if (row) {
+					$('#current-row-index').val(index);
+					$('#console-detail-info').text(row.content);
+				} else {
+					$('#console-datagrid').datagrid('selectRow', index + 1);
+					$.messager.alert('失败', '当前已到第一条记录!', 'error');
+				}
+			}
+		}, {
+			text : '下一条',
+			iconCls : 'icon-next',
+			handler : function() {
+			    var index = parseInt($('#current-row-index').val()) + 1;
+				$('#console-datagrid').datagrid('selectRow', index);
+				var row = $('#console-datagrid').datagrid('getSelected');
+				if (row) {
+					$('#current-row-index').val(index);
+					$('#console-detail-info').text(row.content);
+				} else {
+					$('#console-datagrid').datagrid('selectRow', index - 1);
+					$.messager.alert('失败', '当前已到最后一条记录', 'error');
+				}
+			}
+		}, {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#console-info-dlg").dialog('close');
+			}
+		} ]
+	});
 
 	$('#add-conn-dlg').dialog({
 		closed : true,
@@ -701,7 +749,8 @@ var SiteMgr = {
 															}, {
 																field : 'createTime',
 																title : '更新时间',
-																width : 100
+																width : 100,
+																sortable : true
 															} ] ]
 												});
 							}
@@ -1118,6 +1167,21 @@ var SiteMgr = {
 		getSelectedIndex:function(){
 			var tab = $('#param-tabs').tabs('getSelected');
 			return $('#param-tabs').tabs('getTabIndex',tab);
+		},
+		selectDatagridRows : function(paramUids) {
+        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
+        		var category = SiteMgr.categories[i];
+        		var gridId = "#param-tab" + category.value + '-grid';
+        		var rows = $(gridId).datagrid('getRows');
+        		for (var j = 0; j < rows.length; j++) {
+        		    var deviceParam = rows[j];
+        		    var chkId = gridId + '-ck-' + j;
+        		    if ($.inArray(deviceParam.paramUid, paramUids) >= 0) {
+        			$(chkId).prop("checked", true);
+        			$(gridId).datagrid('selectRow', j);
+        		    }
+        		}
+        	    }
 		}
 	// end
 	},
@@ -1232,11 +1296,12 @@ var SiteMgr = {
 				setTimeout(function(){    
 					var index = SiteMgr.paramTabs.getSelectedIndex();
 					SiteMgr.paramTabs.displayParamList(data.uid, index);
-				    EasyUIUtils.closeLoading();
+					SiteMgr.paramTabs.selectDatagridRows(data.paramUids.split(','))
+					EasyUIUtils.closeLoading();
 				},5000);
 			});
 			SiteMgr.socket.on('settings', function(data) {
-				SiteMgr.console.output({
+				SiteMgrs.console.output({
 					name : "设置参数",
 					content : "发送:" + data.requestText,
 					createTime : new Date().toLocaleString()
@@ -1244,7 +1309,7 @@ var SiteMgr = {
 				setTimeout(function(){
 					var index = SiteMgr.paramTabs.getSelectedIndex();
 					SiteMgr.paramTabs.displayParamList(data.uid, index);
-				    EasyUIUtils.closeLoading();
+					EasyUIUtils.closeLoading();
 				},5000);
 			});
 		}

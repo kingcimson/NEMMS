@@ -3,6 +3,7 @@ package com.wellheadstone.nemms.server.handler.socketio;
 import io.netty.channel.socket.SocketChannel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,7 @@ import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
 import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.util.Converter;
 
 public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 	private final static Logger logger = LoggerFactory.getLogger(QuerySelectedListener.class);
@@ -34,17 +36,18 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 			if (channel == null) {
 				data.setRequestText("未找到当前站点或设备的连接通道.");
 			} else {
-				this.sendMessage(channel, data, message);
+				String[] paramIdList = StringUtils.split(data.getParamUids(), ',');
+				data.setRequestText(this.sendMessage(channel, paramIdList, message));
 			}
 		}
 		client.sendEvent(EventName.QuerySelected, data);
 	}
 
-	private void sendMessage(SocketChannel channel, SocketIOMessage data, TcpUdpMessage message) {
+	private String sendMessage(SocketChannel channel, String[] paramIdList, TcpUdpMessage message) {
+		List<String> msgList = new ArrayList<String>(6);
 		try {
-			String[] paramIdList = StringUtils.split(data.getParamUids(), ',');
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
-			ArrayList<Byte> list = new ArrayList<Byte>(235);
+			List<Byte> list = new ArrayList<Byte>(235);
 			short count = 0;
 			for (int i = 0; i < paramIdList.length; i++) {
 				String paramKey = MessageUtils.getDeviceParamKey(paramIdList[i], message.getMcp());
@@ -54,20 +57,22 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 				}
 				byte[] unit = MessageUtils.getUnitBytes(message.getMcp(), po);
 				if (list.size() + unit.length < 235) {
-					MessageUtils.setPdu(list, unit);
+					Converter.copyArrayToList(unit, list);
 					if (i < paramIdList.length - 1) {
 						continue;
 					}
 				}
 				message.setPacketId(count++);
-				message.setPDU(MessageUtils.getPdu(list));
-				data.setRequestText(message.toString() + ";" + data.getRequestText());
+				message.setPDU(Converter.listToArray(list));
+				msgList.add(message.toString());
 				channel.writeAndFlush(message);
+
 				list.clear();
-				MessageUtils.setPdu(list, unit);
+				Converter.copyArrayToList(unit, list);
 			}
 		} catch (Exception ex) {
 			logger.error("QuerySelectedListener send message error.", ex);
 		}
+		return StringUtils.join(msgList, ";");
 	}
 }

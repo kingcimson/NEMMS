@@ -178,20 +178,6 @@ public class MessageUtils {
 		return buffer.array();
 	}
 
-	public static byte[] getPdu(ArrayList<Byte> list) {
-		byte[] bytes = new byte[list.size()];
-		for (int i = 0; i < list.size(); i++) {
-			bytes[i] = list.get(i).byteValue();
-		}
-		return bytes;
-	}
-
-	public static void setPdu(ArrayList<Byte> list, byte[] unit) {
-		for (byte b : unit) {
-			list.add(b);
-		}
-	}
-
 	public static byte[] getParamIdBytes(int mcp, String id) {
 		if (mcp == 1) {
 			return Converter.getReverseBytes(Short.valueOf(id.substring(2), 16).shortValue());

@@ -326,6 +326,10 @@
 				</table>
 			</center>
 	</div>
+	<div id="console-info-dlg" title="控制台细信息">
+		<div id="console-detail-info" style="padding: 2px"></div>
+		<input id="current-row-index" name="current-row-index" type="hidden" value="0" />
+	</div>
 	<div id="add-conn-dlg" title="增加连接设备">
 		<form id="add-conn-form" name="add-conn-form" method="post">
 			<center>
