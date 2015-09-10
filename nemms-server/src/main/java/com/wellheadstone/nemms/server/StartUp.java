@@ -12,6 +12,7 @@ import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 
 public class StartUp {
 	protected final static Logger logger = LoggerFactory.getLogger(StartUp.class);
+	private final static String configPath = "";
 
 	public static void main(String[] args) {
 		try {
@@ -24,13 +25,13 @@ public class StartUp {
 	}
 
 	private static void initializeConfiguration() {
-		PropertyConfigurator.configure("target/conf/log4j.properties");
+		PropertyConfigurator.configure(configPath + "conf/log4j.properties");
 
 		SpringContextUtils springContextUtil = new SpringContextUtils();
-		ApplicationContext appContext = new FileSystemXmlApplicationContext("target/conf/spring.xml");
+		ApplicationContext appContext = new FileSystemXmlApplicationContext(configPath + "conf/spring.xml");
 		springContextUtil.setApplicationContext(appContext);
 
-		PropertiesUtils.configure("target/conf/resource.properties");
+		PropertiesUtils.configure(configPath + "conf/resource.properties");
 	}
 
 	private static void initData() {
