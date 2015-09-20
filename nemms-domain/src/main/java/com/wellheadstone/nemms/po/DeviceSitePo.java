@@ -14,9 +14,9 @@ import com.wellheadstone.nemms.data.annotations.Column;
  */
 public class DeviceSitePo implements Serializable {
 	/**
-	 *
+	 * 
 	 */
-	private static final long serialVersionUID = 5904439898771651854L;
+	private static final long serialVersionUID = -9178940850043107661L;
 
 	/**
 	 * 实体site名称
@@ -62,16 +62,6 @@ public class DeviceSitePo implements Serializable {
 	 * 列名protocol,协议类型
 	 */
 	public final static String Protocol = "protocol";
-
-	/**
-	 * 列名ip_addr,设备ip地址
-	 */
-	public final static String IpAddr = "ip_addr";
-
-	/**
-	 * 列名port,远端端口
-	 */
-	public final static String Port = "port";
 
 	/**
 	 * 列名manufactor,设备厂商
@@ -176,12 +166,6 @@ public class DeviceSitePo implements Serializable {
 
 	@Column(name = "protocol")
 	private String protocol = "";
-
-	@Column(name = "ip_addr")
-	private String ipAddr = "";
-
-	@Column(name = "port")
-	private Integer port = 0;
 
 	@Column(name = "manufactor")
 	private String manufactor = "";
@@ -374,42 +358,6 @@ public class DeviceSitePo implements Serializable {
 	 */
 	public void setProtocol(String protocol) {
 		this.protocol = protocol;
-	}
-
-	/**
-	 * 获取设备ip地址
-	 *
-	 * @return 设备ip地址
-	 */
-	public String getIpAddr() {
-		return this.ipAddr == null ? "" : this.ipAddr;
-	}
-
-	/**
-	 * 设置设备ip地址
-	 *
-	 * @param ipAddr
-	 */
-	public void setIpAddr(String ipAddr) {
-		this.ipAddr = ipAddr;
-	}
-
-	/**
-	 * 获取远端端口
-	 *
-	 * @return 远端端口
-	 */
-	public Integer getPort() {
-		return this.port == null ? 0 : this.port;
-	}
-
-	/**
-	 * 设置远端端口
-	 *
-	 * @param port
-	 */
-	public void setPort(Integer port) {
-		this.port = port;
 	}
 
 	/**

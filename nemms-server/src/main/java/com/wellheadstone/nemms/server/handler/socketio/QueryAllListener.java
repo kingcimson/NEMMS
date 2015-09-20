@@ -32,7 +32,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 		if (connInfo == null) {
 			data.setRequestText("未找到当前站点与设备的连接服务器ip与port.");
 		} else {
-			SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get(connInfo.getClientIp());
+			SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get(connInfo.getDeviceIp());
 			if (channel == null) {
 				data.setRequestText("未找到当前站点或设备的连接通道.");
 			} else {

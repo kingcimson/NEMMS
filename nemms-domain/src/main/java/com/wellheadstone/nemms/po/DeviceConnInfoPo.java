@@ -14,9 +14,9 @@ import com.wellheadstone.nemms.data.annotations.Column;
  */
 public class DeviceConnInfoPo implements Serializable {
 	/**
-	 *
+	 * 
 	 */
-	private static final long serialVersionUID = -5386843424285389784L;
+	private static final long serialVersionUID = -543080867482799985L;
 
 	/**
 	 * 实体device_conn_info名称
@@ -34,9 +34,14 @@ public class DeviceConnInfoPo implements Serializable {
 	public final static String SiteUid = "site_uid";
 
 	/**
-	 * 列名client_ip,客户端设备IP
+	 * 列名device_ip,客户端设备IP
 	 */
-	public final static String ClientIp = "client_ip";
+	public final static String DeviceIp = "device_ip";
+
+	/**
+	 * 列名device_port,客户端设备Port
+	 */
+	public final static String DevicePort = "device_port";
 
 	/**
 	 * 列名server_ip,连接的服务器IP
@@ -54,14 +59,14 @@ public class DeviceConnInfoPo implements Serializable {
 	public final static String Status = "status";
 
 	/**
-	 * 列名startTime,连接时间
+	 * 列名create_time,建立连接时间
 	 */
-	public final static String StartTime = "startTime";
+	public final static String CreateTime = "create_time";
 
 	/**
-	 * 列名heartTime,上次心跳时间
+	 * 列名update_time,更新连接时间
 	 */
-	public final static String HeartTime = "heartTime";
+	public final static String UpdateTime = "update_time";
 
 	@Column(name = "id")
 	private Integer id;
@@ -69,8 +74,11 @@ public class DeviceConnInfoPo implements Serializable {
 	@Column(name = "site_uid")
 	private String siteUid;
 
-	@Column(name = "client_ip")
-	private String clientIp;
+	@Column(name = "device_ip")
+	private String deviceIp;
+
+	@Column(name = "device_port")
+	private Integer devicePort;
 
 	@Column(name = "server_ip")
 	private String serverIp;
@@ -81,11 +89,11 @@ public class DeviceConnInfoPo implements Serializable {
 	@Column(name = "status")
 	private Integer status = 1;
 
-	@Column(name = "startTime")
-	private Date startTime = Calendar.getInstance().getTime();
+	@Column(name = "create_time")
+	private Date createTime = Calendar.getInstance().getTime();
 
-	@Column(name = "heartTime")
-	private Date heartTime = Calendar.getInstance().getTime();
+	@Column(name = "update_time")
+	private Date updateTime = Calendar.getInstance().getTime();
 
 	/**
 	 * 获取
@@ -125,26 +133,45 @@ public class DeviceConnInfoPo implements Serializable {
 
 	/**
 	 * 获取客户端设备IP
-	 *
-	 * @return 客户端设备IP
+	 * 
+	 * @return
 	 */
-	public String getClientIp() {
-		return this.clientIp;
+	public String getDeviceIp() {
+		return deviceIp;
 	}
 
 	/**
 	 * 设置客户端设备IP
-	 *
-	 * @param clientIp
+	 * 
+	 * @param deviceIp
 	 */
-	public void setClientIp(String clientIp) {
-		this.clientIp = clientIp;
+	public void setDeviceIp(String deviceIp) {
+		this.deviceIp = deviceIp;
 	}
 
 	/**
+	 * 获取客户端设备IP端口
+	 * 
+	 * @return
+	 */
+	public Integer getDevicePort() {
+		return devicePort;
+	}
+
+	/**
+	 * 设置客户端设备IP端口
+	 * 
+	 * @param devicePort
+	 */
+	public void setDevicePort(Integer devicePort) {
+		this.devicePort = devicePort;
+	}
+
+	/**
+	 * 
 	 * 获取连接的服务器IP
-	 *
-	 * @return 连接的服务器IP
+	 * 
+	 * @return
 	 */
 	public String getServerIp() {
 		return this.serverIp;
@@ -196,40 +223,40 @@ public class DeviceConnInfoPo implements Serializable {
 	}
 
 	/**
-	 * 获取连接时间
-	 *
-	 * @return 连接时间
+	 * 获取建立连接时间
+	 * 
+	 * @return
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getStartTime() {
-		return startTime == null ? Calendar.getInstance().getTime() : startTime;
+	public Date getCreateTime() {
+		return createTime == null ? Calendar.getInstance().getTime() : createTime;
 	}
 
 	/**
-	 * 设置连接时间
-	 *
-	 * @param startTime
+	 * 设置建立连接时间
+	 * 
+	 * @param createTime
 	 */
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	/**
-	 * 获取上次心跳时间
-	 *
-	 * @return 上次心跳时间
+	 * 获取更新连接时间
+	 * 
+	 * @return
 	 */
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getHeartTime() {
-		return heartTime == null ? Calendar.getInstance().getTime() : heartTime;
+	public Date getUpdateTime() {
+		return updateTime == null ? Calendar.getInstance().getTime() : updateTime;
 	}
 
 	/**
-	 * 设置上次心跳时间
-	 *
-	 * @param heartTime
+	 * 设置更新连接时间
+	 * 
+	 * @param updateTime
 	 */
-	public void setHeartTime(Date heartTime) {
-		this.heartTime = heartTime;
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 }

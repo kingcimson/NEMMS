@@ -32,7 +32,7 @@ public class DeviceConnInfoController extends AbstractController {
 	@RequestMapping(value = "/list")
 	@ResponseBody
 	public Map<String, Object> list(DataGridPager pager, HttpServletRequest request) {
-		pager.setDefaultSort(DeviceConnInfoPo.StartTime);
+		pager.setDefaultSort(DeviceConnInfoPo.UpdateTime);
 		PageInfo pageInfo = new PageInfo((pager.getPage() - 1) * pager.getRows(), pager.getRows(), pager.getSort(),
 				pager.getOrder());
 		List<DeviceConnInfoPo> list = this.deviceConnInfoService.getByPage(pageInfo);

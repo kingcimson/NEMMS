@@ -137,9 +137,8 @@ var EasyUIUtils = {
 	},
 	loadToDatagrid : function(id, href) {
 		var grid = $(id);
-		grid.datagrid('clearSelections');
-		grid.datagrid({
-			url : href
+		$.getJSON(href,function(data){
+			grid.datagrid('loadData',data);
 		});
 	},
 	reloadDatagrid : function(id) {

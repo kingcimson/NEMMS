@@ -112,8 +112,6 @@ public class DeviceSiteController extends AbstractController {
 			po.setApProtocol(parentPo.getApProtocol());
 			po.setMcpProtocol(parentPo.getMcpProtocol());
 			po.setProtocol(parentPo.getProtocol());
-			po.setIpAddr(parentPo.getIpAddr());
-			po.setPort(parentPo.getPort());
 			po.setCreateUser(loginUser.getAccount());
 			po.setId(this.siteService.addSite(po));
 			po = this.siteService.getById(po.getId());

@@ -86,13 +86,6 @@
 							data-options="valueField:'value',textField:'name'"  style="width: 148px"></select></td>
 					</tr>
 					<tr>
-						<td>UDP协议IP地址:</td>
-						<td><input class="easyui-textbox" type="text" id="ipAddr" name="ipAddr" data-options="required:true"></input></td>
-						<td>UDP协议端口:</td>
-						<td><input class="easyui-textbox" type="text" id="port" name="port" data-options="required:true"
-							 style="width: 148px"></input></td>
-					</tr>
-					<tr>
 						<td>设备厂商:</td>
 						<td><input class="easyui-textbox" type="text" id="manufactor" name="manufactor"></input></td>
 						<td>安装地点:</td>
@@ -159,13 +152,6 @@
 							data-options="valueField:'value',textField:'name'"  style="width: 148px"></select></td>
 					</tr>
 					<tr>
-						<td>UDP协议IP地址:</td>
-						<td><input class="easyui-textbox" type="text" id="edit-ipAddr" name="ipAddr" data-options="required:true"></input></td>
-						<td>UDP协议端口:</td>
-						<td><input class="easyui-textbox" type="text" id="edit-port" name="port" data-options="required:true"
-							 style="width: 148px"></input></td>
-					</tr>
-					<tr>
 						<td>设备厂商:</td>
 						<td><input class="easyui-textbox" type="text" id="edit-manufactor" name="manufactor"></input></td>
 						<td>安装地点:</td>
@@ -221,12 +207,6 @@
 						<td><label id="view-mcpProtocol"></label></td>
 						<td>通讯协议类型:</td>
 						<td><label id="view-protocol"></label></td>
-					</tr>
-					<tr>
-						<td>UDP协议IP地址:</td>
-						<td><label id="view-ipAddr"></label></td>
-						<td>UDP协议端口:</td>
-						<td><label id="view-port"></label></td>
 					</tr>
 					<tr>
 						<td>设备厂商:</td>
@@ -336,14 +316,18 @@
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">
 					<tr>
 						<td>站点/设备编号:</td>
-						<td><input class="easyui-textbox" type="text" id="conn-siteUid" name="siteUid" data-options="required:true"></input></td>
-						<td>设备IP:</td>
-						<td><input class="easyui-textbox" type="text" id="conn-clientIp" name="clientIp" data-options="required:true" style="width: 138px"></input></td>
+						<td colspan="3"><input class="easyui-textbox" type="text" id="conn-siteUid" name="siteUid" data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
-						<td>连接服务器IP:</td>
+						<td>设备IP:</td>
+						<td><input class="easyui-textbox" type="text" id="conn-deviceIp" name="deviceIp" data-options="required:true"></input></td>
+						<td>设备端口:</td>
+						<td><input class="easyui-textbox" type="text" id="conn-devicePort" name="devicePort" data-options="required:true" style="width: 138px"></input></td>
+					</tr>
+					<tr>
+						<td>服务器IP:</td>
 						<td><input class="easyui-textbox" type="text" id="conn-serverIp" name="serverIp" data-options="required:true"></input></td>
-						<td>连接服务器IP:</td>
+						<td>服务器端口:</td>
 						<td><input class="easyui-textbox" type="text" id="conn-serverPort" name="serverPort" data-options="required:true" style="width: 138px"></input></td>
 					</tr>
 				</table>
@@ -356,17 +340,20 @@
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">
 					<tr>
 						<td>站点/设备编号:</td>
-						<td><input class="easyui-textbox" type="text" id="edit-conn-siteUid" name="siteUid" data-options="required:true"></input></td>
-						<td>设备IP:</td>
-						<td><input class="easyui-textbox" type="text" id="edit-conn-clientIp" name="clientIp" data-options="required:true" style="width: 138px"></input></td>
+						<td colspan="3"><input class="easyui-textbox" type="text" id="edit-conn-siteUid" name="siteUid" data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
-						<td>连接服务器IP:</td>
+						<td>设备IP:</td>
+						<td><input class="easyui-textbox" type="text" id="edit-conn-deviceIp" name="deviceIp" data-options="required:true"></input></td>
+						<td>设备端口:</td>
+						<td><input class="easyui-textbox" type="text" id="edit-conn-devicePort" name="devicePort" data-options="required:true" style="width: 138px"></input></td>
+					</tr>
+					<tr>
+						<td>服务器IP:</td>
 						<td><input class="easyui-textbox" type="text" id="edit-conn-serverIp" name="serverIp" data-options="required:true"></input></td>
-						<td>连接服务器IP:</td>
+						<td>服务器端口:</td>
 						<td><input class="easyui-textbox" type="text" id="edit-conn-serverPort" name="serverPort" data-options="required:true" style="width: 138px"></input>
-						 	<input type="hidden" id="edit-conn-id" name="id" ></input>
-						</td>
+							<input type="hidden" id="edit-conn-id" name="id" ></input></td>
 					</tr>
 				</table>
 			</center>

@@ -53,8 +53,9 @@ public class HeartTask extends AbstractTask implements ITask {
 		String devId = Converter.getHexString(msg.getDeviceId());
 		if (devId.equals("00")) {
 			DeviceConnInfoPo po = new DeviceConnInfoPo();
-			po.setClientIp(RemoteAdressFormatter.getIP(ctx.channel().remoteAddress()));
 			po.setSiteUid(siteUid);
+			po.setDeviceIp(RemoteAdressFormatter.getIP(ctx.channel().remoteAddress()));
+			po.setDevicePort(RemoteAdressFormatter.getPort(ctx.channel().remoteAddress()));
 			po.setServerIp(RemoteAdressFormatter.getIP(ctx.channel().localAddress()));
 			po.setServerPort(RemoteAdressFormatter.getPort(ctx.channel().localAddress()));
 			ServiceFacade.addNewDeviceConn(po);

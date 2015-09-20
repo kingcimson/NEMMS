@@ -28,8 +28,9 @@ public class DeviceSiteService extends BaseService<DeviceSiteDao, DeviceSitePo> 
 	public boolean editSite(DeviceSitePo entity) {
 		String[] columnNames = new String[] {
 				DeviceSitePo.Name, DeviceSitePo.Uid, DeviceSitePo.DeviceType,
-				DeviceSitePo.ApProtocol, DeviceSitePo.McpProtocol, DeviceSitePo.IpAddr, DeviceSitePo.Port,
-				DeviceSitePo.Protocol, DeviceSitePo.Manufactor, DeviceSitePo.Sequence, DeviceSitePo.Comment
+				DeviceSitePo.ApProtocol, DeviceSitePo.McpProtocol,
+				DeviceSitePo.Protocol, DeviceSitePo.Manufactor,
+				DeviceSitePo.Sequence, DeviceSitePo.Comment
 		};
 		return this.edit(entity, entity.getId(), columnNames);
 	}

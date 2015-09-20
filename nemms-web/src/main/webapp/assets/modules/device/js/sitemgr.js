@@ -72,7 +72,6 @@ $(function() {
 		rownumbers : true,
 		fitColumns : true,
 		singleSelect : true,
-		// pageSize : 10,
 		toolbar : [ {
 			iconCls : 'icon-clear1',
 			handler : function() {
@@ -99,7 +98,6 @@ $(function() {
 	});
 
 	$('#connected-device-datagrid').datagrid({
-		method : 'get',
 		fit : true,
 		pagination : false,
 		rownumbers : true,
@@ -136,27 +134,31 @@ $(function() {
 			title : '站点/设备编号',
 			width : 100
 		}, {
-			field : 'clientIp',
+			field : 'deviceIp',
 			title : '设备IP',
 			width : 100
 		}, {
+			field : 'devicePort',
+			title : '设备端口',
+			width : 70
+		},{
 			field : 'serverIp',
 			title : '服务器IP',
 			width : 100
 		}, {
 			field : 'serverPort',
 			title : '服务器端口',
-			width : 80
+			width : 70
 		}, {
 			field : 'status',
 			title : '状态',
-			width : 80,
+			width : 50,
 			formatter : function(value, row, index) {
 				return value == "1" ? "正常" : "断开";
 			}
 		}, {
-			field : 'startTime',
-			title : '建立连接时间',
+			field : 'updateTime',
+			title : '连接更新时间',
 			width : 100
 		} ] ],
 		onDblClickRow : function(index, row) {
@@ -171,7 +173,6 @@ $(function() {
 		fitColumns : true,
 		singleSelect : true,
 		url : schedulePageUrl + 'list',
-		// pageSize : 10,
 		toolbar : [ {
 			iconCls : 'icon-edit1',
 			handler : function() {
@@ -224,7 +225,6 @@ $(function() {
 		rownumbers : true,
 		fitColumns : true,
 		singleSelect : true,
-		// pageSize : 10,
 		url : nmsstatusPageUrl + 'list',
 		toolbar : [ {
 			iconCls : 'icon-reload',
@@ -302,7 +302,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 600,
-		height : 450,
+		height : 420,
 		iconCls : 'icon-add',
 		buttons : [ {
 			text : '关闭',
@@ -321,7 +321,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 600,
-		height : 450,
+		height : 420,
 		iconCls : 'icon-edit',
 		buttons : [ {
 			text : '关闭',
@@ -340,7 +340,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 600,
-		height : 450,
+		height : 420,
 		iconCls : 'icon-item1',
 		buttons : [ {
 			text : '关闭',
@@ -454,7 +454,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 560,
-		height : 210,
+		height : 240,
 		iconCls : 'icon-add',
 		buttons : [ {
 			text : '关闭',
@@ -473,7 +473,7 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 560,
-		height : 210,
+		height : 240,
 		iconCls : 'icon-edit1',
 		buttons : [ {
 			text : '关闭',
@@ -789,8 +789,6 @@ var SiteMgr = {
 			SiteMgr.initCombox('addSite');
 			$('#uid').textbox('setValue', "0x");
 			$('#sequence').textbox('setValue', "10");
-			$('#ipAddr').textbox('setValue', "127.0.0.1");
-			$('#port').textbox('setValue', "8000");
 			$('#apMaxLen').textbox('setValue', "1024");
 			$('#nc').textbox('setValue', "1");
 			$('#tot1').textbox('setValue', "60");
@@ -1020,8 +1018,6 @@ var SiteMgr = {
 			if (node) {
 				var tab = $('#param-tabs').tabs('getSelected');
 				var index = $('#param-tabs').tabs('getTabIndex', tab);
-				//var siteUid = node.attributes.uid;
-				//SiteMgr.paramTabs.displayParamList(siteUid, index);
 				for (var i = 0; i < SiteMgr.categories.length; i++) {
 		        		var category = SiteMgr.categories[i];
 		        		var gridId = "#param-tab" + category.value + '-grid';
@@ -1029,10 +1025,10 @@ var SiteMgr = {
 		        		for (var j = 0; j < rows.length; j++) {
 		        		    var chkId = gridId + '-ck-' + j;
 		        		    if ($(chkId).prop("checked")) {
-		        			$(chkId).prop("checked",false);
+		        		    	$(chkId).prop("checked",false);
 		        		    }
 		        		}
-		        	    }
+		        }
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
 			}
@@ -1055,45 +1051,45 @@ var SiteMgr = {
 		},
 		getSelectedParamUidList : function() {
         	    var map = {
-        		paramUidList : [],
-        		rowIdList : []
+	        		paramUidList : [],
+	        		rowIdList : []
         	    };
         	    for (var i = 0; i < SiteMgr.categories.length; i++) {
-        		var category = SiteMgr.categories[i];
-        		var gridId = "#param-tab" + category.value + '-grid';
-        		var rows = $(gridId).datagrid('getRows');
-        		for (var j = 0; j < rows.length; j++) {
-        		    var deviceParam = rows[j];
-        		    var chkId = gridId + '-ck-' + j;
-        		    if ($(chkId).prop("checked")) {
-        			map.paramUidList.push(deviceParam.paramUid);
-			        map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
-        		    }
-        		}
+	        		var category = SiteMgr.categories[i];
+	        		var gridId = "#param-tab" + category.value + '-grid';
+	        		var rows = $(gridId).datagrid('getRows');
+	        		for (var j = 0; j < rows.length; j++) {
+	        		    var deviceParam = rows[j];
+	        		    var chkId = gridId + '-ck-' + j;
+	        		    if ($(chkId).prop("checked")) {
+	        			map.paramUidList.push(deviceParam.paramUid);
+				        map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
+	        		    }
+	        		}
         	    }
         	    return map;
 		},
 		getSetupParamIdValueList : function() {
-		    	   var map = {
-				idValueList : [],
-				rowIdList : []
+		    	var map = {
+					idValueList : [],
+					rowIdList : []
 			    };
 			    for (var i = 0; i < SiteMgr.categories.length; i++) {
-				var category = SiteMgr.categories[i];
-				var gridId = "#param-tab" + category.value + '-grid';
-				var rows = $(gridId).datagrid('getRows');
-				for (var j = 0; j < rows.length; j++) {
-				    var deviceParam = rows[j];
-				    var chkId = gridId + '-ck-' + j;
-				    var valueId = gridId + '-value-' + j;
-				    if ($(chkId).prop("checked") && deviceParam.mode == 'rw') {
-					map.idValueList.push({
-					    id : deviceParam.paramUid,
-					    value : $(valueId).val()
-					});
-					map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
-				    }
-				}
+					var category = SiteMgr.categories[i];
+					var gridId = "#param-tab" + category.value + '-grid';
+					var rows = $(gridId).datagrid('getRows');
+					for (var j = 0; j < rows.length; j++) {
+					    var deviceParam = rows[j];
+					    var chkId = gridId + '-ck-' + j;
+					    var valueId = gridId + '-value-' + j;
+					    if ($(chkId).prop("checked") && deviceParam.mode == 'rw') {
+							map.idValueList.push({
+							    id : deviceParam.paramUid,
+							    value : $(valueId).val()
+							});
+							map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
+					    }
+					}
 			    }
 			    return map;
 		}
