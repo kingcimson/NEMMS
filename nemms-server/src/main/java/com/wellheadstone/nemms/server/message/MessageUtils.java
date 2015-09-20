@@ -211,7 +211,7 @@ public class MessageUtils {
 					Converter.byteToShort(bytes[3]));
 		}
 		if ("dt".equals(format.trim().toLowerCase()) && bytes != null && bytes.length > 6) {
-			return String.format("%s %s %s %s  %s:%s:%s",
+			return String.format("%02x%02x%02x%02x  %02x:%02x:%02x",
 					Converter.byteToShort(bytes[0]),
 					Converter.byteToShort(bytes[1]),
 					Converter.byteToShort(bytes[2]),

@@ -613,7 +613,7 @@ var SiteMgr = {
 		SiteMgr.loadConfigItems();
 	},
 	initConsoleTabs:function(){
-	    var height = $('#console-tabs').height()-60;
+	    var height = $('#console-tabs').height()-30;
 	    $("div[id^='console-tab-']").css({"height":height});
 	    $('#console-tab-1').css({"height":height});
 	},
@@ -980,10 +980,11 @@ var SiteMgr = {
 				return;
 			}
 			var node = $('#site-tree').tree('getSelected');
-			var paramUidList = SiteMgr.toolbar.getSelectedParamUidList();
-			if (node && paramUidList.length > 0) {
+			var map = SiteMgr.toolbar.getSelectedParamUidList();
+			if (node && map.paramUidList.length > 0) {
 				var data = node.attributes;
-				data.paramUids = paramUidList.join();
+				data.paramUids = map.paramUidList.join();
+				data.rowIds = map.rowIdList.join();
 				SiteMgr.socket.emit('querySelected', data);
 				EasyUIUtils.loading();
 			} else {
@@ -992,8 +993,8 @@ var SiteMgr = {
 		},
 		querySchedule : function() {
 			var node = $('#site-tree').tree('getSelected');
-			var paramUidList = SiteMgr.toolbar.getSelectedParamUidList();
-			if (node && paramUidList.length > 0) {
+			var map = SiteMgr.toolbar.getSelectedParamUidList();
+			if (node && map.paramUidList.length > 0) {
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备,并确定是否选中参数!', 'info');
 			}
@@ -1003,10 +1004,11 @@ var SiteMgr = {
 				return;
 			}
 			var node = $('#site-tree').tree('getSelected');
-			var idValueList = SiteMgr.toolbar.getSetupParamIdValueList();
-			if (node && idValueList.length > 0) {
+			var map = SiteMgr.toolbar.getSetupParamIdValueList();
+			if (node && map.idValueList.length > 0) {
 				var data = node.attributes;
-				data.paramUids = JSON.stringify(idValueList);
+				data.paramUids = JSON.stringify(map.idValueList);
+				data.rowIds = map.rowIdList.join();
 				SiteMgr.socket.emit('settings', data);
 				EasyUIUtils.loading();
 			} else {
@@ -1041,40 +1043,48 @@ var SiteMgr = {
 			return paramUidList;
 		},
 		getSelectedParamUidList : function() {
-			var paramUidList = [];
-			for (var i = 0; i < SiteMgr.categories.length; i++) {
-				var category = SiteMgr.categories[i];
-				var gridId = "#param-tab" + category.value + '-grid';
-				var rows = $(gridId).datagrid('getRows');
-				for (var j = 0; j < rows.length; j++) {
-					var deviceParam = rows[j];
-					var chkId = gridId + '-ck-' + j;
-					if ($(chkId).prop("checked")) {
-						paramUidList.push(deviceParam.paramUid);
-					}
-				}
-			}
-			return paramUidList;
+        	    var map = {
+        		paramUidList : [],
+        		rowIdList : []
+        	    };
+        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
+        		var category = SiteMgr.categories[i];
+        		var gridId = "#param-tab" + category.value + '-grid';
+        		var rows = $(gridId).datagrid('getRows');
+        		for (var j = 0; j < rows.length; j++) {
+        		    var deviceParam = rows[j];
+        		    var chkId = gridId + '-ck-' + j;
+        		    if ($(chkId).prop("checked")) {
+        			map.paramUidList.push(deviceParam.paramUid);
+			        map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
+        		    }
+        		}
+        	    }
+        	    return map;
 		},
 		getSetupParamIdValueList : function() {
-			var idValueList = [];
-			for (var i = 0; i < SiteMgr.categories.length; i++) {
+		    	   var map = {
+				mapidValueList : [],
+				rowIdList : []
+			    };
+			    for (var i = 0; i < SiteMgr.categories.length; i++) {
 				var category = SiteMgr.categories[i];
 				var gridId = "#param-tab" + category.value + '-grid';
 				var rows = $(gridId).datagrid('getRows');
 				for (var j = 0; j < rows.length; j++) {
-					var deviceParam = rows[j];
-					var chkId = gridId + '-ck-' + j;
-					var valueId = gridId + '-value-' + j;
-					if ($(chkId).prop("checked") && deviceParam.mode == 'rw') {
-					    idValueList.push({
-						    id : deviceParam.paramUid,
-						    value : $(valueId).val()
-						});
-					}
+				    var deviceParam = rows[j];
+				    var chkId = gridId + '-ck-' + j;
+				    var valueId = gridId + '-value-' + j;
+				    if ($(chkId).prop("checked") && deviceParam.mode == 'rw') {
+					map.idValueList.push({
+					    id : deviceParam.paramUid,
+					    value : $(valueId).val()
+					});
+					map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
+				    }
 				}
-			}
-			return  idValueList;
+			    }
+			    return map;
 		}
 	// end
 	},
@@ -1186,22 +1196,35 @@ var SiteMgr = {
 			var tab = $('#param-tabs').tabs('getSelected');
 			return $('#param-tabs').tabs('getTabIndex',tab);
 		},
-		selectDatagridRows : function(paramUids) {
-        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
-        		var category = SiteMgr.categories[i];
-        		var gridId = "#param-tab" + category.value + '-grid';
-        		var data = $(gridId).datagrid('getData');
-        		for (var j = 0; j < data.total; j++) {
-        		    var deviceParam = data.rows[j];
-        		    var chkId = gridId + '-ck-' + j;
-        		    if ($.inArray(deviceParam.paramUid, paramUids) >= 0) {
-        			$(chkId).prop("checked", true);
-        			$(gridId).datagrid('selectRow', j);
+		updateParamsValue : function(siteUid, paramUids,rowIds) {
+        	    $.post(siteMgrPageUrl + 'queryValues', {
+        		"siteUid" : siteUid,
+        		"paramUids" : paramUids
+        	    }, function(data) {
+        		var rowIdList = rowIds.split(',');
+        		for(var i=0;i<rowIdList.length;i++){
+        		    var rowId = rowIdList[i];
+        		    var meta = rowId.split('-');
+        		    if(meta.length != 6) continue;
+        		    var gridId =  meta.slice(0,3).join('-');
+        		    var index = parseInt(meta[4]);
+        		    var paramUid = meta[5];
+        		    var row = data[paramUid];
+        		    if(row){
+        			SiteMgr.paramTabs.updateDatagridRow(gridId, index, row);
         		    }
-        		}
-        	    }
-		}
-	// end
+        		}		
+        	    });
+    		},
+    		updateDatagridRow:function(gridId,index,row){
+    		 $(gridId).datagrid('updateRow',{
+			index: index,
+			row: row
+		    });
+    		 var chkId =gridId +"-ck-"+ index;
+    		 $(chkId).prop("checked",true);
+    		}
+	// endss
 	},
 	dialogs : {
 		addSiteNodeDlg : {
@@ -1312,9 +1335,7 @@ var SiteMgr = {
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function(){    
-					var index = SiteMgr.paramTabs.getSelectedIndex();
-					SiteMgr.paramTabs.displayParamList(data.uid, index);
-					SiteMgr.paramTabs.selectDatagridRows(data.paramUids.split(','))
+					SiteMgr.paramTabs.updateParamsValue(data.uid, data.paramUids,data.rowIds);
 					EasyUIUtils.closeLoading();
 				},5000);
 			});
@@ -1325,8 +1346,7 @@ var SiteMgr = {
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function(){
-					var index = SiteMgr.paramTabs.getSelectedIndex();
-					SiteMgr.paramTabs.displayParamList(data.uid, index);
+					SiteMgr.paramTabs.updateParamsValue(data.uid, data.paramUids,data.rowIds);
 					EasyUIUtils.closeLoading();
 				},5000);
 			});

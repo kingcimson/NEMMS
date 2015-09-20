@@ -3,6 +3,7 @@ package com.wellheadstone.nemms.dao;
 import java.sql.Types;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import com.wellheadstone.nemms.data.jdbc.BaseDao;
@@ -20,7 +21,7 @@ public class DeviceDataDao extends BaseDao<DeviceDataPo> {
 		super(DeviceDataPo.EntityName, DeviceDataPo.Id);
 	}
 
-	public List<DeviceSiteParamPo> queryAllValues(String siteUid) {
+	public List<DeviceSiteParamPo> queryAllValues(String siteUid, String inParamUids) {
 		StringBuilder sqlBuilder = new StringBuilder("");
 		sqlBuilder.append("SELECT ");
 		sqlBuilder.append("	t2.id,");
@@ -42,8 +43,13 @@ public class DeviceDataDao extends BaseDao<DeviceDataPo> {
 		sqlBuilder.append("	%s t1 ");
 		sqlBuilder.append("INNER JOIN %s t2 ON t1.param_uid = t2.uid and t1.mcp_id = t2.mcp_id ");
 		sqlBuilder.append("WHERE ");
-		sqlBuilder.append("	t1.site_uid = ? order by t2.category_id,t1.param_uid asc ");
-		String sql = String.format(sqlBuilder.toString(), DeviceDataPo.EntityName, DeviceParamPo.EntityName);
+		sqlBuilder.append("	t1.site_uid = ? %s order by t2.category_id,t1.param_uid asc ");
+
+		String inClause = "";
+		if (StringUtils.isNotBlank(inParamUids)) {
+			inClause = String.format("AND %s IN ('%s')", DeviceDataPo.ParamUid, inParamUids);
+		}
+		String sql = String.format(sqlBuilder.toString(), DeviceDataPo.EntityName, DeviceParamPo.EntityName, inClause);
 		return this.queryForList(sql, new Object[] { siteUid }, new int[] { Types.VARCHAR }, DeviceSiteParamPo.class);
 	}
 }

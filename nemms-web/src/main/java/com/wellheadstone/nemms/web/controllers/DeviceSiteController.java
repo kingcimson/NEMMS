@@ -183,10 +183,12 @@ public class DeviceSiteController extends AbstractController {
 	@RequestMapping(value = "/query")
 	@ResponseBody
 	public Map<String, Object> query(Integer page, Integer rows, HttpServletRequest request) {
-		if (page == null)
+		if (page == null) {
 			page = 1;
-		if (rows == null)
+		}
+		if (rows == null) {
 			rows = 30;
+		}
 
 		PageInfo pageInfo = new PageInfo((page - 1) * rows, rows);
 		List<DeviceSitePo> list = this.siteService.getByPage(pageInfo);
@@ -203,6 +205,15 @@ public class DeviceSiteController extends AbstractController {
 			HttpServletRequest request) {
 		siteUid = siteUid == null ? "" : siteUid;
 		return this.deviceMonitorService.queryAllValuesForMap(siteUid);
+	}
+
+	@RequestMapping(value = "/queryValues")
+	@ResponseBody
+	public Map<String, DeviceSiteParamPo> queryValues(String siteUid, String paramUids,
+			@CurrentUser UserPo loginUser,
+			HttpServletRequest request) {
+		siteUid = siteUid == null ? "" : siteUid;
+		return this.deviceMonitorService.queryValuesForMap(siteUid, paramUids);
 	}
 
 	@RequestMapping(value = "/dragTreeNode")

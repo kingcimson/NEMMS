@@ -26,6 +26,7 @@ public class SocketIOMessage implements Serializable {
 	private String paramUids = "";
 	private String requestText = "";
 	private String responseText = "";
+	private String rowIds = "";
 	private Long timeStamp = System.currentTimeMillis();
 
 	/**
@@ -423,6 +424,24 @@ public class SocketIOMessage implements Serializable {
 	 */
 	public void setResponseText(String responseText) {
 		this.responseText = responseText;
+	}
+
+	/**
+	 * 获取当前参数所在界面的datagrid行中checkedbox元素id
+	 *
+	 * @return
+	 */
+	public String getRowIds() {
+		return rowIds;
+	}
+
+	/**
+	 * 设置当前参数所在界面的datagrid行中checkedbox元素id
+	 *
+	 * @param rowIds
+	 */
+	public void setRowIds(String rowIds) {
+		this.rowIds = rowIds;
 	}
 
 	/**
