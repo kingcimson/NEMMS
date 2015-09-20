@@ -53,13 +53,16 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 			short count = 0;
 			for (int i = 0; i < paramList.size(); i++) {
 				String paramId = paramList.get(i).getId();
-				// String value = paramList.get(i).getValue().trim();
+				String value = paramList.get(i).getValue().trim();
 				String paramKey = MessageUtils.getDeviceParamKey(paramId, message.getMcp());
 				DeviceParamPo po = paramMap.get(paramKey);
 				if (po == null) {
 					continue;
 				}
-				byte[] unit = MessageUtils.getUnitBytes(message.getMcp(), po);
+				byte[] unit = MessageUtils.getUnitBytes(message.getMcp(), po, value);
+				if (unit == null) {
+					continue;
+				}
 				if (list.size() + unit.length < 235) {
 					Converter.copyArrayToList(unit, list);
 					if (i < paramList.size() - 1) {
