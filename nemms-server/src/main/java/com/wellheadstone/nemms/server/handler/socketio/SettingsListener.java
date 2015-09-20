@@ -28,7 +28,7 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 	private final static Logger logger = LoggerFactory.getLogger(SettingsListener.class);
 
 	@Override
-	public synchronized void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
+	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		TcpUdpMessage message = MessageUtils.getSetupReqMessage(data);
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
