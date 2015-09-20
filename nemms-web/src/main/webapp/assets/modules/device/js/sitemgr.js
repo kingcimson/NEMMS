@@ -1020,8 +1020,19 @@ var SiteMgr = {
 			if (node) {
 				var tab = $('#param-tabs').tabs('getSelected');
 				var index = $('#param-tabs').tabs('getTabIndex', tab);
-				var siteUid = node.attributes.uid;
-				SiteMgr.paramTabs.displayParamList(siteUid, index);
+				//var siteUid = node.attributes.uid;
+				//SiteMgr.paramTabs.displayParamList(siteUid, index);
+				for (var i = 0; i < SiteMgr.categories.length; i++) {
+		        		var category = SiteMgr.categories[i];
+		        		var gridId = "#param-tab" + category.value + '-grid';
+		        		var rows = $(gridId).datagrid('getRows');
+		        		for (var j = 0; j < rows.length; j++) {
+		        		    var chkId = gridId + '-ck-' + j;
+		        		    if ($(chkId).prop("checked")) {
+		        			$(chkId).prop("checked",false);
+		        		    }
+		        		}
+		        	    }
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
 			}
@@ -1064,7 +1075,7 @@ var SiteMgr = {
 		},
 		getSetupParamIdValueList : function() {
 		    	   var map = {
-				mapidValueList : [],
+				idValueList : [],
 				rowIdList : []
 			    };
 			    for (var i = 0; i < SiteMgr.categories.length; i++) {
@@ -1340,14 +1351,18 @@ var SiteMgr = {
 				},5000);
 			});
 			SiteMgr.socket.on('settings', function(data) {
-				SiteMgrs.console.output({
+			    	SiteMgr.console.output({
 					name : "设置参数",
 					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function(){
-					SiteMgr.paramTabs.updateParamsValue(data.uid, data.paramUids,data.rowIds);
-					EasyUIUtils.closeLoading();
+				    var idValueList = $.parseJSON(data.paramUids);
+				    var paramUids = $.map(idValueList, function(e){
+					  return e.id;
+					  }).join(',');
+				    SiteMgr.paramTabs.updateParamsValue(data.uid, paramUids,data.rowIds);
+				    EasyUIUtils.closeLoading();
 				},5000);
 			});
 		},

@@ -174,17 +174,19 @@ public class MessageUtils {
 	public static byte[] getParamValueBytes(String value, DeviceParamPo po) {
 		try {
 			if (po.getValueType().equals("uint1")) {
-				return Converter.getReverseBytes(Byte.valueOf(value));
+				return Converter.getReverseBytes(Short.valueOf(value).byteValue());
 			}
 			if (po.getValueType().equals("uint2")) {
-				return Converter.getReverseBytes(Short.valueOf(value));
+				byte[] src = Converter.getBytes(Integer.valueOf(value));
+				return Converter.getReverseBytes(src, 2, 4);
 			}
 			if (po.getValueType().equals("uint3")) {
 				byte[] src = Converter.getBytes(Integer.valueOf(value));
 				return Converter.getReverseBytes(src, 1, 4);
 			}
 			if (po.getValueType().equals("uint4")) {
-				return Converter.getReverseBytes(Integer.valueOf(value));
+				byte[] src = Converter.getBytes(Long.valueOf(value));
+				return Converter.getReverseBytes(src, 4, 8);
 			}
 			if (po.getValueType().equals("sint1")) {
 				return Converter.getReverseBytes(Byte.valueOf(value));
@@ -285,10 +287,10 @@ public class MessageUtils {
 				return null;
 			}
 			return new byte[] {
-					Byte.valueOf(seg[0]),
-					Byte.valueOf(seg[1]),
-					Byte.valueOf(seg[2]),
-					Byte.valueOf(seg[3])
+					Short.valueOf(seg[0]).byteValue(),
+					Short.valueOf(seg[1]).byteValue(),
+					Short.valueOf(seg[2]).byteValue(),
+					Short.valueOf(seg[3]).byteValue()
 			};
 		}
 		if ("dt".equals(format.trim().toLowerCase())) {

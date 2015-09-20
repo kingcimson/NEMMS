@@ -36,11 +36,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 			if (channel == null) {
 				data.setRequestText("未找到当前站点或设备的连接通道.");
 			} else {
-				// String[] paramIdList = StringUtils.split(data.getParamUids(),
-				// ',');
 				this.sendMessage(client, channel, data, message);
-				// data.setRequestText(this.sendMessage(channel, paramIdList,
-				// message));
 			}
 		}
 	}
@@ -73,8 +69,8 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 				msgList.add(message.toString());
 				data.setRequestText(message.toString());
 				channel.writeAndFlush(message).sync();
-				// channel.;
 				client.sendEvent(EventName.QueryALL, data);
+				Thread.sleep(2000);
 				list.clear();
 				Converter.copyArrayToList(unit, list);
 			}
