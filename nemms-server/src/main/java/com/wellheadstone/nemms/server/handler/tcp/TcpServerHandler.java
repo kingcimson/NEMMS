@@ -32,6 +32,7 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
 		ctx.flush();
+		logger.info("read finished");
 	}
 
 	@Override

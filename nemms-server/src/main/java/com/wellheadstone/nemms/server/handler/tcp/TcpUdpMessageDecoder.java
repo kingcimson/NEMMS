@@ -31,6 +31,5 @@ public class TcpUdpMessageDecoder extends ByteToMessageDecoder {
 					ctx.channel().remoteAddress(), escapeBytes.length, Converter.bytesToHexString(escapeBytes)));
 			TaskFactory.creator(ctx, msg).execute();
 		}
-		// ctx.channel()
 	}
 }

@@ -14,7 +14,7 @@ import com.wellheadstone.nemms.server.message.TcpUdpMessage;
 
 public class GetParamListListener implements DataListener<SocketIOMessage> {
 	@Override
-	public synchronized void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
+	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		TcpUdpMessage message = MessageUtils.getParamListReqMessage(data);
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
@@ -26,7 +26,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			} else {
 				data.setRequestText(message.toString());
 				ServiceFacade.removeDeviceDataBy(data.getUid());
-				channel.writeAndFlush(message).syncUninterruptibly();
+				channel.writeAndFlush(message).get();
 			}
 		}
 		client.sendEvent(EventName.GetParamList, data);

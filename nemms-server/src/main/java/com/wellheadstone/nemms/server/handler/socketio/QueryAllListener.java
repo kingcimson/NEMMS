@@ -26,7 +26,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 	private final static Logger logger = LoggerFactory.getLogger(QueryAllListener.class);
 
 	@Override
-	public synchronized void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
+	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		TcpUdpMessage message = MessageUtils.getQueryAllReqMessage(data);
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
@@ -68,9 +68,8 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 				message.setPacketId(count++);
 				message.setPDU(Converter.listToArray(list));
 				msgList.add(message.toString());
-				channel.writeAndFlush(message);
-				Thread.sleep(1000);
-
+				channel.writeAndFlush(message).awaitUninterruptibly(1000);
+				channel.read().closeFuture().awaitUninterruptibly(1000);
 				list.clear();
 				Converter.copyArrayToList(unit, list);
 			}
