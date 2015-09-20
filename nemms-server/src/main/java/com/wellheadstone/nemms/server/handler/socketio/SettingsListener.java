@@ -21,7 +21,7 @@ import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class SettingsListener implements DataListener<SocketIOMessage> {
@@ -29,7 +29,7 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
-		TcpUdpMessage message = MessageUtils.getSetupReqMessage(data);
+		CMCCFDSMessage message = MessageUtils.getSetupReqMessage(data);
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
 			data.setRequestText("未找到当前站点与设备的连接服务器ip与port.");
@@ -45,7 +45,7 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 		client.sendEvent(EventName.Settings, data);
 	}
 
-	private String sendMessage(SocketChannel channel, List<IdValuePair> paramList, TcpUdpMessage message) {
+	private String sendMessage(SocketChannel channel, List<IdValuePair> paramList, CMCCFDSMessage message) {
 		List<String> msgList = new ArrayList<String>(6);
 		try {
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();

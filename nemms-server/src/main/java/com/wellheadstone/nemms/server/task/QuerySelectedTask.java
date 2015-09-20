@@ -6,13 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.message.MessageUtils;
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class QuerySelectedTask extends AbstractTask implements ITask {
 	private final static Logger logger = LoggerFactory.getLogger(QuerySelectedTask.class);
 
-	protected QuerySelectedTask(ChannelHandlerContext ctx, TcpUdpMessage msg) {
+	protected QuerySelectedTask(ChannelHandlerContext ctx, CMCCFDSMessage msg) {
 		super(ctx, msg);
 	}
 

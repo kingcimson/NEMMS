@@ -3,7 +3,6 @@ package com.wellheadstone.nemms.server;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -18,12 +17,11 @@ import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.handler.tcp.TcpServerHandler;
-import com.wellheadstone.nemms.server.handler.tcp.TcpUdpMessageDecoder;
-import com.wellheadstone.nemms.server.handler.tcp.TcpUdpMessageEncoder;
+import com.wellheadstone.nemms.server.handler.tcp.TcpMessageDecoder;
+import com.wellheadstone.nemms.server.handler.tcp.TcpMessageEncoder;
 
 public class TcpServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(TcpServer.class);
-	private Channel channel;
 
 	@Override
 	public void start() {
@@ -34,10 +32,6 @@ public class TcpServer implements IServer {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
-	}
-
-	public Channel getChannel() {
-		return this.channel;
 	}
 
 	private void bind(String ip, int port) throws Exception {
@@ -52,7 +46,6 @@ public class TcpServer implements IServer {
 					.option(ChannelOption.SO_KEEPALIVE, true)
 					.childHandler(new ChildChannelHandler());
 			ChannelFuture f = b.bind(ip, port).sync();
-			this.channel = f.channel();
 			f.channel().closeFuture().sync();
 		} finally {
 			bossGroup.shutdownGracefully();
@@ -65,8 +58,8 @@ public class TcpServer implements IServer {
 		protected void initChannel(SocketChannel channel) throws Exception {
 			channel.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192,
 					new ByteBuf[] { Unpooled.wrappedBuffer(new byte[] { 0x7e }) }));
-			channel.pipeline().addLast("decoder", new TcpUdpMessageDecoder());
-			channel.pipeline().addLast("encoder", new TcpUdpMessageEncoder());
+			channel.pipeline().addLast("decoder", new TcpMessageDecoder());
+			channel.pipeline().addLast("encoder", new TcpMessageEncoder());
 			channel.pipeline().addLast("handler", new TcpServerHandler());
 		}
 	}

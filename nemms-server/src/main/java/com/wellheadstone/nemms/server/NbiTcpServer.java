@@ -83,7 +83,7 @@ public class NbiTcpServer implements IServer {
 	}
 
 	private int getPort() {
-		int port = 8001;
+		int port = 8003;
 		try {
 			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.nbi.port").trim());
 		} catch (Exception e) {

@@ -3,15 +3,15 @@ package com.wellheadstone.nemms.server.util;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 
 public class ByteObjConverter {
-	public static TcpUdpMessage bytesToObject(byte[] bytes) {
+	public static CMCCFDSMessage bytesToObject(byte[] bytes) {
 		if (bytes == null || bytes.length < 17) {
 			return null;
 		}
 
-		TcpUdpMessage obj = new TcpUdpMessage();
+		CMCCFDSMessage obj = new CMCCFDSMessage();
 		obj.setStartFlag(bytes[0]);
 		obj.setAp(bytes[1]);
 		obj.setVp(bytes[2]);
@@ -33,7 +33,7 @@ public class ByteObjConverter {
 		return Arrays.copyOfRange(src, startIndex, endIndex);
 	}
 
-	public static byte[] objectToBytes(TcpUdpMessage obj) {
+	public static byte[] objectToBytes(CMCCFDSMessage obj) {
 		int length = 13 + (obj.getPDU() == null ? 0 : obj.getPDU().length);
 		ByteBuffer srcBuf = ByteBuffer.allocate(length);
 		srcBuf.put(obj.getAp());

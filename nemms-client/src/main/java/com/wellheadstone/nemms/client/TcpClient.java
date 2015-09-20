@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wellheadstone.nemms.client.handler.tcp.TcpClientHandler;
+import com.wellheadstone.nemms.client.handler.TcpClientHandler;
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
-import com.wellheadstone.nemms.server.handler.tcp.TcpUdpMessageEncoder;
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.handler.tcp.TcpMessageEncoder;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 
 public class TcpClient {
 	private final static Logger logger = LoggerFactory.getLogger(TcpClient.class);
@@ -35,7 +35,7 @@ public class TcpClient {
 						@Override
 						protected void initChannel(SocketChannel channel) throws Exception {
 							ChannelPipeline pipeline = channel.pipeline();
-							pipeline.addLast("encoder", new TcpUdpMessageEncoder());
+							pipeline.addLast("encoder", new TcpMessageEncoder());
 							pipeline.addLast("handler", new TcpClientHandler());
 						}
 					});
@@ -52,7 +52,7 @@ public class TcpClient {
 	}
 
 	private static void sendData(Channel ch) {
-		TcpUdpMessage message = new TcpUdpMessage();
+		CMCCFDSMessage message = new CMCCFDSMessage();
 		message.setStartFlag((byte) 0x7f);
 		message.setAp((byte) 0x03);
 		message.setVp((byte) 0x01);

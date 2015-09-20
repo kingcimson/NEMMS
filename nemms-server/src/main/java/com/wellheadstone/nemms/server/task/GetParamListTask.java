@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory;
 import com.wellheadstone.nemms.server.domain.po.DeviceDataPo;
 import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 import com.wellheadstone.nemms.server.message.MessageUtils;
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class GetParamListTask extends AbstractTask implements ITask {
 	private final static Logger logger = LoggerFactory.getLogger(GetParamListTask.class);
 
-	protected GetParamListTask(ChannelHandlerContext ctx, TcpUdpMessage msg) {
+	protected GetParamListTask(ChannelHandlerContext ctx, CMCCFDSMessage msg) {
 		super(ctx, msg);
 	}
 

@@ -2,13 +2,13 @@ package com.wellheadstone.nemms.server.task;
 
 import io.netty.channel.ChannelHandlerContext;
 
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 
 public abstract class AbstractTask {
 	protected ChannelHandlerContext ctx;
-	protected TcpUdpMessage msg;
+	protected CMCCFDSMessage msg;
 
-	protected AbstractTask(ChannelHandlerContext ctx, TcpUdpMessage msg) {
+	protected AbstractTask(ChannelHandlerContext ctx, CMCCFDSMessage msg) {
 		this.ctx = ctx;
 		this.msg = msg;
 	}

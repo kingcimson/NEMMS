@@ -7,15 +7,15 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.ByteObjConverter;
 import com.wellheadstone.nemms.server.util.Converter;
 
-public class TcpUdpMessageEncoder extends MessageToByteEncoder<TcpUdpMessage> {
-	private final static Logger logger = LoggerFactory.getLogger(TcpUdpMessageEncoder.class);
+public class TcpMessageEncoder extends MessageToByteEncoder<CMCCFDSMessage> {
+	private final static Logger logger = LoggerFactory.getLogger(TcpMessageEncoder.class);
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, TcpUdpMessage msg, ByteBuf out) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, CMCCFDSMessage msg, ByteBuf out) throws Exception {
 		byte[] bytes = ByteObjConverter.objectToBytes(msg);
 		out.writeBytes(bytes);
 		ctx.flush();

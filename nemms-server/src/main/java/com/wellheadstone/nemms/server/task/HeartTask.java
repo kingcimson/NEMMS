@@ -18,14 +18,14 @@ import com.wellheadstone.nemms.server.domain.po.DeviceSitePo;
 import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.MessageUtils;
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.Converter;
 import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
 
 public class HeartTask extends AbstractTask implements ITask {
 	private final static Logger logger = LoggerFactory.getLogger(HeartTask.class);
 
-	protected HeartTask(ChannelHandlerContext ctx, TcpUdpMessage msg) {
+	protected HeartTask(ChannelHandlerContext ctx, CMCCFDSMessage msg) {
 		super(ctx, msg);
 	}
 
@@ -49,7 +49,7 @@ public class HeartTask extends AbstractTask implements ITask {
 		}
 	}
 
-	private void addNewConn(ChannelHandlerContext ctx, TcpUdpMessage msg, String siteUid) {
+	private void addNewConn(ChannelHandlerContext ctx, CMCCFDSMessage msg, String siteUid) {
 		String devId = Converter.getHexString(msg.getDeviceId());
 		if (devId.equals("00")) {
 			DeviceConnInfoPo po = new DeviceConnInfoPo();

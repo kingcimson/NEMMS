@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.client.handler.tcp;
+package com.wellheadstone.nemms.client.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

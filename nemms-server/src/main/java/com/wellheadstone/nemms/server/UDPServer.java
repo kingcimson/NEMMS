@@ -1,16 +1,23 @@
 package com.wellheadstone.nemms.server;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.handler.udp.UDPServerHandler;
+import com.wellheadstone.nemms.server.handler.udp.UdpMessageDecoder;
+import com.wellheadstone.nemms.server.handler.udp.UdpMessageEncoder;
 
 public class UDPServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(UDPServer.class);
@@ -31,9 +38,18 @@ public class UDPServer implements IServer {
 		try {
 			Bootstrap b = new Bootstrap();
 			b.group(group)
-				.channel(NioDatagramChannel.class)
-				.option(ChannelOption.SO_BROADCAST, true)
-				.handler(new UDPServerHandler());
+					.channel(NioDatagramChannel.class)
+					.option(ChannelOption.SO_BROADCAST, true)
+					.handler(new ChannelInitializer<DatagramChannel>() {
+						@Override
+						protected void initChannel(DatagramChannel channel) throws Exception {
+							channel.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192,
+									new ByteBuf[] { Unpooled.wrappedBuffer(new byte[] { 0x7e }) }));
+							channel.pipeline().addLast("decoder", new UdpMessageDecoder());
+							channel.pipeline().addLast("encoder", new UdpMessageEncoder());
+							channel.pipeline().addLast("handler", new UDPServerHandler());
+						}
+					});
 			b.bind(ip, port).sync().channel().closeFuture().await();
 		} finally {
 			group.shutdownGracefully();
@@ -51,7 +67,7 @@ public class UDPServer implements IServer {
 	}
 
 	private int getPort() {
-		int port = 8002;
+		int port = 8001;
 		try {
 			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.udp.port").trim());
 		} catch (Exception e) {

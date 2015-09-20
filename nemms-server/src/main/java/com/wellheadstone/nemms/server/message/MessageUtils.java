@@ -19,49 +19,49 @@ import com.wellheadstone.nemms.server.util.Converter;
 public class MessageUtils {
 	private final static Logger logger = LoggerFactory.getLogger(MessageUtils.class);
 
-	public static TcpUdpMessage getHeartResMessage(TcpUdpMessage msg) {
+	public static CMCCFDSMessage getHeartResMessage(CMCCFDSMessage msg) {
 		msg.setVpLayerFlag((byte) 0x00);
 		msg.setRespFlag((byte) 0x00);
 		return msg;
 	}
 
-	public static TcpUdpMessage getParamListReqMessage(TcpUdpMessage msg) {
+	public static CMCCFDSMessage getParamListReqMessage(CMCCFDSMessage msg) {
 		msg.setVpLayerFlag((byte) 0x80);
 		msg.setRespFlag((byte) 0xff);
 		return msg;
 	}
 
-	public static TcpUdpMessage getParamListReqMessage(SocketIOMessage data) {
-		TcpUdpMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
+	public static CMCCFDSMessage getParamListReqMessage(SocketIOMessage data) {
+		CMCCFDSMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
 		byte[] pdu = Converter.getReverseBytes(MessageUtils.getParamListPDU(message.getMcp()));
 		message.setCmdId((byte) 0x02);
 		message.setPDU(pdu);
 		return message;
 	}
 
-	public static TcpUdpMessage getQueryAllReqMessage(SocketIOMessage data) {
-		TcpUdpMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
+	public static CMCCFDSMessage getQueryAllReqMessage(SocketIOMessage data) {
+		CMCCFDSMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
 		message.setCmdId((byte) 0x02);
 		message.setPDU(new byte[] { 0x00 });
 		return message;
 	}
 
-	public static TcpUdpMessage getQuerySelectedReqMessage(SocketIOMessage data) {
-		TcpUdpMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
+	public static CMCCFDSMessage getQuerySelectedReqMessage(SocketIOMessage data) {
+		CMCCFDSMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
 		message.setCmdId((byte) 0x02);
 		message.setPDU(new byte[] { 0x00 });
 		return message;
 	}
 
-	public static TcpUdpMessage getSetupReqMessage(SocketIOMessage data) {
-		TcpUdpMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
+	public static CMCCFDSMessage getSetupReqMessage(SocketIOMessage data) {
+		CMCCFDSMessage message = MessageUtils.SocketIOMessage2TcpUdpMessage(data);
 		message.setCmdId((byte) 0x03);
 		message.setPDU(new byte[] { 0x00 });
 		return message;
 	}
 
-	public static TcpUdpMessage SocketIOMessage2TcpUdpMessage(SocketIOMessage msg) {
-		TcpUdpMessage message = new TcpUdpMessage();
+	public static CMCCFDSMessage SocketIOMessage2TcpUdpMessage(SocketIOMessage msg) {
+		CMCCFDSMessage message = new CMCCFDSMessage();
 		message.setStartFlag((byte) 0x7e);
 		message.setAp(Byte.valueOf(msg.getApProtocol()));
 		message.setVp((byte) 0x01);

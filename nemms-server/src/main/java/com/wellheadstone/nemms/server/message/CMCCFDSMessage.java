@@ -5,7 +5,10 @@ import java.io.Serializable;
 import com.wellheadstone.nemms.server.util.ByteObjConverter;
 import com.wellheadstone.nemms.server.util.Converter;
 
-public class TcpUdpMessage implements Serializable {
+/**
+ * 中国移动通信光纤分布系统网管接口协议
+ */
+public class CMCCFDSMessage implements Serializable {
 	private static final long serialVersionUID = 7625190637270731504L;
 	private byte startFlag;// 起始标志
 	private byte ap;// ap层办议类型
@@ -21,7 +24,7 @@ public class TcpUdpMessage implements Serializable {
 	private short crc;// CRC校验单元 2字节倒序
 	private byte endFlag;// 结束标志
 
-	public TcpUdpMessage() {
+	public CMCCFDSMessage() {
 	}
 
 	/**

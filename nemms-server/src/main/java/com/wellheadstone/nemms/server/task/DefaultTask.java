@@ -5,13 +5,13 @@ import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 
 public class DefaultTask extends AbstractTask implements ITask {
 
 	private final static Logger logger = LoggerFactory.getLogger(DefaultTask.class);
 
-	protected DefaultTask(ChannelHandlerContext ctx, TcpUdpMessage msg) {
+	protected DefaultTask(ChannelHandlerContext ctx, CMCCFDSMessage msg) {
 		super(ctx, msg);
 	}
 

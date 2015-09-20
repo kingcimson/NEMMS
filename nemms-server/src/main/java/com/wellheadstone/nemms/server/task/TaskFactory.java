@@ -2,12 +2,12 @@ package com.wellheadstone.nemms.server.task;
 
 import io.netty.channel.ChannelHandlerContext;
 
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class TaskFactory {
 
-	public static ITask creator(ChannelHandlerContext ctx, TcpUdpMessage msg) {
+	public static ITask creator(ChannelHandlerContext ctx, CMCCFDSMessage msg) {
 		// 上报
 		if (msg.getCmdId() == 0x01) {
 			return new HeartTask(ctx, msg);

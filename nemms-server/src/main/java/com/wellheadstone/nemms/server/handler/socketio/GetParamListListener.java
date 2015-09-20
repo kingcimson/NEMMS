@@ -10,12 +10,12 @@ import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
-import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 
 public class GetParamListListener implements DataListener<SocketIOMessage> {
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
-		TcpUdpMessage message = MessageUtils.getParamListReqMessage(data);
+		CMCCFDSMessage message = MessageUtils.getParamListReqMessage(data);
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
 			data.setRequestText("未找到当前站点与设备的连接服务器ip与port.");
@@ -29,7 +29,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 		client.sendEvent(EventName.GetParamList, data);
 	}
 
-	private void sendTcpMessage(SocketIOMessage data, TcpUdpMessage message, DeviceConnInfoPo connInfo)
+	private void sendTcpMessage(SocketIOMessage data, CMCCFDSMessage message, DeviceConnInfoPo connInfo)
 			throws InterruptedException {
 		SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get(connInfo.getDeviceIp());
 		if (channel == null) {
@@ -41,7 +41,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 		}
 	}
 
-	private void sendUdpMessage(SocketIOMessage data, TcpUdpMessage message, DeviceConnInfoPo connInfo)
+	private void sendUdpMessage(SocketIOMessage data, CMCCFDSMessage message, DeviceConnInfoPo connInfo)
 			throws InterruptedException {
 		SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get(connInfo.getDeviceIp());
 		if (channel == null) {
