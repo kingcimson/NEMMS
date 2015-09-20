@@ -613,7 +613,7 @@ var SiteMgr = {
 		SiteMgr.loadConfigItems();
 	},
 	initConsoleTabs:function(){
-	    var height = $('#console-tabs').height()-30;
+	    var height = $('#console-tabs').height()-60;
 	    $("div[id^='console-tab-']").css({"height":height});
 	    $('#console-tab-1').css({"height":height});
 	},
@@ -948,6 +948,9 @@ var SiteMgr = {
 	},
 	toolbar : {
 		getParamList : function() {
+			if(!SiteMgr.socketIO.isConnected()){
+				return;
+			}
 			var node = $('#site-tree').tree('getSelected');
 			if (node) {
 				var data = node.attributes;
@@ -958,6 +961,9 @@ var SiteMgr = {
 			}
 		},
 		queryAll : function() {
+			if(!SiteMgr.socketIO.isConnected()){
+				return;
+			}
 			var node = $('#site-tree').tree('getSelected');
 			var paramUidList = SiteMgr.toolbar.getAllParamUidList();
 			if (node && paramUidList.length > 0) {
@@ -970,6 +976,9 @@ var SiteMgr = {
 			}
 		},
 		querySelected : function() {
+			if(!SiteMgr.socketIO.isConnected()){
+				return;
+			}
 			var node = $('#site-tree').tree('getSelected');
 			var paramUidList = SiteMgr.toolbar.getSelectedParamUidList();
 			if (node && paramUidList.length > 0) {
@@ -990,6 +999,9 @@ var SiteMgr = {
 			}
 		},
 		setup : function() {
+			if(!SiteMgr.socketIO.isConnected()){
+				return;
+			}
 			var node = $('#site-tree').tree('getSelected');
 			var idValueList = SiteMgr.toolbar.getSetupParamIdValueList();
 			if (node && idValueList.length > 0) {
@@ -1318,6 +1330,12 @@ var SiteMgr = {
 					EasyUIUtils.closeLoading();
 				},5000);
 			});
+		},
+		isConnected:function(){
+			if(!SiteMgr.socket.connected){
+				$.messager.alert('警告', '没有连接到通讯服务器,请查看系统配置是否正确。', 'info');
+			}
+			return SiteMgr.socket.connected;
 		}
 	}
 // end
