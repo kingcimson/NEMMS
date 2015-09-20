@@ -68,8 +68,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 				message.setPacketId(count++);
 				message.setPDU(Converter.listToArray(list));
 				msgList.add(message.toString());
-				channel.writeAndFlush(message).awaitUninterruptibly(1000);
-				channel.read().closeFuture().awaitUninterruptibly(1000);
+				channel.writeAndFlush(message);
 				list.clear();
 				Converter.copyArrayToList(unit, list);
 			}

@@ -26,7 +26,7 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 	private final static Logger logger = LoggerFactory.getLogger(QuerySelectedListener.class);
 
 	@Override
-	public synchronized void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
+	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		TcpUdpMessage message = MessageUtils.getQuerySelectedReqMessage(data);
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
