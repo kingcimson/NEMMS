@@ -600,6 +600,7 @@ $(function() {
 	$('#btn-clear').bind('click', SiteMgr.toolbar.clear);
 
 	// end
+	SiteMgr.initConsoleTabs();
 });
 
 var SiteMgr = {
@@ -610,6 +611,11 @@ var SiteMgr = {
 	socket : null,
 	init : function() {
 		SiteMgr.loadConfigItems();
+	},
+	initConsoleTabs:function(){
+	    var height = $('#console-tabs').height()-30;
+	    $("div[id^='console-tab-']").css({"height":height});
+	    $('#console-tab-1').css({"height":height});
 	},
 	getConfigItemName : function(key, value) {
 		if (key == "mcpMode") {

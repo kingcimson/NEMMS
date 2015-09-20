@@ -26,7 +26,8 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			} else {
 				data.setRequestText(message.toString());
 				ServiceFacade.removeDeviceDataBy(data.getUid());
-				channel.writeAndFlush(message);
+				channel.writeAndFlush(message).sync();
+				// channel.read().closeFuture().sync();
 			}
 		}
 		client.sendEvent(EventName.GetParamList, data);

@@ -36,18 +36,21 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 			if (channel == null) {
 				data.setRequestText("未找到当前站点或设备的连接通道.");
 			} else {
-				String[] paramIdList = StringUtils.split(data.getParamUids(), ',');
-				data.setRequestText(this.sendMessage(channel, paramIdList, message));
+				// String[] paramIdList = StringUtils.split(data.getParamUids(),
+				// ',');
+				this.sendMessage(client, channel, data, message);
+				// data.setRequestText(this.sendMessage(channel, paramIdList,
+				// message));
 			}
 		}
-		client.sendEvent(EventName.QueryALL, data);
 	}
 
-	private String sendMessage(SocketChannel channel, String[] paramIdList, TcpUdpMessage message) {
+	private String sendMessage(SocketIOClient client, SocketChannel channel, SocketIOMessage data, TcpUdpMessage message) {
 		List<String> msgList = new ArrayList<String>(6);
 		try {
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
 			List<Byte> list = new ArrayList<Byte>(235);
+			String[] paramIdList = StringUtils.split(data.getParamUids(), ',');
 
 			short count = 0;
 			for (int i = 0; i < paramIdList.length; i++) {
@@ -68,7 +71,10 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 				message.setPacketId(count++);
 				message.setPDU(Converter.listToArray(list));
 				msgList.add(message.toString());
-				channel.writeAndFlush(message);
+				data.setRequestText(message.toString());
+				channel.writeAndFlush(message).sync();
+				// channel.;
+				client.sendEvent(EventName.QueryALL, data);
 				list.clear();
 				Converter.copyArrayToList(unit, list);
 			}

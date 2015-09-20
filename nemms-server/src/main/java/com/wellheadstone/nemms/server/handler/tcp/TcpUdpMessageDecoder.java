@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.message.TcpUdpMessage;
-import com.wellheadstone.nemms.server.task.TaskFactory;
 import com.wellheadstone.nemms.server.util.ByteBufToBytes;
 import com.wellheadstone.nemms.server.util.ByteObjConverter;
 import com.wellheadstone.nemms.server.util.Converter;
@@ -29,7 +28,7 @@ public class TcpUdpMessageDecoder extends ByteToMessageDecoder {
 		} else {
 			logger.info(String.format("receive from [%s][%s] bytes:%s",
 					ctx.channel().remoteAddress(), escapeBytes.length, Converter.bytesToHexString(escapeBytes)));
-			TaskFactory.creator(ctx, msg).execute();
+			out.add(msg);
 		}
 	}
 }

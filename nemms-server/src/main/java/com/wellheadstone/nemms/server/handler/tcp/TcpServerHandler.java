@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
+import com.wellheadstone.nemms.server.message.TcpUdpMessage;
+import com.wellheadstone.nemms.server.task.TaskFactory;
 import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
 
 public class TcpServerHandler extends ChannelInboundHandlerAdapter {
@@ -30,9 +32,14 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	@Override
+	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		TaskFactory.creator(ctx, (TcpUdpMessage) msg).execute();
+		ctx.fireChannelRead(msg);
+	}
+
+	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
 		ctx.flush();
-		logger.info("read finished");
 	}
 
 	@Override
