@@ -217,5 +217,14 @@ var EasyUIUtils = {
 	},
 	closeLoading:function(){
 		$.messager.progress("close");
+	},
+	tips:function(){
+		$.messager.show({
+			title : '请稍后...',
+			text : '数据正在加载中...',
+		});
+	},
+	closeTips:function(){
+		$.messager.show("close");
 	}
 };
