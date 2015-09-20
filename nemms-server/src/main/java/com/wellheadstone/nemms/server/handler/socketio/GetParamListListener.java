@@ -14,11 +14,11 @@ import com.wellheadstone.nemms.server.message.TcpUdpMessage;
 
 public class GetParamListListener implements DataListener<SocketIOMessage> {
 	@Override
-	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
+	public synchronized void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		TcpUdpMessage message = MessageUtils.getParamListReqMessage(data);
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
-			data.setResponseText("未找到当前站点与设备的连接服务器ip与port.");
+			data.setRequestText("未找到当前站点与设备的连接服务器ip与port.");
 		} else {
 			SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get(connInfo.getClientIp());
 			if (channel == null) {
@@ -26,7 +26,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			} else {
 				data.setRequestText(message.toString());
 				ServiceFacade.removeDeviceDataBy(data.getUid());
-				channel.writeAndFlush(message);
+				channel.writeAndFlush(message).syncUninterruptibly();
 			}
 		}
 		client.sendEvent(EventName.GetParamList, data);

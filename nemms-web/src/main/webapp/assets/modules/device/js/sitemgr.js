@@ -1268,7 +1268,7 @@ var SiteMgr = {
 			SiteMgr.socket.on('getParamList', function(data) {
 				SiteMgr.console.output({
 					name : "获取查询列表",
-					content : "发送:" + data.requestText,
+					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function(){
@@ -1279,7 +1279,7 @@ var SiteMgr = {
 			SiteMgr.socket.on('queryAll', function(data) {
 				SiteMgr.console.output({
 					name : "查询所有参数",
-					content : "发送:" + data.requestText,
+					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function(){
@@ -1290,7 +1290,7 @@ var SiteMgr = {
 			SiteMgr.socket.on('querySelected', function(data) {
 				SiteMgr.console.output({
 					name : "查询选中参数",
-					content : "发送:" + data.requestText,
+					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function(){    
@@ -1303,7 +1303,7 @@ var SiteMgr = {
 			SiteMgr.socket.on('settings', function(data) {
 				SiteMgrs.console.output({
 					name : "设置参数",
-					content : "发送:" + data.requestText,
+					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function(){

@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.handler.tcp.TcpServerHandler;
-import com.wellheadstone.nemms.server.message.TcpUdpMessageDecoder;
-import com.wellheadstone.nemms.server.message.TcpUdpMessageEncoder;
+import com.wellheadstone.nemms.server.handler.tcp.TcpUdpMessageDecoder;
+import com.wellheadstone.nemms.server.handler.tcp.TcpUdpMessageEncoder;
 
 public class TcpServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(TcpServer.class);
@@ -46,8 +46,10 @@ public class TcpServer implements IServer {
 
 		try {
 			ServerBootstrap b = new ServerBootstrap();
-			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
-					.option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_KEEPALIVE, true)
+			b.group(bossGroup, workerGroup)
+					.channel(NioServerSocketChannel.class)
+					.option(ChannelOption.TCP_NODELAY, true)
+					.option(ChannelOption.SO_KEEPALIVE, true)
 					.childHandler(new ChildChannelHandler());
 			ChannelFuture f = b.bind(ip, port).sync();
 			this.channel = f.channel();
@@ -61,7 +63,6 @@ public class TcpServer implements IServer {
 	private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 		@Override
 		protected void initChannel(SocketChannel channel) throws Exception {
-
 			channel.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192,
 					new ByteBuf[] { Unpooled.wrappedBuffer(new byte[] { 0x7e }) }));
 			channel.pipeline().addLast("decoder", new TcpUdpMessageDecoder());

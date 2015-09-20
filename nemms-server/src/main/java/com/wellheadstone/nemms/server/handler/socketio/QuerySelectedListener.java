@@ -26,11 +26,11 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 	private final static Logger logger = LoggerFactory.getLogger(QuerySelectedListener.class);
 
 	@Override
-	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
+	public synchronized void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		TcpUdpMessage message = MessageUtils.getQuerySelectedReqMessage(data);
 		DeviceConnInfoPo connInfo = ServiceFacade.getConnInfoBy(data.getUid());
 		if (connInfo == null) {
-			data.setResponseText("未找到当前站点与设备的连接服务器ip与port.");
+			data.setRequestText("未找到当前站点与设备的连接服务器ip与port.");
 		} else {
 			SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get(connInfo.getClientIp());
 			if (channel == null) {

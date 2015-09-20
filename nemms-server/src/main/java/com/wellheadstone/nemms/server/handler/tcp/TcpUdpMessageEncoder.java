@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.message;
+package com.wellheadstone.nemms.server.handler.tcp;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,6 +7,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wellheadstone.nemms.server.message.TcpUdpMessage;
 import com.wellheadstone.nemms.server.util.ByteObjConverter;
 import com.wellheadstone.nemms.server.util.Converter;
 
