@@ -92,8 +92,8 @@ $(function() {
 			width : 70
 		} ] ],
 		onDblClickRow : function(index, row) {
-		    $('#console-info-dlg').dialog('open').dialog('center');
-		    $('#console-detail-info').text(row.content);
+			$('#console-info-dlg').dialog('open').dialog('center');
+			$('#console-detail-info').text(row.content);
 		}
 	});
 
@@ -141,7 +141,7 @@ $(function() {
 			field : 'devicePort',
 			title : '设备端口',
 			width : 70
-		},{
+		}, {
 			field : 'serverIp',
 			title : '服务器IP',
 			width : 100
@@ -218,7 +218,7 @@ $(function() {
 			SiteMgr.schedule.view();
 		}
 	});
-	
+
 	$('#nbi-datagrid').datagrid({
 		fit : true,
 		pagination : false,
@@ -240,22 +240,22 @@ $(function() {
 			field : 'nmsName',
 			title : 'nms名称',
 			width : 80
-		},{
+		}, {
 			field : 'serviceName',
 			title : '服务名称',
 			width : 80
-		},{
+		}, {
 			field : 'serviceUrl',
 			title : '服务URL',
 			width : 100
-		},{
+		}, {
 			field : 'serviceStatus',
 			title : '服务状态',
 			width : 50,
 			formatter : function(value, row, index) {
 				return value == "1" ? "正常" : "异常";
 			}
-		},{
+		}, {
 			field : 'updateTime',
 			title : '列新时间',
 			width : 80
@@ -403,19 +403,19 @@ $(function() {
 			}
 		} ]
 	});
-	
+
 	$('#console-info-dlg').dialog({
 		closed : true,
 		modal : false,
-		maximizable:true,
+		maximizable : true,
 		width : window.screen.width - 650,
 		height : window.screen.height - 350,
-		iconCls:'icon-info',
+		iconCls : 'icon-info',
 		buttons : [ {
 			text : '上一条',
 			iconCls : 'icon-prev',
 			handler : function() {
-			    var index = parseInt($('#current-row-index').val()) - 1;
+				var index = parseInt($('#current-row-index').val()) - 1;
 				$('#console-datagrid').datagrid('selectRow', index);
 				var row = $('#console-datagrid').datagrid('getSelected');
 				if (row) {
@@ -430,7 +430,7 @@ $(function() {
 			text : '下一条',
 			iconCls : 'icon-next',
 			handler : function() {
-			    var index = parseInt($('#current-row-index').val()) + 1;
+				var index = parseInt($('#current-row-index').val()) + 1;
 				$('#console-datagrid').datagrid('selectRow', index);
 				var row = $('#console-datagrid').datagrid('getSelected');
 				if (row) {
@@ -601,6 +601,10 @@ $(function() {
 
 	// end
 	SiteMgr.initConsoleTabs();
+
+	setInterval(function() {
+		EasyUIUtils.loadToDatagrid(id, connInfoPageUrl + 'list')
+	}, 60000);
 });
 
 var SiteMgr = {
@@ -612,10 +616,14 @@ var SiteMgr = {
 	init : function() {
 		SiteMgr.loadConfigItems();
 	},
-	initConsoleTabs:function(){
-	    var height = $('#console-tabs').height()-30;
-	    $("div[id^='console-tab-']").css({"height":height});
-	    $('#console-tab-1').css({"height":height});
+	initConsoleTabs : function() {
+		var height = $('#console-tabs').height() - 30;
+		$("div[id^='console-tab-']").css({
+			"height" : height
+		});
+		$('#console-tab-1').css({
+			"height" : height
+		});
 	},
 	getConfigItemName : function(key, value) {
 		if (key == "mcpMode") {
@@ -657,26 +665,31 @@ var SiteMgr = {
 			SiteMgr.paramOption = data;
 		});
 
-		$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth1Items',{
+		$
+				.getJSON(
+						XFrame.getContextPath() + '/system/dict/getDepth1Items',
+						{
 							parentKey : "deviceParamCategory"
 						},
 						function(data) {
 							SiteMgr.categories = data;
-							var height = $('#param-tabs').height()-30;
+							var height = $('#param-tabs').height() - 30;
 							for (var i = 0; i < SiteMgr.categories.length; i++) {
 								var category = SiteMgr.categories[i];
 								var title = category.name + "参数";
 								var id = "param-tab" + category.value;
 								var gridId = id + "-grid";
 								var content = "<div id=\"" + id + "\" style=\"padding: 2px;\">"
-										+ "<div style=\"height:"+ height +"px\">" + "<div class=\"easyui-datagrid\" id=\""
-										+ gridId + "\"></div>" + "</div>" + "</div>";
+										+ "<div style=\"height:" + height + "px\">"
+										+ "<div class=\"easyui-datagrid\" id=\"" + gridId + "\"></div>" + "</div>"
+										+ "</div>";
 								$('#param-tabs').tabs('add', {
 									title : title,
 									content : content
 								});
 
-								$('#' + gridId).datagrid(
+								$('#' + gridId)
+										.datagrid(
 												{
 													fit : true,
 													pagination : false,
@@ -724,7 +737,8 @@ var SiteMgr = {
 																			for (var i = 0; i < items.length; i++) {
 																				var item = items[i];
 																				if (item.value == value) {
-																					return item.value + "(" + item.name + ")";
+																					return item.value + "(" + item.name
+																							+ ")";
 																				}
 																			}
 																			return value;
@@ -946,7 +960,7 @@ var SiteMgr = {
 	},
 	toolbar : {
 		getParamList : function() {
-			if(!SiteMgr.socketIO.isConnected()){
+			if (!SiteMgr.socketIO.isConnected()) {
 				return;
 			}
 			var node = $('#site-tree').tree('getSelected');
@@ -959,7 +973,7 @@ var SiteMgr = {
 			}
 		},
 		queryAll : function() {
-			if(!SiteMgr.socketIO.isConnected()){
+			if (!SiteMgr.socketIO.isConnected()) {
 				return;
 			}
 			var node = $('#site-tree').tree('getSelected');
@@ -974,7 +988,7 @@ var SiteMgr = {
 			}
 		},
 		querySelected : function() {
-			if(!SiteMgr.socketIO.isConnected()){
+			if (!SiteMgr.socketIO.isConnected()) {
 				return;
 			}
 			var node = $('#site-tree').tree('getSelected');
@@ -998,7 +1012,7 @@ var SiteMgr = {
 			}
 		},
 		setup : function() {
-			if(!SiteMgr.socketIO.isConnected()){
+			if (!SiteMgr.socketIO.isConnected()) {
 				return;
 			}
 			var node = $('#site-tree').tree('getSelected');
@@ -1019,16 +1033,16 @@ var SiteMgr = {
 				var tab = $('#param-tabs').tabs('getSelected');
 				var index = $('#param-tabs').tabs('getTabIndex', tab);
 				for (var i = 0; i < SiteMgr.categories.length; i++) {
-		        		var category = SiteMgr.categories[i];
-		        		var gridId = "#param-tab" + category.value + '-grid';
-		        		var rows = $(gridId).datagrid('getRows');
-		        		for (var j = 0; j < rows.length; j++) {
-		        		    var chkId = gridId + '-ck-' + j;
-		        		    if ($(chkId).prop("checked")) {
-		        		    	$(chkId).prop("checked",false);
-		        		    }
-		        		}
-		        }
+					var category = SiteMgr.categories[i];
+					var gridId = "#param-tab" + category.value + '-grid';
+					var rows = $(gridId).datagrid('getRows');
+					for (var j = 0; j < rows.length; j++) {
+						var chkId = gridId + '-ck-' + j;
+						if ($(chkId).prop("checked")) {
+							$(chkId).prop("checked", false);
+						}
+					}
+				}
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
 			}
@@ -1050,48 +1064,48 @@ var SiteMgr = {
 			return paramUidList;
 		},
 		getSelectedParamUidList : function() {
-        	    var map = {
-	        		paramUidList : [],
-	        		rowIdList : []
-        	    };
-        	    for (var i = 0; i < SiteMgr.categories.length; i++) {
-	        		var category = SiteMgr.categories[i];
-	        		var gridId = "#param-tab" + category.value + '-grid';
-	        		var rows = $(gridId).datagrid('getRows');
-	        		for (var j = 0; j < rows.length; j++) {
-	        		    var deviceParam = rows[j];
-	        		    var chkId = gridId + '-ck-' + j;
-	        		    if ($(chkId).prop("checked")) {
-	        			map.paramUidList.push(deviceParam.paramUid);
-				        map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
-	        		    }
-	        		}
-        	    }
-        	    return map;
+			var map = {
+				paramUidList : [],
+				rowIdList : []
+			};
+			for (var i = 0; i < SiteMgr.categories.length; i++) {
+				var category = SiteMgr.categories[i];
+				var gridId = "#param-tab" + category.value + '-grid';
+				var rows = $(gridId).datagrid('getRows');
+				for (var j = 0; j < rows.length; j++) {
+					var deviceParam = rows[j];
+					var chkId = gridId + '-ck-' + j;
+					if ($(chkId).prop("checked")) {
+						map.paramUidList.push(deviceParam.paramUid);
+						map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
+					}
+				}
+			}
+			return map;
 		},
 		getSetupParamIdValueList : function() {
-		    	var map = {
-					idValueList : [],
-					rowIdList : []
-			    };
-			    for (var i = 0; i < SiteMgr.categories.length; i++) {
-					var category = SiteMgr.categories[i];
-					var gridId = "#param-tab" + category.value + '-grid';
-					var rows = $(gridId).datagrid('getRows');
-					for (var j = 0; j < rows.length; j++) {
-					    var deviceParam = rows[j];
-					    var chkId = gridId + '-ck-' + j;
-					    var valueId = gridId + '-value-' + j;
-					    if ($(chkId).prop("checked") && deviceParam.mode == 'rw') {
-							map.idValueList.push({
-							    id : deviceParam.paramUid,
-							    value : $(valueId).val()
-							});
-							map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
-					    }
+			var map = {
+				idValueList : [],
+				rowIdList : []
+			};
+			for (var i = 0; i < SiteMgr.categories.length; i++) {
+				var category = SiteMgr.categories[i];
+				var gridId = "#param-tab" + category.value + '-grid';
+				var rows = $(gridId).datagrid('getRows');
+				for (var j = 0; j < rows.length; j++) {
+					var deviceParam = rows[j];
+					var chkId = gridId + '-ck-' + j;
+					var valueId = gridId + '-value-' + j;
+					if ($(chkId).prop("checked") && deviceParam.mode == 'rw') {
+						map.idValueList.push({
+							id : deviceParam.paramUid,
+							value : $(valueId).val()
+						});
+						map.rowIdList.push(chkId + "-" + deviceParam.paramUid);
 					}
-			    }
-			    return map;
+				}
+			}
+			return map;
 		}
 	// end
 	},
@@ -1199,38 +1213,40 @@ var SiteMgr = {
 		select : function(index) {
 			$('#param-tabs').tabs('select', index);
 		},
-		getSelectedIndex:function(){
+		getSelectedIndex : function() {
 			var tab = $('#param-tabs').tabs('getSelected');
-			return $('#param-tabs').tabs('getTabIndex',tab);
+			return $('#param-tabs').tabs('getTabIndex', tab);
 		},
-		updateParamsValue : function(siteUid, paramUids,rowIds) {
-        	    $.post(siteMgrPageUrl + 'queryValues', {
-        		"siteUid" : siteUid,
-        		"paramUids" : paramUids
-        	    }, function(data) {
-        		var rowIdList = rowIds.split(',');
-        		for(var i=0;i<rowIdList.length;i++){
-        		    var rowId = rowIdList[i];
-        		    var meta = rowId.split('-');
-        		    if(meta.length != 6) continue;
-        		    var gridId =  meta.slice(0,3).join('-');
-        		    var index = parseInt(meta[4]);
-        		    var paramUid = meta[5];
-        		    var row = data[paramUid];
-        		    if(row){
-        			SiteMgr.paramTabs.updateDatagridRow(gridId, index, row);
-        		    }
-        		}		
-        	    });
-    		},
-    		updateDatagridRow:function(gridId,index,row){
-    		 $(gridId).datagrid('updateRow',{
-			index: index,
-			row: row
-		    });
-    		 var chkId =gridId +"-ck-"+ index;
-    		 $(chkId).prop("checked",true);
-    		}
+		updateParamsValue : function(siteUid, paramUids, rowIds) {
+			$.post(siteMgrPageUrl + 'queryValues', {
+				"siteUid" : siteUid,
+				"paramUids" : paramUids
+			}, function(data) {
+				var rowIdList = rowIds.split(',');
+				for (var i = 0; i < rowIdList.length; i++) {
+					var rowId = rowIdList[i];
+					var meta = rowId.split('-');
+					if (meta.length != 6) {
+						continue;
+					}
+					var gridId = meta.slice(0, 3).join('-');
+					var index = parseInt(meta[4]);
+					var paramUid = meta[5];
+					var row = data[paramUid];
+					if (row) {
+						SiteMgr.paramTabs.updateDatagridRow(gridId, index, row);
+					}
+				}
+			});
+		},
+		updateDatagridRow : function(gridId, index, row) {
+			$(gridId).datagrid('updateRow', {
+				index : index,
+				row : row
+			});
+			var chkId = gridId + "-ck-" + index;
+			$(chkId).prop("checked", true);
+		}
 	// endss
 	},
 	dialogs : {
@@ -1319,10 +1335,10 @@ var SiteMgr = {
 					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
-				setTimeout(function(){
-				    SiteMgr.paramTabs.displayParamList(data.uid, 0);
-				    EasyUIUtils.closeLoading();
-				},5000);
+				setTimeout(function() {
+					SiteMgr.paramTabs.displayParamList(data.uid, 0);
+					EasyUIUtils.closeLoading();
+				}, 5000);
 			});
 			SiteMgr.socket.on('queryAll', function(data) {
 				SiteMgr.console.output({
@@ -1330,10 +1346,10 @@ var SiteMgr = {
 					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
-				setTimeout(function(){
-				    SiteMgr.paramTabs.displayParamList(data.uid, 0);
-				    EasyUIUtils.closeLoading();
-				},5000);
+				setTimeout(function() {
+					SiteMgr.paramTabs.displayParamList(data.uid, 0);
+					EasyUIUtils.closeLoading();
+				}, 5000);
 			});
 			SiteMgr.socket.on('querySelected', function(data) {
 				SiteMgr.console.output({
@@ -1341,29 +1357,29 @@ var SiteMgr = {
 					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
-				setTimeout(function(){    
-					SiteMgr.paramTabs.updateParamsValue(data.uid, data.paramUids,data.rowIds);
+				setTimeout(function() {
+					SiteMgr.paramTabs.updateParamsValue(data.uid, data.paramUids, data.rowIds);
 					EasyUIUtils.closeLoading();
-				},5000);
+				}, 5000);
 			});
 			SiteMgr.socket.on('settings', function(data) {
-			    	SiteMgr.console.output({
+				SiteMgr.console.output({
 					name : "设置参数",
 					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
-				setTimeout(function(){
-				    var idValueList = $.parseJSON(data.paramUids);
-				    var paramUids = $.map(idValueList, function(e){
-					  return e.id;
-					  }).join(',');
-				    SiteMgr.paramTabs.updateParamsValue(data.uid, paramUids,data.rowIds);
-				    EasyUIUtils.closeLoading();
-				},5000);
+				setTimeout(function() {
+					var idValueList = $.parseJSON(data.paramUids);
+					var paramUids = $.map(idValueList, function(e) {
+						return e.id;
+					}).join(',');
+					SiteMgr.paramTabs.updateParamsValue(data.uid, paramUids, data.rowIds);
+					EasyUIUtils.closeLoading();
+				}, 5000);
 			});
 		},
-		isConnected:function(){
-			if(!SiteMgr.socket.connected){
+		isConnected : function() {
+			if (!SiteMgr.socket.connected) {
 				$.messager.alert('警告', '没有连接到通讯服务器,请查看系统配置是否正确。', 'info');
 			}
 			return SiteMgr.socket.connected;
