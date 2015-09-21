@@ -12,8 +12,6 @@ public class SocketIOMessage implements Serializable {
 	private String apProtocol = "0";
 	private String mcpProtocol = "0";
 	private String protocol = "0";
-	private String ipAddr = "";
-	private Integer port = 0;
 	private String manufactor = "";
 	private String location = "";
 	private Integer apMaxLen = 1024;
@@ -172,42 +170,6 @@ public class SocketIOMessage implements Serializable {
 	 */
 	public void setProtocol(String protocol) {
 		this.protocol = protocol;
-	}
-
-	/**
-	 * 获取设备ip地址(udp协议)
-	 *
-	 * @return 设备ip地址
-	 */
-	public String getIpAddr() {
-		return this.ipAddr == null ? "" : this.ipAddr;
-	}
-
-	/**
-	 * 设置设备ip地址(udp协议)
-	 *
-	 * @param ipAddr
-	 */
-	public void setIpAddr(String ipAddr) {
-		this.ipAddr = ipAddr;
-	}
-
-	/**
-	 * 获取远端端口(udp协议)
-	 *
-	 * @return 远端端口
-	 */
-	public Integer getPort() {
-		return this.port == null ? 0 : this.port;
-	}
-
-	/**
-	 * 设置远端端口(udp协议)
-	 *
-	 * @param port
-	 */
-	public void setPort(Integer port) {
-		this.port = port;
 	}
 
 	/**

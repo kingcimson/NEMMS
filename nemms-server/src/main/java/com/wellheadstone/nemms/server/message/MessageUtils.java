@@ -77,7 +77,7 @@ public class MessageUtils {
 
 	public static int getSiteId(String siteId) {
 		if (siteId.length() < 10 || siteId.length() > 12) {
-			return -1;
+			return Integer.MAX_VALUE;
 		}
 
 		String uid = siteId.substring(2, 10);
@@ -86,7 +86,7 @@ public class MessageUtils {
 
 	public static byte getDeviceId(String siteId) {
 		if (siteId.length() < 10 || siteId.length() > 12) {
-			return -1;
+			return 0;
 		}
 
 		if (siteId.length() == 10) {
@@ -94,7 +94,7 @@ public class MessageUtils {
 		}
 
 		String uid = siteId.substring(10);
-		return Byte.valueOf(uid, 16);
+		return Short.valueOf(uid, 16).byteValue();
 	}
 
 	public static void parseDataUnit(String siteUid, byte mcp, byte[] pdu) {

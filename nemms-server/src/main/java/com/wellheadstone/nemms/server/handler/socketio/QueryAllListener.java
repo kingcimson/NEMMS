@@ -17,9 +17,9 @@ import com.wellheadstone.nemms.server.domain.po.DeviceConnInfoPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceParamPo;
 import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
-import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class QueryAllListener implements DataListener<SocketIOMessage> {
@@ -41,7 +41,8 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 		}
 	}
 
-	private String sendMessage(SocketIOClient client, SocketChannel channel, SocketIOMessage data, CMCCFDSMessage message) {
+	private String sendMessage(SocketIOClient client, SocketChannel channel, SocketIOMessage data,
+			CMCCFDSMessage message) {
 		List<String> msgList = new ArrayList<String>(6);
 		try {
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();

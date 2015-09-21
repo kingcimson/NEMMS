@@ -25,6 +25,10 @@ public class ServiceFacade {
 	}
 
 	public static DeviceConnInfoPo getConnInfoBy(String siteUid) {
+		// 如果是设备编号
+		if (siteUid.length() > 10) {
+			siteUid = siteUid.substring(0, 10);
+		}
 		return connInfoService.getDao().queryBy(siteUid);
 	}
 
