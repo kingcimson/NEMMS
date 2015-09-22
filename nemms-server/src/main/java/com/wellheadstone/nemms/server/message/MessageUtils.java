@@ -132,27 +132,27 @@ public class MessageUtils {
 		byte[] bytes = Arrays.copyOfRange(pdu, startIndex, endIndex);
 		if (po.getValueType().equals("uint1")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
-			return String.valueOf(Converter.getShort(src) / po.getRatio());
+			return getFormattedParamValue(String.valueOf(Converter.getShort(src) / po.getRatio()));
 		}
 		if (po.getValueType().equals("uint2")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 4);
-			return String.valueOf(Converter.getInt(src) / po.getRatio());
+			return getFormattedParamValue(String.valueOf(Converter.getInt(src) / po.getRatio()));
 		}
 		if (po.getValueType().equals("uint3")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 4);
-			return String.valueOf(Converter.getInt(src) / po.getRatio());
+			return getFormattedParamValue(String.valueOf(Converter.getInt(src) / po.getRatio()));
 		}
 		if (po.getValueType().equals("uint4")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 8);
-			return String.valueOf(Converter.getLong(src) / po.getRatio());
+			return getFormattedParamValue(String.valueOf(Converter.getLong(src) / po.getRatio()));
 		}
 		if (po.getValueType().equals("sint1")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
-			return String.valueOf(Converter.getShort(src) / po.getRatio());
+			return getFormattedParamValue(String.valueOf(Converter.getShort(src) / po.getRatio()));
 		}
 		if (po.getValueType().equals("sint2")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
-			return String.valueOf(Converter.getShort(src) / po.getRatio());
+			return getFormattedParamValue(String.valueOf(Converter.getShort(src) / po.getRatio()));
 		}
 		if (po.getValueType().equals("bit")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
@@ -171,31 +171,42 @@ public class MessageUtils {
 		return "N/A";
 	}
 
+	private static String getFormattedParamValue(String value) {
+		String[] seg = StringUtils.split(value, '.');
+		if (seg.length == 2) {
+			return Integer.valueOf(seg[1]) > 0 ? value : seg[0];
+		}
+		if (seg.length == 1) {
+			return seg[0];
+		}
+		return StringUtils.EMPTY;
+	}
+
 	public static byte[] getParamValueBytes(String value, DeviceParamPo po) {
 		try {
 			double ratio = po.getRatio();
 			if (po.getValueType().equals("uint1")) {
-				byte[] src = Converter.getBytes(Short.valueOf(value), ratio);
+				byte[] src = Converter.getShortBytes(Double.valueOf(value), ratio);
 				return Converter.getReverseBytes(src, 1, 2);
 			}
 			if (po.getValueType().equals("uint2")) {
-				byte[] src = Converter.getBytes(Integer.valueOf(value), ratio);
+				byte[] src = Converter.getIntBytes(Double.valueOf(value), ratio);
 				return Converter.getReverseBytes(src, 2, 4);
 			}
 			if (po.getValueType().equals("uint3")) {
-				byte[] src = Converter.getBytes(Integer.valueOf(value), ratio);
+				byte[] src = Converter.getIntBytes(Double.valueOf(value), ratio);
 				return Converter.getReverseBytes(src, 1, 4);
 			}
 			if (po.getValueType().equals("uint4")) {
-				byte[] src = Converter.getBytes(Long.valueOf(value), ratio);
+				byte[] src = Converter.getLongBytes(Double.valueOf(value), ratio);
 				return Converter.getReverseBytes(src, 4, 8);
 			}
 			if (po.getValueType().equals("sint1")) {
-				byte[] src = Converter.getBytes(Short.valueOf(value), ratio);
+				byte[] src = Converter.getShortBytes(Double.valueOf(value), ratio);
 				return Converter.getReverseBytes(src, 1, 2);
 			}
 			if (po.getValueType().equals("sint2")) {
-				byte[] src = Converter.getBytes(Integer.valueOf(value), ratio);
+				byte[] src = Converter.getIntBytes(Double.valueOf(value), ratio);
 				return Converter.getReverseBytes(src, 2, 4);
 			}
 			if (po.getValueType().equals("bit")) {

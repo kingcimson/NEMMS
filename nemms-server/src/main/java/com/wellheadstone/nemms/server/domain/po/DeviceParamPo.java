@@ -320,7 +320,7 @@ public class DeviceParamPo implements Serializable {
 	 * @return 传输比或系数
 	 */
 	public Double getRatio() {
-		return this.ratio <= 0 ? 1 : this.ratio;
+		return this.ratio == 0 ? 1 : this.ratio;
 	}
 
 	/**

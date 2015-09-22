@@ -31,24 +31,15 @@ public class Converter {
 		return buffer.array();
 	}
 
-	public static byte[] getBytes(Short value, double ratio) {
-		if (ratio == 1.0 || ratio == 1) {
-			return getBytes(value.shortValue());
-		}
+	public static byte[] getShortBytes(double value, double ratio) {
 		return getBytes((short) (value * ratio));
 	}
 
-	public static byte[] getBytes(Integer value, double ratio) {
-		if (ratio == 1.0 || ratio == 1) {
-			return getBytes(value.intValue());
-		}
+	public static byte[] getIntBytes(double value, double ratio) {
 		return getBytes((int) (value * ratio));
 	}
 
-	public static byte[] getBytes(Long value, double ratio) {
-		if (ratio == 1.0 || ratio == 1) {
-			return getBytes(value.longValue());
-		}
+	public static byte[] getLongBytes(double value, double ratio) {
 		return getBytes((long) (value * ratio));
 	}
 

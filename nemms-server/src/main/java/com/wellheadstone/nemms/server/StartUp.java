@@ -37,6 +37,8 @@ public class StartUp {
 	}
 
 	private static void startServers() {
+		logger.info("server started at ip: {}", Config.getServerIP());
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
