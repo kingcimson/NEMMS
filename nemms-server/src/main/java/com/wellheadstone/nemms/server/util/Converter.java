@@ -31,6 +31,27 @@ public class Converter {
 		return buffer.array();
 	}
 
+	public static byte[] getBytes(Short value, double ratio) {
+		if (ratio == 1.0 || ratio == 1) {
+			return getBytes(value.shortValue());
+		}
+		return getBytes((short) (value * ratio));
+	}
+
+	public static byte[] getBytes(Integer value, double ratio) {
+		if (ratio == 1.0 || ratio == 1) {
+			return getBytes(value.intValue());
+		}
+		return getBytes((int) (value * ratio));
+	}
+
+	public static byte[] getBytes(Long value, double ratio) {
+		if (ratio == 1.0 || ratio == 1) {
+			return getBytes(value.longValue());
+		}
+		return getBytes((long) (value * ratio));
+	}
+
 	public static short getReverseShort(byte[] src, int startIndex, int endIndex) {
 		byte[] bytes = Arrays.copyOfRange(src, startIndex, endIndex);
 		return getShort(getReverseBytes(bytes));

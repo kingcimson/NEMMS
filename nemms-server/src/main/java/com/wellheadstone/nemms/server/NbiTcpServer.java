@@ -19,7 +19,6 @@ import io.netty.util.concurrent.FutureListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.handler.tcp.NbiTcpServerHandler;
 
 /**
@@ -31,10 +30,8 @@ public class NbiTcpServer implements IServer {
 
 	@Override
 	public void start() {
-		int port = this.getPort();
-
 		try {
-			this.bind(this.getIPAddress(), port);
+			this.bind(Config.getServerIP(), Config.getNbiPort());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -75,25 +72,5 @@ public class NbiTcpServer implements IServer {
 			pipeline.addLast("encoder", new StringEncoder());
 			pipeline.addLast("handler", new NbiTcpServerHandler());
 		}
-	}
-
-	private String getIPAddress() {
-		String ipAddr = "localhost";
-		try {
-			ipAddr = PropertiesUtils.getValue("nemms.server.ip").trim();
-		} catch (Exception e) {
-			logger.error("NBI Server IP Parse Error,Set the default IP:" + ipAddr, e);
-		}
-		return ipAddr;
-	}
-
-	private int getPort() {
-		int port = 8003;
-		try {
-			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.nbi.port").trim());
-		} catch (Exception e) {
-			logger.error("NBI Server Port Parse Error,Set the default port:" + port, e);
-		}
-		return port;
 	}
 }

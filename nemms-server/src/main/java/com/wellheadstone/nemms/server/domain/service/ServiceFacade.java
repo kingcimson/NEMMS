@@ -66,7 +66,7 @@ public class ServiceFacade {
 
 	public static Map<String, DeviceParamPo> getDeviceParamMap() {
 		if (deviceParamMap == null) {
-			return new HashMap<String, DeviceParamPo>(0);
+			loadDeviceParamData();
 		}
 		return deviceParamMap;
 	}

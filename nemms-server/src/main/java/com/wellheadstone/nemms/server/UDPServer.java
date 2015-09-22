@@ -17,7 +17,6 @@ import io.netty.util.concurrent.FutureListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wellheadstone.nemms.common.util.PropertiesUtils;
 import com.wellheadstone.nemms.server.handler.udp.UDPServerHandler;
 import com.wellheadstone.nemms.server.handler.udp.UdpMessageDecoder;
 import com.wellheadstone.nemms.server.handler.udp.UdpMessageEncoder;
@@ -27,10 +26,8 @@ public class UDPServer implements IServer {
 
 	@Override
 	public void start() {
-		int port = this.getPort();
-
 		try {
-			this.bind(this.getIPAddress(), port);
+			this.bind(Config.getServerIP(), Config.getUdpPort());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -70,25 +67,5 @@ public class UDPServer implements IServer {
 			channel.pipeline().addLast("encoder", new UdpMessageEncoder());
 			channel.pipeline().addLast("handler", new UDPServerHandler());
 		}
-	}
-
-	private String getIPAddress() {
-		String ipAddr = "localhost";
-		try {
-			ipAddr = PropertiesUtils.getValue("nemms.server.ip").trim();
-		} catch (Exception e) {
-			logger.error("UDP Server IP Parse Error,Set the default IP:" + ipAddr, e);
-		}
-		return ipAddr;
-	}
-
-	private int getPort() {
-		int port = 8001;
-		try {
-			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.udp.port").trim());
-		} catch (Exception e) {
-			logger.error("UDP Server Port Parse Error,Set the default port:" + port, e);
-		}
-		return port;
 	}
 }

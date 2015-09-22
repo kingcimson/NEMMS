@@ -111,13 +111,13 @@ public class MessageUtils {
 			int startIndex = i + 1;
 			int endIndex = startIndex + byteCount;
 
-			String paramUid = Converter.getReverseHexString(pdu, startIndex, endIndex);
+			String paramUid = Converter.getHexStringWith0X(Converter.getReverseHexString(pdu, startIndex, endIndex));
+			DeviceParamPo paramPo = paramMap.get(MessageUtils.getDeviceParamKey(paramUid, mcp));
 			DeviceDataPo po = new DeviceDataPo();
 			po.setSiteUid(siteUid);
-			po.setParamUid(Converter.getHexStringWith0X(paramUid));
+			po.setParamUid(paramUid);
 			po.setMcpId((int) mcp);
-			po.setValue(MessageUtils.getParamValue(pdu, endIndex, i + unitLength,
-					paramMap.get(MessageUtils.getDeviceParamKey(po.getParamUid(), mcp))));
+			po.setValue(MessageUtils.getParamValue(pdu, endIndex, i + unitLength, paramPo));
 			entities.add(po);
 
 			i = i + unitLength;
@@ -132,27 +132,27 @@ public class MessageUtils {
 		byte[] bytes = Arrays.copyOfRange(pdu, startIndex, endIndex);
 		if (po.getValueType().equals("uint1")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
-			return String.valueOf(Converter.getShort(src));
+			return String.valueOf(Converter.getShort(src) / po.getRatio());
 		}
 		if (po.getValueType().equals("uint2")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 4);
-			return String.valueOf(Converter.getInt(src));
+			return String.valueOf(Converter.getInt(src) / po.getRatio());
 		}
 		if (po.getValueType().equals("uint3")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 4);
-			return String.valueOf(Converter.getInt(src));
+			return String.valueOf(Converter.getInt(src) / po.getRatio());
 		}
 		if (po.getValueType().equals("uint4")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 8);
-			return String.valueOf(Converter.getLong(src));
+			return String.valueOf(Converter.getLong(src) / po.getRatio());
 		}
 		if (po.getValueType().equals("sint1")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
-			return String.valueOf(Converter.getShort(src));
+			return String.valueOf(Converter.getShort(src) / po.getRatio());
 		}
 		if (po.getValueType().equals("sint2")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
-			return String.valueOf(Converter.getShort(src));
+			return String.valueOf(Converter.getShort(src) / po.getRatio());
 		}
 		if (po.getValueType().equals("bit")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
@@ -173,26 +173,30 @@ public class MessageUtils {
 
 	public static byte[] getParamValueBytes(String value, DeviceParamPo po) {
 		try {
+			double ratio = po.getRatio();
 			if (po.getValueType().equals("uint1")) {
-				return Converter.getReverseBytes(Short.valueOf(value).byteValue());
+				byte[] src = Converter.getBytes(Short.valueOf(value), ratio);
+				return Converter.getReverseBytes(src, 1, 2);
 			}
 			if (po.getValueType().equals("uint2")) {
-				byte[] src = Converter.getBytes(Integer.valueOf(value));
+				byte[] src = Converter.getBytes(Integer.valueOf(value), ratio);
 				return Converter.getReverseBytes(src, 2, 4);
 			}
 			if (po.getValueType().equals("uint3")) {
-				byte[] src = Converter.getBytes(Integer.valueOf(value));
+				byte[] src = Converter.getBytes(Integer.valueOf(value), ratio);
 				return Converter.getReverseBytes(src, 1, 4);
 			}
 			if (po.getValueType().equals("uint4")) {
-				byte[] src = Converter.getBytes(Long.valueOf(value));
+				byte[] src = Converter.getBytes(Long.valueOf(value), ratio);
 				return Converter.getReverseBytes(src, 4, 8);
 			}
 			if (po.getValueType().equals("sint1")) {
-				return Converter.getReverseBytes(Byte.valueOf(value));
+				byte[] src = Converter.getBytes(Short.valueOf(value), ratio);
+				return Converter.getReverseBytes(src, 1, 2);
 			}
 			if (po.getValueType().equals("sint2")) {
-				return Converter.getReverseBytes(Short.valueOf(value));
+				byte[] src = Converter.getBytes(Integer.valueOf(value), ratio);
+				return Converter.getReverseBytes(src, 2, 4);
 			}
 			if (po.getValueType().equals("bit")) {
 				return Converter.getReverseBytes(Byte.valueOf(value));

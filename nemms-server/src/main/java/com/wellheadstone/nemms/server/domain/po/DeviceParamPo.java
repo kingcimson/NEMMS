@@ -147,7 +147,7 @@ public class DeviceParamPo implements Serializable {
 	private String unit;
 
 	@Column(name = "ratio")
-	private String ratio;
+	private Double ratio;
 
 	@Column(name = "value_type")
 	private String valueType;
@@ -319,8 +319,8 @@ public class DeviceParamPo implements Serializable {
 	 *
 	 * @return 传输比或系数
 	 */
-	public String getRatio() {
-		return this.ratio;
+	public Double getRatio() {
+		return this.ratio <= 0 ? 1 : this.ratio;
 	}
 
 	/**
@@ -328,7 +328,7 @@ public class DeviceParamPo implements Serializable {
 	 *
 	 * @param ratio
 	 */
-	public void setRatio(String ratio) {
+	public void setRatio(Double ratio) {
 		this.ratio = ratio;
 	}
 
