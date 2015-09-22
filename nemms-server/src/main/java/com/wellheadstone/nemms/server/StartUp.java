@@ -16,7 +16,7 @@ public class StartUp {
 
 	public static void main(String[] args) {
 		try {
-			initializeConfiguration();
+			initConfig();
 			initData();
 			startServers();
 		} catch (Exception e) {
@@ -24,13 +24,11 @@ public class StartUp {
 		}
 	}
 
-	private static void initializeConfiguration() {
+	private static void initConfig() {
 		PropertyConfigurator.configure(configPath + "conf/log4j.properties");
-
 		SpringContextUtils springContextUtil = new SpringContextUtils();
 		ApplicationContext appContext = new FileSystemXmlApplicationContext(configPath + "conf/spring.xml");
 		springContextUtil.setApplicationContext(appContext);
-
 		PropertiesUtils.configure(configPath + "conf/resource.properties");
 	}
 
@@ -42,7 +40,6 @@ public class StartUp {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				logger.info("Starting MySocketIOServer");
 				new MySocketIOServer().start();
 			}
 		}, "MySocketIOServer").start();
@@ -50,7 +47,6 @@ public class StartUp {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				logger.info("Starting TcpIPServer");
 				new TcpServer().start();
 			}
 		}, "TcpIPServer").start();
@@ -58,7 +54,6 @@ public class StartUp {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				logger.info("Starting UDPServer");
 				new UDPServer().start();
 			}
 		}, "UDPServer").start();
@@ -66,7 +61,6 @@ public class StartUp {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				logger.info("Starting NbiServer");
 				new NbiTcpServer().start();
 			}
 		}, "NbiServer").start();

@@ -11,14 +11,16 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.FutureListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.common.util.PropertiesUtils;
-import com.wellheadstone.nemms.server.handler.tcp.TcpServerHandler;
 import com.wellheadstone.nemms.server.handler.tcp.TcpMessageDecoder;
 import com.wellheadstone.nemms.server.handler.tcp.TcpMessageEncoder;
+import com.wellheadstone.nemms.server.handler.tcp.TcpServerHandler;
 
 public class TcpServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(TcpServer.class);
@@ -45,7 +47,16 @@ public class TcpServer implements IServer {
 					.option(ChannelOption.TCP_NODELAY, true)
 					.option(ChannelOption.SO_KEEPALIVE, true)
 					.childHandler(new ChildChannelHandler());
-			ChannelFuture f = b.bind(ip, port).sync();
+			ChannelFuture f = b.bind(ip, port).addListener(new FutureListener<Void>() {
+				@Override
+				public void operationComplete(Future<Void> future) throws Exception {
+					if (future.isSuccess()) {
+						logger.info("TCP server started at port: {}", port);
+					} else {
+						logger.info("TCP server start failed at port: {}", port);
+					}
+				}
+			}).sync();
 			f.channel().closeFuture().sync();
 		} finally {
 			bossGroup.shutdownGracefully();

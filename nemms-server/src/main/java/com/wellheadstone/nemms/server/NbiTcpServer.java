@@ -1,7 +1,6 @@
 package com.wellheadstone.nemms.server;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -14,6 +13,8 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.FutureListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,6 @@ import com.wellheadstone.nemms.server.handler.tcp.NbiTcpServerHandler;
  */
 public class NbiTcpServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(NbiTcpServer.class);
-	private Channel channel;
 
 	@Override
 	public void start() {
@@ -40,10 +40,6 @@ public class NbiTcpServer implements IServer {
 		}
 	}
 
-	public Channel getChannel() {
-		return this.channel;
-	}
-
 	private void bind(String ip, int port) throws Exception {
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -53,7 +49,16 @@ public class NbiTcpServer implements IServer {
 			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
 					.option(ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_KEEPALIVE, true)
 					.childHandler(new ChildChannelHandler());
-			ChannelFuture f = b.bind(ip, port).sync();
+			ChannelFuture f = b.bind(ip, port).addListener(new FutureListener<Void>() {
+				@Override
+				public void operationComplete(Future<Void> future) throws Exception {
+					if (future.isSuccess()) {
+						logger.info("NbiTCP server started at port: {}", port);
+					} else {
+						logger.info("NbiTCP server start failed at port: {}", port);
+					}
+				}
+			}).sync();
 			f.channel().closeFuture().sync();
 		} finally {
 			bossGroup.shutdownGracefully();

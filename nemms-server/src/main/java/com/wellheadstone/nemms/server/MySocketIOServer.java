@@ -1,5 +1,7 @@
 package com.wellheadstone.nemms.server;
 
+import io.netty.channel.ChannelFuture;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,15 +30,15 @@ public class MySocketIOServer implements IServer {
 				ListenerFactory.create(EventName.QuerySelected));
 		server.addEventListener(EventName.Settings, SocketIOMessage.class,
 				ListenerFactory.create(EventName.Settings));
-		server.start();
 
 		try {
-			Thread.sleep(Integer.MAX_VALUE);
+			ChannelFuture future = (ChannelFuture) server.startAsync().sync();
+			future.channel().closeFuture().sync();
 		} catch (InterruptedException e) {
 			logger.error(e.getMessage(), e);
+		} finally {
+			server.stop();
 		}
-
-		server.stop();
 	}
 
 	private String getIPAddress() {
