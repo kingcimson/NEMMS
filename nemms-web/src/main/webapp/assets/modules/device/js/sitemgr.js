@@ -603,8 +603,8 @@ $(function() {
 	SiteMgr.initConsoleTabs();
 
 	setInterval(function() {
-		EasyUIUtils.loadToDatagrid(id, connInfoPageUrl + 'list')
-	}, 60000);
+		EasyUIUtils.loadToDatagrid('#connected-device-datagrid', connInfoPageUrl + 'list')
+	}, 30000);
 });
 
 var SiteMgr = {
