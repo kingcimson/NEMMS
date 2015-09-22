@@ -2,6 +2,7 @@ package com.wellheadstone.nemms.server.handler.udp;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.socket.DatagramChannel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,16 +16,21 @@ public class UDPServerHandler extends ChannelInboundHandlerAdapter {
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
 		logger.info("device[" + clientIP + "] is actived");
+		UdpSocketChannelMap.add(clientIP, (DatagramChannel) ctx.channel());
+		super.channelActive(ctx);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
 		logger.info("device[" + clientIP + "] is inactived");
+		UdpSocketChannelMap.remove((DatagramChannel) ctx.channel());
 	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		// TaskFactory.creator(ctx, (CMCCFDSMessage) msg).execute();
+		logger.info(msg.toString());
 		ctx.fireChannelRead(msg);
 	}
 

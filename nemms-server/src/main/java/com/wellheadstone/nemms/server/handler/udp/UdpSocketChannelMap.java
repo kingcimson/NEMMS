@@ -1,15 +1,15 @@
 package com.wellheadstone.nemms.server.handler.udp;
 
 import io.netty.channel.Channel;
-import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.DatagramChannel;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UdpSocketChannelMap {
-	private static Map<String, SocketChannel> map = new ConcurrentHashMap<String, SocketChannel>();
+	private static Map<String, DatagramChannel> map = new ConcurrentHashMap<String, DatagramChannel>(200);
 
-	public static void add(String clientId, SocketChannel socketChannel) {
+	public static void add(String clientId, DatagramChannel socketChannel) {
 		map.put(clientId, socketChannel);
 	}
 
@@ -17,8 +17,8 @@ public class UdpSocketChannelMap {
 		return map.get(clientId);
 	}
 
-	public static void remove(SocketChannel socketChannel) {
-		for (Map.Entry<String, SocketChannel> entry : map.entrySet()) {
+	public static void remove(DatagramChannel socketChannel) {
+		for (Map.Entry<String, DatagramChannel> entry : map.entrySet()) {
 			if (entry.getValue() == socketChannel) {
 				map.remove(entry.getKey());
 			}
