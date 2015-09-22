@@ -603,7 +603,7 @@ $(function() {
 	SiteMgr.initConsoleTabs();
 
 	setInterval(function() {
-		EasyUIUtils.loadToDatagrid(id, connInfoPageUrl + 'list')
+		EasyUIUtils.loadToDatagrid('#connected-device-datagrid', connInfoPageUrl + 'list')
 	}, 60000);
 });
 
