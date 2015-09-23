@@ -49,7 +49,7 @@ var EasyUIUtils = {
 			EasyUIUtils.loadToDatagrid(gridId, gridUrl);
 		});
 	},
-	removeWithIdFieldName : function(gridId, gridUrl, actUrl,idFieldName) {
+	removeWithIdFieldName : function(gridId, gridUrl, actUrl, idFieldName) {
 		var row = $(gridId).datagrid('getSelected');
 		if (!row) {
 			return $.messager.alert('警告', '请选中一条记录!', 'info');
@@ -137,8 +137,8 @@ var EasyUIUtils = {
 	},
 	loadToDatagrid : function(id, href) {
 		var grid = $(id);
-		$.getJSON(href,function(data){
-			grid.datagrid('loadData',data);
+		$.getJSON(href, function(data) {
+			grid.datagrid('loadData', data);
 		});
 	},
 	reloadDatagrid : function(id) {
@@ -208,22 +208,14 @@ var EasyUIUtils = {
 			}
 		});
 	},
-	loading:function(){
+	loading : function() {
 		$.messager.progress({
 			title : '请稍后...',
 			text : '数据正在加载中...',
+			closable : true
 		});
 	},
-	closeLoading:function(){
+	closeLoading : function() {
 		$.messager.progress("close");
-	},
-	tips:function(){
-		$.messager.show({
-			title : '请稍后...',
-			text : '数据正在加载中...',
-		});
-	},
-	closeTips:function(){
-		$.messager.show("close");
 	}
 };

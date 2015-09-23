@@ -60,6 +60,7 @@ $(function() {
 		tools : [ {
 			iconCls : 'icon-fullscreen',
 			handler : function() {
+				// $('#console-tabs').hide();
 				$('#fullscreen-console-tabs-dlg').dialog('open').dialog('center');
 			}
 		} ]
@@ -1338,7 +1339,7 @@ var SiteMgr = {
 				setTimeout(function() {
 					SiteMgr.paramTabs.displayParamList(data.uid, 0);
 					EasyUIUtils.closeLoading();
-				}, 5000);
+				}, 6000);
 			});
 			SiteMgr.socket.on('queryAll', function(data) {
 				SiteMgr.console.output({
@@ -1349,7 +1350,7 @@ var SiteMgr = {
 				setTimeout(function() {
 					SiteMgr.paramTabs.displayParamList(data.uid, 0);
 					EasyUIUtils.closeLoading();
-				}, 5000);
+				}, 6000);
 			});
 			SiteMgr.socket.on('querySelected', function(data) {
 				SiteMgr.console.output({
@@ -1360,7 +1361,7 @@ var SiteMgr = {
 				setTimeout(function() {
 					SiteMgr.paramTabs.updateParamsValue(data.uid, data.paramUids, data.rowIds);
 					EasyUIUtils.closeLoading();
-				}, 5000);
+				}, 2000);
 			});
 			SiteMgr.socket.on('settings', function(data) {
 				SiteMgr.console.output({
@@ -1375,7 +1376,7 @@ var SiteMgr = {
 					}).join(',');
 					SiteMgr.paramTabs.updateParamsValue(data.uid, paramUids, data.rowIds);
 					EasyUIUtils.closeLoading();
-				}, 5000);
+				}, 2000);
 			});
 		},
 		isConnected : function() {
