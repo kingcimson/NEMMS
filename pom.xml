@@ -182,6 +182,11 @@
 				<artifactId>netty-socketio</artifactId>
 				<version>1.7.7</version>
 			</dependency>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>2.1.1</version>
+			</dependency>
 			<!-- Test -->
 			<dependency>
 				<groupId>junit</groupId>

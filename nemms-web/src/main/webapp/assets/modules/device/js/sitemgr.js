@@ -1331,7 +1331,7 @@ var SiteMgr = {
 			});
 			SiteMgr.socket.on('getParamList', function(data) {
 				SiteMgr.console.output({
-					name : "获取查询列表",
+					name : "获取参数列表",
 					content : data.requestText,
 					createTime : new Date().toLocaleString()
 				});
