@@ -70,11 +70,11 @@ public class GetParamListTask extends AbstractTask implements ITask {
 			return false;
 		}
 		// mcp:a 参数标识为2字节
-		if (mcp == 1 && pdu.length > 4) {
+		if (mcp == 1 && pdu.length >= 4) {
 			return (pdu[3] > pdu[4]);
 		}
 		// mcp:c 参数标识为4字节
-		if (mcp == 3 && pdu.length > 7) {
+		if (mcp == 3 && pdu.length >= 7) {
 			return (pdu[5] > pdu[6]);
 		}
 		return false;
@@ -83,11 +83,13 @@ public class GetParamListTask extends AbstractTask implements ITask {
 	private byte[] getNewPDU(byte mcp, byte[] srcPdu) {
 		// mcp:a 参数标识为2字节
 		if (mcp == 1) {
+			srcPdu[0] = 0x05;
 			srcPdu[4] += 1;
 			return Arrays.copyOfRange(srcPdu, 0, 5);
 		}
 		// mcp:c 参数标识为4字节
 		if (mcp == 3) {
+			srcPdu[0] = 0x07;
 			srcPdu[6] += 1;
 			return Arrays.copyOfRange(srcPdu, 0, 7);
 		}
