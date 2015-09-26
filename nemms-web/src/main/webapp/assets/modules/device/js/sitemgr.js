@@ -859,6 +859,7 @@ var SiteMgr = {
 			$.getJSON(siteMgrPageUrl + 'queryByUid', {
 				uid : uid
 			}, function(data) {
+				SiteMgr.dialogs.viewSiteNodeDlg.open();
 				SiteMgr.siteTree.viewSiteNode(data);
 			});
 		},
