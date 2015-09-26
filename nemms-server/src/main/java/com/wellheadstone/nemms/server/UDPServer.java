@@ -1,8 +1,6 @@
 package com.wellheadstone.nemms.server;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -10,7 +8,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
 
@@ -20,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.wellheadstone.nemms.server.handler.udp.UDPServerHandler;
 import com.wellheadstone.nemms.server.handler.udp.UdpMessageDecoder;
 import com.wellheadstone.nemms.server.handler.udp.UdpMessageEncoder;
+import com.wellheadstone.nemms.server.handler.udp.UdpSocketChannelMap;
 
 public class UDPServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(UDPServer.class);
@@ -52,6 +50,7 @@ public class UDPServer implements IServer {
 					}
 				}
 			}).sync();
+			UdpSocketChannelMap.add(ip, (DatagramChannel) f.channel());
 			f.channel().closeFuture().sync();
 		} finally {
 			group.shutdownGracefully();
@@ -61,8 +60,6 @@ public class UDPServer implements IServer {
 	private class ChildChannelHandler extends ChannelInitializer<DatagramChannel> {
 		@Override
 		protected void initChannel(DatagramChannel channel) throws Exception {
-			channel.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192,
-					new ByteBuf[] { Unpooled.wrappedBuffer(new byte[] { 0x7e }) }));
 			channel.pipeline().addLast("decoder", new UdpMessageDecoder());
 			channel.pipeline().addLast("encoder", new UdpMessageEncoder());
 			channel.pipeline().addLast("handler", new UDPServerHandler());

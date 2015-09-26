@@ -1,8 +1,6 @@
 package com.wellheadstone.nemms.client;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -10,9 +8,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -26,6 +24,7 @@ import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 
 public class UdpClient {
 	private final static Logger logger = LoggerFactory.getLogger(TcpClient.class);
+	private static Channel channel;
 
 	public static void run() throws InterruptedException, IOException {
 		EventLoopGroup group = new NioEventLoopGroup();
@@ -37,18 +36,17 @@ public class UdpClient {
 					.handler(new ChannelInitializer<DatagramChannel>() {
 						@Override
 						protected void initChannel(DatagramChannel channel) throws Exception {
-							channel.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192,
-									new ByteBuf[] { Unpooled.wrappedBuffer(new byte[] { 0x7e }) }));
 							channel.pipeline().addLast("decoder", new UdpMessageDecoder());
 							channel.pipeline().addLast("encoder", new UdpMessageEncoder());
 							channel.pipeline().addLast("handler", new UDPServerHandler());
 						}
 					});
-			Channel ch = b.connect(getIPAddress(), getPort()).sync().channel();
-			for (;;) {
-				sendData(ch);
+			channel = b.connect(getIPAddress(), getPort()).sync().channel();
+			for (int i = 0; i < 10; i++) {
+				sendData(channel);
 				TimeUnit.SECONDS.sleep(10);
 			}
+			channel.closeFuture().sync();
 		} finally {
 			group.shutdownGracefully();
 		}
@@ -66,8 +64,9 @@ public class UdpClient {
 		message.setMcp((byte) 0x01);
 		message.setCmdId((byte) 0x02);
 		message.setRespFlag((byte) 0xff);
-		message.setPDU(new byte[] { 0x01, 0x01, 0x00, 0x09, 0x05 });
+		message.setPDU(new byte[] { 0x05, 0x09, 0x00, 0x01, 0x01 });
 		message.setEndFlag((byte) 0x7e);
+		message.setRemoteAddress(new InetSocketAddress(getIPAddress(), getPort()));
 		ch.writeAndFlush(message);
 	}
 

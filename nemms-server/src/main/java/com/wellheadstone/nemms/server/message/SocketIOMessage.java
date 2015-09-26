@@ -155,7 +155,7 @@ public class SocketIOMessage implements Serializable {
 	}
 
 	/**
-	 * 获取协议类型
+	 * 获取协议类型（1：tcp,2:udp,其他保留)
 	 *
 	 * @return 协议类型
 	 */
@@ -164,7 +164,7 @@ public class SocketIOMessage implements Serializable {
 	}
 
 	/**
-	 * 设置协议类型
+	 * 设置协议类型（1：tcp,2:udp,其他保留)
 	 *
 	 * @param protocol
 	 */

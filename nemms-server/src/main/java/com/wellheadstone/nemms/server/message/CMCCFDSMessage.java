@@ -1,6 +1,7 @@
 package com.wellheadstone.nemms.server.message;
 
 import java.io.Serializable;
+import java.net.SocketAddress;
 
 import com.wellheadstone.nemms.server.util.ByteObjConverter;
 import com.wellheadstone.nemms.server.util.Converter;
@@ -10,6 +11,7 @@ import com.wellheadstone.nemms.server.util.Converter;
  */
 public class CMCCFDSMessage implements Serializable {
 	private static final long serialVersionUID = 7625190637270731504L;
+	private SocketAddress remoteAddress;
 	private byte startFlag;// 起始标志
 	private byte ap;// ap层办议类型
 	private byte vp;// 承载协议类型
@@ -25,6 +27,21 @@ public class CMCCFDSMessage implements Serializable {
 	private byte endFlag;// 结束标志
 
 	public CMCCFDSMessage() {
+	}
+
+	/**
+	 * @return the remoteAddress
+	 */
+	public SocketAddress getRemoteAddress() {
+		return remoteAddress;
+	}
+
+	/**
+	 * @param remoteAddress
+	 *            the remoteAddress to set
+	 */
+	public void setRemoteAddress(SocketAddress remoteAddress) {
+		this.remoteAddress = remoteAddress;
 	}
 
 	/**

@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -20,14 +21,15 @@ public class UdpMessageDecoder extends MessageToMessageDecoder<DatagramPacket> {
 	@Override
 	protected void decode(ChannelHandlerContext ctx, DatagramPacket packet, List<Object> out) throws Exception {
 		byte[] bytes = ByteBufToBytes.read(packet.content());
-		byte[] escapeBytes = ByteObjConverter.escapeDecodeBytes(bytes);
+		byte[] escapeBytes = ByteObjConverter.escapeDecodeBytes(Arrays.copyOfRange(bytes, 1, bytes.length - 1));
 		CMCCFDSMessage msg = ByteObjConverter.bytesToObject(escapeBytes);
 
 		if (msg == null) {
-			logger.info(String.format("receive from [%s] incorrect packet!", ctx.channel().remoteAddress()));
+			logger.info(String.format("receive from [%s] incorrect packet!", packet.sender()));
 		} else {
 			logger.info(String.format("receive from [%s][%s] bytes:%s",
-					ctx.channel().remoteAddress(), escapeBytes.length, Converter.bytesToHexString(escapeBytes)));
+					packet.sender(), escapeBytes.length, Converter.bytesToHexString(escapeBytes)));
+			msg.setRemoteAddress(packet.sender());
 			out.add(msg);
 		}
 	}

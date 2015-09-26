@@ -28,6 +28,7 @@ public class TcpMessageDecoder extends ByteToMessageDecoder {
 		} else {
 			logger.info(String.format("receive from [%s][%s] bytes:%s",
 					ctx.channel().remoteAddress(), escapeBytes.length, Converter.bytesToHexString(escapeBytes)));
+			msg.setRemoteAddress(ctx.channel().remoteAddress());
 			out.add(msg);
 		}
 	}

@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.domain.po.DeviceDataPo;
 import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
-import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
+import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class GetParamListTask extends AbstractTask implements ITask {
@@ -39,7 +39,7 @@ public class GetParamListTask extends AbstractTask implements ITask {
 			}
 			logger.info(">>>get param list query finished<<<");
 		} catch (Exception ex) {
-			logger.error("GetParamListTask execute error.", ex);
+			logger.error("get param list query execute error.", ex);
 		}
 	}
 
@@ -60,7 +60,9 @@ public class GetParamListTask extends AbstractTask implements ITask {
 			po.setMcpId((int) mcp);
 			entities.add(po);
 		}
-		ServiceFacade.addParamList(entities);
+		if (entities.size() > 0) {
+			ServiceFacade.addParamList(entities);
+		}
 	}
 
 	private boolean queryNext(byte mcp, byte[] pdu) {

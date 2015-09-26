@@ -47,7 +47,7 @@ public class HeartTask extends AbstractTask implements ITask {
 			}
 			ctx.channel().writeAndFlush(MessageUtils.getHeartResMessage(msg));
 		} catch (Exception ex) {
-			logger.error("HeartTask execute error.", ex);
+			logger.error("heart task execute error.", ex);
 		}
 	}
 
@@ -56,8 +56,8 @@ public class HeartTask extends AbstractTask implements ITask {
 		if (devId.equals("00")) {
 			DeviceConnInfoPo po = new DeviceConnInfoPo();
 			po.setSiteUid(siteUid);
-			po.setDeviceIp(RemoteAdressFormatter.getIP(ctx.channel().remoteAddress()));
-			po.setDevicePort(RemoteAdressFormatter.getPort(ctx.channel().remoteAddress()));
+			po.setDeviceIp(RemoteAdressFormatter.getIP(msg.getRemoteAddress()));
+			po.setDevicePort(RemoteAdressFormatter.getPort(msg.getRemoteAddress()));
 			po.setServerIp(RemoteAdressFormatter.getIP(ctx.channel().localAddress()));
 			po.setServerPort(RemoteAdressFormatter.getPort(ctx.channel().localAddress()));
 			ServiceFacade.addNewDeviceConn(po);

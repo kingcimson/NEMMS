@@ -9,8 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UdpSocketChannelMap {
 	private static Map<String, DatagramChannel> map = new ConcurrentHashMap<String, DatagramChannel>(200);
 
-	public static void add(String clientId, DatagramChannel socketChannel) {
-		map.put(clientId, socketChannel);
+	public static void add(String clientId, DatagramChannel channel) {
+		map.put(clientId, channel);
 	}
 
 	public static Channel get(String clientId) {

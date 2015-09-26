@@ -1,7 +1,9 @@
 package com.wellheadstone.nemms.server.handler.socketio;
 
-import io.netty.channel.socket.DatagramChannel;
+import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
+
+import java.net.InetSocketAddress;
 
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -35,7 +37,7 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			throws InterruptedException {
 		SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get(connInfo.getDeviceIp());
 		if (channel == null) {
-			data.setRequestText("未找到当前站点或设备的连接通道.");
+			data.setRequestText("未找到当前站点或设备的TCP连接通道.");
 		} else {
 			data.setRequestText(message.toString());
 			ServiceFacade.removeDeviceDataBy(data.getUid());
@@ -45,12 +47,13 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 
 	private void sendUdpMessage(SocketIOMessage data, CMCCFDSMessage message, DeviceConnInfoPo connInfo)
 			throws InterruptedException {
-		DatagramChannel channel = (DatagramChannel) UdpSocketChannelMap.get(connInfo.getDeviceIp());
+		Channel channel = UdpSocketChannelMap.get(connInfo.getServerIp());
 		if (channel == null) {
-			data.setRequestText("未找到当前站点或设备的连接通道.");
+			data.setRequestText("未找到当前站点或设备的UDP连接通道.");
 		} else {
 			data.setRequestText(message.toString());
 			ServiceFacade.removeDeviceDataBy(data.getUid());
+			message.setRemoteAddress(new InetSocketAddress(connInfo.getDeviceIp(), connInfo.getDevicePort()));
 			channel.writeAndFlush(message).sync();
 		}
 	}
