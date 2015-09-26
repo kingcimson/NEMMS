@@ -12,7 +12,7 @@ import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 
 public class StartUp {
 	protected final static Logger logger = LoggerFactory.getLogger(StartUp.class);
-	private final static String configPath = "target/";
+	private final static String configPath = "";
 
 	public static void main(String[] args) {
 		try {

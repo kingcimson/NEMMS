@@ -33,7 +33,7 @@ public class DeviceSiteController extends AbstractController {
 	@Resource
 	private DeviceSiteTreeService siteTreeService;
 	@Resource
-	private DeviceDataService deviceMonitorService;
+	private DeviceDataService deviceDataService;
 
 	@RequestMapping(value = { "", "/", "/index" })
 	public String index(HttpServletRequest req) {
@@ -202,7 +202,7 @@ public class DeviceSiteController extends AbstractController {
 	public Map<Integer, List<DeviceSiteParamPo>> queryAllValues(String siteUid, @CurrentUser UserPo loginUser,
 			HttpServletRequest request) {
 		siteUid = siteUid == null ? "" : siteUid;
-		return this.deviceMonitorService.queryAllValuesForMap(siteUid);
+		return this.deviceDataService.queryAllValuesForMap(siteUid);
 	}
 
 	@RequestMapping(value = "/queryValues")
@@ -211,7 +211,15 @@ public class DeviceSiteController extends AbstractController {
 			@CurrentUser UserPo loginUser,
 			HttpServletRequest request) {
 		siteUid = siteUid == null ? "" : siteUid;
-		return this.deviceMonitorService.queryValuesForMap(siteUid, paramUids);
+		return this.deviceDataService.queryValuesForMap(siteUid, paramUids);
+	}
+
+	@RequestMapping(value = "/queryByUid")
+	@ResponseBody
+	public DeviceSitePo queryByUid(String uid, @CurrentUser UserPo loginUser,
+			HttpServletRequest request) {
+		uid = uid == null ? "" : uid;
+		return this.siteService.getByUid(uid);
 	}
 
 	@RequestMapping(value = "/dragTreeNode")

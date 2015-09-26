@@ -163,7 +163,7 @@ $(function() {
 			width : 100
 		} ] ],
 		onDblClickRow : function(index, row) {
-			SiteMgr.conn.edit();
+			SiteMgr.siteTree.viewSiteNodeByUid(row.siteUid);
 		}
 	});
 
@@ -666,13 +666,8 @@ var SiteMgr = {
 			SiteMgr.paramOption = data;
 		});
 
-		$
-				.getJSON(
-						XFrame.getContextPath() + '/system/dict/getDepth1Items',
-						{
-							parentKey : "deviceParamCategory"
-						},
-						function(data) {
+		$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth1Items',{
+			parentKey : "deviceParamCategory"},function(data) {
 							SiteMgr.categories = data;
 							var height = $('#param-tabs').height() - 30;
 							for (var i = 0; i < SiteMgr.categories.length; i++) {
@@ -689,9 +684,7 @@ var SiteMgr = {
 									content : content
 								});
 
-								$('#' + gridId)
-										.datagrid(
-												{
+								$('#' + gridId).datagrid({
 													fit : true,
 													pagination : false,
 													rownumbers : true,
@@ -776,7 +769,7 @@ var SiteMgr = {
 												});
 							}
 							$('#param-tabs').tabs('select', 0);
-						});
+			});
 	},
 	initCombox : function(act) {
 		var prefix = act == "addSite" ? "#" : "#edit-";
@@ -861,6 +854,13 @@ var SiteMgr = {
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
 			}
+		},
+		viewSiteNodeByUid : function(uid) {
+			$.getJSON(siteMgrPageUrl + 'queryByUid', {
+				uid : uid
+			}, function(data) {
+				SiteMgr.siteTree.viewSiteNode(data);
+			});
 		},
 		viewSiteNode : function(meta) {
 			var comboxKeys = [ "deviceType", "apProtocol", "mcpProtocol", "protocol", "mcpMode" ];
