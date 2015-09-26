@@ -35,11 +35,11 @@ public class TaskFactory {
 		}
 
 		// mcp:a 参数标识为2字节
-		if (mcp == 1 && pdu.length > 4) {
+		if (mcp == 1 && pdu.length >= 4) {
 			return (0x09 == Converter.getReverseShort(pdu, 1, 3));
 		}
 		// mcp:c 参数标识为4字节
-		if (mcp == 3 && pdu.length > 7) {
+		if (mcp == 3 && pdu.length >= 7) {
 			return (0x0009 == Converter.getReverseInt(pdu, 1, 5));
 		}
 		return false;
