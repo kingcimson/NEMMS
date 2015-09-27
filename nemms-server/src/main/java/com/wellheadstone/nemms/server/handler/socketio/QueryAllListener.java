@@ -95,8 +95,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 
 				data.setRequestText(message.toString());
 				client.sendEvent(EventName.QueryALL, data);
-				// Thread.sleep(2000);
-				channel.wait(5000);
+				Thread.sleep(2000);
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);
