@@ -38,6 +38,8 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		TaskFactory.creator(ctx, (CMCCFDSMessage) msg).execute();
 		ctx.fireChannelRead(msg);
+		ctx.channel().notifyAll();
+		logger.info("channel id:{}", ctx.channel().hashCode());
 	}
 
 	@Override

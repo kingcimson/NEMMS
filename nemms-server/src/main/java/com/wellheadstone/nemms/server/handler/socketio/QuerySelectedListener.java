@@ -95,7 +95,8 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 
 				data.setRequestText(message.toString());
 				client.sendEvent(EventName.QuerySelected, data);
-				Thread.sleep(2000);
+				// Thread.sleep(2000);
+				channel.wait(5000);
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);

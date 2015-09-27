@@ -97,6 +97,7 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 
 				data.setRequestText(message.toString());
 				client.sendEvent(EventName.Settings, data);
+				channel.wait(5000);
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);
