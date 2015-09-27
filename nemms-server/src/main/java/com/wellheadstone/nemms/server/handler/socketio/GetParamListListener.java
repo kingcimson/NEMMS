@@ -55,8 +55,6 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			ServiceFacade.removeDeviceDataBy(data.getUid());
 			message.setRemoteAddress(new InetSocketAddress(connInfo.getDeviceIp(), connInfo.getDevicePort()));
 			channel.writeAndFlush(message).sync();
-			channel.wait(5000);
-			System.out.println("get params:" + channel.hashCode());
 		}
 	}
 }

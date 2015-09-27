@@ -1340,7 +1340,7 @@ var SiteMgr = {
 				setTimeout(function() {
 					SiteMgr.paramTabs.displayParamList(data.uid, 0);
 					EasyUIUtils.closeLoading();
-				}, 6000);
+				}, 8000);
 			});
 			SiteMgr.socket.on('queryAll', function(data) {
 				SiteMgr.console.output({
