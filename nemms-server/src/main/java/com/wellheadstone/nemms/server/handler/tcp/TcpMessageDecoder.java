@@ -24,10 +24,10 @@ public class TcpMessageDecoder extends ByteToMessageDecoder {
 		CMCCFDSMessage msg = ByteObjConverter.bytesToObject(escapeBytes);
 
 		if (msg == null) {
-			logger.info(String.format("receive from [%s] incorrect packet!", ctx.channel().remoteAddress()));
+			logger.info("receive from tcp device [{}] incorrect packet!", ctx.channel().remoteAddress());
 		} else {
-			logger.info(String.format("receive from [%s][%s] bytes:%s",
-					ctx.channel().remoteAddress(), escapeBytes.length, Converter.bytesToHexString(escapeBytes)));
+			logger.info("receive from tcp device [{}][{}] bytes:{}", ctx.channel().remoteAddress(), escapeBytes.length,
+					Converter.bytesToHexString(escapeBytes));
 			msg.setRemoteAddress(ctx.channel().remoteAddress());
 			out.add(msg);
 		}

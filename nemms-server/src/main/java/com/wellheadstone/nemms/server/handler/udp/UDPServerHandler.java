@@ -8,21 +8,23 @@ import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.task.TaskFactory;
-import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
+import com.wellheadstone.nemms.server.util.SocketAddressUtils;
 
 public class UDPServerHandler extends ChannelInboundHandlerAdapter {
 	private final static Logger logger = LoggerFactory.getLogger(UDPServerHandler.class);
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
-		logger.info("device[" + clientIP + "] is actived");
+		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
+		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
+		logger.info("udp device [{}:{}] is actived", ip, port);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
-		logger.info("device[" + clientIP + "] is inactived");
+		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
+		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
+		logger.info("udp device [{}:{}] is inactived", ip, port);
 	}
 
 	@Override

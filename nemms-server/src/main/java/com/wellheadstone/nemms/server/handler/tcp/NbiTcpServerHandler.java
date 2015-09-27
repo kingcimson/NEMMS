@@ -7,30 +7,32 @@ import io.netty.channel.socket.SocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
+import com.wellheadstone.nemms.server.util.SocketAddressUtils;
 
 public class NbiTcpServerHandler extends ChannelInboundHandlerAdapter {
 	private final static Logger logger = LoggerFactory.getLogger(NbiTcpServerHandler.class);
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
-		logger.info("NBI [" + clientIP + "] is actived");
+		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
+		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
+		logger.info("nbi device [{}:{}] is actived", ip, port);
 		TcpSocketChannelMap.add("nbi", (SocketChannel) ctx.channel());
 		super.channelActive(ctx);
 	}
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
-		logger.info("NBI [" + clientIP + "] is inactived");
+		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
+		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
+		logger.info("nbi device [{}:{}] is inactived", ip, port);
+		TcpSocketChannelMap.add("nbi", (SocketChannel) ctx.channel());
 		TcpSocketChannelMap.remove((SocketChannel) ctx.channel());
 	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		String clientIP = RemoteAdressFormatter.getIP(ctx.channel().remoteAddress());
-		logger.info("NBI [" + clientIP + "] data:" + msg);
+		logger.info("receive from nbi device [{}] data:{}", ctx.channel().remoteAddress(), msg);
 	}
 
 	@Override

@@ -25,10 +25,10 @@ public class UdpMessageDecoder extends MessageToMessageDecoder<DatagramPacket> {
 		CMCCFDSMessage msg = ByteObjConverter.bytesToObject(escapeBytes);
 
 		if (msg == null) {
-			logger.info(String.format("receive from [%s] incorrect packet!", packet.sender()));
+			logger.info("receive from udp device [{}] incorrect packet!", packet.sender());
 		} else {
-			logger.info(String.format("receive from [%s][%s] bytes:%s",
-					packet.sender(), escapeBytes.length, Converter.bytesToHexString(escapeBytes)));
+			logger.info("receive from udp device [{}][{}] bytes:{}", packet.sender(), escapeBytes.length,
+					Converter.bytesToHexString(escapeBytes));
 			msg.setRemoteAddress(packet.sender());
 			out.add(msg);
 		}

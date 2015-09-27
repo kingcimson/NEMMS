@@ -20,7 +20,7 @@ public class TcpMessageEncoder extends MessageToByteEncoder<CMCCFDSMessage> {
 		out.writeBytes(bytes);
 		ctx.flush();
 
-		logger.info(String.format("send to [%s][%s] bytes:%s",
-				ctx.channel().remoteAddress(), bytes.length, Converter.bytesToHexString(bytes)));
+		logger.info("send to tcp device [{}][{}] bytes:{}", ctx.channel().remoteAddress(), bytes.length,
+				Converter.bytesToHexString(bytes));
 	}
 }

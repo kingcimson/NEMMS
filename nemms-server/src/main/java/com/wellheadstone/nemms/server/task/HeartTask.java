@@ -20,7 +20,7 @@ import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.util.Converter;
-import com.wellheadstone.nemms.server.util.RemoteAdressFormatter;
+import com.wellheadstone.nemms.server.util.SocketAddressUtils;
 
 public class HeartTask extends AbstractTask implements ITask {
 	private final static Logger logger = LoggerFactory.getLogger(HeartTask.class);
@@ -56,10 +56,10 @@ public class HeartTask extends AbstractTask implements ITask {
 		if (devId.equals("00")) {
 			DeviceConnInfoPo po = new DeviceConnInfoPo();
 			po.setSiteUid(siteUid);
-			po.setDeviceIp(RemoteAdressFormatter.getIP(msg.getRemoteAddress()));
-			po.setDevicePort(RemoteAdressFormatter.getPort(msg.getRemoteAddress()));
-			po.setServerIp(RemoteAdressFormatter.getIP(ctx.channel().localAddress()));
-			po.setServerPort(RemoteAdressFormatter.getPort(ctx.channel().localAddress()));
+			po.setDeviceIp(SocketAddressUtils.getIP(msg.getRemoteAddress()));
+			po.setDevicePort(SocketAddressUtils.getPort(msg.getRemoteAddress()));
+			po.setServerIp(SocketAddressUtils.getIP(ctx.channel().localAddress()));
+			po.setServerPort(SocketAddressUtils.getPort(ctx.channel().localAddress()));
 			ServiceFacade.addNewDeviceConn(po);
 		}
 	}

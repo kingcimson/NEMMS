@@ -25,7 +25,7 @@ public class UdpMessageEncoder extends MessageToMessageEncoder<CMCCFDSMessage> {
 		InetSocketAddress recipient = (InetSocketAddress) msg.getRemoteAddress();
 		out.add(new DatagramPacket(byteBuf, recipient));
 
-		logger.info(String.format("send to [%s][%s] bytes:%s",
-				msg.getRemoteAddress(), bytes.length, Converter.bytesToHexString(bytes)));
+		logger.info("send to udp device [{}][{}] bytes:{}", msg.getRemoteAddress(), bytes.length,
+				Converter.bytesToHexString(bytes));
 	}
 }
