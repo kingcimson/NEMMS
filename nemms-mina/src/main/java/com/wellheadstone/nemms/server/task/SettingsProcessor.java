@@ -57,12 +57,12 @@ public class SettingsProcessor {
 				list.clear();
 				Converter.copyArrayToList(unit, list);
 			}
-			data.setEof(true);
-			data.setRequestText("");
-			data.setResponseText(">>设置参数完成<<");
 		} catch (Exception ex) {
 			logger.error("set params execute error.", ex);
 		}
+		data.setEof(true);
+		data.setRequestText("");
+		data.setResponseText(">>设置参数完成<<");
 	}
 
 	public static void execute(IoSession session, SocketIOMessage data, CMCCFDSMessage resMsg) {

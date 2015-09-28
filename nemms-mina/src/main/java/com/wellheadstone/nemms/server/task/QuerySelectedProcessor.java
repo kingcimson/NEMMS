@@ -54,13 +54,13 @@ public class QuerySelectedProcessor {
 				list.clear();
 				Converter.copyArrayToList(unit, list);
 			}
-			data.setEof(true);
-			data.setRequestText("");
-			data.setResponseText(">>查询全部完成<<");
-			client.sendEvent(EventName.QuerySelected, data);
 		} catch (Exception ex) {
 			logger.error("query params execute error.", ex);
 		}
+		data.setEof(true);
+		data.setRequestText("");
+		data.setResponseText(">>查询全部完成<<");
+		client.sendEvent(EventName.QuerySelected, data);
 	}
 
 	public static void execute(IoSession session, SocketIOMessage data, CMCCFDSMessage resMsg) {

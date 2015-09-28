@@ -25,17 +25,25 @@ public class GetParamListProcessor {
 		try {
 			CMCCFDSMessage resMsg = IoSessionUtils.writeAndRead(session, data, reqMsg);
 			client.sendEvent(EventName.GetParamList, data);
-			if (reqMsg != null) {
+			if (resMsg != null) {
 				String siteUid = Converter.getHexStringWith0X(Converter.getHexString(resMsg.getSiteId()));
 				parseDataUnit(siteUid, resMsg.getMcp(), resMsg.getPDU());
 				while (queryNext(resMsg.getMcp(), resMsg.getPDU())) {
 					resMsg.setPDU(getNewPDU(resMsg.getMcp(), resMsg.getPDU()));
-					session.write(MessageUtils.getParamListReqMessage(resMsg));
+					resMsg = IoSessionUtils.writeAndRead(session, data, MessageUtils.getParamListReqMessage(resMsg));
+					client.sendEvent(EventName.GetParamList, data);
+					if (resMsg != null) {
+						siteUid = Converter.getHexStringWith0X(Converter.getHexString(resMsg.getSiteId()));
+						parseDataUnit(siteUid, resMsg.getMcp(), resMsg.getPDU());
+					}
 				}
 			}
 		} catch (Exception ex) {
 			logger.error("get param list execute error.", ex);
 		}
+		data.setEof(true);
+		data.setRequestText("");
+		data.setResponseText(">>获取参数列表完成<<");
 	}
 
 	private static void parseDataUnit(String siteUid, byte mcp, byte[] pdu) {
