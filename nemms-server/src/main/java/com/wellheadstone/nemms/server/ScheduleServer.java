@@ -12,6 +12,11 @@ public class ScheduleServer implements IServer {
 	private static final Logger logger = LoggerFactory.getLogger(ScheduleServer.class);
 
 	@Override
+	public String getName() {
+		return "ScheduleServer";
+	}
+
+	@Override
 	public void start() {
 		try {
 			Timer timer = new Timer();

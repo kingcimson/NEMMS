@@ -20,6 +20,7 @@
 		<module>nemms-membership</module>
 		<module>nemms-server</module>
 		<module>nemms-client</module>
+		<module>nemms-mina</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -186,6 +187,11 @@
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz</artifactId>
 				<version>2.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.mina</groupId>
+				<artifactId>mina-core</artifactId>
+				<version>2.0.9</version>
 			</dependency>
 			<!-- Test -->
 			<dependency>

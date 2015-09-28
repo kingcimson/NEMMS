@@ -9,19 +9,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TcpSocketChannelMap {
 	private static Map<String, SocketChannel> map = new ConcurrentHashMap<String, SocketChannel>(200);
 
-	public static void add(String clientId, SocketChannel socketChannel) {
-		map.put(clientId, socketChannel);
+	public static void add(String key, SocketChannel socketChannel) {
+		map.put(key, socketChannel);
 	}
 
-	public static Channel get(String clientId) {
-		return map.get(clientId);
+	public static Channel get(String key) {
+		return map.get(key);
 	}
 
-	public static void remove(SocketChannel socketChannel) {
-		for (Map.Entry<String, SocketChannel> entry : map.entrySet()) {
-			if (entry.getValue() == socketChannel) {
-				map.remove(entry.getKey());
-			}
-		}
+	public static void remove(String key) {
+		map.remove(key);
 	}
 }

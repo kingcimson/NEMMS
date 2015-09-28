@@ -25,6 +25,11 @@ public class TcpServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(TcpServer.class);
 
 	@Override
+	public String getName() {
+		return "TcpServer";
+	}
+
+	@Override
 	public void start() {
 		try {
 			this.bind(Config.getServerIP(), Config.getTcpPort());

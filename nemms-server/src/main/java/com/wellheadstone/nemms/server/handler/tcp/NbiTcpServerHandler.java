@@ -26,8 +26,7 @@ public class NbiTcpServerHandler extends ChannelInboundHandlerAdapter {
 		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
 		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
 		logger.info("nbi device [{}:{}] is inactived", ip, port);
-		TcpSocketChannelMap.add("nbi", (SocketChannel) ctx.channel());
-		TcpSocketChannelMap.remove((SocketChannel) ctx.channel());
+		TcpSocketChannelMap.remove("nbi");
 	}
 
 	@Override

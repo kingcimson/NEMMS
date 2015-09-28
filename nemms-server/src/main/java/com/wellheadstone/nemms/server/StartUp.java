@@ -1,5 +1,7 @@
 package com.wellheadstone.nemms.server;
 
+import java.util.List;
+
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,33 +40,14 @@ public class StartUp {
 
 	private static void startServers() {
 		logger.info("server started at ip: {}", Config.getServerIP());
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				new MySocketIOServer().start();
-			}
-		}, "MySocketIOServer").start();
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				new TcpServer().start();
-			}
-		}, "TcpIPServer").start();
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				new UDPServer().start();
-			}
-		}, "UDPServer").start();
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				new NbiTcpServer().start();
-			}
-		}, "NbiServer").start();
+		List<IServer> servers = new NettyServerGroup().getServers();
+		for (IServer server : servers) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					server.start();
+				}
+			}, server.getName()).start();
+		}
 	}
 }

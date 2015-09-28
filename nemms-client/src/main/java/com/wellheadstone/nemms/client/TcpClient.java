@@ -53,7 +53,7 @@ public class TcpClient {
 
 	private static void sendData(Channel ch) {
 		CMCCFDSMessage message = new CMCCFDSMessage();
-		message.setStartFlag((byte) 0x7f);
+		message.setStartFlag((byte) 0x7e);
 		message.setAp((byte) 0x03);
 		message.setVp((byte) 0x01);
 		message.setSiteId(0x02020005);
@@ -64,7 +64,7 @@ public class TcpClient {
 		message.setCmdId((byte) 0x02);
 		message.setRespFlag((byte) 0xff);
 		message.setPDU(new byte[] { 0x01, 0x01, 0x00, 0x09, 0x05 });
-		message.setEndFlag((byte) 0x7f);
+		message.setEndFlag((byte) 0x7e);
 		ch.writeAndFlush(message);
 	}
 

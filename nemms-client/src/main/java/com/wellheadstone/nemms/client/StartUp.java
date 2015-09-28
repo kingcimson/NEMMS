@@ -13,9 +13,9 @@ public class StartUp {
 	public static void main(String[] args) {
 		try {
 			initializeConfiguration();
-			// TcpClient.run();
-			//NbiTcpClient.run();
-			UdpClient.run();
+			TcpClient.run();
+			// NbiTcpClient.run();
+			// UdpClient.run();
 		} catch (Exception e) {
 			logger.debug(e.toString());
 		}

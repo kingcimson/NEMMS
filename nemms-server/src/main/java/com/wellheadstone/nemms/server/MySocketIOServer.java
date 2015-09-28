@@ -15,6 +15,11 @@ public class MySocketIOServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(MySocketIOServer.class);
 
 	@Override
+	public String getName() {
+		return "MySocketIOServer";
+	}
+
+	@Override
 	public void start() {
 		Configuration config = new Configuration();
 		config.setHostname(Config.getServerIP());
@@ -39,4 +44,5 @@ public class MySocketIOServer implements IServer {
 			server.stop();
 		}
 	}
+
 }

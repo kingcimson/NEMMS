@@ -29,6 +29,11 @@ public class NbiTcpServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(NbiTcpServer.class);
 
 	@Override
+	public String getName() {
+		return "NbiServer";
+	}
+
+	@Override
 	public void start() {
 		try {
 			this.bind(Config.getServerIP(), Config.getNbiPort());

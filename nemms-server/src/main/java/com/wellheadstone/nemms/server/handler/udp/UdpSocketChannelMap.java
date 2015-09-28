@@ -13,15 +13,11 @@ public class UdpSocketChannelMap {
 		map.put(clientId, channel);
 	}
 
-	public static Channel get(String clientId) {
-		return map.get(clientId);
+	public static Channel get(String key) {
+		return map.get(key);
 	}
 
-	public static void remove(DatagramChannel socketChannel) {
-		for (Map.Entry<String, DatagramChannel> entry : map.entrySet()) {
-			if (entry.getValue() == socketChannel) {
-				map.remove(entry.getKey());
-			}
-		}
+	public static void remove(String key) {
+		map.remove(key);
 	}
 }

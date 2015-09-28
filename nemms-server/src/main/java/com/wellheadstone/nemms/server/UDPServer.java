@@ -23,6 +23,11 @@ public class UDPServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(UDPServer.class);
 
 	@Override
+	public String getName() {
+		return "UDPServer";
+	}
+
+	@Override
 	public void start() {
 		try {
 			this.bind(Config.getServerIP(), Config.getUdpPort());

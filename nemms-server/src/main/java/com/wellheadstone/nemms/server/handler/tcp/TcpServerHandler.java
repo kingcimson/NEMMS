@@ -29,8 +29,7 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
 		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
 		logger.info("tcp device [{}:{}] is inactived", ip, port);
-		TcpSocketChannelMap.add("nbi", (SocketChannel) ctx.channel());
-		TcpSocketChannelMap.remove((SocketChannel) ctx.channel());
+		TcpSocketChannelMap.remove(ip);
 		ServiceFacade.removeDeviceConnByIP(ip);
 	}
 
