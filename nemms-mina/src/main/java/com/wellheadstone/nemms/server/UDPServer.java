@@ -30,7 +30,7 @@ public class UDPServer implements IServer {
 
 	private void bind(String ip, int port) throws Exception {
 		NioDatagramAcceptor acceptor = new NioDatagramAcceptor();
-		acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new UdpCodecFactory()));
+		acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new UdpCodecFactory((byte) 0x7e, 2048)));
 		acceptor.setHandler(new UdpServerHandler());
 		acceptor.getSessionConfig().setReuseAddress(true);
 		acceptor.getSessionConfig().setReadBufferSize(2048);

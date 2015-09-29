@@ -3,6 +3,7 @@ var connInfoPageUrl = XFrame.getContextPath() + '/device/connInfo/';
 var schedulePageUrl = XFrame.getContextPath() + '/device/schedule/';
 var settingsPageUrl = XFrame.getContextPath() + '/system/settings/';
 var nmsstatusPageUrl = XFrame.getContextPath() + '/device/nmsstatus/';
+var dictPageUrl = dictPageUrl + '';
 
 $(function() {
 	$('#west').panel({
@@ -84,9 +85,20 @@ $(function() {
 			title : '操作',
 			width : 60
 		}, {
-			field : 'content',
-			title : '说明',
-			width : 300
+			field : 'req',
+			title : '发送',
+			width : 100
+		}, {
+			field : 'res',
+			title : '响应',
+			width : 100
+		}, {
+			field : 'respFlag',
+			title : '状态',
+			width : 50,
+			formatter : function(value, row, index) {
+				return (value == 0 || value == 255) ? "正常" : "异常";
+			}
 		}, {
 			field : 'createTime',
 			title : '操作时间',
@@ -646,13 +658,13 @@ var SiteMgr = {
 			SiteMgr.socketIO.init(ip, port);
 		});
 
-		$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth1Items', {
+		$.getJSON(dictPageUrl + 'getDepth1Items', {
 			parentKey : "deviceType"
 		}, function(data) {
 			SiteMgr.dataDict["deviceType"] = data;
 		});
 
-		$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth2Items', {
+		$.getJSON(dictPageUrl + 'getDepth2Items', {
 			parentKey : "monitorParam"
 		}, function(data) {
 			SiteMgr.dataDict["apProtocol"] = data.apProtocol;
@@ -660,13 +672,13 @@ var SiteMgr = {
 			SiteMgr.dataDict["protocol"] = data.protocol;
 		});
 
-		$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth2Items', {
+		$.getJSON(dictPageUrl + 'getDepth2Items', {
 			parentKey : "paramOption"
 		}, function(data) {
 			SiteMgr.paramOption = data;
 		});
 
-		$.getJSON(XFrame.getContextPath() + '/system/dict/getDepth1Items',{
+		$.getJSON(dictPageUrl + 'getDepth1Items',{
 			parentKey : "deviceParamCategory"},function(data) {
 							SiteMgr.categories = data;
 							var height = $('#param-tabs').height() - 30;
@@ -1320,21 +1332,27 @@ var SiteMgr = {
 			SiteMgr.socket.on('connect', function() {
 				SiteMgr.console.output({
 					name : "连接服务器",
-					content : "连接远程通讯服务器成功!",
+					req : "",
+					res : "连接远程通讯服务器成功!",
+					respFlag : 0,
 					createTime : new Date().toLocaleString()
 				});
 			});
 			SiteMgr.socket.on('disconnect', function() {
 				SiteMgr.console.output({
 					name : "断开服务器",
-					content : "断开远程通讯服务器成功!",
+					req : "",
+					res : "断开远程通讯服务器成功!",
+					respFlag : 0,
 					createTime : new Date().toLocaleString()
 				});
 			});
 			SiteMgr.socket.on('getParamList', function(data) {
 				SiteMgr.console.output({
 					name : "获取参数列表",
-					content : data.requestText,
+					req : data.requestText,
+					res : data.responseText,
+					respFlag : data.respFlag,
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function() {
@@ -1345,7 +1363,9 @@ var SiteMgr = {
 			SiteMgr.socket.on('queryAll', function(data) {
 				SiteMgr.console.output({
 					name : "查询所有参数",
-					content : data.requestText,
+					req : data.requestText,
+					res : data.responseText,
+					respFlag : data.respFlag,
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function() {
@@ -1356,7 +1376,9 @@ var SiteMgr = {
 			SiteMgr.socket.on('querySelected', function(data) {
 				SiteMgr.console.output({
 					name : "查询选中参数",
-					content : data.requestText,
+					req : data.requestText,
+					res : data.responseText,
+					respFlag : data.respFlag,
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function() {
@@ -1367,7 +1389,9 @@ var SiteMgr = {
 			SiteMgr.socket.on('settings', function(data) {
 				SiteMgr.console.output({
 					name : "设置参数",
-					content : data.requestText,
+					req : data.requestText,
+					res : data.responseText,
+					respFlag : data.respFlag,
 					createTime : new Date().toLocaleString()
 				});
 				setTimeout(function() {

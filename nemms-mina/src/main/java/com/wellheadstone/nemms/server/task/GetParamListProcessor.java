@@ -24,6 +24,7 @@ public class GetParamListProcessor {
 	public static void execute(IoSession session, SocketIOClient client, SocketIOMessage data, CMCCFDSMessage reqMsg) {
 		try {
 			CMCCFDSMessage resMsg = IoSessionUtils.writeAndRead(session, data, reqMsg);
+			data.setRespFlag(Converter.byteToShort(resMsg.getRespFlag()));
 			client.sendEvent(EventName.GetParamList, data);
 			if (resMsg != null) {
 				String siteUid = Converter.getHexStringWith0X(Converter.getHexString(resMsg.getSiteId()));
@@ -31,6 +32,7 @@ public class GetParamListProcessor {
 				while (queryNext(resMsg.getMcp(), resMsg.getPDU())) {
 					resMsg.setPDU(getNewPDU(resMsg.getMcp(), resMsg.getPDU()));
 					resMsg = IoSessionUtils.writeAndRead(session, data, MessageUtils.getParamListReqMessage(resMsg));
+					data.setRespFlag(Converter.byteToShort(resMsg.getRespFlag()));
 					client.sendEvent(EventName.GetParamList, data);
 					if (resMsg != null) {
 						siteUid = Converter.getHexStringWith0X(Converter.getHexString(resMsg.getSiteId()));

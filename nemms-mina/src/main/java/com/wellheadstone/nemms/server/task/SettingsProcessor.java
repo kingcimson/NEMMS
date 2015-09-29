@@ -52,6 +52,7 @@ public class SettingsProcessor {
 				message.setPDU(Converter.listToArray(list));
 				CMCCFDSMessage resMsg = IoSessionUtils.writeAndRead(session, data, message);
 				QuerySelectedProcessor.execute(session, data, resMsg);
+				data.setRespFlag(Converter.byteToShort(resMsg.getRespFlag()));
 				client.sendEvent(EventName.Settings, data);
 
 				list.clear();

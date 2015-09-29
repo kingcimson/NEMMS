@@ -43,7 +43,7 @@ public class TcpClient {
 			Channel ch = b.connect(getIPAddress(), getPort()).sync().channel();
 			for (;;) {
 				sendData(ch);
-				TimeUnit.SECONDS.sleep(10);
+				TimeUnit.SECONDS.sleep(2);
 			}
 
 		} finally {

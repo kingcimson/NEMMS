@@ -31,7 +31,7 @@ public class TcpServer implements IServer {
 
 	private void bind(String ip, int port) throws Exception {
 		IoAcceptor acceptor = new NioSocketAcceptor();
-		acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TcpCodecFactory()));
+		acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TcpCodecFactory((byte) 0x7e, 2048)));
 		acceptor.setHandler(new TcpServerHandler());
 		acceptor.getSessionConfig().setReadBufferSize(2048);
 		acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);

@@ -42,11 +42,11 @@ public class UdpClient {
 						}
 					});
 			channel = b.connect(getIPAddress(), getPort()).sync().channel();
-			for (int i = 0; i < 10; i++) {
+			for (;;) {
 				sendData(channel);
-				TimeUnit.SECONDS.sleep(10);
+				TimeUnit.SECONDS.sleep(5);
 			}
-			channel.closeFuture().sync();
+			// channel.closeFuture().sync();
 		} finally {
 			group.shutdownGracefully();
 		}

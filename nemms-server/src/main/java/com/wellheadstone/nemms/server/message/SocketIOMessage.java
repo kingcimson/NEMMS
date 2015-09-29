@@ -25,6 +25,8 @@ public class SocketIOMessage implements Serializable {
 	private String requestText = "";
 	private String responseText = "";
 	private String rowIds = "";
+	private Short respFlag = 0;
+	private boolean eof;
 	private Long timeStamp = System.currentTimeMillis();
 
 	/**
@@ -404,6 +406,40 @@ public class SocketIOMessage implements Serializable {
 	 */
 	public void setRowIds(String rowIds) {
 		this.rowIds = rowIds;
+	}
+
+	/**
+	 * @return the respFlag
+	 */
+	public Short getRespFlag() {
+		return respFlag;
+	}
+
+	/**
+	 * @param respFlag
+	 *            the respFlag to set
+	 */
+	public void setRespFlag(Short respFlag) {
+		this.respFlag = respFlag;
+	}
+
+	/**
+	 * 获取当前消息是否为最后一条
+	 * 
+	 * @return the eof
+	 */
+	public boolean isEof() {
+		return eof;
+	}
+
+	/**
+	 * 设置当前消息是否为最后一条
+	 * 
+	 * @param eof
+	 *            the eof to set
+	 */
+	public void setEof(boolean eof) {
+		this.eof = eof;
 	}
 
 	/**

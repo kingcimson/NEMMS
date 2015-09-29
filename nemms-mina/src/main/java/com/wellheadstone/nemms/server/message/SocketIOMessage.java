@@ -25,6 +25,7 @@ public class SocketIOMessage implements Serializable {
 	private String requestText = "";
 	private String responseText = "";
 	private String rowIds = "";
+	private Short respFlag = 0;
 	private boolean eof;
 	private Long timeStamp = System.currentTimeMillis();
 
@@ -405,6 +406,21 @@ public class SocketIOMessage implements Serializable {
 	 */
 	public void setRowIds(String rowIds) {
 		this.rowIds = rowIds;
+	}
+
+	/**
+	 * @return the respFlag
+	 */
+	public Short getRespFlag() {
+		return respFlag;
+	}
+
+	/**
+	 * @param respFlag
+	 *            the respFlag to set
+	 */
+	public void setRespFlag(Short respFlag) {
+		this.respFlag = respFlag;
 	}
 
 	/**

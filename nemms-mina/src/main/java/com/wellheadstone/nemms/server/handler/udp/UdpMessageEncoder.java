@@ -19,7 +19,7 @@ public class UdpMessageEncoder extends ProtocolEncoderAdapter {
 		byte[] bytes = ByteObjConverter.objectToBytes((CMCCFDSMessage) message);
 		out.write(IoBuffer.wrap(bytes, 0, bytes.length));
 
-		logger.info("send to tcp device [{}][{}] bytes:{}", session.getRemoteAddress(), bytes.length,
+		logger.info("send to udp device [{}][{}] bytes:{}", session.getRemoteAddress(), bytes.length,
 				Converter.bytesToHexString(bytes));
 
 	}

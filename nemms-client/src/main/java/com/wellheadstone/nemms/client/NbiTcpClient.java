@@ -14,6 +14,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,10 @@ public class NbiTcpClient {
 					});
 
 			Channel ch = b.connect(getIPAddress(), getPort()).sync().channel();
-			ch.closeFuture().sync();
+			for (;;) {
+				ch.writeAndFlush("nbi tcp client\r\n");
+				TimeUnit.SECONDS.sleep(10);
+			}
 		} finally {
 			group.shutdownGracefully();
 		}
@@ -59,7 +63,7 @@ public class NbiTcpClient {
 	}
 
 	private static int getPort() {
-		int port = 8001;
+		int port = 8002;
 		try {
 			port = Integer.parseInt(PropertiesUtils.getValue("nemms.server.nbi.port"));
 		} catch (Exception e) {

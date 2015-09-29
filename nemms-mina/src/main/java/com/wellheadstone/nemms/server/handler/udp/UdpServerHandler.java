@@ -16,7 +16,7 @@ public class UdpServerHandler extends IoHandlerAdapter {
 	public void sessionCreated(IoSession session) throws Exception {
 		String ip = SocketAddressUtils.getIP(session.getRemoteAddress());
 		Integer port = SocketAddressUtils.getPort(session.getRemoteAddress());
-		logger.info("tcp device [{}:{}] is actived", ip, port);
+		logger.info("udp device [{}:{}] is actived", ip, port);
 		session.getConfig().setUseReadOperation(true);
 		UdpSessionMap.add(ip, session);
 	}
@@ -25,7 +25,7 @@ public class UdpServerHandler extends IoHandlerAdapter {
 	public void sessionClosed(IoSession session) throws Exception {
 		String ip = SocketAddressUtils.getIP(session.getRemoteAddress());
 		Integer port = SocketAddressUtils.getPort(session.getRemoteAddress());
-		logger.info("tcp device [{}:{}] is inactived", ip, port);
+		logger.info("udp device [{}:{}] is inactived", ip, port);
 		UdpSessionMap.remove(ip);
 		ServiceFacade.removeDeviceConnByIP(ip);
 	}
@@ -36,11 +36,11 @@ public class UdpServerHandler extends IoHandlerAdapter {
 
 	@Override
 	public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
-		logger.info("tcp idle :{}" + session.getIdleCount(status));
+		logger.info("udp idle :{}" + session.getIdleCount(status));
 	}
 
 	@Override
 	public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
-		logger.info("tcp exception {}:{}", session.getRemoteAddress(), cause);
+		logger.info("udp exception {}:{}", session.getRemoteAddress(), cause);
 	}
 }
