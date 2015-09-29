@@ -311,8 +311,18 @@
 			</center>
 	</div>
 	<div id="console-info-dlg" title="控制台细信息">
-		<div id="console-detail-info" style="padding: 2px"></div>
-		<input id="current-row-index" name="current-row-index" type="hidden" value="0" />
+		<table cellpadding="5" style="margin:5px;border:1px" class="form-table" >
+			<tr>
+				<td>发送:</td>
+				<td><textarea id="console-detail-info-req" style="height:100px;width:620px"></textarea></td>
+			</tr>
+			<tr>
+				<td>响应:</td>
+				<td><textarea id="console-detail-info-res" style="height:190px;width:620px"></textarea>
+				<input id="current-row-index" name="current-row-index" type="hidden" value="0" />
+				</td>
+			</tr>
+		</table>	
 	</div>
 	<div id="add-conn-dlg" title="增加连接设备">
 		<form id="add-conn-form" name="add-conn-form" method="post">

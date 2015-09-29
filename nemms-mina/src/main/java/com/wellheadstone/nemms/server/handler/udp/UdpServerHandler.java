@@ -1,7 +1,6 @@
 package com.wellheadstone.nemms.server.handler.udp;
 
 import org.apache.mina.core.service.IoHandlerAdapter;
-import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +31,6 @@ public class UdpServerHandler extends IoHandlerAdapter {
 
 	@Override
 	public void messageReceived(IoSession session, Object message) throws Exception {
-	}
-
-	@Override
-	public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
-		logger.info("udp idle :{}" + session.getIdleCount(status));
 	}
 
 	@Override

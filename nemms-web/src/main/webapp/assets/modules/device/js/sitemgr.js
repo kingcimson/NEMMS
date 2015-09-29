@@ -106,7 +106,8 @@ $(function() {
 		} ] ],
 		onDblClickRow : function(index, row) {
 			$('#console-info-dlg').dialog('open').dialog('center');
-			$('#console-detail-info').text(row.content);
+			$('#console-detail-info-req').text(row.req);
+			$('#console-detail-info-res').text(row.res);
 		}
 	});
 
@@ -423,7 +424,7 @@ $(function() {
 	$('#console-info-dlg').dialog({
 		closed : true,
 		modal : false,
-		maximizable : true,
+		maximizable : false,
 		width : window.screen.width - 650,
 		height : window.screen.height - 350,
 		iconCls : 'icon-info',
@@ -436,7 +437,8 @@ $(function() {
 				var row = $('#console-datagrid').datagrid('getSelected');
 				if (row) {
 					$('#current-row-index').val(index);
-					$('#console-detail-info').text(row.content);
+					$('#console-detail-info-req').text(row.req);
+					$('#console-detail-info-res').text(row.res);
 				} else {
 					$('#console-datagrid').datagrid('selectRow', index + 1);
 					$.messager.alert('失败', '当前已到第一条记录!', 'error');
@@ -451,7 +453,8 @@ $(function() {
 				var row = $('#console-datagrid').datagrid('getSelected');
 				if (row) {
 					$('#current-row-index').val(index);
-					$('#console-detail-info').text(row.content);
+					$('#console-detail-info-req').text(row.req);
+					$('#console-detail-info-res').text(row.res);
 				} else {
 					$('#console-datagrid').datagrid('selectRow', index - 1);
 					$.messager.alert('失败', '当前已到最后一条记录', 'error');
@@ -1335,7 +1338,7 @@ var SiteMgr = {
 			SiteMgr.socket.on('connect', function() {
 				SiteMgr.console.output({
 					name : "连接服务器",
-					req : "",
+					req : "请求连接服务器",
 					res : "连接远程通讯服务器成功!",
 					respFlag : 0,
 					createTime : new Date().toLocaleString()
@@ -1344,7 +1347,7 @@ var SiteMgr = {
 			SiteMgr.socket.on('disconnect', function() {
 				SiteMgr.console.output({
 					name : "断开服务器",
-					req : "",
+					req : "无",
 					res : "断开远程通讯服务器成功!",
 					respFlag : 0,
 					createTime : new Date().toLocaleString()
@@ -1358,10 +1361,10 @@ var SiteMgr = {
 					respFlag : data.respFlag,
 					createTime : new Date().toLocaleString()
 				});
-				setTimeout(function() {
-					SiteMgr.paramTabs.displayParamList(data.uid, 0);
-					EasyUIUtils.closeLoading();
-				}, 8000);
+				if(data.eof){
+				    SiteMgr.paramTabs.displayParamList(data.uid, 0);
+				    EasyUIUtils.closeLoading();
+				}
 			});
 			SiteMgr.socket.on('queryAll', function(data) {
 				SiteMgr.console.output({
@@ -1371,10 +1374,10 @@ var SiteMgr = {
 					respFlag : data.respFlag,
 					createTime : new Date().toLocaleString()
 				});
-				setTimeout(function() {
-					SiteMgr.paramTabs.displayParamList(data.uid, 0);
-					EasyUIUtils.closeLoading();
-				}, 6000);
+				if(data.eof){
+				    SiteMgr.paramTabs.displayParamList(data.uid, 0);
+				    EasyUIUtils.closeLoading();
+				}
 			});
 			SiteMgr.socket.on('querySelected', function(data) {
 				SiteMgr.console.output({
@@ -1384,10 +1387,10 @@ var SiteMgr = {
 					respFlag : data.respFlag,
 					createTime : new Date().toLocaleString()
 				});
-				setTimeout(function() {
-					SiteMgr.paramTabs.updateParamsValue(data.uid, data.paramUids, data.rowIds);
-					EasyUIUtils.closeLoading();
-				}, 2000);
+				if(data.eof){ 
+				    SiteMgr.paramTabs.updateParamsValue(data.uid, data.paramUids, data.rowIds);
+				    EasyUIUtils.closeLoading();
+				}
 			});
 			SiteMgr.socket.on('settings', function(data) {
 				SiteMgr.console.output({
@@ -1397,14 +1400,14 @@ var SiteMgr = {
 					respFlag : data.respFlag,
 					createTime : new Date().toLocaleString()
 				});
-				setTimeout(function() {
+				if(data.eof){ 
 					var idValueList = $.parseJSON(data.paramUids);
 					var paramUids = $.map(idValueList, function(e) {
 						return e.id;
 					}).join(',');
 					SiteMgr.paramTabs.updateParamsValue(data.uid, paramUids, data.rowIds);
 					EasyUIUtils.closeLoading();
-				}, 2000);
+				}
 			});
 		},
 		isConnected : function() {

@@ -1,7 +1,6 @@
 package com.wellheadstone.nemms.server.handler.tcp;
 
 import org.apache.mina.core.service.IoHandlerAdapter;
-import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +40,6 @@ public class TcpServerHandler extends IoHandlerAdapter {
 				HeartProcessor.execute(session, reqMsg);
 			}
 		}
-	}
-
-	@Override
-	public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
-		logger.info("tcp idle :{}" + session.getIdleCount(status));
 	}
 
 	@Override

@@ -45,19 +45,23 @@ public class TcpMessageDecoder extends CumulativeProtocolDecoder {
 
 		count = 0;
 		flag = in.get();
-		while (in.hasRemaining() &&
-				((flag != delim && count < maxLength) || (flag == delim && count == 0))) {
+		if (flag != delim) {
+			buf.put(flag);
+			count++;
+		}
+		while (in.hasRemaining() && flag != delim && count < maxLength) {
 			flag = in.get();
 			buf.put(flag);
 			count++;
 		}
+		buf.flip();
+
 		if (flag != delim) {
 			return false;
 		}
-		buf.flip();
 
-		byte[] bytes = new byte[count];
-		buf.get(bytes, 0, count);
+		byte[] bytes = new byte[count - 1];
+		buf.get(bytes, 0, count - 1);
 		byte[] escapeBytes = ByteObjConverter.escapeDecodeBytes(bytes);
 		CMCCFDSMessage msg = ByteObjConverter.bytesToObject(escapeBytes);
 
