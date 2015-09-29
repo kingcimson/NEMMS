@@ -25,33 +25,38 @@ public class GetParamListListener implements DataListener<SocketIOMessage> {
 			data.setRequestText("未找到当前站点与设备的连接服务器ip与port.");
 		} else {
 			if (data.getProtocol().equals("1")) {
-				this.sendTcpMessage(data, message, connInfo);
+				this.sendTcpMessage(client, data, message, connInfo);
 			} else if (data.getProtocol().equals("2")) {
-				this.sendUdpMessage(data, message, connInfo);
+				this.sendUdpMessage(client, data, message, connInfo);
 			}
 		}
-		client.sendEvent(EventName.GetParamList, data);
 	}
 
-	private void sendTcpMessage(SocketIOMessage data, CMCCFDSMessage message, DeviceConnInfoPo connInfo)
+	private void sendTcpMessage(SocketIOClient client, SocketIOMessage data, CMCCFDSMessage message,
+			DeviceConnInfoPo connInfo)
 			throws InterruptedException {
 		SocketChannel channel = (SocketChannel) TcpSocketChannelMap.get(connInfo.getDeviceIp());
 		if (channel == null) {
-			data.setRequestText("未找到当前站点或设备的TCP连接通道.");
+			data.setEof(true);
+			data.setResponseText("未找到当前站点或设备的TCP连接通道.");
+			client.sendEvent(EventName.GetParamList, data);
 		} else {
-			data.setRequestText(message.toString());
+			SocketIOClientMap.add(message, new SocketIOClientRequest(client, data, EventName.GetParamList));
 			ServiceFacade.removeDeviceDataBy(data.getUid());
 			channel.writeAndFlush(message).sync();
 		}
 	}
 
-	private void sendUdpMessage(SocketIOMessage data, CMCCFDSMessage message, DeviceConnInfoPo connInfo)
+	private void sendUdpMessage(SocketIOClient client, SocketIOMessage data, CMCCFDSMessage message,
+			DeviceConnInfoPo connInfo)
 			throws InterruptedException {
 		Channel channel = UdpSocketChannelMap.get(connInfo.getServerIp());
 		if (channel == null) {
-			data.setRequestText("未找到当前站点或设备的UDP连接通道.");
+			data.setEof(true);
+			data.setResponseText("未找到当前站点或设备的UDP连接通道.");
+			client.sendEvent(EventName.GetParamList, data);
 		} else {
-			data.setRequestText(message.toString());
+			SocketIOClientMap.add(message, new SocketIOClientRequest(client, data, EventName.GetParamList));
 			ServiceFacade.removeDeviceDataBy(data.getUid());
 			message.setRemoteAddress(new InetSocketAddress(connInfo.getDeviceIp(), connInfo.getDevicePort()));
 			channel.writeAndFlush(message).sync();

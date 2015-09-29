@@ -256,4 +256,8 @@ public class CMCCFDSMessage implements Serializable {
 	public String toString() {
 		return Converter.bytesToHexString(ByteObjConverter.objectToBytes(this));
 	}
+
+	public String getKey() {
+		return String.format("%s-%s-%s-%s", this.siteId, this.deviceId, this.cmdId, this.packetId);
+	}
 }

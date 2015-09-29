@@ -37,6 +37,7 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 			throws InterruptedException {
 		IoSession session = TcpSessionMap.get(connInfo.getDeviceIp());
 		if (session == null) {
+			data.setEof(true);
 			data.setResponseText("未找到当前站点或设备的TCP连接通道.");
 			client.sendEvent(EventName.QuerySelected, data);
 		} else {
@@ -49,6 +50,7 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 			throws InterruptedException {
 		IoSession session = UdpSessionMap.get(connInfo.getDeviceIp());
 		if (session == null) {
+			data.setEof(true);
 			data.setResponseText("未找到当前站点或设备的UDP连接通道.");
 			client.sendEvent(EventName.QuerySelected, data);
 		} else {

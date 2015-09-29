@@ -49,8 +49,11 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 			throws InterruptedException {
 		Channel channel = TcpSocketChannelMap.get(connInfo.getDeviceIp());
 		if (channel == null) {
+			data.setEof(true);
 			data.setRequestText("未找到当前站点或设备的TCP连接通道.");
+			client.sendEvent(EventName.Settings, data);
 		} else {
+			SocketIOClientMap.add(message, new SocketIOClientRequest(client, data, EventName.Settings));
 			this.sendMessage(client, channel, data, message);
 		}
 	}
@@ -60,8 +63,11 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 			throws InterruptedException {
 		Channel channel = UdpSocketChannelMap.get(connInfo.getServerIp());
 		if (channel == null) {
+			data.setEof(true);
 			data.setRequestText("未找到当前站点或设备的UDP连接通道.");
+			client.sendEvent(EventName.Settings, data);
 		} else {
+			SocketIOClientMap.add(message, new SocketIOClientRequest(client, data, EventName.Settings));
 			this.sendMessage(client, channel, data, message);
 		}
 	}
@@ -70,7 +76,7 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 		try {
 			List<IdValuePair> paramList = JSON.parseArray(data.getParamUids(), IdValuePair.class);
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
-			List<Byte> list = new ArrayList<Byte>(235);
+			List<Byte> list = new ArrayList<Byte>(data.getApMaxLen());
 
 			short count = 0;
 			for (int i = 0; i < paramList.size(); i++) {
@@ -85,7 +91,7 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 				if (unit == null) {
 					continue;
 				}
-				if (list.size() + unit.length < 235) {
+				if (list.size() + unit.length < data.getApMaxLen()) {
 					Converter.copyArrayToList(unit, list);
 					if (i < paramList.size() - 1) {
 						continue;
@@ -93,10 +99,9 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 				}
 				message.setPacketId(count++);
 				message.setPDU(Converter.listToArray(list));
+				data.setEof(i < paramList.size() - 1);
+				SocketIOClientMap.add(message, new SocketIOClientRequest(client, data, EventName.Settings));
 				channel.writeAndFlush(message);
-
-				data.setRequestText(message.toString());
-				client.sendEvent(EventName.Settings, data);
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);

@@ -47,6 +47,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 			throws InterruptedException {
 		Channel channel = TcpSocketChannelMap.get(connInfo.getDeviceIp());
 		if (channel == null) {
+			data.setEof(true);
 			data.setRequestText("未找到当前站点或设备的TCP连接通道.");
 			client.sendEvent(EventName.QueryALL, data);
 		} else {
@@ -59,6 +60,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 			throws InterruptedException {
 		Channel channel = UdpSocketChannelMap.get(connInfo.getServerIp());
 		if (channel == null) {
+			data.setEof(true);
 			data.setRequestText("未找到当前站点或设备的UDP连接通道.");
 			client.sendEvent(EventName.QueryALL, data);
 		} else {
@@ -70,7 +72,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 	private void sendMessage(SocketIOClient client, Channel channel, SocketIOMessage data, CMCCFDSMessage message) {
 		try {
 			Map<String, DeviceParamPo> paramMap = ServiceFacade.getDeviceParamMap();
-			List<Byte> list = new ArrayList<Byte>(235);
+			List<Byte> list = new ArrayList<Byte>(data.getApMaxLen());
 			String[] paramIdList = StringUtils.split(data.getParamUids(), ',');
 
 			short count = 0;
@@ -82,7 +84,7 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 				}
 
 				byte[] unit = MessageUtils.getUnitBytes(message.getMcp(), po);
-				if (list.size() + unit.length < 235) {
+				if (list.size() + unit.length < data.getApMaxLen()) {
 					Converter.copyArrayToList(unit, list);
 					if (i < paramIdList.length - 1) {
 						continue;
@@ -91,11 +93,9 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 
 				message.setPacketId(count++);
 				message.setPDU(Converter.listToArray(list));
+				data.setEof(i < paramIdList.length - 1);
+				SocketIOClientMap.add(message, new SocketIOClientRequest(client, data, EventName.QueryALL));
 				channel.writeAndFlush(message).sync();
-
-				data.setRequestText(message.toString());
-				client.sendEvent(EventName.QueryALL, data);
-				Thread.sleep(2000);
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);

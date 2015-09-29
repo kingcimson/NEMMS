@@ -216,7 +216,7 @@ public class SocketIOMessage implements Serializable {
 	 * @return ap:c协议包最大长度(字节)
 	 */
 	public Integer getApMaxLen() {
-		return this.apMaxLen;
+		return this.apMaxLen <= 64 ? 235 : this.apMaxLen;
 	}
 
 	/**
