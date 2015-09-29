@@ -107,6 +107,7 @@ public class DeviceSiteController extends AbstractController {
 
 		try {
 			DeviceSitePo parentPo = this.siteService.getById(po.getPid());
+			po.setDecUid(po.getDecUid());
 			po.setUid(parentPo.getUid() + po.getUid());
 			po.setDeviceType(parentPo.getDeviceType());
 			po.setApProtocol(parentPo.getApProtocol());
@@ -131,6 +132,9 @@ public class DeviceSiteController extends AbstractController {
 		ParamJsonResult<TreeNode<DeviceSitePo>> result = new ParamJsonResult<TreeNode<DeviceSitePo>>(false, "");
 
 		try {
+			DeviceSitePo parentPo = this.siteService.getById(po.getPid());
+			po.setDecUid(po.getDecUid());
+			po.setUid(parentPo.getUid() + po.getUid());
 			this.siteService.editDevice(po);
 			TreeNode<DeviceSitePo> treeNode = this.createTreeNode(this.siteService.getById(po.getId()));
 			result.setData(treeNode);

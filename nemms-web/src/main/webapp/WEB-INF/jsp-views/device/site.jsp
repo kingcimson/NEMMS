@@ -64,7 +64,7 @@
 					</tr>
 					<tr>
 						<td>站点编号:</td>
-						<td><input class="easyui-textbox" type="text" id="uid" name="uid" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" id="decUid" name="decUid" data-options="required:true"></input></td>
 						<td>站点顺序:</td>
 						<td><input class="easyui-textbox" type="text" id="sequence" name="sequence" data-options="required:true"
 							 style="width: 148px"></input></td>
@@ -130,7 +130,7 @@
 					</tr>
 					<tr>
 						<td>站点编号:</td>
-						<td><input class="easyui-textbox" type="text" id="edit-uid" name="uid" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" id="edit-decUid" name="decUid" data-options="required:true"></input></td>
 						<td>站点顺序:</td>
 						<td><input class="easyui-textbox" type="text" id="edit-sequence" name="sequence" data-options="required:true"
 							 style="width: 148px"></input></td>
@@ -192,7 +192,7 @@
 					</tr>
 					<tr>
 						<td>站点编号:</td>
-						<td><label id="view-uid" name="uid"></label></td>
+						<td><label id="view-decUid" name="decUid"></label>(<label id="view-uid" name="uid"></label>)</td>
 						<td>站点顺序:</td>
 						<td><label id="view-sequence"></label></td>
 					</tr>
@@ -246,7 +246,7 @@
 					</tr>
 					<tr>
 						<td>设备编号:</td>
-						<td><input class="easyui-textbox" type="text" id="device-uid" name="uid" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" id="device-decUid" name="decUid" data-options="required:true"></input></td>
 						<td>设备顺序:</td>
 						<td><input class="easyui-textbox" type="text" id="device-sequence" name="sequence"
 							data-options="required:true" style="width: 138px"></input></td>
@@ -272,15 +272,19 @@
 					</tr>
 					<tr>
 						<td>设备编号:</td>
-						<td><input class="easyui-textbox" type="text" id="edit-device-uid" name="uid" data-options="required:true"></input></td>
+						<td><input class="easyui-textbox" type="text" id="edit-device-decUid" name="decUid" data-options="required:true"></input></td>
 						<td>设备顺序:</td>
 						<td><input class="easyui-textbox" type="text" id="edit-device-sequence" name="sequence"
 							data-options="required:true" style="width: 138px"></input></td>
 					</tr>
 					<tr>
 						<td>设备备注:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" id="edit-device-comment" name="comment"
-							style="width: 380px"></input> <input type="hidden" name="id" id="edit-device-id"></input></td>
+						<td colspan="3">
+							<input class="easyui-textbox" type="text" id="edit-device-comment" name="comment" style="width: 380px"></input>
+							<input type="hidden" name="id" id="edit-device-id"></input>
+							<input type="hidden" name="pid" id="edit-device-pid"></input> 
+							<input type="hidden" name="flag" id="edit-device-flag" value="1"></input>
+						</td>
 					</tr>
 				</table>
 			</center>
@@ -295,7 +299,7 @@
 					</tr>
 					<tr>
 						<td>设备编号:</td>
-						<td><label id="view-device-uid"></label></td>
+						<td><label id="view-device-decUid"></label>(<label id="view-device-uid"></label>)</td>
 						<td>设备顺序:</td>
 						<td><label id="view-device-sequence"></label></td>
 					</tr>
@@ -316,7 +320,7 @@
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">
 					<tr>
 						<td>站点/设备编号:</td>
-						<td colspan="3"><input class="easyui-textbox" type="text" id="conn-siteUid" name="siteUid" data-options="required:true" style="width: 380px"></input></td>
+						<td colspan="3"><input class="easyui-textbox" type="text" id="conn-decUid" name="decUid" data-options="required:true" style="width: 380px"></input></td>
 					</tr>
 					<tr>
 						<td>设备IP:</td>

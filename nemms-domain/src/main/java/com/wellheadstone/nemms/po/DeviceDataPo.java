@@ -58,7 +58,7 @@ public class DeviceDataPo implements Serializable {
 	 */
 	public final static String UpdateTime = "update_time";
 
-	@Column(name = "id")
+	@Column(name = "id", isIgnored = true)
 	private Long id;
 
 	@Column(name = "site_uid")
@@ -145,7 +145,8 @@ public class DeviceDataPo implements Serializable {
 	/**
 	 * 设置参数mcp协议类型标识(1:MCP_A,2:MCP_B,3:MCP_C 其他保留)
 	 * 
-	 * @param mcpId (1:MCP_A,2:MCP_B,3:MCP_C 其他保留)
+	 * @param mcpId
+	 *            (1:MCP_A,2:MCP_B,3:MCP_C 其他保留)
 	 */
 	public void setMcpId(Integer mcpId) {
 		this.mcpId = mcpId;

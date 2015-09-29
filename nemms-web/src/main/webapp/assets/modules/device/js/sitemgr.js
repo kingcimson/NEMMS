@@ -3,7 +3,7 @@ var connInfoPageUrl = XFrame.getContextPath() + '/device/connInfo/';
 var schedulePageUrl = XFrame.getContextPath() + '/device/schedule/';
 var settingsPageUrl = XFrame.getContextPath() + '/system/settings/';
 var nmsstatusPageUrl = XFrame.getContextPath() + '/device/nmsstatus/';
-var dictPageUrl = dictPageUrl + '';
+var dictPageUrl =XFrame.getContextPath() + '/system/dict/';
 
 $(function() {
 	$('#west').panel({
@@ -143,9 +143,12 @@ $(function() {
 			title : '标识',
 			width : 50
 		}, {
-			field : 'siteUid',
+			field : 'decUid',
 			title : '站点/设备编号',
-			width : 100
+			width : 100,
+			formatter : function(value, row, index) {
+				return value + '('+ row.siteUid +')';
+			}
 		}, {
 			field : 'deviceIp',
 			title : '设备IP',

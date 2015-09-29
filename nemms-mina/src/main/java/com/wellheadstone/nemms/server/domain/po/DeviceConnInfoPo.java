@@ -68,7 +68,7 @@ public class DeviceConnInfoPo implements Serializable {
 	 */
 	public final static String UpdateTime = "update_time";
 
-	@Column(name = "id")
+	@Column(name = "id", isIgnored = true)
 	private Integer id;
 
 	@Column(name = "site_uid")

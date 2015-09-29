@@ -58,7 +58,7 @@ public class DeviceDataPo implements Serializable {
 	 */
 	public final static String UpdateTime = "update_time";
 
-	@Column(name = "id")
+	@Column(name = "id", isIgnored = true)
 	private Long id;
 
 	@Column(name = "site_uid")

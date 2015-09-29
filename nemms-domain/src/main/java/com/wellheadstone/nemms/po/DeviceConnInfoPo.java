@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.wellheadstone.nemms.common.serializer.CustomDateTimeSerializer;
@@ -68,7 +69,7 @@ public class DeviceConnInfoPo implements Serializable {
 	 */
 	public final static String UpdateTime = "update_time";
 
-	@Column(name = "id")
+	@Column(name = "id", isIgnored = true)
 	private Integer id;
 
 	@Column(name = "site_uid")
@@ -94,6 +95,8 @@ public class DeviceConnInfoPo implements Serializable {
 
 	@Column(name = "update_time")
 	private Date updateTime = Calendar.getInstance().getTime();
+
+	private Integer decUid;
 
 	/**
 	 * 获取
@@ -258,5 +261,29 @@ public class DeviceConnInfoPo implements Serializable {
 	 */
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	/**
+	 * 获取十六制的uid对应的十进制
+	 * 
+	 * @return the decUid
+	 */
+	public Integer getDecUid() {
+		String hexUid = StringUtils.substring(this.siteUid, 2, 10);
+		if (StringUtils.isNotBlank(hexUid)) {
+			this.decUid = Integer.valueOf(hexUid, 16);
+		}
+		return this.decUid;
+	}
+
+	/**
+	 * 设置十六制的uid对应的十进制
+	 * 
+	 * @param decUid
+	 *            the decUid to set
+	 */
+	public void setDecUid(Integer decUid) {
+		this.decUid = decUid;
+		this.siteUid = "0x" + String.format("%08x", this.decUid).toUpperCase();
 	}
 }
