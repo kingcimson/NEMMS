@@ -8,6 +8,7 @@ public class SocketIOClientRequest {
 	private final SocketIOMessage data;
 	private final String eventName;
 	private short packetId;
+	private boolean finished;
 
 	public SocketIOClientRequest(SocketIOClient client, SocketIOMessage data, String eventName) {
 		this.client = client;
@@ -49,6 +50,14 @@ public class SocketIOClientRequest {
 	 */
 	public void setPacketId(short packetId) {
 		this.packetId = packetId;
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
 	}
 
 }

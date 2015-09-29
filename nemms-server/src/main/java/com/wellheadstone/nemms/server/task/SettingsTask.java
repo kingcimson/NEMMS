@@ -38,15 +38,14 @@ public class SettingsTask extends AbstractTask implements ITask {
 
 			request.getData().setResponseText(msg.toString());
 			request.getData().setRespFlag(Converter.byteToShort(msg.getRespFlag()));
-			request.getClient().sendEvent(request.getEventName(), request.getData());
+			request.getClient().sendEvent(request.getEventName(), request.getData().clone());
+			request.setFinished(true);
 
 			if (request.getData().isEof()) {
-				request.getData().setEof(true);
 				request.getData().setRequestText("无");
 				request.getData().setResponseText(">>设置参数操作全部完成<<");
 				request.getClient().sendEvent(request.getEventName(), request.getData());
 			}
-			SocketIOClientMap.remove(msg.getKey());
 		} catch (Exception ex) {
 			logger.error("set params task execute error.", ex);
 		}

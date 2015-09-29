@@ -42,18 +42,20 @@ public class GetParamListTask extends AbstractTask implements ITask {
 
 			request.getData().setResponseText(msg.toString());
 			request.getData().setRespFlag(Converter.byteToShort(msg.getRespFlag()));
-			request.getClient().sendEvent(request.getEventName(), request.getData());
+			request.getClient().sendEvent(request.getEventName(), request.getData().clone());
 
 			if (this.queryNext(msg.getMcp(), msg.getPDU())) {
 				msg.setPDU(this.getNewPDU(msg.getMcp(), msg.getPDU()));
-				ctx.channel().writeAndFlush(MessageUtils.getParamListReqMessage(msg));
+				msg = MessageUtils.getParamListReqMessage(msg);
+				request.getData().setRequestText(msg.toString());
+				ctx.channel().writeAndFlush(msg);
 				return;
 			}
 
 			request.getData().setEof(true);
 			request.getData().setRequestText("无");
 			request.getData().setResponseText(">>获取参数列表全部完成<<");
-			request.getClient().sendEvent(request.getEventName(), request.getData());
+			request.getClient().sendEvent(request.getEventName(), request.getData().clone());
 			SocketIOClientMap.remove(msg.getKey());
 		} catch (Exception ex) {
 			logger.error("get param list query execute error.", ex);

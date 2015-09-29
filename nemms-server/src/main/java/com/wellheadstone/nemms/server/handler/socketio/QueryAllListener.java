@@ -93,9 +93,15 @@ public class QueryAllListener implements DataListener<SocketIOMessage> {
 
 				message.setPacketId(count++);
 				message.setPDU(Converter.listToArray(list));
-				data.setEof(i < paramIdList.length - 1);
-				SocketIOClientMap.add(message, new SocketIOClientRequest(client, data, EventName.QueryALL));
+				data.setEof(i >= paramIdList.length - 1);
+				SocketIOClientMap.add(message, new SocketIOClientRequest(client, data.clone(), EventName.QueryALL));
 				channel.writeAndFlush(message).sync();
+				if (!SocketIOClientMap.wait(message.getKey(), data.getTot1() * 1000)) {
+					data.setEof(true);
+					data.setResponseText(">>数据接收失败或响应超时<<");
+					client.sendEvent(EventName.QueryALL, data);
+					break;
+				}
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);

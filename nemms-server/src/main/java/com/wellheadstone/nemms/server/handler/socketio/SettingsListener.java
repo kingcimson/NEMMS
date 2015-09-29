@@ -97,11 +97,18 @@ public class SettingsListener implements DataListener<SocketIOMessage> {
 						continue;
 					}
 				}
+
 				message.setPacketId(count++);
 				message.setPDU(Converter.listToArray(list));
-				data.setEof(i < paramList.size() - 1);
-				SocketIOClientMap.add(message, new SocketIOClientRequest(client, data, EventName.Settings));
-				channel.writeAndFlush(message);
+				data.setEof(i >= paramList.size() - 1);
+				SocketIOClientMap.add(message, new SocketIOClientRequest(client, data.clone(), EventName.Settings));
+				channel.writeAndFlush(message).sync();
+				if (!SocketIOClientMap.wait(message.getKey(), data.getTot1() * 1000)) {
+					data.setEof(true);
+					data.setResponseText(">>数据接收失败或响应超时<<");
+					client.sendEvent(EventName.Settings, data);
+					break;
+				}
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);

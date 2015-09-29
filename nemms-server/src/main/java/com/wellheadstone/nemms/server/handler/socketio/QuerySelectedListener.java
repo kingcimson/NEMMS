@@ -93,12 +93,16 @@ public class QuerySelectedListener implements DataListener<SocketIOMessage> {
 
 				message.setPacketId(count++);
 				message.setPDU(Converter.listToArray(list));
-				data.setEof(i < paramIdList.length - 1);
-				SocketIOClientMap.add(message, new SocketIOClientRequest(client, data, EventName.QuerySelected));
+				data.setEof(i >= paramIdList.length - 1);
+				SocketIOClientMap.add(message, new SocketIOClientRequest(
+						client, data.clone(), EventName.QuerySelected));
 				channel.writeAndFlush(message).sync();
-
-				data.setRequestText(message.toString());
-				client.sendEvent(EventName.QuerySelected, data);
+				if (!SocketIOClientMap.wait(message.getKey(), data.getTot1() * 1000)) {
+					data.setEof(true);
+					data.setResponseText(">>数据接收失败或响应超时<<");
+					client.sendEvent(EventName.QuerySelected, data);
+					break;
+				}
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);

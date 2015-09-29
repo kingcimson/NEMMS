@@ -270,7 +270,7 @@ public class SocketIOMessage implements Serializable {
 	 * @return 设备响应超时
 	 */
 	public Short getTot1() {
-		return this.tot1;
+		return this.tot1 <= 0 ? 3 : this.tot1;
 	}
 
 	/**
@@ -425,7 +425,7 @@ public class SocketIOMessage implements Serializable {
 
 	/**
 	 * 获取当前消息是否为最后一条
-	 * 
+	 *
 	 * @return the eof
 	 */
 	public boolean isEof() {
@@ -434,7 +434,7 @@ public class SocketIOMessage implements Serializable {
 
 	/**
 	 * 设置当前消息是否为最后一条
-	 * 
+	 *
 	 * @param eof
 	 *            the eof to set
 	 */
@@ -458,5 +458,35 @@ public class SocketIOMessage implements Serializable {
 	 */
 	public void setTimeStamp(Long timeStamp) {
 		this.timeStamp = timeStamp;
+	}
+
+	@Override
+	public SocketIOMessage clone() {
+		SocketIOMessage newObj = new SocketIOMessage();
+		newObj.setApMaxLen(this.getApMaxLen());
+		newObj.setApProtocol(this.getApProtocol());
+		newObj.setDeviceType(this.getDeviceType());
+		newObj.setEof(this.isEof());
+		newObj.setFlag(this.getFlag());
+		newObj.setId(this.getId());
+		newObj.setLocation(this.getLocation());
+		newObj.setManufactor(this.getManufactor());
+		newObj.setMcpMode(this.getMcpMode());
+		newObj.setMcpProtocol(this.getMcpProtocol());
+		newObj.setName(this.getName());
+		newObj.setNc(this.getNc());
+		newObj.setParamUids(this.getParamUids());
+		newObj.setPid(this.getPid());
+		newObj.setProtocol(this.getProtocol());
+		newObj.setRequestText(this.getRequestText());
+		newObj.setRespFlag(this.getRespFlag());
+		newObj.setResponseText(this.getResponseText());
+		newObj.setRowIds(this.getRowIds());
+		newObj.setStatus(this.getStatus());
+		newObj.setTg(this.getTg());
+		newObj.setTimeStamp(this.getTimeStamp());
+		newObj.setTot1(this.getTot1());
+		newObj.setUid(this.getUid());
+		return newObj;
 	}
 }

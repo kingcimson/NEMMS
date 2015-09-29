@@ -14,6 +14,7 @@ public class SocketIOClientMap {
 			message.setPacketId(++packetId);
 		}
 		clientRequest.setPacketId(message.getPacketId());
+		clientRequest.getData().setRequestText(message.toString());
 		map.put(message.getKey(), clientRequest);
 	}
 
@@ -23,5 +24,20 @@ public class SocketIOClientMap {
 
 	public static void remove(String key) {
 		map.remove(key);
+	}
+
+	public static boolean wait(String key, long timeount) {
+		SocketIOClientRequest request = null;
+		long elapseTime = 0;
+
+		do {
+			long beginTime = System.currentTimeMillis();
+			request = map.get(key);
+			long nowTime = System.currentTimeMillis();
+			elapseTime = nowTime - beginTime;
+		} while (elapseTime < timeount && request != null && !request.isFinished());
+
+		map.remove(key);
+		return request != null ? request.isFinished() : false;
 	}
 }
