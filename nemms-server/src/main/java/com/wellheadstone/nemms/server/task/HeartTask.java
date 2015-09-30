@@ -11,15 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.common.viewmodel.IdValuePair;
+import com.wellheadstone.nemms.server.collection.TcpChannelMap;
 import com.wellheadstone.nemms.server.domain.po.DeviceConnInfoPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceDataPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceReportPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceSitePo;
 import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
-import com.wellheadstone.nemms.server.handler.tcp.TcpSocketChannelMap;
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
-import com.wellheadstone.nemms.server.message.MessageUtils;
 import com.wellheadstone.nemms.server.util.Converter;
+import com.wellheadstone.nemms.server.util.MessageUtils;
 import com.wellheadstone.nemms.server.util.SocketAddressUtils;
 
 public class HeartTask extends AbstractTask implements ITask {
@@ -78,7 +78,7 @@ public class HeartTask extends AbstractTask implements ITask {
 	}
 
 	private void report(byte mcpId, byte[] pdu, byte reportType, String siteUid) {
-		Channel ch = TcpSocketChannelMap.get("nbi");
+		Channel ch = TcpChannelMap.get("nbi");
 		List<IdValuePair> list = this.getReportDataList(pdu);
 		for (IdValuePair item : list) {
 			if (ch != null) {

@@ -1,7 +1,6 @@
 package com.wellheadstone.nemms.server.task;
 
-import io.netty.channel.ChannelHandlerContext;
-
+import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +13,8 @@ import com.wellheadstone.nemms.server.util.MessageUtils;
 public class SettingsTask extends AbstractTask implements ITask {
 	private final static Logger logger = LoggerFactory.getLogger(SettingsTask.class);
 
-	protected SettingsTask(ChannelHandlerContext ctx, CMCCFDSMessage msg) {
-		super(ctx, msg);
+	protected SettingsTask(IoSession session, CMCCFDSMessage msg) {
+		super(session, msg);
 	}
 
 	@Override

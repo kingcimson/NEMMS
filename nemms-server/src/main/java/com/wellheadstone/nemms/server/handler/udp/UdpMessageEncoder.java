@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
-import com.wellheadstone.nemms.server.util.ByteObjConverter;
+import com.wellheadstone.nemms.server.util.CodecUtils;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class UdpMessageEncoder extends MessageToMessageEncoder<CMCCFDSMessage> {
@@ -20,12 +20,12 @@ public class UdpMessageEncoder extends MessageToMessageEncoder<CMCCFDSMessage> {
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, CMCCFDSMessage msg, List<Object> out) throws Exception {
-		byte[] bytes = ByteObjConverter.objectToBytes(msg);
+		byte[] bytes = CodecUtils.messageToBytes(msg);
 		ByteBuf byteBuf = ctx.alloc().buffer().writeBytes(bytes);
 		InetSocketAddress recipient = (InetSocketAddress) msg.getRemoteAddress();
 		out.add(new DatagramPacket(byteBuf, recipient));
 
-		logger.info("send to udp device [{}][{}] bytes:{}", msg.getRemoteAddress(), bytes.length,
-				Converter.bytesToHexString(bytes));
+		logger.info("send to udp device [{}][{}] bytes:{}",
+				msg.getRemoteAddress(), bytes.length, Converter.bytesToHexString(bytes));
 	}
 }

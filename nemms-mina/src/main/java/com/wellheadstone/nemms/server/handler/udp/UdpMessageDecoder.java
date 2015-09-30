@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
-import com.wellheadstone.nemms.server.util.ByteObjConverter;
+import com.wellheadstone.nemms.server.util.CodecUtils;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class UdpMessageDecoder extends CumulativeProtocolDecoder {
@@ -30,7 +30,7 @@ public class UdpMessageDecoder extends CumulativeProtocolDecoder {
 		byte delim = this.delimiter;
 		int maxLength = this.maxPacketLength;
 
-		IoBuffer buf = IoBuffer.allocate(255);
+		IoBuffer buf = IoBuffer.allocate(this.maxPacketLength);
 		buf.setAutoExpand(true);
 
 		int count = 0;
@@ -62,14 +62,14 @@ public class UdpMessageDecoder extends CumulativeProtocolDecoder {
 
 		byte[] bytes = new byte[count - 1];
 		buf.get(bytes, 0, count - 1);
-		byte[] escapeBytes = ByteObjConverter.escapeDecodeBytes(bytes);
-		CMCCFDSMessage msg = ByteObjConverter.bytesToObject(escapeBytes);
+		byte[] escapeBytes = CodecUtils.escapeDecodeBytes(bytes);
+		CMCCFDSMessage msg = CodecUtils.bytesToMessage(escapeBytes);
 
 		if (msg == null) {
 			logger.info("receive from udp device [{}] incorrect packet!", session.getRemoteAddress());
 		} else {
-			logger.info("receive from udp device [{}][{}] bytes:{}", session.getRemoteAddress(), escapeBytes.length,
-					Converter.bytesToHexString(escapeBytes));
+			logger.info("receive from udp device [{}][{}] bytes:{}", session.getRemoteAddress(),
+					escapeBytes.length, Converter.bytesToHexString(escapeBytes));
 			out.write(msg);
 		}
 

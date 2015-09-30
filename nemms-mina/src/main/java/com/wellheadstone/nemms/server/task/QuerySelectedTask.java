@@ -1,7 +1,6 @@
 package com.wellheadstone.nemms.server.task;
 
-import io.netty.channel.ChannelHandlerContext;
-
+import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,16 +10,15 @@ import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.Converter;
 import com.wellheadstone.nemms.server.util.MessageUtils;
 
-public class SettingsTask extends AbstractTask implements ITask {
-	private final static Logger logger = LoggerFactory.getLogger(SettingsTask.class);
+public class QuerySelectedTask extends AbstractTask implements ITask {
+	private final static Logger logger = LoggerFactory.getLogger(QuerySelectedTask.class);
 
-	protected SettingsTask(ChannelHandlerContext ctx, CMCCFDSMessage msg) {
-		super(ctx, msg);
+	protected QuerySelectedTask(IoSession session, CMCCFDSMessage msg) {
+		super(session, msg);
 	}
 
 	@Override
 	public int init() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -43,11 +41,11 @@ public class SettingsTask extends AbstractTask implements ITask {
 
 			if (request.getData().isEof()) {
 				request.getData().setRequestText("无");
-				request.getData().setResponseText(">>设置参数操作全部完成<<");
+				request.getData().setResponseText(">>查询参数操作全部完成<<");
 				request.getClient().sendEvent(request.getData().getEventName(), request.getData());
 			}
 		} catch (Exception ex) {
-			logger.error("set params task execute error.", ex);
+			logger.error("query selected params task execute error.", ex);
 		}
 	}
 }

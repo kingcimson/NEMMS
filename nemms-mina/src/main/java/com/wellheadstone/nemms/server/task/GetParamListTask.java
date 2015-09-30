@@ -1,11 +1,10 @@
 package com.wellheadstone.nemms.server.task;
 
-import io.netty.channel.ChannelHandlerContext;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +19,8 @@ import com.wellheadstone.nemms.server.util.MessageUtils;
 public class GetParamListTask extends AbstractTask implements ITask {
 	private final static Logger logger = LoggerFactory.getLogger(GetParamListTask.class);
 
-	protected GetParamListTask(ChannelHandlerContext ctx, CMCCFDSMessage msg) {
-		super(ctx, msg);
+	protected GetParamListTask(IoSession session, CMCCFDSMessage msg) {
+		super(session, msg);
 	}
 
 	@Override
@@ -48,7 +47,7 @@ public class GetParamListTask extends AbstractTask implements ITask {
 				msg.setPDU(this.getNewPDU(msg.getMcp(), msg.getPDU()));
 				msg = MessageUtils.getParamListReqMessage(msg);
 				request.getData().setRequestText(msg.toString());
-				ctx.channel().writeAndFlush(msg);
+				session.write(msg);
 				return;
 			}
 

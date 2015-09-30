@@ -14,10 +14,10 @@ import io.netty.util.concurrent.FutureListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wellheadstone.nemms.server.collection.UdpChannelMap;
 import com.wellheadstone.nemms.server.handler.udp.UDPServerHandler;
 import com.wellheadstone.nemms.server.handler.udp.UdpMessageDecoder;
 import com.wellheadstone.nemms.server.handler.udp.UdpMessageEncoder;
-import com.wellheadstone.nemms.server.handler.udp.UdpSocketChannelMap;
 
 public class UDPServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(UDPServer.class);
@@ -55,7 +55,7 @@ public class UDPServer implements IServer {
 					}
 				}
 			}).sync();
-			UdpSocketChannelMap.add(ip, (DatagramChannel) f.channel());
+			UdpChannelMap.add(ip, (DatagramChannel) f.channel());
 			f.channel().closeFuture().sync();
 		} finally {
 			group.shutdownGracefully();

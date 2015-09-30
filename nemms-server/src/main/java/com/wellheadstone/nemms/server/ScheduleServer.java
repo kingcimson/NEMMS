@@ -5,8 +5,8 @@ import java.util.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.wellheadstone.nemms.server.schedule.QueryParamsJob;
-import com.wellheadstone.nemms.server.schedule.UpdateCacheJob;
+import com.wellheadstone.nemms.server.job.QueryParamsJob;
+import com.wellheadstone.nemms.server.job.UpdateCacheJob;
 
 public class ScheduleServer implements IServer {
 	private static final Logger logger = LoggerFactory.getLogger(ScheduleServer.class);

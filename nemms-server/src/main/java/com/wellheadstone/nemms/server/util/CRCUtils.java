@@ -1,7 +1,7 @@
 package com.wellheadstone.nemms.server.util;
 
-public class CRC16 {
-	public static short getCRC(byte[] bytes) {
+public class CRCUtils {
+	public static short getCRC16(byte[] bytes) {
 		int crc = 0x00;
 		int polynomial = 0x1021;
 		for (int index = 0; index < bytes.length; index++) {

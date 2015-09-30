@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
-import com.wellheadstone.nemms.server.util.ByteObjConverter;
+import com.wellheadstone.nemms.server.util.CodecUtils;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class UdpMessageEncoder extends ProtocolEncoderAdapter {
@@ -16,11 +16,11 @@ public class UdpMessageEncoder extends ProtocolEncoderAdapter {
 
 	@Override
 	public void encode(IoSession session, Object message, ProtocolEncoderOutput out) throws Exception {
-		byte[] bytes = ByteObjConverter.objectToBytes((CMCCFDSMessage) message);
+		byte[] bytes = CodecUtils.messageToBytes((CMCCFDSMessage) message);
 		out.write(IoBuffer.wrap(bytes, 0, bytes.length));
 
-		logger.info("send to udp device [{}][{}] bytes:{}", session.getRemoteAddress(), bytes.length,
-				Converter.bytesToHexString(bytes));
+		logger.info("send to udp device [{}][{}] bytes:{}",
+				session.getRemoteAddress(), bytes.length, Converter.bytesToHexString(bytes));
 
 	}
 }

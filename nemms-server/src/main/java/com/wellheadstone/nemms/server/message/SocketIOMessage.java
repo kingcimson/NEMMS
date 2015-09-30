@@ -27,6 +27,7 @@ public class SocketIOMessage implements Serializable {
 	private String rowIds = "";
 	private Short respFlag = 0;
 	private boolean eof;
+	private String eventName;
 	private Long timeStamp = System.currentTimeMillis();
 
 	/**
@@ -443,6 +444,25 @@ public class SocketIOMessage implements Serializable {
 	}
 
 	/**
+	 * 获取socketio请求事件名
+	 * 
+	 * @return the eventName
+	 */
+	public String getEventName() {
+		return eventName;
+	}
+
+	/**
+	 * 设置socketio请求事件名
+	 * 
+	 * @param eventName
+	 *            the eventName to set
+	 */
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+
+	/**
 	 * 获取当前时间戳
 	 *
 	 * @return
@@ -487,6 +507,7 @@ public class SocketIOMessage implements Serializable {
 		newObj.setTimeStamp(this.getTimeStamp());
 		newObj.setTot1(this.getTot1());
 		newObj.setUid(this.getUid());
+		newObj.setEventName(this.getEventName());
 		return newObj;
 	}
 }

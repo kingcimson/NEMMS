@@ -5,51 +5,51 @@ import java.util.Arrays;
 
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 
-public class ByteObjConverter {
-	public static CMCCFDSMessage bytesToObject(byte[] bytes) {
+public class CodecUtils {
+	public static CMCCFDSMessage bytesToMessage(byte[] bytes) {
 		if (bytes == null || bytes.length < 17) {
 			return null;
 		}
 
-		CMCCFDSMessage obj = new CMCCFDSMessage();
-		obj.setStartFlag(bytes[0]);
-		obj.setAp(bytes[1]);
-		obj.setVp(bytes[2]);
-		obj.setSiteId(Converter.getReverseInt(bytes, 3, 7));
-		obj.setDeviceId(bytes[7]);
-		obj.setPacketId(Converter.getReverseShort(bytes, 8, 10));
-		obj.setVpLayerFlag(bytes[10]);
-		obj.setMcp(bytes[11]);
-		obj.setCmdId(bytes[12]);
-		obj.setRespFlag(bytes[13]);
-		obj.setPDU(getPDU(bytes, 14, bytes.length - 3));
-		obj.setCrc(Converter.getReverseShort(bytes, bytes.length - 3, bytes.length - 1));
-		obj.setEndFlag(bytes[bytes.length - 1]);
+		CMCCFDSMessage msg = new CMCCFDSMessage();
+		msg.setStartFlag(bytes[0]);
+		msg.setAp(bytes[1]);
+		msg.setVp(bytes[2]);
+		msg.setSiteId(Converter.getReverseInt(bytes, 3, 7));
+		msg.setDeviceId(bytes[7]);
+		msg.setPacketId(Converter.getReverseShort(bytes, 8, 10));
+		msg.setVpLayerFlag(bytes[10]);
+		msg.setMcp(bytes[11]);
+		msg.setCmdId(bytes[12]);
+		msg.setRespFlag(bytes[13]);
+		msg.setPDU(getPDU(bytes, 14, bytes.length - 3));
+		msg.setCrc(Converter.getReverseShort(bytes, bytes.length - 3, bytes.length - 1));
+		msg.setEndFlag(bytes[bytes.length - 1]);
 
-		return obj;
+		return msg;
 	}
 
 	private static byte[] getPDU(byte[] src, int startIndex, int endIndex) {
 		return Arrays.copyOfRange(src, startIndex, endIndex);
 	}
 
-	public static byte[] objectToBytes(CMCCFDSMessage obj) {
-		int length = 13 + (obj.getPDU() == null ? 0 : obj.getPDU().length);
+	public static byte[] messageToBytes(CMCCFDSMessage msg) {
+		int length = 13 + (msg.getPDU() == null ? 0 : msg.getPDU().length);
 		ByteBuffer srcBuf = ByteBuffer.allocate(length);
-		srcBuf.put(obj.getAp());
-		srcBuf.put(obj.getVp());
-		srcBuf.put(Converter.getReverseBytes(obj.getSiteId()));
-		srcBuf.put(obj.getDeviceId());
-		srcBuf.put(Converter.getReverseBytes(obj.getPacketId()));
-		srcBuf.put(obj.getVpLayerFlag());
-		srcBuf.put(obj.getMcp());
-		srcBuf.put(obj.getCmdId());
-		srcBuf.put(obj.getRespFlag());
-		srcBuf.put(obj.getPDU());
+		srcBuf.put(msg.getAp());
+		srcBuf.put(msg.getVp());
+		srcBuf.put(Converter.getReverseBytes(msg.getSiteId()));
+		srcBuf.put(msg.getDeviceId());
+		srcBuf.put(Converter.getReverseBytes(msg.getPacketId()));
+		srcBuf.put(msg.getVpLayerFlag());
+		srcBuf.put(msg.getMcp());
+		srcBuf.put(msg.getCmdId());
+		srcBuf.put(msg.getRespFlag());
+		srcBuf.put(msg.getPDU());
 
 		ByteBuffer crcBuf = ByteBuffer.allocate(srcBuf.array().length + 2);
 		crcBuf.put(srcBuf.array());
-		crcBuf.put(Converter.getReverseBytes(CRC16.getCRC(srcBuf.array())));
+		crcBuf.put(Converter.getReverseBytes(CRCUtils.getCRC16(srcBuf.array())));
 		byte[] crcBytes = crcBuf.array();
 
 		srcBuf.clear();
@@ -57,12 +57,19 @@ public class ByteObjConverter {
 
 		byte[] escapeBytes = escapeEncodeBytes(crcBytes);
 		ByteBuffer byteBuf = ByteBuffer.allocate(escapeBytes.length + 2);
-		byteBuf.put(obj.getStartFlag());
+		byteBuf.put(msg.getStartFlag());
 		byteBuf.put(escapeBytes);
-		byteBuf.put(obj.getEndFlag());
+		byteBuf.put(msg.getEndFlag());
 		return byteBuf.array();
 	}
 
+	/**
+	 * 编码转义，把0x5e转义为0x5e0x5d,把0x7e转义为0x5e0x7d
+	 * 
+	 * @param crcBytes
+	 *            经过crc校检的字节序列
+	 * @return 转义后的字节序列
+	 */
 	public static byte[] escapeEncodeBytes(byte[] crcBytes) {
 		ByteBuffer byteBuf = ByteBuffer.allocate(getEncodeByteCount(crcBytes));
 		for (byte b : crcBytes) {
@@ -79,6 +86,12 @@ public class ByteObjConverter {
 		return byteBuf.array();
 	}
 
+	/**
+	 * 解码转义，把0x5e5d转成0x5e，把0x5e7d转义为0x7e
+	 * 
+	 * @param srcBytes
+	 * @return 转义后的字节
+	 */
 	public static byte[] escapeDecodeBytes(byte[] srcBytes) {
 		ByteBuffer byteBuf = ByteBuffer.allocate(getDecodeByteCount(srcBytes));
 		byteBuf.put((byte) 0x7e);

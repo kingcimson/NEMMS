@@ -3,7 +3,7 @@ package com.wellheadstone.nemms.server.message;
 import java.io.Serializable;
 import java.net.SocketAddress;
 
-import com.wellheadstone.nemms.server.util.ByteObjConverter;
+import com.wellheadstone.nemms.server.util.CodecUtils;
 import com.wellheadstone.nemms.server.util.Converter;
 
 /**
@@ -254,7 +254,7 @@ public class CMCCFDSMessage implements Serializable {
 
 	@Override
 	public String toString() {
-		return Converter.bytesToHexString(ByteObjConverter.objectToBytes(this));
+		return Converter.bytesToHexString(CodecUtils.messageToBytes(this));
 	}
 
 	public String getKey() {

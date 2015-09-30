@@ -1,8 +1,9 @@
-package com.wellheadstone.nemms.server.handler.socketio;
+package com.wellheadstone.nemms.server.collection;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.wellheadstone.nemms.server.handler.socketio.SocketIOClientRequest;
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 
 public class SocketIOClientMap {

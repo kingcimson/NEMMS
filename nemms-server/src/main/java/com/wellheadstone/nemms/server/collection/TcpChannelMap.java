@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.handler.tcp;
+package com.wellheadstone.nemms.server.collection;
 
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
@@ -6,7 +6,7 @@ import io.netty.channel.socket.SocketChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class TcpSocketChannelMap {
+public class TcpChannelMap {
 	private static Map<String, SocketChannel> map = new ConcurrentHashMap<String, SocketChannel>(200);
 
 	public static void add(String key, SocketChannel socketChannel) {

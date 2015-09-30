@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.handler.udp;
+package com.wellheadstone.nemms.server.collection;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

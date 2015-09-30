@@ -7,6 +7,7 @@ import io.netty.channel.socket.SocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wellheadstone.nemms.server.collection.TcpChannelMap;
 import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.task.TaskFactory;
@@ -20,7 +21,7 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
 		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
 		logger.info("tcp device [{}:{}] is actived", ip, port);
-		TcpSocketChannelMap.add(ip, (SocketChannel) ctx.channel());
+		TcpChannelMap.add(ip, (SocketChannel) ctx.channel());
 		super.channelActive(ctx);
 	}
 
@@ -29,7 +30,7 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
 		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
 		logger.info("tcp device [{}:{}] is inactived", ip, port);
-		TcpSocketChannelMap.remove(ip);
+		TcpChannelMap.remove(ip);
 		ServiceFacade.removeDeviceConnByIP(ip);
 	}
 

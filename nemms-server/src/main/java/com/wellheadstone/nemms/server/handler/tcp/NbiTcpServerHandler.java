@@ -7,6 +7,7 @@ import io.netty.channel.socket.SocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wellheadstone.nemms.server.collection.TcpChannelMap;
 import com.wellheadstone.nemms.server.util.SocketAddressUtils;
 
 public class NbiTcpServerHandler extends ChannelInboundHandlerAdapter {
@@ -17,7 +18,7 @@ public class NbiTcpServerHandler extends ChannelInboundHandlerAdapter {
 		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
 		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
 		logger.info("nbi device [{}:{}] is actived", ip, port);
-		TcpSocketChannelMap.add("nbi", (SocketChannel) ctx.channel());
+		TcpChannelMap.add("nbi", (SocketChannel) ctx.channel());
 		super.channelActive(ctx);
 	}
 
@@ -26,7 +27,7 @@ public class NbiTcpServerHandler extends ChannelInboundHandlerAdapter {
 		String ip = SocketAddressUtils.getIP(ctx.channel().remoteAddress());
 		Integer port = SocketAddressUtils.getPort(ctx.channel().remoteAddress());
 		logger.info("nbi device [{}:{}] is inactived", ip, port);
-		TcpSocketChannelMap.remove("nbi");
+		TcpChannelMap.remove("nbi");
 	}
 
 	@Override

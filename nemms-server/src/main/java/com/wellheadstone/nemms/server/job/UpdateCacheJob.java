@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.schedule;
+package com.wellheadstone.nemms.server.job;
 
 import java.util.TimerTask;
 

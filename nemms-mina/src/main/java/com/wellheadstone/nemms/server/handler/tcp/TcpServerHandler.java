@@ -5,9 +5,10 @@ import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.wellheadstone.nemms.server.collection.TcpSessionMap;
 import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
-import com.wellheadstone.nemms.server.task.HeartProcessor;
+import com.wellheadstone.nemms.server.task.TaskFactory;
 import com.wellheadstone.nemms.server.util.SocketAddressUtils;
 
 public class TcpServerHandler extends IoHandlerAdapter {
@@ -34,11 +35,7 @@ public class TcpServerHandler extends IoHandlerAdapter {
 	@Override
 	public void messageReceived(IoSession session, Object message) throws Exception {
 		if (message instanceof CMCCFDSMessage) {
-			CMCCFDSMessage reqMsg = (CMCCFDSMessage) message;
-			// 心跳上报
-			if (reqMsg.getCmdId() == 0x01) {
-				HeartProcessor.execute(session, reqMsg);
-			}
+			TaskFactory.creator(session, (CMCCFDSMessage) message).execute();
 		}
 	}
 

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
-import com.wellheadstone.nemms.server.util.ByteObjConverter;
+import com.wellheadstone.nemms.server.util.CodecUtils;
 import com.wellheadstone.nemms.server.util.Converter;
 
 public class TcpMessageDecoder extends CumulativeProtocolDecoder {
@@ -62,14 +62,14 @@ public class TcpMessageDecoder extends CumulativeProtocolDecoder {
 
 		byte[] bytes = new byte[count - 1];
 		buf.get(bytes, 0, count - 1);
-		byte[] escapeBytes = ByteObjConverter.escapeDecodeBytes(bytes);
-		CMCCFDSMessage msg = ByteObjConverter.bytesToObject(escapeBytes);
+		byte[] escapeBytes = CodecUtils.escapeDecodeBytes(bytes);
+		CMCCFDSMessage msg = CodecUtils.bytesToMessage(escapeBytes);
 
 		if (msg == null) {
 			logger.info("receive from tcp device [{}] incorrect packet!", session.getRemoteAddress());
 		} else {
-			logger.info("receive from tcp device [{}][{}] bytes:{}", session.getRemoteAddress(), escapeBytes.length,
-					Converter.bytesToHexString(escapeBytes));
+			logger.info("receive from tcp device [{}][{}] bytes:{}", session.getRemoteAddress(),
+					escapeBytes.length, Converter.bytesToHexString(escapeBytes));
 			out.write(msg);
 		}
 

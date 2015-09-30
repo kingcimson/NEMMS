@@ -1,4 +1,4 @@
-package com.wellheadstone.nemms.server.message;
+package com.wellheadstone.nemms.server.util;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -14,7 +14,8 @@ import org.slf4j.LoggerFactory;
 import com.wellheadstone.nemms.server.domain.po.DeviceDataPo;
 import com.wellheadstone.nemms.server.domain.po.DeviceParamPo;
 import com.wellheadstone.nemms.server.domain.service.ServiceFacade;
-import com.wellheadstone.nemms.server.util.Converter;
+import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
+import com.wellheadstone.nemms.server.message.SocketIOMessage;
 
 public class MessageUtils {
 	private final static Logger logger = LoggerFactory.getLogger(MessageUtils.class);

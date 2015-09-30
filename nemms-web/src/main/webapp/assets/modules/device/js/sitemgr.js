@@ -986,7 +986,8 @@ var SiteMgr = {
 			var node = $('#site-tree').tree('getSelected');
 			if (node) {
 				var data = node.attributes;
-				SiteMgr.socket.emit('getParamList', data);
+				data.eventName = 'getParamList';
+				SiteMgr.socket.emit(data.eventName, data);
 				EasyUIUtils.loading();
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备!', 'info');
@@ -1001,7 +1002,8 @@ var SiteMgr = {
 			if (node && paramUidList.length > 0) {
 				var data = node.attributes;
 				data.paramUids = paramUidList.join();
-				SiteMgr.socket.emit('queryAll', data);
+				data.eventName = 'queryAll';
+				SiteMgr.socket.emit(data.eventName, data);
 				EasyUIUtils.loading();
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备,并确定站点或设备是否存在查询参数!', 'info');
@@ -1017,16 +1019,9 @@ var SiteMgr = {
 				var data = node.attributes;
 				data.paramUids = map.paramUidList.join();
 				data.rowIds = map.rowIdList.join();
-				SiteMgr.socket.emit('querySelected', data);
+				data.eventName = 'querySelected';
+				SiteMgr.socket.emit(data.eventName, data);
 				EasyUIUtils.loading();
-			} else {
-				$.messager.alert('警告', '请选中一个站点或设备,并确定是否选中参数!', 'info');
-			}
-		},
-		querySchedule : function() {
-			var node = $('#site-tree').tree('getSelected');
-			var map = SiteMgr.toolbar.getSelectedParamUidList();
-			if (node && map.paramUidList.length > 0) {
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备,并确定是否选中参数!', 'info');
 			}
@@ -1041,8 +1036,17 @@ var SiteMgr = {
 				var data = node.attributes;
 				data.paramUids = JSON.stringify(map.idValueList);
 				data.rowIds = map.rowIdList.join();
-				SiteMgr.socket.emit('settings', data);
+				data.eventName = 'settings';
+				SiteMgr.socket.emit(data.eventName, data);
 				EasyUIUtils.loading();
+			} else {
+				$.messager.alert('警告', '请选中一个站点或设备,并确定是否选中参数!', 'info');
+			}
+		},
+		querySchedule : function() {
+			var node = $('#site-tree').tree('getSelected');
+			var map = SiteMgr.toolbar.getSelectedParamUidList();
+			if (node && map.paramUidList.length > 0) {
 			} else {
 				$.messager.alert('警告', '请选中一个站点或设备,并确定是否选中参数!', 'info');
 			}
