@@ -27,7 +27,7 @@ public class SettingsTask extends AbstractTask implements ITask {
 	@Override
 	public void execute() {
 		try {
-			String siteUid = Converter.getHexStringWith0X(Converter.getHexString(msg.getSiteId()));
+			String siteUid = MessageUtils.getSiteUid(msg);
 			MessageUtils.parseDataUnit(siteUid, msg.getMcp(), msg.getPDU());
 
 			SocketIOClientRequest request = SocketIOClientMap.get(msg.getKey());

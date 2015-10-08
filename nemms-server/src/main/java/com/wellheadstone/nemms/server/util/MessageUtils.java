@@ -76,28 +76,6 @@ public class MessageUtils {
 		return message;
 	}
 
-	public static int getSiteId(String siteId) {
-		if (siteId.length() < 10 || siteId.length() > 12) {
-			return Integer.MAX_VALUE;
-		}
-
-		String uid = siteId.substring(2, 10);
-		return Integer.valueOf(uid, 16);
-	}
-
-	public static byte getDeviceId(String siteId) {
-		if (siteId.length() < 10 || siteId.length() > 12) {
-			return 0;
-		}
-
-		if (siteId.length() == 10) {
-			return Byte.valueOf("0");
-		}
-
-		String uid = siteId.substring(10);
-		return Short.valueOf(uid, 16).byteValue();
-	}
-
 	public static void parseDataUnit(String siteUid, byte mcp, byte[] pdu) {
 		if (pdu == null || pdu.length < 4) {
 			return;
@@ -112,7 +90,7 @@ public class MessageUtils {
 			int startIndex = i + 1;
 			int endIndex = startIndex + byteCount;
 
-			String paramUid = Converter.getHexStringWith0X(Converter.getReverseHexString(pdu, startIndex, endIndex));
+			String paramUid = MessageUtils.getParamUid(Converter.getReverseHexString(pdu, startIndex, endIndex));
 			DeviceParamPo paramPo = paramMap.get(MessageUtils.getDeviceParamKey(paramUid, mcp));
 			DeviceDataPo po = new DeviceDataPo();
 			po.setSiteUid(siteUid);
@@ -163,7 +141,7 @@ public class MessageUtils {
 			if (bytes[0] == 0x30) {
 				return "0";
 			}
-			return new String(bytes, Charset.forName("US-ASCII"));
+			return new String(bytes, Charset.forName("ISO-8859-1"));
 		}
 		if (po.getValueType().equals("dstr")) {
 			return getDStringValue(po.getFormat(), bytes);
@@ -214,7 +192,7 @@ public class MessageUtils {
 				return Converter.getReverseBytes(Byte.valueOf(value));
 			}
 			if (po.getValueType().equals("str")) {
-				return value.getBytes("US-ASCII");
+				return value.getBytes("ISO-8859-1");
 			}
 			if (po.getValueType().equals("dstr")) {
 				return getDStringValueBytes(po.getFormat(), value);
@@ -331,5 +309,40 @@ public class MessageUtils {
 			};
 		}
 		return null;
+	}
+
+	public static int getSiteId(String siteId) {
+		if (siteId.length() < 10 || siteId.length() > 12) {
+			return Integer.MAX_VALUE;
+		}
+
+		String uid = siteId.substring(2, 10);
+		return Integer.valueOf(uid, 16);
+	}
+
+	public static byte getDeviceId(String siteId) {
+		if (siteId.length() < 10 || siteId.length() > 12) {
+			return 0;
+		}
+
+		if (siteId.length() == 10) {
+			return Byte.valueOf("0");
+		}
+
+		String uid = siteId.substring(10);
+		return Short.valueOf(uid, 16).byteValue();
+	}
+
+	public static String getSiteUid(CMCCFDSMessage msg) {
+		String devId = Converter.getHexString(msg.getDeviceId());
+		String siteUid = Converter.getHexStringWith0X(Converter.getHexString(msg.getSiteId()));
+		if (devId.equals("00")) {
+			return siteUid;
+		}
+		return siteUid + devId;
+	}
+
+	public static String getParamUid(String hexUid) {
+		return Converter.getHexStringWith0X(hexUid);
 	}
 }

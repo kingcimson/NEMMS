@@ -35,7 +35,7 @@ public class HeartTask extends AbstractTask implements ITask {
 	@Override
 	public void execute() {
 		try {
-			String siteUid = Converter.getHexStringWith0X(Converter.getHexString(msg.getSiteId()));
+			String siteUid = MessageUtils.getSiteUid(msg);
 			byte reportType = this.getReportType(msg.getPDU());
 			if (reportType == 6 || reportType == 7) {
 				this.addNewConn(session, msg, siteUid);
@@ -106,7 +106,7 @@ public class HeartTask extends AbstractTask implements ITask {
 		List<IdValuePair> list = new ArrayList<IdValuePair>(5);
 		for (int i = pdu[0]; i < pdu.length;) {
 			String id = Converter.getReverseHexString(pdu, i + 1, i + pdu[i] - 1);
-			id = Converter.getHexStringWith0X(id);
+			id = MessageUtils.getParamUid(id);
 			String value = String.valueOf(pdu[i + pdu[i] - 1]);
 			list.add(new IdValuePair(id, value));
 			i = i + pdu[i];

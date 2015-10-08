@@ -32,7 +32,7 @@ public class GetParamListTask extends AbstractTask implements ITask {
 	@Override
 	public void execute() {
 		try {
-			String siteUid = Converter.getHexStringWith0X(Converter.getHexString(msg.getSiteId()));
+			String siteUid = MessageUtils.getSiteUid(msg);
 			this.parseDataUnit(siteUid, msg.getMcp(), msg.getPDU());
 			SocketIOClientRequest request = SocketIOClientMap.get(msg.getKey());
 			if (request == null) {
@@ -72,10 +72,10 @@ public class GetParamListTask extends AbstractTask implements ITask {
 		int size = pdu.length / byteCount;
 		List<DeviceDataPo> entities = new ArrayList<DeviceDataPo>(size);
 		for (int i = startIndex; i < pdu.length; i = i + byteCount) {
-			String paramUid = Converter.getReverseHexString(pdu, i, i + byteCount);
+			String hexUid = Converter.getReverseHexString(pdu, i, i + byteCount);
 			DeviceDataPo po = new DeviceDataPo();
 			po.setSiteUid(siteUid);
-			po.setParamUid(Converter.getHexStringWith0X(paramUid));
+			po.setParamUid(MessageUtils.getParamUid(hexUid));
 			po.setMcpId((int) mcp);
 			entities.add(po);
 		}

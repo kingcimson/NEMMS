@@ -14,7 +14,7 @@
 		类型:<select class="easyui-combobox" id="filter-category-id" name="categoryId" data-options="valueField:'value',textField:'name'" panelHeight="auto" style="width: 100px"></select> 
 		<select class="easyui-combobox" id="field-name" name="fieldName" panelHeight="auto" style="width: 120px">
 			<option value="name">名称</option>
-			<option value="param_uid">监控标识</option>
+			<option value="uid">监控标识</option>
 			<option value="mcp_id">MCP协议类型</option>
 			<option value="mode">模式</option>
 			<option value="value_type">值类型</option>
