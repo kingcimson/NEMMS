@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,7 +142,11 @@ public class MessageUtils {
 			if (bytes[0] == 0x30) {
 				return "0";
 			}
-			return new String(bytes, Charset.forName("ISO-8859-1"));
+			int index = ArrayUtils.indexOf(bytes, (byte) 0x00);
+			if (index <= 0) {
+				return "0";
+			}
+			return new String(Arrays.copyOfRange(bytes, 0, index), Charset.forName("ISO-8859-1"));
 		}
 		if (po.getValueType().equals("dstr")) {
 			return getDStringValue(po.getFormat(), bytes);
