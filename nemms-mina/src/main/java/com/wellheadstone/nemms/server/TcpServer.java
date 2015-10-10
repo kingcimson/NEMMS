@@ -34,7 +34,7 @@ public class TcpServer implements IServer {
 		acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TcpCodecFactory((byte) 0x7e, 2048)));
 		acceptor.setHandler(new TcpServerHandler());
 		acceptor.getSessionConfig().setReadBufferSize(2048);
-		acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
+		acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 120);
 		acceptor.bind(new InetSocketAddress(ip, port));
 
 		logger.info("TCP server started at port: {}", port);

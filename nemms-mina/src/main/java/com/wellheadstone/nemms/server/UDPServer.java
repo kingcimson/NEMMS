@@ -34,7 +34,7 @@ public class UDPServer implements IServer {
 		acceptor.setHandler(new UdpServerHandler());
 		acceptor.getSessionConfig().setReuseAddress(true);
 		acceptor.getSessionConfig().setReadBufferSize(2048);
-		acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
+		acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 120);
 		acceptor.bind(new InetSocketAddress(ip, port));
 
 		logger.info("UDP server started at port: {}", port);

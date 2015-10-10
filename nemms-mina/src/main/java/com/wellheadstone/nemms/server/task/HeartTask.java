@@ -54,8 +54,8 @@ public class HeartTask extends AbstractTask implements ITask {
 		if (devId.equals("00")) {
 			DeviceConnInfoPo po = new DeviceConnInfoPo();
 			po.setSiteUid(siteUid);
-			po.setDeviceIp(SocketAddressUtils.getIP(msg.getRemoteAddress()));
-			po.setDevicePort(SocketAddressUtils.getPort(msg.getRemoteAddress()));
+			po.setDeviceIp(SocketAddressUtils.getIP(session.getRemoteAddress()));
+			po.setDevicePort(SocketAddressUtils.getPort(session.getRemoteAddress()));
 			po.setServerIp(SocketAddressUtils.getIP(session.getLocalAddress()));
 			po.setServerPort(SocketAddressUtils.getPort(session.getLocalAddress()));
 			ServiceFacade.addNewDeviceConn(po);
