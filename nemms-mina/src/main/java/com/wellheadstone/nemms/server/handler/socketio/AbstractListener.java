@@ -43,7 +43,7 @@ public abstract class AbstractListener {
 
 	protected void sendUdpMessage(SocketIOClient client,
 			SocketIOMessage data, CMCCFDSMessage message, DeviceConnInfoPo connInfo) throws Exception {
-		IoSession session = UdpSessionMap.get(connInfo.getServerIp());
+		IoSession session = UdpSessionMap.get(connInfo.getDeviceIp());
 		if (session == null) {
 			SocketIOClientUtils.sendEofEvent(client, data, "未找到当前站点或设备的UDP连接通道.");
 		} else {

@@ -3,7 +3,6 @@ package com.wellheadstone.nemms.server;
 import java.net.InetSocketAddress;
 
 import org.apache.mina.core.service.IoAcceptor;
-import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.slf4j.Logger;
@@ -34,7 +33,6 @@ public class TcpServer implements IServer {
 		acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TcpCodecFactory((byte) 0x7e, 2048)));
 		acceptor.setHandler(new TcpServerHandler());
 		acceptor.getSessionConfig().setReadBufferSize(2048);
-		acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 120);
 		acceptor.bind(new InetSocketAddress(ip, port));
 
 		logger.info("TCP server started at port: {}", port);
