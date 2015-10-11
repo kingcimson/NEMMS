@@ -156,4 +156,15 @@ public class DeviceSiteDao extends BaseDao<DeviceSitePo> {
 		Object[] args = new Object[] { po.getUid() };
 		return this.update(po, condition, args, columnNames);
 	}
+
+	public int updateChild(DeviceSitePo po) {
+		String[] columnNames = new String[] {
+				DeviceSitePo.DeviceType, DeviceSitePo.ApProtocol, DeviceSitePo.McpProtocol,
+				DeviceSitePo.Protocol, DeviceSitePo.Manufactor, DeviceSitePo.ApMaxLen, DeviceSitePo.
+				McpMode, DeviceSitePo.Nc, DeviceSitePo.Tot1, DeviceSitePo.Tg, DeviceSitePo.Location
+		};
+		String condition = Restrictions.equal(DeviceSitePo.Pid, "?").toString();
+		Object[] args = new Object[] { po.getId() };
+		return this.update(po, condition, args, columnNames);
+	}
 }

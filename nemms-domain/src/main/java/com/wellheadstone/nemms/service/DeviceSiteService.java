@@ -32,7 +32,9 @@ public class DeviceSiteService extends BaseService<DeviceSiteDao, DeviceSitePo> 
 				DeviceSitePo.ApMaxLen, DeviceSitePo.McpMode, DeviceSitePo.Nc, DeviceSitePo.Tot1, DeviceSitePo.Tg,
 				DeviceSitePo.Location
 		};
+		this.getDao().updateChild(entity);
 		return this.edit(entity, entity.getId(), columnNames);
+
 	}
 
 	public boolean editDevice(DeviceSitePo entity) {
