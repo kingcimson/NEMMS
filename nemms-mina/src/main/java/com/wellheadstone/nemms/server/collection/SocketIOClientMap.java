@@ -38,6 +38,7 @@ public class SocketIOClientMap {
 
 		do {
 			long nowTime = System.currentTimeMillis();
+			request = map.get(key);
 			elapseTime = nowTime - beginTime;
 		} while (elapseTime < timeount && !request.isFinished());
 
