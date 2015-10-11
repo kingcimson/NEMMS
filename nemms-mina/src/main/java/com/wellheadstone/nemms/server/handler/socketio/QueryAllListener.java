@@ -63,6 +63,7 @@ public class QueryAllListener extends AbstractListener implements DataListener<S
 					SocketIOClientUtils.sendEofEvent(client, data, ">>数据接收失败或响应超时<<");
 					break;
 				}
+				SocketIOClientUtils.sendEvent(message, ">>查询全部参数操作全部完成<<");
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);

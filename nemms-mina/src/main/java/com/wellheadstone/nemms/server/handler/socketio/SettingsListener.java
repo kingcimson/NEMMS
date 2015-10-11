@@ -69,6 +69,7 @@ public class SettingsListener extends AbstractListener implements DataListener<S
 					SocketIOClientUtils.sendEofEvent(client, data, ">>数据接收失败或响应超时<<");
 					break;
 				}
+				SocketIOClientUtils.sendEvent(message, ">>>设置参数操作全部完成<<");
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);

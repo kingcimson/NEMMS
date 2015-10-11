@@ -63,6 +63,7 @@ public class QuerySelectedListener extends AbstractListener implements DataListe
 					SocketIOClientUtils.sendEofEvent(client, data, ">>数据接收失败或响应超时<<");
 					break;
 				}
+				SocketIOClientUtils.sendEvent(message, ">>查询选中参数操作全部完成<<");
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);

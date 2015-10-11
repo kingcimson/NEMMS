@@ -24,6 +24,7 @@ public class MySocketIOServer implements IServer {
 		Configuration config = new Configuration();
 		config.setHostname(Config.getServerIP());
 		config.setPort(Config.getSocketIOPort());
+		config.setUpgradeTimeout(60000);
 
 		final SocketIOServer server = new SocketIOServer(config);
 		server.addEventListener(EventName.GetParamList, SocketIOMessage.class,

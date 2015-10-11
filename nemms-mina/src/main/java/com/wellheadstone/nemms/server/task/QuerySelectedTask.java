@@ -36,14 +36,7 @@ public class QuerySelectedTask extends AbstractTask implements ITask {
 
 			request.getData().setResponseText(msg.toString());
 			request.getData().setRespFlag(Converter.byteToShort(msg.getRespFlag()));
-			request.getClient().sendEvent(request.getData().getEventName(), request.getData().clone());
 			request.setFinished(true);
-
-			if (request.getData().isEof()) {
-				request.getData().setRequestText("无");
-				request.getData().setResponseText(">>查询参数操作全部完成<<");
-				request.getClient().sendEvent(request.getData().getEventName(), request.getData());
-			}
 		} catch (Exception ex) {
 			logger.error("query selected params task execute error.", ex);
 		}

@@ -28,17 +28,19 @@ public class SocketIOClientMap {
 	}
 
 	public static boolean wait(String key, long timeount) {
-		SocketIOClientRequest request = null;
+		SocketIOClientRequest request = map.get(key);
+		if (request == null) {
+			return false;
+		}
+
+		long beginTime = System.currentTimeMillis();
 		long elapseTime = 0;
 
 		do {
-			long beginTime = System.currentTimeMillis();
-			request = map.get(key);
 			long nowTime = System.currentTimeMillis();
 			elapseTime = nowTime - beginTime;
-		} while (elapseTime < timeount && request != null && !request.isFinished());
+		} while (elapseTime < timeount && !request.isFinished());
 
-		map.remove(key);
-		return request != null ? request.isFinished() : false;
+		return request.isFinished();
 	}
 }

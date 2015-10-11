@@ -65,11 +65,12 @@ public class SettingsListener extends AbstractListener implements DataListener<S
 				message.setPDU(Converter.listToArray(list));
 				data.setEof(i >= paramList.size() - 1);
 				SocketIOClientMap.add(message, new SocketIOClientRequest(client, data.clone()));
-				channel.writeAndFlush(message).sync();
+				channel.writeAndFlush(message);
 				if (!SocketIOClientMap.wait(message.getKey(), data.getTot1() * 1000)) {
 					SocketIOClientUtils.sendEofEvent(client, data, ">>数据接收失败或响应超时<<");
 					break;
 				}
+				SocketIOClientUtils.sendEvent(message, ">>设置参数操作全部完成<<");
 
 				list.clear();
 				Converter.copyArrayToList(unit, list);
