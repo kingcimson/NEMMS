@@ -218,7 +218,7 @@ public class MessageUtils {
 				return Converter.getReverseBytes(src, 2, 4);
 			}
 			if (po.getValueType().equals("bit")) {
-				return Converter.getReverseBytes(Byte.valueOf(value));
+				return new byte[] { Byte.valueOf(value) };
 			}
 			if (po.getValueType().equals("str")) {
 				return value.getBytes("ISO-8859-1");

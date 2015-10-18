@@ -40,6 +40,6 @@ public class UDPServerHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		logger.error("udp exception {}:{}", ctx.channel().remoteAddress(), cause);
+		logger.error("udp exception {}", cause);
 	}
 }
