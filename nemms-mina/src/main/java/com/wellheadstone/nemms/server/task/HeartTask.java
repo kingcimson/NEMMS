@@ -105,10 +105,10 @@ public class HeartTask extends AbstractTask implements ITask {
 
 		List<IdValuePair> list = new ArrayList<IdValuePair>(5);
 		for (int i = pdu[0]; i < pdu.length;) {
-			String id = Converter.getReverseHexString(pdu, i + 1, i + pdu[i] - 1);
-			id = MessageUtils.getParamUid(id);
-			String value = String.valueOf(pdu[i + pdu[i] - 1]);
-			list.add(new IdValuePair(id, value));
+			String hexUid = Converter.getReverseHexString(pdu, i + 1, i + pdu[i] - 1);
+			String paramUid = MessageUtils.getParamUid(hexUid);
+			String value = MessageUtils.getParamValue(paramUid, String.valueOf(pdu[i + pdu[i] - 1]));
+			list.add(new IdValuePair(paramUid, value));
 			i = i + pdu[i];
 		}
 

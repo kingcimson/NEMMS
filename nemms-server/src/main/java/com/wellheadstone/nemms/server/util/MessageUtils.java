@@ -91,13 +91,15 @@ public class MessageUtils {
 			int startIndex = i + 1;
 			int endIndex = startIndex + byteCount;
 
-			String paramUid = MessageUtils.getParamUid(Converter.getReverseHexString(pdu, startIndex, endIndex));
+			String hexUid = Converter.getReverseHexString(pdu, startIndex, endIndex);
+			String paramUid = MessageUtils.getParamUid(hexUid);
 			DeviceParamPo paramPo = paramMap.get(MessageUtils.getDeviceParamKey(paramUid, mcp));
 			DeviceDataPo po = new DeviceDataPo();
 			po.setSiteUid(siteUid);
 			po.setParamUid(paramUid);
 			po.setMcpId((int) mcp);
 			po.setValue(MessageUtils.getParamValue(pdu, endIndex, i + unitLength, paramPo));
+			po.setValue(MessageUtils.getParamValue(hexUid, po.getValue()));
 			entities.add(po);
 
 			i = i + unitLength;
@@ -365,9 +367,8 @@ public class MessageUtils {
 	}
 
 	/**
-	 * 
-	 * 0：正常
-	 * 1：监控数据标识无法识别。
+	 *
+	 * 0：正常 1：监控数据标识无法识别。
 	 * 2：监控数据的设置值超出范围。接收到此错误代码后，监控管理中心应提示“设置数据超出范围”。
 	 * 3：监控数据标识与监控数据的值不符合要求，比如：非要求的ASCII码范围。
 	 * 4：监控数据标识与监控数据长度不匹配。
