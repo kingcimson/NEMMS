@@ -47,5 +47,6 @@ public class TcpServerHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		logger.error("tcp exception {}:{}", ctx.channel().remoteAddress(), cause);
 	}
 }

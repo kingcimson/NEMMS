@@ -348,6 +348,46 @@ public class MessageUtils {
 	}
 
 	public static String getParamUid(String hexUid) {
+		char[] chars = hexUid.toCharArray();
+		if (chars[0] != '0') {
+			chars[0] = '0';
+			hexUid = new String(chars);
+		}
 		return Converter.getHexStringWith0X(hexUid);
+	}
+
+	public static String getParamValue(String hexUid, String value) {
+		char[] chars = hexUid.toCharArray();
+		if (chars[0] != '0') {
+			return getErrorParamValue(chars[0]);
+		}
+		return value;
+	}
+
+	/**
+	 * 
+	 * 0：正常
+	 * 1：监控数据标识无法识别。
+	 * 2：监控数据的设置值超出范围。接收到此错误代码后，监控管理中心应提示“设置数据超出范围”。
+	 * 3：监控数据标识与监控数据的值不符合要求，比如：非要求的ASCII码范围。
+	 * 4：监控数据标识与监控数据长度不匹配。
+	 * 5：监控数据的检测值低于工作范围。接收到此错误代码后，监控管理中心应显示该数据的值为“--”。
+	 * 6：监控数据的检测值高于工作范围。接收到此错误代码后，监控管理中心应显示该数据的值为“++”。
+	 * 7：监控数据无法检测。接收到此错误代码后，监控管理中心应显示该数据的值为“**”。
+	 * 8：系统保留（厂家不能占用）。
+	 * 9：未列出的其它错误。
+	 * 10～15：厂家自定义（监控管理中心不作处理）。
+	 */
+	public static String getErrorParamValue(char errorCode) {
+		if (errorCode == '5') {
+			return "--";
+		}
+		if (errorCode == '6') {
+			return "++";
+		}
+		if (errorCode == '7') {
+			return "**";
+		}
+		return String.valueOf(errorCode);
 	}
 }

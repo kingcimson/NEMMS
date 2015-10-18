@@ -17,7 +17,6 @@ public class DefaultTask extends AbstractTask implements ITask {
 
 	@Override
 	public int init() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

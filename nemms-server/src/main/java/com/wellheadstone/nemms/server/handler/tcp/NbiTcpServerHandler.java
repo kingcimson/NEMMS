@@ -42,5 +42,6 @@ public class NbiTcpServerHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		logger.error("nbi exception {}:{}", ctx.channel().remoteAddress(), cause);
 	}
 }

@@ -71,6 +71,7 @@ public class QueryAllListener extends AbstractListener implements DataListener<S
 			}
 		} catch (Exception ex) {
 			logger.error("query all params send message error.", ex);
+			SocketIOClientUtils.sendErrorEvent(client, data, "发送请求数据时发生程序异常");
 		}
 	}
 

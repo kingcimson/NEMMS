@@ -10,6 +10,7 @@ import com.wellheadstone.nemms.server.handler.socketio.SocketIOClientRequest;
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.Converter;
 import com.wellheadstone.nemms.server.util.MessageUtils;
+import com.wellheadstone.nemms.server.util.SocketIOClientUtils;
 
 public class SettingsTask extends AbstractTask implements ITask {
 	private final static Logger logger = LoggerFactory.getLogger(SettingsTask.class);
@@ -20,7 +21,6 @@ public class SettingsTask extends AbstractTask implements ITask {
 
 	@Override
 	public int init() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -31,16 +31,12 @@ public class SettingsTask extends AbstractTask implements ITask {
 			MessageUtils.parseDataUnit(siteUid, msg.getMcp(), msg.getPDU());
 
 			SocketIOClientRequest request = SocketIOClientMap.get(msg.getKey());
-			if (request == null) {
-				logger.error("not found socketio client request object");
-				return;
-			}
-
 			request.getData().setResponseText(msg.toString());
 			request.getData().setRespFlag(Converter.byteToShort(msg.getRespFlag()));
 			request.setFinished(true);
 		} catch (Exception ex) {
 			logger.error("set params task execute error.", ex);
+			SocketIOClientUtils.setErrorResponse(this.msg, "解析响应数据时发生程序异常");
 		}
 	}
 }

@@ -41,6 +41,6 @@ public class TcpServerHandler extends IoHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
-		logger.info("tcp exception {}:{}", session.getRemoteAddress(), cause);
+		logger.error("tcp exception {}:{}", session.getRemoteAddress(), cause);
 	}
 }

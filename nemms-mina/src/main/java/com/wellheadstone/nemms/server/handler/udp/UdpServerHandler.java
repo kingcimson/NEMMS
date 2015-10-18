@@ -40,6 +40,6 @@ public class UdpServerHandler extends IoHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
-		logger.info("udp exception {}:{}", session.getRemoteAddress(), cause);
+		logger.error("udp exception {}:{}", session.getRemoteAddress(), cause);
 	}
 }

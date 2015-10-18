@@ -16,6 +16,7 @@ import com.wellheadstone.nemms.server.handler.socketio.SocketIOClientRequest;
 import com.wellheadstone.nemms.server.message.CMCCFDSMessage;
 import com.wellheadstone.nemms.server.util.Converter;
 import com.wellheadstone.nemms.server.util.MessageUtils;
+import com.wellheadstone.nemms.server.util.SocketIOClientUtils;
 
 public class GetParamListTask extends AbstractTask implements ITask {
 	private final static Logger logger = LoggerFactory.getLogger(GetParamListTask.class);
@@ -34,12 +35,8 @@ public class GetParamListTask extends AbstractTask implements ITask {
 		try {
 			String siteUid = MessageUtils.getSiteUid(msg);
 			this.parseDataUnit(siteUid, msg.getMcp(), msg.getPDU());
-			SocketIOClientRequest request = SocketIOClientMap.get(msg.getKey());
-			if (request == null) {
-				logger.error("not found socketio client request object");
-				return;
-			}
 
+			SocketIOClientRequest request = SocketIOClientMap.get(msg.getKey());
 			request.getData().setResponseText(msg.toString());
 			request.getData().setRespFlag(Converter.byteToShort(msg.getRespFlag()));
 			request.getClient().sendEvent(request.getData().getEventName(), request.getData().clone());
@@ -59,6 +56,7 @@ public class GetParamListTask extends AbstractTask implements ITask {
 			SocketIOClientMap.remove(msg.getKey());
 		} catch (Exception ex) {
 			logger.error("get param list query execute error.", ex);
+			SocketIOClientUtils.sendErrorEvent(this.msg, "解析响应数据时发生程序异常");
 		}
 	}
 

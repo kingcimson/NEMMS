@@ -71,6 +71,7 @@ public class QuerySelectedListener extends AbstractListener implements DataListe
 			}
 		} catch (Exception ex) {
 			logger.error("query selected params send message error.", ex);
+			SocketIOClientUtils.sendErrorEvent(client, data, "发送请求数据时发生程序异常");
 		}
 	}
 }

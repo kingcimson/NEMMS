@@ -36,6 +36,6 @@ public class NbiTcpServerHandler extends IoHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
-		logger.info("nbi exception {}:{}", session.getRemoteAddress(), cause);
+		logger.error("nbi exception {}:{}", session.getRemoteAddress(), cause);
 	}
 }
