@@ -3,6 +3,7 @@ var connInfoPageUrl = XFrame.getContextPath() + '/device/connInfo/';
 var schedulePageUrl = XFrame.getContextPath() + '/device/schedule/';
 var settingsPageUrl = XFrame.getContextPath() + '/system/settings/';
 var nmsstatusPageUrl = XFrame.getContextPath() + '/device/nmsstatus/';
+var reportPageUrl = XFrame.getContextPath() + '/device/report/';
 var dictPageUrl =XFrame.getContextPath() + '/system/dict/';
 
 $(function() {
@@ -53,7 +54,7 @@ $(function() {
 		tools : [ {
 			iconCls : 'icon-fullscreen',
 			handler : function() {
-				$('#fullscreen-param-tabs-dlg').dialog('open').dialog('center');
+				//$('#fullscreen-param-tabs-dlg').dialog('open').dialog('center');
 			}
 		} ]
 	});
@@ -61,8 +62,7 @@ $(function() {
 		tools : [ {
 			iconCls : 'icon-fullscreen',
 			handler : function() {
-				// $('#console-tabs').hide();
-				$('#fullscreen-console-tabs-dlg').dialog('open').dialog('center');
+				//$('#fullscreen-console-tabs-dlg').dialog('open').dialog('center');
 			}
 		} ]
 	});
@@ -274,13 +274,47 @@ $(function() {
 			}
 		}, {
 			field : 'updateTime',
-			title : '列新时间',
+			title : '更新时间',
 			width : 80
 		} ] ],
 		onDblClickRow : function(index, row) {
 		}
 	});
 
+	$('#device-report-datagrid').datagrid({
+		method : 'get',
+		fit : true,
+		fitColumns : true,
+		singleSelect : true,
+		pagination : true,
+		rownumbers : true,
+		pageSize : 50,
+		url : reportPageUrl + 'list',
+		columns : [ [ {
+				field : 'id',
+				title : '标识',
+				width : 50
+			}, {
+				field : 'siteUid',
+				title : '站点/设备编号',
+				width : 100
+			}, {
+				field : 'type',
+				title : '告警类型',
+				width : 80
+			}, {
+				field : 'content',
+				title : '告警内容',
+				width : content
+			}, {
+				field : 'createTime',
+				title : '创建时间',
+				width : 80
+			} ] ],
+			onDblClickRow : function(index, row) {
+			}
+	});
+	
 	$('#search-site-result').datagrid({
 		method : 'get',
 		fit : true,
@@ -607,7 +641,42 @@ $(function() {
 			}
 		} ]
 	});
+	
+	$('#telnet-site-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : 560,
+		height : 280,
+		iconCls : 'icon-add',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#telnet-site-dlg").dialog('close');
+			}
+		}, {
+			text : '保存',
+			iconCls : 'icon-save',
+			handler : SiteMgr.toolbar.telnet
+		} ]
+	});
 
+	$('#device-report-dlg').dialog({
+		closed : true,
+		modal : true,
+		width : window.screen.width - 300,
+		height : window.screen.height - 350,
+		maximizable : true,
+		iconCls : 'icon-console',
+		buttons : [ {
+			text : '关闭',
+			iconCls : 'icon-no',
+			handler : function() {
+				$("#device-report-dlg").dialog('close');
+			}
+		} ]
+	});
+	
 	// buttons
 	$('#btn-search-site').bind('click', SiteMgr.siteTree.search);
 	$('#btn-get-param-list').bind('click', SiteMgr.toolbar.getParamList);
@@ -973,6 +1042,12 @@ var SiteMgr = {
 				if (item.name == "refresh") {
 					return SiteMgr.siteTree.reload();
 				}
+				if (item.name == "telnet") {
+					return SiteMgr.dialogs.telnetSiteDlg.open();
+				}
+				if (item.name == "report") {
+					return SiteMgr.dialogs.deviceReportDlg.open();
+				}
 				return;
 			}
 		}
@@ -1130,6 +1205,20 @@ var SiteMgr = {
 				}
 			}
 			return map;
+		},
+		telnet:function(){
+			if (!SiteMgr.socketIO.isConnected()) {
+				return;
+			}
+			var node = $('#site-tree').tree('getSelected');
+			if (node && node.attributes.flag == 0) {
+				var data = node.attributes;
+				data.eventName = 'telnet';
+				SiteMgr.socket.emit(data.eventName, data);
+				EasyUIUtils.loading();
+			} else {
+				$.messager.alert('警告', '请选中一个主单元!', 'info');
+			}
 		}
 	// end
 	},
@@ -1334,6 +1423,22 @@ var SiteMgr = {
 				$('#search-site-dlg').dialog('open').dialog('center');
 				EasyUIUtils.clearDatagrid('#search-site-result');
 			}
+		},
+		telnetSiteDlg : {
+			open : function(){
+				$('#telnet-site-dlg').dialog('open').dialog('center');
+				$('#telnet-site-form').form('clear');
+				$('#telnet-port').val(23);
+				$('#telnet-user').val('root');
+				$('#telnet-pwd').val('');
+				$('#telnet-cmd').val('fun display');
+			}
+		},
+		deviceReportDlg : {
+			open : function(){
+				$('#device-report-dlg').dialog('open').dialog('center');
+				EasyUIUtils.clearDatagrid('##device-report-datagrid');
+			}
 		}
 	},
 	socketIO : {
@@ -1410,6 +1515,19 @@ var SiteMgr = {
 						return e.id;
 					}).join(',');
 					SiteMgr.paramTabs.updateParamsValue(data.uid, paramUids, data.rowIds);
+					EasyUIUtils.closeLoading();
+				}
+			});
+			SiteMgr.socket.on('telnet', function(data) {
+				SiteMgr.console.output({
+					name : "获取站点设备列表",
+					req : data.requestText,
+					res : data.responseText,
+					respFlag : data.respFlag,
+					createTime : new Date().toLocaleString()
+				});
+				if(data.eof){ 
+					
 					EasyUIUtils.closeLoading();
 				}
 			});

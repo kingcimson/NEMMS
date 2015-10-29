@@ -9,7 +9,9 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.wellheadstone.nemms.server.handler.socketio.EventName;
 import com.wellheadstone.nemms.server.handler.socketio.ListenerFactory;
+import com.wellheadstone.nemms.server.handler.socketio.TelentListener;
 import com.wellheadstone.nemms.server.message.SocketIOMessage;
+import com.wellheadstone.nemms.server.message.SocketIOTelnetMessage;
 
 public class MySocketIOServer implements IServer {
 	private final static Logger logger = LoggerFactory.getLogger(MySocketIOServer.class);
@@ -35,6 +37,7 @@ public class MySocketIOServer implements IServer {
 				ListenerFactory.create(EventName.QuerySelected));
 		server.addEventListener(EventName.Settings, SocketIOMessage.class,
 				ListenerFactory.create(EventName.Settings));
+		server.addEventListener(EventName.Telnet, SocketIOTelnetMessage.class, new TelentListener());
 
 		try {
 			ChannelFuture future = (ChannelFuture) server.startAsync().sync();
@@ -45,5 +48,4 @@ public class MySocketIOServer implements IServer {
 			server.stop();
 		}
 	}
-
 }

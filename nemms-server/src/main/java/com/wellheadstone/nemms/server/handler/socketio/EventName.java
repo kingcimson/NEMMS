@@ -21,4 +21,9 @@ public class EventName {
 	 * 设置参数事件名称
 	 */
 	public static final String Settings = "settings";
+
+	/**
+	 * telnet主单元下所有设备
+	 */
+	public static final String Telnet = "telnet";
 }

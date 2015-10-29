@@ -17,6 +17,6 @@ public class ListenerFactory {
 		if (EventName.Settings.equals(eventName)) {
 			return new SettingsListener();
 		}
-		return new DefaultListListener();
+		return new DefaultListener();
 	}
 }

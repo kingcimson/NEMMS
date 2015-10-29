@@ -9,10 +9,10 @@ public class TelnetUtils {
 	private TelnetClient telnet;
 	private InputStream in;
 	private PrintStream out;
-	private String prompt;// '>' default is windows os
+	private String prompt;// '#' default
 
 	public TelnetUtils() {
-		this(">");
+		this("#");
 	}
 
 	public TelnetUtils(String prompt) {
