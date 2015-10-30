@@ -33,6 +33,7 @@ public class DeviceSiteService extends BaseService<DeviceSiteDao, DeviceSitePo> 
 				DeviceSitePo.Location
 		};
 		this.getDao().updateChild(entity);
+		this.getDao().updateChildUid(entity);
 		return this.edit(entity, entity.getId(), columnNames);
 
 	}

@@ -167,4 +167,10 @@ public class DeviceSiteDao extends BaseDao<DeviceSitePo> {
 		Object[] args = new Object[] { po.getId() };
 		return this.update(po, condition, args, columnNames);
 	}
+
+	public int updateChildUid(DeviceSitePo po) {
+		String sql = String.format("update %1$s set %2$s=CONCAT('%3$s',RIGHT(%2$s,2)) WHERE pid=%4$s",
+				DeviceSitePo.EntityName, DeviceSitePo.Uid, po.getUid(), po.getId());
+		return this.update(sql);
+	}
 }
