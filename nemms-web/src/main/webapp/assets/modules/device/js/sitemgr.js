@@ -305,7 +305,7 @@ $(function() {
 			}, {
 				field : 'content',
 				title : '告警内容',
-				width : content
+				width : 200
 			}, {
 				field : 'createTime',
 				title : '创建时间',
@@ -646,8 +646,8 @@ $(function() {
 		closed : true,
 		modal : true,
 		width : 560,
-		height : 280,
-		iconCls : 'icon-add',
+		height : 260,
+		iconCls : 'icon-list',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -667,7 +667,7 @@ $(function() {
 		width : window.screen.width - 300,
 		height : window.screen.height - 350,
 		maximizable : true,
-		iconCls : 'icon-console',
+		iconCls : 'icon-report',
 		buttons : [ {
 			text : '关闭',
 			iconCls : 'icon-no',
@@ -1428,10 +1428,10 @@ var SiteMgr = {
 			open : function(){
 				$('#telnet-site-dlg').dialog('open').dialog('center');
 				$('#telnet-site-form').form('clear');
-				$('#telnet-port').val(23);
-				$('#telnet-user').val('root');
-				$('#telnet-pwd').val('');
-				$('#telnet-cmd').val('fun display');
+				$('#telnet-port').textbox('setValue',23);
+				$('#telnet-user').textbox('setValue','root');
+				$('#telnet-pwd').textbox('setValue','');
+				$('#telnet-cmd').textbox('setValue','fun display');
 			}
 		},
 		deviceReportDlg : {
