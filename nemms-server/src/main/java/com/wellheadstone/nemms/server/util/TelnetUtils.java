@@ -29,14 +29,11 @@ public class TelnetUtils {
 			telnet.connect(ip, port);
 			in = telnet.getInputStream();
 			out = new PrintStream(telnet.getOutputStream());
-			read("login:");
+			read("Aceway login:");
 			write(user);
-			read("password:");
-			write(password);
-			String rs = read(prompt);
-			if (rs != null && rs.contains("Login Failed")) {
-				throw new RuntimeException("登录失败");
-			}
+			// read("password:");
+			// write(password);
+			read(prompt);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

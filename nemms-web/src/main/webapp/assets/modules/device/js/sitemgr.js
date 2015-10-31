@@ -1228,6 +1228,7 @@ var SiteMgr = {
 					data.telnetCmd=$('#telnet-cmd').textbox('getValue');
 					SiteMgr.socket.emit(data.eventName, data);
 					EasyUIUtils.loading();
+					SiteMgr.dialogs.telnetSiteDlg.close();
 				} else {
 					$.messager.alert('警告', '请选中一个主单元!', 'info');
 				}
@@ -1454,6 +1455,9 @@ var SiteMgr = {
 						}
 					});
 				}
+			},
+			close:function(){
+				$('#telnet-site-dlg').dialog('close');
 			}
 		},
 		deviceReportDlg : {

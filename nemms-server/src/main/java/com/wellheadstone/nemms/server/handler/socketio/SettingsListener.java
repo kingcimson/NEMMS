@@ -29,7 +29,6 @@ public class SettingsListener extends AbstractListener implements DataListener<S
 	@Override
 	public void onData(SocketIOClient client, SocketIOMessage data, AckRequest ackSender) throws Exception {
 		CMCCFDSMessage message = MessageUtils.getSetupReqMessage(data);
-
 		this.onData(client, data, message);
 	}
 
