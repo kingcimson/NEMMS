@@ -86,6 +86,12 @@ public class ServiceFacade {
 		}
 	}
 
+	public static void addSiteDevices(List<DeviceSitePo> entities) {
+		for (DeviceSitePo entity : entities) {
+			deviceSiteService.getDao().replaceInsert(entity);
+		}
+	}
+
 	private static void loadDeviceParamData() {
 		List<DeviceParamPo> params = deviceParamService.getDao().query();
 		deviceParamMap = new HashMap<String, DeviceParamPo>(params.size());
