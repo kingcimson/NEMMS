@@ -421,7 +421,7 @@
 			<center>
 				<table cellpadding="5" style="margin: 30px auto" class="form-table">
 					<tr>
-						<td>站点IP:</td>
+						<td>主单元IP:</td>
 						<td><input class="easyui-textbox" type="text" id="telnet-ip" name="ip" data-options="required:true"></input></td>
 						<td>telnet端口:</td>
 						<td><input class="easyui-textbox" type="text" id="telnet-port" name="port" data-options="required:true" style="width: 138px"></input></td>

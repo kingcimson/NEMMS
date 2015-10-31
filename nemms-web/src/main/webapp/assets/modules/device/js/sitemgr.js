@@ -47,6 +47,12 @@ $(function() {
 				left : e.pageX,
 				top : e.pageY
 			});
+			var itemEl = $('#m-telnet')[0]; 
+			if(node.attributes.flag == 0){
+				$('#site-tree-ctx-menu').menu('enableItem',itemEl);
+			}else{
+				$('#site-tree-ctx-menu').menu('disableItem',itemEl);
+			}
 		}
 	});
 
@@ -655,7 +661,7 @@ $(function() {
 				$("#telnet-site-dlg").dialog('close');
 			}
 		}, {
-			text : '保存',
+			text : '确定',
 			iconCls : 'icon-save',
 			handler : SiteMgr.toolbar.telnet
 		} ]
@@ -1207,22 +1213,24 @@ var SiteMgr = {
 			return map;
 		},
 		telnet:function(){
-			if (!SiteMgr.socketIO.isConnected()) {
-				return;
-			}
-			var node = $('#site-tree').tree('getSelected');
-			if (node && node.attributes.flag == 0) {
-				var data = node.attributes;
-				data.eventName = 'telnet';
-				data.telnetIP=$('#telnet-ip').textbox('getValue');
-				data.telnetPort=$('#telnet-port').textbox('getValue');
-				data.telnetUser=$('#telnet-user').textbox('getValue');
-				data.telnetPwd=$('#telnet-pwd').textbox('getValue');
-				data.telnetCmd=$('#telnet-cmd').textbox('getValue');
-				SiteMgr.socket.emit(data.eventName, data);
-				EasyUIUtils.loading();
-			} else {
-				$.messager.alert('警告', '请选中一个主单元!', 'info');
+			if($('#telnet-site-form').form('validate')){
+				if (!SiteMgr.socketIO.isConnected()) {
+					return;
+				}
+				var node = $('#site-tree').tree('getSelected');
+				if (node && node.attributes.flag == 0) {
+					var data = node.attributes;
+					data.eventName = 'telnet';
+					data.telnetIP=$('#telnet-ip').textbox('getValue');
+					data.telnetPort=$('#telnet-port').textbox('getValue');
+					data.telnetUser=$('#telnet-user').textbox('getValue');
+					data.telnetPwd=$('#telnet-pwd').textbox('getValue');
+					data.telnetCmd=$('#telnet-cmd').textbox('getValue');
+					SiteMgr.socket.emit(data.eventName, data);
+					EasyUIUtils.loading();
+				} else {
+					$.messager.alert('警告', '请选中一个主单元!', 'info');
+				}
 			}
 		}
 	// end
@@ -1437,6 +1445,15 @@ var SiteMgr = {
 				$('#telnet-user').textbox('setValue','root');
 				$('#telnet-pwd').textbox('setValue','');
 				$('#telnet-cmd').textbox('setValue','fun display');
+				
+				var node = $('#site-tree').tree('getSelected');
+				if(node){
+					$.getJSON(connInfoPageUrl+'get',{"siteUid":node.attributes.uid },function(result){
+						if(result.data){
+							$('#telnet-ip').textbox('setValue',result.data.deviceIp);
+						}
+					});
+				}
 			}
 		},
 		deviceReportDlg : {
@@ -1531,10 +1548,7 @@ var SiteMgr = {
 					respFlag : data.respFlag,
 					createTime : new Date().toLocaleString()
 				});
-				if(data.eof){ 
-					
-					EasyUIUtils.closeLoading();
-				}
+				EasyUIUtils.closeLoading();
 			});
 		},
 		isConnected : function() {

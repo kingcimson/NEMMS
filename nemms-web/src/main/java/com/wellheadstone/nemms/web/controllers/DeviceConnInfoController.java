@@ -83,4 +83,19 @@ public class DeviceConnInfoController extends AbstractController {
 		}
 		return result;
 	}
+
+	@RequestMapping(value = "/get")
+	@ResponseBody
+	public ParamJsonResult<DeviceConnInfoPo> get(String siteUid, HttpServletRequest request) {
+		ParamJsonResult<DeviceConnInfoPo> result = new ParamJsonResult<DeviceConnInfoPo>(false, "");
+		try {
+			result.setData(this.deviceConnInfoService.getBySiteUid(siteUid));
+			result.setSuccess(true);
+			this.setSuccessResult(result, "获取设备连接记录成功!");
+			return result;
+		} catch (Exception ex) {
+			this.setExceptionResult(result, ex);
+		}
+		return result;
+	}
 }
