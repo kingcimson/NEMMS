@@ -7,8 +7,7 @@ import com.wellheadstone.nemms.server.message.SocketIOTelnetMessage;
 
 public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 	@Override
-	public void onData(SocketIOClient client, SocketIOTelnetMessage data,
-			AckRequest ackSender) throws Exception {
-		client.sendEvent("default", "没有找到对应的事件处理程序");
+	public void onData(SocketIOClient client, SocketIOTelnetMessage data, AckRequest ackSender) throws Exception {
+		client.sendEvent("telnet", "");
 	}
 }

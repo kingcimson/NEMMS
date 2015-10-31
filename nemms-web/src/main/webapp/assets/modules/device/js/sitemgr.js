@@ -1214,6 +1214,11 @@ var SiteMgr = {
 			if (node && node.attributes.flag == 0) {
 				var data = node.attributes;
 				data.eventName = 'telnet';
+				data.telnetIP=$('#telnet-ip').textbox('getValue');
+				data.telnetPort=$('#telnet-port').textbox('getValue');
+				data.telnetUser=$('#telnet-user').textbox('getValue');
+				data.telnetPwd=$('#telnet-pwd').textbox('getValue');
+				data.telnetCmd=$('#telnet-cmd').textbox('getValue');
 				SiteMgr.socket.emit(data.eventName, data);
 				EasyUIUtils.loading();
 			} else {
