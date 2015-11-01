@@ -92,6 +92,10 @@ public class ServiceFacade {
 		}
 	}
 
+	public static void setSiteHasChild(int pid) {
+		deviceSiteService.getDao().updateHasChild(pid, true);
+	}
+
 	private static void loadDeviceParamData() {
 		List<DeviceParamPo> params = deviceParamService.getDao().query();
 		deviceParamMap = new HashMap<String, DeviceParamPo>(params.size());

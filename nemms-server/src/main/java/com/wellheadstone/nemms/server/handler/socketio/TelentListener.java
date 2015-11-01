@@ -30,6 +30,7 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 			List<String> lines = this.parseTelnetResult(respText);
 			List<DeviceSitePo> devices = this.getSiteDevices(lines, data);
 			ServiceFacade.addSiteDevices(devices);
+			ServiceFacade.setSiteHasChild(data.getPid());
 		} catch (Exception e) {
 			logger.error("TelentListener error.", e);
 			data.setRespFlag((short) 0xFE);
