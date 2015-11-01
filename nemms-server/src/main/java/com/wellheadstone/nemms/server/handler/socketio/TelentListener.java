@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -86,6 +85,6 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 				devices.add(po);
 			}
 		}
-		return devices;//.stream().sorted().collect(Collectors.toList());
+		return devices;// .stream().sorted().collect(Collectors.toList());
 	}
 }
