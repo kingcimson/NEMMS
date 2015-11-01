@@ -43,7 +43,7 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 	}
 
 	private List<String> parseTelnetResult(String respText) {
-		String regex = "^[\\d+]\\:.*\\r\\n$";
+		String regex = "\\d+\\:.*?\\r";
 		Matcher matcher = Pattern.compile(regex).matcher(respText);
 		List<String> list = new ArrayList<String>(42);
 		while (matcher.find()) {
@@ -55,7 +55,7 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 	private List<DeviceSitePo> getSiteDevices(List<String> lines, SocketIOTelnetMessage data) {
 		List<DeviceSitePo> devices = new ArrayList<DeviceSitePo>(lines.size());
 		for (String line : lines) {
-			String newline = line.replaceAll("[\\d+]\\:|client (type|ip|number) is|[ ]", "");
+			String newline = line.replaceAll("\\d+\\:|client (type|ip|number) is|[ ]", "");
 			String[] fields = StringUtils.splitPreserveAllTokens(newline, ';');
 			if (fields != null && fields.length >= 4) {
 				String type = StringUtils.substring(fields[0], 0, 3);
@@ -86,6 +86,6 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 				devices.add(po);
 			}
 		}
-		return devices.stream().sorted().collect(Collectors.toList());
+		return devices;//.stream().sorted().collect(Collectors.toList());
 	}
 }
