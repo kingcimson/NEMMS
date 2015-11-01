@@ -1022,6 +1022,12 @@ var SiteMgr = {
 			$('#site-tree').tree('reload');
 			SiteMgr.paramTabs.clear();
 		},
+		reloadSelected : function() {
+			var node = $('#site-tree').tree('getSelected');
+			if(node){
+				$('#site-tree').tree('reload',node.target);
+			}
+		},
 		search : function() {
 			var fieldName = $('#field-name').combobox('getValue');
 			var keyword = $('#keyword').val();
@@ -1553,6 +1559,7 @@ var SiteMgr = {
 					createTime : new Date().toLocaleString()
 				});
 				EasyUIUtils.closeLoading();
+				SiteMgr.siteTree.reloadSelected();
 			});
 		},
 		isConnected : function() {
