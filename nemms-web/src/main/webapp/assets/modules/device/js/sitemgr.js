@@ -1559,7 +1559,7 @@ var SiteMgr = {
 					createTime : new Date().toLocaleString()
 				});
 				EasyUIUtils.closeLoading();
-				SiteMgr.siteTree.reloadSelected();
+				SiteMgr.siteTree.reload();
 			});
 		},
 		isConnected : function() {
