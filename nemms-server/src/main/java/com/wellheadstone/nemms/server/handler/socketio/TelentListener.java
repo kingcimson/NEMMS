@@ -1,6 +1,7 @@
 package com.wellheadstone.nemms.server.handler.socketio;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -86,6 +87,12 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 				devices.add(po);
 			}
 		}
-		return devices;// .stream().sorted().collect(Collectors.toList());
+		devices.sort(new Comparator<DeviceSitePo>() {
+			@Override
+			public int compare(DeviceSitePo o1, DeviceSitePo o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
+		return devices;
 	}
 }

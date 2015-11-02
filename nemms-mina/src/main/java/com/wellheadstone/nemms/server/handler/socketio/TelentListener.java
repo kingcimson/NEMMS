@@ -1,10 +1,10 @@
 package com.wellheadstone.nemms.server.handler.socketio;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -31,6 +31,7 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 			List<String> lines = this.parseTelnetResult(respText);
 			List<DeviceSitePo> devices = this.getSiteDevices(lines, data);
 			ServiceFacade.addSiteDevices(devices);
+			ServiceFacade.setSiteHasChild(data.getId());
 		} catch (Exception e) {
 			logger.error("TelentListener error.", e);
 			data.setRespFlag((short) 0xFE);
@@ -43,7 +44,7 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 	}
 
 	private List<String> parseTelnetResult(String respText) {
-		String regex = "^[\\d+]\\:.*\\r\\n$";
+		String regex = "\\d+\\:.*?\\r";
 		Matcher matcher = Pattern.compile(regex).matcher(respText);
 		List<String> list = new ArrayList<String>(42);
 		while (matcher.find()) {
@@ -55,7 +56,7 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 	private List<DeviceSitePo> getSiteDevices(List<String> lines, SocketIOTelnetMessage data) {
 		List<DeviceSitePo> devices = new ArrayList<DeviceSitePo>(lines.size());
 		for (String line : lines) {
-			String newline = line.replaceAll("[\\d+]\\:|client (type|ip|number) is|[ ]", "");
+			String newline = line.replaceAll("\\d+\\:|client (type|ip|number) is|[ ]", "");
 			String[] fields = StringUtils.splitPreserveAllTokens(newline, ';');
 			if (fields != null && fields.length >= 4) {
 				String type = StringUtils.substring(fields[0], 0, 3);
@@ -65,7 +66,7 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 				DeviceSitePo po = new DeviceSitePo();
 				po.setApMaxLen(data.getApMaxLen());
 				po.setApProtocol(data.getApProtocol());
-				po.setCreateUser("system");
+				po.setCreateUser("admin");
 				po.setDeviceType(data.getDeviceType());
 				po.setFlag(1);
 				po.setHasChild(false);
@@ -86,6 +87,12 @@ public class TelentListener implements DataListener<SocketIOTelnetMessage> {
 				devices.add(po);
 			}
 		}
-		return devices.stream().sorted().collect(Collectors.toList());
+		devices.sort(new Comparator<DeviceSitePo>() {
+			@Override
+			public int compare(DeviceSitePo o1, DeviceSitePo o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
+		return devices;
 	}
 }

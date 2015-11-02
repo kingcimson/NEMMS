@@ -47,11 +47,14 @@ $(function() {
 				left : e.pageX,
 				top : e.pageY
 			});
-			var itemEl = $('#m-telnet')[0]; 
+			var telnetEl = $('#m-telnet')[0]; 
+			var addDevEl = $('#m-add-device')[0]; 
 			if(node.attributes.flag == 0){
-				$('#site-tree-ctx-menu').menu('enableItem',itemEl);
+				$('#site-tree-ctx-menu').menu('enableItem',telnetEl);
+				$('#site-tree-ctx-menu').menu('enableItem',addDevEl);
 			}else{
-				$('#site-tree-ctx-menu').menu('disableItem',itemEl);
+				$('#site-tree-ctx-menu').menu('disableItem',telnetEl);
+				$('#site-tree-ctx-menu').menu('disableItem',addDevEl);
 			}
 		}
 	});
@@ -1564,7 +1567,7 @@ var SiteMgr = {
 					createTime : new Date().toLocaleString()
 				});
 				EasyUIUtils.closeLoading();
-				SiteMgr.siteTree.reload();
+				SiteMgr.siteTree.reloadSelected();
 			});
 		},
 		isConnected : function() {
