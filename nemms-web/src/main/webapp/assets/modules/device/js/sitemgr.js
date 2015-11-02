@@ -1028,12 +1028,7 @@ var SiteMgr = {
 		reloadSelected : function() {
 			var node = $('#site-tree').tree('getSelected');
 			if(node){
-				var id = node.id;
-				$('#site-tree').tree('reload');
-				node = $('site-tree').tree('find', id);
-				if(node){
-					$('#site-tree').tree('reload',node.target);
-				}
+				$('#site-tree').tree('reload',node.target);
 			}
 		},
 		search : function() {
@@ -1567,7 +1562,7 @@ var SiteMgr = {
 					createTime : new Date().toLocaleString()
 				});
 				EasyUIUtils.closeLoading();
-				SiteMgr.siteTree.reloadSelected();
+				SiteMgr.siteTree.reload();
 			});
 		},
 		isConnected : function() {
