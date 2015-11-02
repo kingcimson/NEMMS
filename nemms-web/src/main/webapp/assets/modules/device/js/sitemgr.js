@@ -1025,7 +1025,12 @@ var SiteMgr = {
 		reloadSelected : function() {
 			var node = $('#site-tree').tree('getSelected');
 			if(node){
-				$('#site-tree').tree('reload',node.target);
+				var id = node.id;
+				$('#site-tree').tree('reload');
+				node = $('site-tree').tree('find', id);
+				if(node){
+					$('#site-tree').tree('reload',node.target);
+				}
 			}
 		},
 		search : function() {
