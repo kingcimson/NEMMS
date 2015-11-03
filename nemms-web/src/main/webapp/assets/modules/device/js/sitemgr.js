@@ -1472,7 +1472,7 @@ var SiteMgr = {
 		deviceReportDlg : {
 			open : function(){
 				$('#device-report-dlg').dialog('open').dialog('center');
-				EasyUIUtils.clearDatagrid('##device-report-datagrid');
+				EasyUIUtils.clearDatagrid('#device-report-datagrid');
 			}
 		}
 	},
