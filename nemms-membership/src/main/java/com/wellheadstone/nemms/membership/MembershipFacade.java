@@ -3,6 +3,7 @@ package com.wellheadstone.nemms.membership;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -79,7 +80,7 @@ public class MembershipFacade {
 	}
 
 	/**
-	 * 获取权限id Set集合
+	 * 获取权限 Set集合
 	 * 
 	 * @param roleIds
 	 *            角色ids
@@ -91,11 +92,12 @@ public class MembershipFacade {
 			return Collections.emptySet();
 		}
 
+		Map<String, String> opterationMap = operationService.getIdCodeMap();
 		String[] operationIdSplit = StringUtils.split(operationIds, ',');
 		Set<String> permSet = new HashSet<String>(operationIdSplit.length);
 		for (String optId : operationIdSplit) {
 			if (!permSet.contains(optId.trim())) {
-				permSet.add(optId);
+				permSet.add(opterationMap.get(optId.trim()));
 			}
 		}
 		return permSet;
@@ -130,12 +132,14 @@ public class MembershipFacade {
 
 	private boolean hasPermission(String[] codeOperationIdSplit, String[] operationIdSplit) {
 		if (codeOperationIdSplit == null ||
-				operationIdSplit == null)
+				operationIdSplit == null) {
 			return false;
+		}
 
 		for (String optId : codeOperationIdSplit) {
-			if (!ArrayUtils.contains(operationIdSplit, optId))
+			if (!ArrayUtils.contains(operationIdSplit, optId)) {
 				return false;
+			}
 		}
 
 		return true;
@@ -147,8 +151,9 @@ public class MembershipFacade {
 	 * @return
 	 */
 	public boolean isAdministrator(String roleIds) {
-		if (StringUtils.isBlank(roleIds))
+		if (StringUtils.isBlank(roleIds)) {
 			return false;
+		}
 		return this.roleService.isSuperAdminRole(roleIds);
 	}
 

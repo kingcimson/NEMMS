@@ -58,7 +58,7 @@ public class RoleService extends BaseService<RoleDao, RolePo> {
 	public String getOperationIds(String roleIds) {
 		String condition = Restrictions.in(RolePo.RoleId, roleIds).toString();
 		List<RolePo> list = this.getDao().query(condition, RolePo.Operations);
-		List<String> operationsList = list.stream().map(x -> x.getModules()).collect(Collectors.toList());
+		List<String> operationsList = list.stream().map(x -> x.getOperations()).collect(Collectors.toList());
 
 		String operationIds = StringUtils.join(operationsList, ',');
 		List<String> operationIdList = Arrays.asList(StringUtils.split(operationIds, ',')).stream()

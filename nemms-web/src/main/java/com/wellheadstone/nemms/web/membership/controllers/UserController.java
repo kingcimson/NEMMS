@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,6 +39,7 @@ public class UserController extends AbstractController {
 
 	@RequestMapping(value = "/list")
 	@ResponseBody
+	@RequiresPermissions("memberships.user:view")
 	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager,
 			HttpServletRequest request) {
 		pager.setDefaultSort(UserPo.CreateTime);

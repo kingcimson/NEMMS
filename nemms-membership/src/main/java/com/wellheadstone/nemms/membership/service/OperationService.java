@@ -61,6 +61,12 @@ public class OperationService extends BaseService<OperationDao, OperationPo> {
 		return operationMap.values().stream().collect(Collectors.toList());
 	}
 
+	public Map<String, String> getIdCodeMap() {
+		return operationMap.values()
+				.stream()
+				.collect(Collectors.toMap(x -> x.getOperationId().toString(), y -> y.getCode()));
+	}
+
 	public String getOperationIds(String[] codes)
 	{
 		if (codes == null || codes.length == 0) {
@@ -71,8 +77,9 @@ public class OperationService extends BaseService<OperationDao, OperationPo> {
 		for (String code : codes)
 		{
 			String key = code.trim().toLowerCase();
-			if (operationMap.containsKey(key))
+			if (operationMap.containsKey(key)) {
 				optIds.add(String.valueOf(operationMap.get(key).getOperationId()));
+			}
 		}
 
 		return StringUtils.join(optIds, ',');
@@ -81,8 +88,9 @@ public class OperationService extends BaseService<OperationDao, OperationPo> {
 	public String getOperationIds(String operationIds)
 	{
 		// 如果设置为所有权限
-		if (operationIds.contains("all"))
+		if (operationIds.contains("all")) {
 			return "all";
+		}
 
 		List<String> idList = Arrays.asList(StringUtils.split(operationIds, ','));
 		List<String> treePaths = operationMap.values().stream()
