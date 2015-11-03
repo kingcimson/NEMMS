@@ -1235,9 +1235,9 @@ var SiteMgr = {
 					data.telnetUser=$('#telnet-user').textbox('getValue');
 					data.telnetPwd=$('#telnet-pwd').textbox('getValue');
 					data.telnetCmd=$('#telnet-cmd').textbox('getValue');
-					SiteMgr.socket.emit(data.eventName, data);
-					EasyUIUtils.loading();
 					SiteMgr.dialogs.telnetSiteDlg.close();
+					EasyUIUtils.loading();
+					SiteMgr.socket.emit(data.eventName, data);
 				} else {
 					$.messager.alert('警告', '请选中一个主单元!', 'info');
 				}
