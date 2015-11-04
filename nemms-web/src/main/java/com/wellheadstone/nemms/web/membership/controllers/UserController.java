@@ -33,6 +33,7 @@ public class UserController extends AbstractController {
 	private PasswordService passwordService;
 
 	@RequestMapping(value = { "", "/", "/index" })
+	@RequiresPermissions("memberships.user:view")
 	public String index() {
 		return "membership/user";
 	}
@@ -55,6 +56,7 @@ public class UserController extends AbstractController {
 
 	@RequestMapping(value = "/find")
 	@ResponseBody
+	@RequiresPermissions("memberships.user:view")
 	public Map<String, Object> find(@CurrentUser UserPo loginUser,
 			DataGridPager pager, String fieldName, String keyword, HttpServletRequest request) {
 		pager.setDefaultSort(UserPo.CreateTime);
@@ -70,6 +72,7 @@ public class UserController extends AbstractController {
 
 	@RequestMapping(value = "/add")
 	@ResponseBody
+	@RequiresPermissions("memberships.user:create")
 	public ParamJsonResult<UserPo> add(UserPo po, HttpServletRequest request) {
 		ParamJsonResult<UserPo> result = new ParamJsonResult<UserPo>(false, "");
 		try {
@@ -84,6 +87,7 @@ public class UserController extends AbstractController {
 
 	@RequestMapping(value = "/edit")
 	@ResponseBody
+	@RequiresPermissions("memberships.user:update")
 	public ParamJsonResult<UserPo> edit(UserPo po, HttpServletRequest request) {
 		ParamJsonResult<UserPo> result = new ParamJsonResult<UserPo>(false, "更新用户失败!");
 		String[] args = new String[] {
@@ -102,6 +106,7 @@ public class UserController extends AbstractController {
 
 	@RequestMapping(value = "/remove")
 	@ResponseBody
+	@RequiresPermissions("memberships.user:delete")
 	public ParamJsonResult<UserPo> remove(Integer id, HttpServletRequest request) {
 		ParamJsonResult<UserPo> result = new ParamJsonResult<UserPo>(false, "");
 		try {
@@ -117,6 +122,7 @@ public class UserController extends AbstractController {
 
 	@RequestMapping(value = "/updateUserPasswordById")
 	@ResponseBody
+	@RequiresPermissions("memberships.user:update")
 	public ParamJsonResult<UserPo> updateUserPasswordById(Integer userId, String password, HttpServletRequest request) {
 		ParamJsonResult<UserPo> result = new ParamJsonResult<UserPo>(false, "更新密码失败！");
 		try {
