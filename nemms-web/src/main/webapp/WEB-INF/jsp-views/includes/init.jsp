@@ -14,6 +14,9 @@
 		$.ajaxSetup({
 				contentType : "application/x-www-form-urlencoded;charset=utf-8",
 				complete : function(xhr, textStatus) {
+				if(xhr.status === 401){
+					return window.location.href='<%=request.getContextPath()%>/error/unauthorized'
+				}
 				var sessionStatus = xhr.getResponseHeader('sessionstatus');
 				if (sessionStatus == 'timeout') {
 					return window.location.reload();
