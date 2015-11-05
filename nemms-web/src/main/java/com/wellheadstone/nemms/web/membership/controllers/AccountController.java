@@ -64,7 +64,7 @@ public class AccountController extends AbstractController {
 			if (ex.getClass().getSimpleName().equals("LockedAccountException")) {
 				result.setMsg("您的账号已经被锁定!");
 			} else if (ex.getClass().getSimpleName().equals("ExcessiveAttemptsException")) {
-				result.setMsg("您重试密码超过20次,账号已被锁定!");
+				result.setMsg("您重试密码超过10次,账号已被锁定!");
 			}
 			this.setExceptionResult(result, ex);
 		}

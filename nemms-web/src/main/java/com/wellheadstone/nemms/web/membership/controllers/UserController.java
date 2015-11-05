@@ -40,7 +40,7 @@ public class UserController extends AbstractController {
 
 	@RequestMapping(value = "/list")
 	@ResponseBody
-	@RequiresPermissions("memberships.user:view1")
+	@RequiresPermissions("memberships.user:view")
 	public Map<String, Object> list(@CurrentUser UserPo loginUser, DataGridPager pager,
 			HttpServletRequest request) {
 		pager.setDefaultSort(UserPo.CreateTime);
