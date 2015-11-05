@@ -129,8 +129,8 @@ public class MessageUtils {
 			return getFormattedParamValue(String.valueOf(Converter.getLong(src) / po.getRatio()));
 		}
 		if (po.getValueType().equals("sint1")) {
-			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
-			return getFormattedParamValue(String.valueOf(Converter.getShort(src) / po.getRatio()));
+			byte src = Byte.valueOf(bytes[0]);
+			return getFormattedParamValue(String.valueOf(src / po.getRatio()));
 		}
 		if (po.getValueType().equals("sint2")) {
 			byte[] src = Converter.getBytes(Converter.getReverseBytes(bytes), 2);
@@ -141,14 +141,14 @@ public class MessageUtils {
 			return String.valueOf(Converter.getShort(src));
 		}
 		if (po.getValueType().equals("str")) {
-			if (bytes[0] == 0x30) {
+			if (bytes[0] == 0x30 || bytes[0] == 0x00) {
 				return "0";
 			}
 			int index = ArrayUtils.indexOf(bytes, (byte) 0x00);
-			if (index <= 0) {
-				return "0";
+			if (index > 0) {
+				return new String(Arrays.copyOfRange(bytes, 0, index), Charset.forName("ISO-8859-1"));
 			}
-			return new String(Arrays.copyOfRange(bytes, 0, index), Charset.forName("ISO-8859-1"));
+			return new String(bytes, Charset.forName("ISO-8859-1"));
 		}
 		if (po.getValueType().equals("dstr")) {
 			return getDStringValue(po.getFormat(), bytes);
